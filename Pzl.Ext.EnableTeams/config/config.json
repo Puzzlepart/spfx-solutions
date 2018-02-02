@@ -1,0 +1,17 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "enable-teams-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/enableTeams/EnableTeamsApplicationCustomizer.js",
+          "manifest": "./src/extensions/enableTeams/EnableTeamsApplicationCustomizer.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+  }
+}
