@@ -1,0 +1,13 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "Move Everyone to visitors by Puzzlepart",
+    "id": "1964e6b4-0694-4d9d-b72a-f02a4db2c66e",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true
+  },
+  "paths": {
+    "zippedPackage": "solution/pzl-ext-moveeveryone.sppkg"
+  }
+}

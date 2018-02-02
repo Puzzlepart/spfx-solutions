@@ -1,0 +1,13 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/spfx/client-side-extension-manifest.schema.json",
+
+  "id": "0ec55642-6231-464b-a4c2-dc72cb61d6f4",
+  "alias": "MoveEveryoneApplicationCustomizer",
+  "componentType": "Extension",
+  "extensionType": "ApplicationCustomizer",
+
+  "version": "*",
+  "manifestVersion": 2,
+
+  "requiresCustomScript": false
+}
