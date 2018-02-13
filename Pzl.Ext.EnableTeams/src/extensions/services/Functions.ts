@@ -7,13 +7,24 @@ export class Functions {
         console.log("Creating team");
         await MSGraph.Put(graphHttpClient, `beta/groups/${groupId}/team`, "{}");
 
-        let endPointInfo = await MSGraph.Get(graphHttpClient, `beta/groups/${groupId}/endpoints`);
-        if (endPointInfo && endPointInfo.value) {
-            let info = endPointInfo.value.find(element => { return element.providerName === 'Microsoft Teams'; });
-            let currentWeb = new Web(siteUrl);
-            await currentWeb.navigation.quicklaunch.add("Teams", info.uri);
-            console.log("Adding teams link");
+        while (true) {
+            let endPointInfo = await MSGraph.Get(graphHttpClient, `beta/groups/${groupId}/endpoints`);
+            if (endPointInfo && endPointInfo.value && endPointInfo.value.length > 0) {
+                let info = endPointInfo.value.find(element => { return element.providerName === 'Microsoft Teams'; });
+                if (info) {
+                    let currentWeb = new Web(siteUrl);
+                    await currentWeb.navigation.quicklaunch.add("Teams", info.uri);
+                    console.log("Adding teams link");
+                    break;
+                }
+            } else {
+                await this.Timeout(500);
+            }
         }
+    }
+
+    private static Timeout(ms: number): Promise<any> {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     public static async RemoveCustomizer(siteUrl: string, componentId: string) {
