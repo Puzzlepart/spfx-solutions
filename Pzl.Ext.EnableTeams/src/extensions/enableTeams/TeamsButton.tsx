@@ -67,15 +67,15 @@ export default class TeamsButton extends React.Component<ITeamsButtonProps, { sh
 
     private async createTeam() {
         const dialog: CreateTeamsDialog = new CreateTeamsDialog();
-        try {            
+        try {
             dialog.message = "Please wait while we set up Microsoft Teams and add a navigation link...";
             dialog.show();
             await Functions.CreateTeam(this.props.graphClient, this.props.groupId, this.props.siteUrl);
             await Functions.RemoveCustomizer(this.props.siteUrl, this.props.componentId);
-
         } catch (error) {
-            dialog.close();
             Log.error(LOG_SOURCE, error);
+        } finally {
+            dialog.close();
         }
     }
 }

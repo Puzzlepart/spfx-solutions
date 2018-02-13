@@ -51,8 +51,9 @@ export default class EnableTeamsApplicationCustomizer
                 hasTeam = true;
             }
         } catch (error) {
-            dialog.close();
             Log.error(LOG_SOURCE, error);
+        } finally {
+            dialog.close();
         }
 
         if (hasTeam) {
