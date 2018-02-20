@@ -1,0 +1,29 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/core-build/serve.schema.json",
+  "port": 4321,
+  "https": true,
+  "serveConfigurations": {
+    "default": {
+      "pageUrl": "https://innovationnorway.sharepoint.com/teams/team-myteam",
+      "customActions": {
+        "349f176f-ae79-4adf-a680-be7f187628d1": {
+          "location": "ClientSideExtension.ApplicationCustomizer",
+          "properties": {
+            "logoUrl": "https://innovationnorway.sharepoint.com/sites/CDN/Shared%20Documents/teams-icon.jpg"
+          }
+        }
+      }
+    },
+    "groupLogo": {
+      "pageUrl": "https://innovationnorway.sharepoint.com/teams/team-myteam",
+      "customActions": {
+        "349f176f-ae79-4adf-a680-be7f187628d1": {
+          "location": "ClientSideExtension.ApplicationCustomizer",
+          "properties": {
+            "logoUrl": "https://innovationnorway.sharepoint.com/sites/CDN/Shared%20Documents/teams-icon.jpg"
+          }
+        }
+      }
+    }
+  }
+}

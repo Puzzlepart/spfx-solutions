@@ -1,0 +1,19 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "Office 365 Group Logo by Puzzlepart",
+    "id": "8ac2fc44-9fb6-4876-8fb7-3e24b9bc6565",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "webApiPermissionRequests": [
+        {
+            "resource": "Microsoft Graph",
+            "scope": "Group.ReadWrite.All"
+        }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/pzl-ext-group-logo.sppkg"
+  }
+}

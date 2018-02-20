@@ -1,0 +1,18 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "group-logo-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/groupLogo/GroupLogoApplicationCustomizer.js",
+          "manifest": "./src/extensions/groupLogo/GroupLogoApplicationCustomizer.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "GroupLogoApplicationCustomizerStrings": "lib/extensions/groupLogo/loc/{locale}.js"
+  }
+}
