@@ -35,6 +35,10 @@ The template takes the following PnP input setting as a boolean value `AutoCreat
 </pnp:Provisioning>
 ```
 
+Sample command using PnP PowerShell
+```
+Apply-PnPProvisioningTemplate -Path template.xml -Parameters @{"AutoCreate"="false"}
+```
 
 ### Building the package
 
