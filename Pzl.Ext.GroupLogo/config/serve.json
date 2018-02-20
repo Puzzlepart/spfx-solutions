@@ -4,23 +4,23 @@
   "https": true,
   "serveConfigurations": {
     "default": {
-      "pageUrl": "https://innovationnorway.sharepoint.com/teams/team-myteam",
+      "pageUrl": "https://contoso.sharepoint.com/teams/team-myteam",
       "customActions": {
         "349f176f-ae79-4adf-a680-be7f187628d1": {
           "location": "ClientSideExtension.ApplicationCustomizer",
           "properties": {
-            "logoUrl": "https://innovationnorway.sharepoint.com/sites/CDN/Shared%20Documents/teams-icon.jpg"
+            "logoUrl": "https://contoso.sharepoint.com/SiteAssets/teams-icon.jpg"
           }
         }
       }
     },
     "groupLogo": {
-      "pageUrl": "https://innovationnorway.sharepoint.com/teams/team-myteam",
+      "pageUrl": "https://contoso.sharepoint.com/teams/team-myteam",
       "customActions": {
         "349f176f-ae79-4adf-a680-be7f187628d1": {
           "location": "ClientSideExtension.ApplicationCustomizer",
           "properties": {
-            "logoUrl": "https://innovationnorway.sharepoint.com/sites/CDN/Shared%20Documents/teams-icon.jpg"
+            "logoUrl": "https://contoso.sharepoint.com/SiteAssets/teams-icon.jpg"
           }
         }
       }
