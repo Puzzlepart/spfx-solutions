@@ -40,22 +40,26 @@ export default class GroupLogoApplicationCustomizer
         let relativeUrlLogo = logoUrl.replace(replace, "");
         let buffer = await web.getFileByServerRelativeUrl(relativeUrlLogo).getBuffer();
 
+        let hasError = false;
         let groupId = this.context.pageContext.legacyPageContext.groupId;
-
+       
         try {
-            await MSGraph.Patch(this.context.graphHttpClient, `v1.0/groups/${groupId}/photo/$value`, buffer);
             Dialog.alert(strings.SettingUp);
+            await MSGraph.Patch(this.context.graphHttpClient, `v1.0/groups/${groupId}/photo/$value`, buffer);
             console.log("Logo updated in the graph");
+        } catch (err) {
+            // Most likely due to user not having Exchange Online license or Group not ready
+            console.log(err);
+            hasError = true;
+        }
+
+        if (!hasError) {
             window.setTimeout(async () => {
                 let currentWeb = new Web(this.context.pageContext.web.absoluteUrl);
                 await currentWeb.getFolderByServerRelativeUrl(`${this.context.pageContext.web.serverRelativeUrl}/SiteAssets/__siteIcon__.jpg`).delete();
                 console.log("Remove site icon file - to force update");
                 this.removeCustomizer();
             }, 3000);
-        } catch (error) {
-            // Most likely due to user not having Exchange Online license
-            debugger;
-            console.log(error);
         }
     }
 
