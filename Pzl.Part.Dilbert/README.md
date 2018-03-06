@@ -1,26 +1,23 @@
-## pzl-part-dilbert
+## Daily Dilbert Modern Web Part
 
-This is where you include your WebPart documentation.
+This web part will together with Microsoft Flow fetch and show the daily dilbert cartoon.
 
 ### Building the code
 
 ```bash
-git clone the repo
+git clone https://github.com/Puzzlepart/spfx-solutions.git
 npm i
-npm i -g gulp
-gulp
+gulp --ship
+gulp package-solution --ship
 ```
 
-This package produces the following:
+### Installing
+* Copy `pzl-part-dilbert.sppkg` from `sharepoint\solution` and install it in your tenant.
+* Import `DailyDilbert_Flow.zip` to your Microsoft Flow environment
+* Open the flow after import and copy the URL of the request URL.
+  <br/>![copy flow url](./flow-url.png)
+* Paste the copied URL into the web part settings
+  <br/>![copy flow url](./webpart-url.png)
+* Save and enjoy!
 
-* lib/* - intermediate-stage commonjs build artifacts
-* dist/* - the bundled script, along with other resources
-* deploy/* - all resources which should be uploaded to a CDN.
 
-### Build options
-
-gulp clean - TODO
-gulp test - TODO
-gulp serve - TODO
-gulp bundle - TODO
-gulp package-solution - TODO
