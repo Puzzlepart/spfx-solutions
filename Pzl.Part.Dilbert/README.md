@@ -20,4 +20,7 @@ gulp package-solution --ship
   <br/>![copy flow url](./webpart-url.png)
 * Save and enjoy!
 
+### Other references
+* http://comicfeeds.chrisbenard.net/view/dilbert/default
+
 

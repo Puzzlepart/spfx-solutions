@@ -1,0 +1,13 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "Office 365 Groups Status Renderer by Puzzlepart",
+    "id": "43aa53a0-47e1-463b-8955-8db77c07234a",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true
+  },
+  "paths": {
+    "zippedPackage": "solution/pzl-ext-group-status.sppkg"
+  }
+}

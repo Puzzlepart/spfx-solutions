@@ -1,0 +1,11 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/spfx/client-side-extension-manifest.schema.json",
+
+  "id": "197aca47-f10e-4955-95df-202d2dafaea7",
+  "alias": "Office365GroupStatusbarApplicationCustom",
+  "componentType": "Extension",
+  "extensionType": "ApplicationCustomizer",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false
+}
