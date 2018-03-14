@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<pnp:Provisioning 
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/01/ProvisioningSchema">
+    <pnp:Preferences Generator="OfficeDevPnP.Core, Version=2.19.1710.0, Culture=neutral, PublicKeyToken=null" />
+    <pnp:Templates ID="CONTAINER-TEMPLATE-GROUPS-STATUS">
+        <pnp:ProvisioningTemplate ID="TEMPLATE-GROUPS-STATUS" Version="1" BaseSiteTemplate="GROUP#0" Scope="RootSite">
+            <pnp:CustomActions>
+                <pnp:SiteCustomActions>
+                    <pnp:CustomAction
+                        Title="ModernSiteStatusbarApplicationCustom"
+                        Name="ModernSiteStatusbarApplicationCustom"
+                        Location="ClientSideExtension.ApplicationCustomizer"
+                        ClientSideComponentId="197aca47-f10e-4955-95df-202d2dafaea7"
+                        ClientSideComponentProperties="{&quot;messageId&quot;:&quot;{parameter:MessageId}&quot;}" />
+                </pnp:SiteCustomActions>
+            </pnp:CustomActions>
+        </pnp:ProvisioningTemplate>
+    </pnp:Templates>
+</pnp:Provisioning>
