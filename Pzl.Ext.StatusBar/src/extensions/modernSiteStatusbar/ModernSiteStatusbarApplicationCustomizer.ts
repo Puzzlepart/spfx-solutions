@@ -8,7 +8,7 @@ import {
 } from '@microsoft/sp-application-base';
 require('mutationobserver-shim');
 
-const LOG_SOURCE: string = '[Office365GroupStatusbarApplicationCustomizer]';
+const LOG_SOURCE: string = '[ModernSiteStatusbarApplicationCustomizer]';
 
 export interface IOffice365GroupStatusbarApplicationCustomizerProperties {
     messageId: string;

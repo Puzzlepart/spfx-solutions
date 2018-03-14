@@ -5,8 +5,8 @@
     "office-365-group-statusbar-application-customizer": {
       "components": [
         {
-          "entrypoint": "./lib/extensions/office365GroupStatusbar/Office365GroupStatusbarApplicationCustomizer.js",
-          "manifest": "./src/extensions/office365GroupStatusbar/Office365GroupStatusbarApplicationCustomizer.manifest.json"
+          "entrypoint": "./lib/extensions/modernSiteStatusbar/ModernSiteStatusbarApplicationCustomizer.js",
+          "manifest": "./src/extensions/modernSiteStatusbar/ModernSiteStatusbarApplicationCustomizer.manifest.json"
         }
       ]
     }

@@ -1,4 +1,4 @@
-## "Office 365 Groups Status Renderer by Puzzlepart
+## Modern Site Status Renderer by Puzzlepart
 
 Extension which will render messages produced by other extensions adding markup to the same messageId as this extension listens to.
 The extension takes a parameter `messageId` which should be a unique ID.
@@ -23,8 +23,8 @@ The template takes the following PnP input setting as a string value `messageId`
             <pnp:CustomActions>
                 <pnp:SiteCustomActions>
                     <pnp:CustomAction
-                        Title="Office365GroupStatusbarApplicationCustom"
-                        Name="Office365GroupStatusbarApplicationCustom"
+                        Title="ModernSiteStatusbarApplicationCustom"
+                        Name="ModernSiteStatusbarApplicationCustom"
                         Location="ClientSideExtension.ApplicationCustomizer"
                         ClientSideComponentId="197aca47-f10e-4955-95df-202d2dafaea7"
                         ClientSideComponentProperties="{&quot;messageId&quot;:&quot;{parameter:MessageId}&quot;}" />
@@ -51,4 +51,4 @@ gulp package-solution --ship
 
 This package produces the following:
 
-* sharepoint/solution/pzl-ext-group-status.sppkg - package to install in the App Catalog
+* sharepoint/solution/pzl-ext-status.sppkg - package to install in the App Catalog
