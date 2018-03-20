@@ -1,26 +1,55 @@
-## pzl-ext-status-bar-group-external-disclaimer
+## External Access Disclaimer Status by Puzzlepart
 
-This is where you include your WebPart documentation.
+Extension which will show a message if
+* The Group supports adding external members
+* The modern site support sharing with external users
 
-### Building the code
+The extension takes a parameter `messageId` which should be a unique ID, and should match the ID used with `pzl-ext-status.sppkg`.
+
+Requires:
+
+* Modern Site Status Renderer by Puzzlepart - pzl-ext-status.sppkg
+
+### Add to a site using the following PnP template
+
+The template takes the following PnP input setting as a string value `messageId`.
+
+```
+<?xml version="1.0"?>
+<pnp:Provisioning 
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/01/ProvisioningSchema">
+    <pnp:Preferences Generator="OfficeDevPnP.Core, Version=2.19.1710.0, Culture=neutral, PublicKeyToken=null" />
+    <pnp:Templates ID="CONTAINER-TEMPLATE-GROUPS-EXTERNAL">
+        <pnp:ProvisioningTemplate ID="TEMPLATE-GROUPS-EXTERNAL" Version="1" BaseSiteTemplate="GROUP#0" Scope="RootSite">
+            <pnp:CustomActions>
+                <pnp:SiteCustomActions>
+                    <pnp:CustomAction
+                        Title="ExternalAccessDisclaimerApplicationCusto"
+                        Name="ExternalAccessDisclaimerApplicationCusto"
+                        Location="ClientSideExtension.ApplicationCustomizer"
+                        ClientSideComponentId="2c565a15-92a5-4f51-9194-6a88a5edd482"
+                        ClientSideComponentProperties="{&quot;messageId&quot;:&quot;{parameter:MessageId}&quot;}" />
+                </pnp:SiteCustomActions>
+            </pnp:CustomActions>
+        </pnp:ProvisioningTemplate>
+    </pnp:Templates>
+</pnp:Provisioning>
+```
+
+Sample command using PnP PowerShell
+```
+Apply-PnPProvisioningTemplate -Path template.xml -Parameters @{"MessageId"="PzlMsg"}
+```
+
+### Building the package
 
 ```bash
 git clone the repo
 npm i
-npm i -g gulp
-gulp
+gulp --ship
+gulp package-solution --ship
 ```
 
 This package produces the following:
 
-* lib/* - intermediate-stage commonjs build artifacts
-* dist/* - the bundled script, along with other resources
-* deploy/* - all resources which should be uploaded to a CDN.
-
-### Build options
-
-gulp clean - TODO
-gulp test - TODO
-gulp serve - TODO
-gulp bundle - TODO
-gulp package-solution - TODO
+* sharepoint/solution/pzl-ext-external-disclaimer.sppkg - package to install in the App Catalog
