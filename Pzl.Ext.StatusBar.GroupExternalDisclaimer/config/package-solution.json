@@ -8,6 +8,6 @@
     "skipFeatureDeployment": true
   },
   "paths": {
-    "zippedPackage": "solution/pzl-ext-status-bar-group-external-disclaimer.sppkg"
+    "zippedPackage": "solution/pzl-ext-external-disclaimer.sppkg"
   }
 }
