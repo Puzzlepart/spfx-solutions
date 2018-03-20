@@ -1,0 +1,13 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "External Access Disclaimer Status by Puzzlepart",
+    "id": "45a9c21c-f312-4cf3-980d-8fe95bf19a24",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true
+  },
+  "paths": {
+    "zippedPackage": "solution/pzl-ext-status-bar-group-external-disclaimer.sppkg"
+  }
+}

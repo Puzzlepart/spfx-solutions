@@ -1,0 +1,18 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "external-access-disclaimer-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/externalAccessDisclaimer/ExternalAccessDisclaimerApplicationCustomizer.js",
+          "manifest": "./src/extensions/externalAccessDisclaimer/ExternalAccessDisclaimerApplicationCustomizer.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "ExternalAccessDisclaimerApplicationCustomizerStrings": "lib/extensions/externalAccessDisclaimer/loc/{locale}.js"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "version": "1.4.1",
+    "libraryName": "pzl-ext-status-bar-group-external-disclaimer",
+    "libraryId": "45a9c21c-f312-4cf3-980d-8fe95bf19a24",
+    "environment": "spo"
+  }
+}
