@@ -15,8 +15,6 @@ export interface IOffice365GroupStatusbarApplicationCustomizerProperties {
 }
 
 // Need to keep global scoped variables due to MutationObserver
-let _messageId: string;
-let _renderContent: () => void;
 let _topPlaceholder: PlaceholderContent | undefined;
 let _observer: MutationObserver;
 
@@ -27,69 +25,54 @@ export default class Office365GroupStatusbarApplicationCustomizer
     @override
     public onInit(): Promise<void> {
         this.context.placeholderProvider.changedEvent.add(this, this.render);
-        // Call render method for generating the HTML elements.
-        //this.render();
         return Promise.resolve<void>();
     }
 
     private async render(): Promise<void> {
-        if (!_messageId && this.properties.messageId) {
-            _messageId = this.properties.messageId;
-        }
-        if (!_renderContent) {
-            _renderContent = this.renderContent;
-        }
-
-        if (!window[_messageId]) {
-            // Make sure message element is present
-            let div = document.createElement("DIV");
-            div.id = _messageId;
-            div.style.cssText = "display:none";
-            document.body.appendChild(div);
+        let targetNode = document.getElementById(this.properties.messageId);
+        if (!targetNode) {
+            // Make sure message element is present - if not create it
+            targetNode = document.createElement("DIV");
+            targetNode.id = this.properties.messageId;
+            document.body.appendChild(targetNode);
         }
 
         if (!_topPlaceholder) {
             _topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top, { onDispose: this._onDispose });
+
+            // Hide placeholder if there is no text in it
+            _topPlaceholder.domElement.style.cssText = targetNode.innerText.length > 0 ? "" : "display:none"
+
+            _topPlaceholder.domElement.innerHTML = `
+                <div class="${styles.msgContainer}">
+                    <div class="${styles.top} ${styles.message}" id="PzlOuterContainer">
+                    </div>
+                </div>`;
+            let outerContainer = document.getElementById("PzlOuterContainer");
+            outerContainer.appendChild(targetNode);
+            targetNode.style.cssText = ""; // show node in case it was created by another extension
         }
 
         if (!_observer) {
             // Register observable
-            let targetNode = window[_messageId];
-            let config = { childList: true };
+            let config = { childList: true, subtree: true, attributes: false, characterData: true };
 
             // Callback function to execute when mutations are observed
+            console.log("Hooking observer for " + this.properties.messageId);
             _observer = new MutationObserver(this.callback);
-            _observer.observe(targetNode, config);
-        }
-
-        _renderContent();
-    }
-
-    private renderContent(): void {
-        if (!_topPlaceholder) {
-            console.error('The expected placeholder (Top) was not found.');
-            return;
-        }
-        console.log('Rendering content');
-
-        if (_topPlaceholder.domElement && window[_messageId] && window[_messageId].innerHTML.length > 0) {
-            _topPlaceholder.domElement.innerHTML = `
-                <div class="${styles.msgContainer}">
-                    <div class="${styles.top} ${styles.message}">
-                        ${window[_messageId].innerHTML}
-                    </div>
-                </div>`;
-        } else {
-            _topPlaceholder.domElement.innerHTML = '';
+            _observer.observe(_topPlaceholder.domElement, config);
         }
     }
 
     private callback(mutationsList) {
-        for (var mutation of mutationsList) {
-            if (mutation.type == 'childList') {
-                _renderContent();
-            }
+        for (let mutation of mutationsList) {
+            let record: MutationRecord = mutation;
+            let element: HTMLElement = record.target as HTMLElement;
+
+            _topPlaceholder.domElement.style.cssText = element.innerText.length > 0 ? "" : "display:none"
+            break;
         }
+        console.log("Status changed");
     }
 
     private _onDispose(): void {
