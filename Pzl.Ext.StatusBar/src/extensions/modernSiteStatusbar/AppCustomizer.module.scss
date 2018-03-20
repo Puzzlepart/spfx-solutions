@@ -1,48 +1,20 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
 $themePrimaryColor: "[theme: themePrimary, default: #6e1e20]";
-$themeLighterAltColor: "[theme: themeLighterAlt, default: #fbf0f1]";
-$themeLighterColor: "[theme: themeLighter, default: #f7e2e2]";
-$themeLightColor: "[theme: themeLight, default: #efc5c5]";
-$themeTertiaryColor: "[theme: themeTertiary, default: #de8486]";
-$themeSecondaryColor: "[theme: themeSecondary, default: #8b2527]";
-$themeDarkAltColor: "[theme: themeDarkAlt, default: #631b1c]";
-$themeDarkColor: "[theme: themeDark, default: #4d1516]";
-$themeDarkerColor: "[theme: themeDarker, default: #3c1011]";
-$neutralLighterAltColor: "[theme: neutralLighterAlt, default: #f8f8f8]";
-$neutralLighterColor: "[theme: neutralLighter, default: #f4f4f4]";
-$neutralLightColor: "[theme: neutralLight, default: #eaeaea]";
-$neutralQuaternaryAltColor: "[theme: neutralQuaternaryAlt, default: #dadada]";
-$neutralQuaternaryColor: "[theme: neutralQuaternary, default: #d0d0d0]";
-$neutralTertiaryAltColor: "[theme: neutralTertiaryAlt, default: #c8c8c8]";
-$neutralTertiaryColor: "[theme: neutralTertiary, default: #d6d6d6]";
-$neutralSecondaryColor: "[theme: neutralSecondary, default: #474747]";
-$neutralPrimaryAltColor: "[theme: neutralPrimaryAlt, default: #2e2e2e]";
-$neutralPrimaryColor: "[theme: neutralPrimary, default: #333]";
-$neutralDarkColor: "[theme: neutralDark, default: #242424]";
-$blackColor: "[theme: black, default: #1c1c1c]";
-$whiteColor: "[theme: white, default: #fff]";
-$primaryBackgroundColor: "[theme: primaryBackground, default: #fff]";
-$primaryTextColor: "[theme: primaryText, default: #333]";
-$bodyBackgroundColor: "[theme: bodyBackground, default: #fff]";
-$bodyTextColor: "[theme: bodyText, default: #333]";
-$disabledBackgroundColor: "[theme: disabledBackground, default: #f4f4f4]";
-$disabledTextColor: "[theme: disabledText, default: #c8c8c8]";
-
-
 .msgContainer {
     .top {
-      height:30px;
-      line-height:2.5;
-      text-align:center;      
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-color: $themePrimaryColor;
-      color: $whiteColor;
+        height: 30px;
+        line-height: 2.5;
+        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: $ms-color-themePrimary;
+        @include ms-fontColor-white;
     }
     .message {
-        cursor:help;
+        cursor: help;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
     }
-  }
+}
