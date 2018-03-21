@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<pnp:Provisioning 
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2018/01/ProvisioningSchema">
+    <pnp:Preferences Generator="OfficeDevPnP.Core, Version=2.19.1710.0, Culture=neutral, PublicKeyToken=null" />
+    <pnp:Templates ID="CONTAINER-TEMPLATE-GROUPS-EXTERNAL">
+        <pnp:ProvisioningTemplate ID="TEMPLATE-GROUPS-EXTERNAL" Version="1" BaseSiteTemplate="GROUP#0" Scope="RootSite">
+            <pnp:CustomActions>
+                <pnp:SiteCustomActions>
+                    <pnp:CustomAction
+                        Title="ExternalAccessDisclaimerApplicationCusto"
+                        Name="ExternalAccessDisclaimerApplicationCusto"
+                        Location="ClientSideExtension.ApplicationCustomizer"
+                        ClientSideComponentId="2c565a15-92a5-4f51-9194-6a88a5edd482"
+                        ClientSideComponentProperties="{&quot;messageId&quot;:&quot;{parameter:MessageId}&quot;}" />
+                </pnp:SiteCustomActions>
+            </pnp:CustomActions>
+        </pnp:ProvisioningTemplate>
+    </pnp:Templates>
+</pnp:Provisioning>
