@@ -6,6 +6,7 @@ import {
     PlaceholderContent,
     PlaceholderName
 } from '@microsoft/sp-application-base';
+import { loadStyles } from '@microsoft/load-themed-styles';
 require('mutationobserver-shim');
 
 const LOG_SOURCE: string = '[ModernSiteStatusbarApplicationCustomizer]';
@@ -29,6 +30,9 @@ export default class Office365GroupStatusbarApplicationCustomizer
     }
 
     private async render(): Promise<void> {
+        // Make sure all messages are shown on one line
+        loadStyles(`#${this.properties.messageId} > DIV {float:left;margin-right:15px;}`);
+
         let targetNode = document.getElementById(this.properties.messageId);
         if (!targetNode) {
             // Make sure message element is present - if not create it
