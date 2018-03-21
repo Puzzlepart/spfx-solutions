@@ -8,7 +8,7 @@ The extension takes a parameter `messageId` which should be a unique ID, and sho
 
 Requires:
 
-* Modern Site Status Renderer by Puzzlepart - pzl-ext-status.sppkg
+* [Modern Site Status Renderer by Puzzlepart](../Pzl.Ext.StatusBar/README.md)
 
 ### Add to a site using the following PnP template
 
