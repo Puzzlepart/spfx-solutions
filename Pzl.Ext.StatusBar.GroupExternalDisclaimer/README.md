@@ -12,7 +12,7 @@ Requires:
 
 ### Add to a site using the following PnP template
 
-The template takes the following PnP input setting as a string value `messageId`.
+The [template](./template.xml) takes the following PnP input setting as a string value `messageId`.
 
 ```
 <?xml version="1.0"?>
