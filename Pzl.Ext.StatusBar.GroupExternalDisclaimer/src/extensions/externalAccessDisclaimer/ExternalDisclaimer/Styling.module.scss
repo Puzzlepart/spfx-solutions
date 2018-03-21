@@ -1,5 +1,4 @@
 @import '~office-ui-fabric-react/dist/sass/References.scss';
-
 .warning {
     @include ms-font-m;
     @include ms-fontWeight-semibold;
@@ -12,31 +11,5 @@
 }
 
 .warningIcon {
-    color: $ms-color-yellowLight;    
+    color: $ms-color-yellowLight;
 }
-
-// .teamsButton {
-//     position: absolute;
-//     background-color: #3F487F;
-//     color: $ms-color-white;
-//     @include ms-font-m;
-//     @include ms-fontWeight-semibold;
-//     height: 30px;
-//     min-width: 130px;
-//     z-index: 1000; //right: 350px;
-//     left: 30px;
-//     bottom: 0;
-// }
-
-// .teamsButton:hover {
-//     background-color: #29384F;
-// }
-
-// .panelButton {
-//     @include ms-font-xl;
-// }
-
-// .panelButton i {
-//     font-size: 1.2em;
-//     color: #3F487F;
-// }
