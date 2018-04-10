@@ -1,0 +1,18 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "classification-notification-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/classificationNotification/ClassificationNotificationApplicationCustomizer.js",
+          "manifest": "./src/extensions/classificationNotification/ClassificationNotificationApplicationCustomizer.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "ClassificationNotificationApplicationCustomizerStrings": "lib/extensions/classificationNotification/loc/{locale}.js"
+  }
+}

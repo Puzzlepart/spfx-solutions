@@ -1,0 +1,13 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "Classification Notification by Puzzlepart",
+    "id": "9e6c1ab5-1d3e-4a39-a43b-d5fa17f9134b",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true
+  },
+  "paths": {
+    "zippedPackage": "solution/pzl-ext-classification.sppkg"
+  }
+}

@@ -1,0 +1,16 @@
+@import '~office-ui-fabric-react/dist/sass/References.scss';
+.notification {
+    @include ms-font-m;
+    @include ms-fontWeight-semibold;
+}
+.classificationColor {
+    color: $ms-color-orangeLighter;
+}
+.warningAdjust {
+    position: relative;
+    top: -2px;
+    margin-left: 5px;
+}
+.warningIcon {
+    color: $ms-color-yellowLight;
+}

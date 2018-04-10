@@ -1,0 +1,31 @@
+{
+  "$schema": "https://dev.office.com/json-schemas/core-build/serve.schema.json",
+  "port": 4321,
+  "https": true,
+  "serveConfigurations": {
+    "default": {
+      "pageUrl": "https://innovationnorway.sharepoint.com/teams/team-mikaeltester",
+      "customActions": {
+        "65d69098-686c-44e7-9ac3-626f788d21fd": {
+          "location": "ClientSideExtension.ApplicationCustomizer",
+          "properties": {
+            "messageId": "PzlMsg",
+            "classifications" : "Confidential,Highly Confidential"
+          }
+        }
+      }
+    },
+    "classificationNotification": {
+      "pageUrl": "https://contoso.sharepoint.com/sites/mySite/SitePages/myPage.aspx",
+      "customActions": {
+        "65d69098-686c-44e7-9ac3-626f788d21fd": {
+          "location": "ClientSideExtension.ApplicationCustomizer",
+          "properties": {
+            "messageId": "PzlMsg",
+            "classifications" : "Confidential,Highly Confidential"
+          }
+        }
+      }
+    }
+  }
+}

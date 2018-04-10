@@ -1,0 +1,8 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "version": "1.4.1",
+    "libraryName": "pzl-ext-status-bar-classification",
+    "libraryId": "9e6c1ab5-1d3e-4a39-a43b-d5fa17f9134b",
+    "environment": "spo"
+  }
+}
