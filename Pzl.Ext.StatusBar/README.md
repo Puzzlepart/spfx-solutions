@@ -15,7 +15,7 @@ Can be used in conjunction with:
 
 The [template](./template.xml) takes the following PnP input setting as a string value `messageId`.
 
-```
+```xml
 <?xml version="1.0"?>
 <pnp:Provisioning 
     xmlns:pnp="http://schemas.dev.office.com/PnP/2018/01/ProvisioningSchema">
