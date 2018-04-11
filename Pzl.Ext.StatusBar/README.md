@@ -9,6 +9,7 @@ up owners, which is a requirement.
 Can be used in conjunction with:
 
 * [External Access Disclaimer Status by Puzzlepart](../Pzl.Ext.StatusBar.GroupExternalDisclaimer/README.md)
+* [Classification Notification by Puzzlepart by Puzzlepart](../Pzl.Ext.StatusBar.Classification/README.md)
 
 ### Add to a site using the following PnP template
 
