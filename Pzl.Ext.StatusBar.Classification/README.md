@@ -37,7 +37,7 @@ The [template](./template.xml) takes the following PnP input setting as a string
 ```
 
 Sample command using PnP PowerShell
-```
+```powershell
 Apply-PnPProvisioningTemplate -Path template.xml -Parameters @{"MessageId"="PzlMsg","Classifications"="Confidential,Highly Confidential"}
 ```
 
