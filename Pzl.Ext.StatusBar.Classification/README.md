@@ -28,7 +28,7 @@ The [template](./template.xml) takes the following PnP input setting as a string
                         Name="ClassificationNotificationApplicationCus"
                         Location="ClientSideExtension.ApplicationCustomizer"
                         ClientSideComponentId="65d69098-686c-44e7-9ac3-626f788d21fd"
-                        ClientSideComponentProperties="{&quot;messageId&quot;:&quot;{parameter:MessageId}&quot;,{&quot;classifications&quot;:&quot;{parameter:Classifications}&quot;}" />
+                        ClientSideComponentProperties="{&quot;messageId&quot;:&quot;{parameter:MessageId}&quot;,&quot;classifications&quot;:&quot;{parameter:Classifications}&quot;}" />
                 </pnp:SiteCustomActions>
             </pnp:CustomActions>
         </pnp:ProvisioningTemplate>
