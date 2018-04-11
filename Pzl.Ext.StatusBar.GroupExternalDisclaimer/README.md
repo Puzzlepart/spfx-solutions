@@ -1,5 +1,7 @@
 ## External Access Disclaimer Status by Puzzlepart
 
+![statusbar](./statusbar.png)
+
 Extension which will show a message if
 * The Group supports adding external members
 * The modern site support sharing with external users

@@ -1,5 +1,7 @@
 ## Classification Notification by Puzzlepart
 
+![statusbar](./statusbar.png)
+
 Extension which will show a message if the classification level of the site is a level specified to be highlighted.
 
 The extension takes a parameter `messageId` which should be a unique ID, and should match the ID used with `pzl-ext-status.sppkg`. It also takes a parameter `classifications` which is a comma separated list of classification values to be highlighted.

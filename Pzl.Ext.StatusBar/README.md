@@ -1,5 +1,7 @@
 ## Modern Site Status Renderer by Puzzlepart
 
+![statusbar](./statusbar.png)
+
 Extension which will render messages produced by other extensions adding markup to the same messageId as this extension listens to.
 The extension takes a parameter `messageId` which should be a unique ID.
 up owners, which is a requirement.
