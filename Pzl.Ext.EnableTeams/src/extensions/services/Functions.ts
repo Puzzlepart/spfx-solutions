@@ -6,12 +6,13 @@ export class Functions {
     public static async CreateTeam(graphHttpClient: GraphHttpClient, groupId: string, siteUrl: string) {
         console.log("Creating team");
         await MSGraph.Put(graphHttpClient, `beta/groups/${groupId}/team`, "{}");
-
+        let teamsUri;
         while (true) {
             let endPointInfo = await MSGraph.Get(graphHttpClient, `beta/groups/${groupId}/endpoints`);
             if (endPointInfo && endPointInfo.value && endPointInfo.value.length > 0) {
                 let info = endPointInfo.value.find(element => { return element.providerName === 'Microsoft Teams'; });
                 if (info) {
+                    teamsUri = info.uri;
                     let currentWeb = new Web(siteUrl);
                     await currentWeb.navigation.quicklaunch.add("Teams", info.uri);
                     console.log("Adding teams link");
@@ -21,6 +22,7 @@ export class Functions {
                 await this.Timeout(500);
             }
         }
+        return teamsUri;
     }
 
     private static Timeout(ms: number): Promise<any> {

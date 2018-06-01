@@ -12,6 +12,7 @@ const LOG_SOURCE: string = 'EnableTeamsApplicationCustomizer';
 
 export interface IEnableTeamsApplicationCustomizerProperties {
     autoCreate: boolean;
+    shouldRedirect: boolean;
 }
 
 
@@ -27,14 +28,17 @@ export default class EnableTeamsApplicationCustomizer
         let isSiteAdmin = this.context.pageContext.legacyPageContext.isSiteAdmin;
         if (isSiteAdmin) {
             let autoCreate = this.properties.autoCreate.toString().toLowerCase() === 'true';
-            this.DoWork(autoCreate);
+            let shouldRedirect = this.properties.shouldRedirect.toString().toLowerCase() === 'true';
+            this.DoWork(autoCreate, shouldRedirect);
         }
 
-        this.arrayPolyfill();        
+        this.arrayPolyfill();
         return Promise.resolve();
     }
 
-    private async DoWork(autoCreate: boolean) {
+    private async DoWork(autoCreate: boolean, shouldRedirect: boolean, ) {
+        let failed = false;
+        let teamsUri;
         let hasTeam = false;
         let groupId = this.context.pageContext.legacyPageContext.groupId;
 
@@ -49,17 +53,21 @@ export default class EnableTeamsApplicationCustomizer
             if (!hasTeam && autoCreate) {
                 dialog.message = "Please wait while we set up Microsoft Teams and add a navigation link...";
                 dialog.show();
-                await Functions.CreateTeam(this.context.graphHttpClient, groupId, this.context.pageContext.site.absoluteUrl);
+                teamsUri = await Functions.CreateTeam(this.context.graphHttpClient, groupId, this.context.pageContext.site.absoluteUrl);
                 hasTeam = true;
             }
         } catch (error) {
+            failed = true;
             Log.error(LOG_SOURCE, error);
         } finally {
             dialog.close();
         }
 
-        if (hasTeam) {
+        if (!failed && hasTeam) {
             await Functions.RemoveCustomizer(this.context.pageContext.site.absoluteUrl, this.componentId);
+            if (shouldRedirect) {
+                document.location.href = teamsUri;
+            }
         } else {
             if (!this._topPlaceholder) {
                 this._topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top, {});
@@ -69,58 +77,57 @@ export default class EnableTeamsApplicationCustomizer
                 }
                 Log.info(LOG_SOURCE, 'The expected placeholder (Top) was found. Rendering <NavigationContainer />');
 
-                let buttonProps = { graphClient: this.context.graphHttpClient, groupId: groupId, siteUrl: this.context.pageContext.site.absoluteUrl, componentId: this.componentId };
+                let buttonProps = { graphClient: this.context.graphHttpClient, groupId: groupId, siteUrl: this.context.pageContext.site.absoluteUrl, componentId: this.componentId, shouldRedirect: shouldRedirect };
                 ReactDOM.render(React.createElement(TeamsButton, buttonProps, null), this._topPlaceholder.domElement);
             }
         }
     }
 
-    private arrayPolyfill()
-    {
+    private arrayPolyfill() {
         if (!(<any>Array.prototype).find) {
             Object.defineProperty(Array.prototype, 'find', {
-              value: function(predicate) {
-               // 1. Let O be ? ToObject(this value).
-                if (this == null) {
-                  throw new TypeError('"this" is null or not defined');
-                }
-          
-                var o = Object(this);
-          
-                // 2. Let len be ? ToLength(? Get(O, "length")).
-                var len = o.length >>> 0;
-          
-                // 3. If IsCallable(predicate) is false, throw a TypeError exception.
-                if (typeof predicate !== 'function') {
-                  throw new TypeError('predicate must be a function');
-                }
-          
-                // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
-                var thisArg = arguments[1];
-          
-                // 5. Let k be 0.
-                var k = 0;
-          
-                // 6. Repeat, while k < len
-                while (k < len) {
-                  // a. Let Pk be ! ToString(k).
-                  // b. Let kValue be ? Get(O, Pk).
-                  // c. Let testResult be ToBoolean(? Call(predicate, T, « kValue, k, O »)).
-                  // d. If testResult is true, return kValue.
-                  var kValue = o[k];
-                  if (predicate.call(thisArg, kValue, k, o)) {
-                    return kValue;
-                  }
-                  // e. Increase k by 1.
-                  k++;
-                }
-          
-                // 7. Return undefined.
-                return undefined;
-              },
-              configurable: true,
-              writable: true
+                value: function (predicate) {
+                    // 1. Let O be ? ToObject(this value).
+                    if (this == null) {
+                        throw new TypeError('"this" is null or not defined');
+                    }
+
+                    var o = Object(this);
+
+                    // 2. Let len be ? ToLength(? Get(O, "length")).
+                    var len = o.length >>> 0;
+
+                    // 3. If IsCallable(predicate) is false, throw a TypeError exception.
+                    if (typeof predicate !== 'function') {
+                        throw new TypeError('predicate must be a function');
+                    }
+
+                    // 4. If thisArg was supplied, let T be thisArg; else let T be undefined.
+                    var thisArg = arguments[1];
+
+                    // 5. Let k be 0.
+                    var k = 0;
+
+                    // 6. Repeat, while k < len
+                    while (k < len) {
+                        // a. Let Pk be ! ToString(k).
+                        // b. Let kValue be ? Get(O, Pk).
+                        // c. Let testResult be ToBoolean(? Call(predicate, T, « kValue, k, O »)).
+                        // d. If testResult is true, return kValue.
+                        var kValue = o[k];
+                        if (predicate.call(thisArg, kValue, k, o)) {
+                            return kValue;
+                        }
+                        // e. Increase k by 1.
+                        k++;
+                    }
+
+                    // 7. Return undefined.
+                    return undefined;
+                },
+                configurable: true,
+                writable: true
             });
-          }
+        }
     }
 }
