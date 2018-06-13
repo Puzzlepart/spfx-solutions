@@ -26,7 +26,8 @@ export default class MoveEveryoneApplicationCustomizer extends BaseApplicationCu
             var user: SiteUserProps = siteUsers[i];
             if (user.LoginName.indexOf(everyoneIdent) === -1) continue;
             if (this.properties.force) {
-                await currentWeb.associatedVisitorGroup.users.add(member.LoginName);
+                await currentWeb.associatedVisitorGroup.users.add(user.LoginName);
+                console.log("Moved everyone to visitors");
             }
 
             for (var j = 0; j < memberGroupUsers.length; j++) {
@@ -35,8 +36,8 @@ export default class MoveEveryoneApplicationCustomizer extends BaseApplicationCu
                     await currentWeb.associatedMemberGroup.users.removeByLoginName(member.LoginName);
                     if (!this.properties.force) {
                         await currentWeb.associatedVisitorGroup.users.add(member.LoginName);
+                        console.log("Moved everyone to visitors");
                     }
-                    console.log("Moved everyone to visitors");
                     break;
                 }
             }
