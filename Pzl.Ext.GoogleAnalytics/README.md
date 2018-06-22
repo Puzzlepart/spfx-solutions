@@ -1,30 +1,22 @@
-## pzl-ext-google-analytics
+## Google analytics SPFx extension
 
-This is where you include your WebPart documentation.
+This webpart makes it possible to gather analytics on modern SharePoint sites with Google Analytics and Google Tag Manager.
 
 ### Building the code
 
 ```bash
-git clone the repo
+git clone https://github.com/Puzzlepart/spfx-solutions.git
 npm i
-npm i -g gulp
-gulp
+gulp --ship
+gulp package-solution --ship
 ```
 
-This package produces the following:
+###
 
-* lib/* - intermediate-stage commonjs build artifacts
-* dist/* - the bundled script, along with other resources
-* deploy/* - all resources which should be uploaded to a CDN.
+### Installing
+* Copy `pzl-ext-google-analytics.sppkg` from `sharepoint\solution` and install it in your tenant.
+* Run the following PowerShell cmdlets
+    * `Connect-PnPOnline https://tenant.sharepoint.com/sites/site`
+    * `Add-PnPCustomAction -ClientSideComponentId "9a936eb0-8370-418e-b4f7-3c6e7f952b50" -Name "GoogleAnalyticsExtension" -Title "GoogleAnalyticsExtension" -Location ClientSideExtension.ApplicationCustomizer -ClientSideComponentProperties: '{"trackerID":"GTM-XXXXXXX"}' -Scope site`
+* Enjoy the stats!
 
-### Build options
-
-gulp clean - TODO
-gulp test - TODO
-gulp serve - TODO
-gulp bundle - TODO
-gulp package-solution - TODO
-
-
-
-Add-PnPCustomAction -ClientSideComponentId "9a936eb0-8370-418e-b4f7-3c6e7f952b50" -Name "GoogleAnalyticsExtension" -Title "GoogleAnalyticsExtension" -Location ClientSideExtension.ApplicationCustomizer -ClientSideComponentProperties: '{"trackerID":"<id>"}' -Scope site

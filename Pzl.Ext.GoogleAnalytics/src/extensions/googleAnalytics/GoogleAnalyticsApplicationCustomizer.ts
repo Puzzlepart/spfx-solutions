@@ -19,7 +19,7 @@ export default class GoogleAnalyticsApplicationCustomizer
       var iframe: any = document.createElement("iframe");
       iframe.height = "0";
       iframe.width = "0";
-      iframe.style = "";
+      iframe.style = "display:none;visibility:hidden";
       iframe.src = `https://www.googletagmanager.com/ns.html?id=${trackerID}`;
 
       document.body.appendChild(iframe);
