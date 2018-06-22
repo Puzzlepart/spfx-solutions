@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "google-analytics-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/googleAnalytics/GoogleAnalyticsApplicationCustomizer.js",
+          "manifest": "./src/extensions/googleAnalytics/GoogleAnalyticsApplicationCustomizer.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "GoogleAnalyticsApplicationCustomizerStrings": "lib/extensions/googleAnalytics/loc/{locale}.js"
+  }
+}
