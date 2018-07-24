@@ -79,7 +79,7 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
   protected get dataVersion(): Version {
     return Version.parse('1.0');
   }
-  protected async onPropertyPaneConfigurationStart() {
+  protected async onPropertyPaneConfigurationStart(): Promise<void> {
     try {
       await this.loadListDropdown();
       await this.loadTileTypeFieldDropdown();
@@ -88,9 +88,18 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
       throw error;
     }
   }
-  private _onConfigure() {
+  private _onConfigure(): void {
     this.context.propertyPane.open();
   }
+  /**
+   *
+   *
+   * @protected
+   * @param {string} propertyPath
+   * @param {*} oldValue
+   * @param {*} newValue
+   * @memberof TilesWebPart
+   */
   protected onPropertyPaneFieldChanged(propertyPath: string, oldValue: any, newValue: any): void {
     if (propertyPath === 'list' &&
       newValue) {
@@ -180,7 +189,7 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
           groups: [
             {
 
-              groupName: "Innstillinger",
+              groupName: strings.Property_BasicGroupName,
               groupFields: [
                 PropertyPaneDropdown('list', {
                   label: strings.Property_List_Label,

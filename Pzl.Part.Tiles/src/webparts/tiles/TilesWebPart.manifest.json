@@ -18,7 +18,7 @@
       "description": {
         "default": "Tiles description"
       },
-      "officeFabricIconFontName": "Link",
+      "officeFabricIconFontName": "Tiles",
       "properties": {
         "orderByField": "Created",
         "count": 6,

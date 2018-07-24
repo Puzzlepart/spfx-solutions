@@ -45,7 +45,7 @@ export default class Tiles extends React.Component<ITilesProps, ITilesState> {
         elements.length > 0 && <div className={styles.promotedLinks}>
           {elements}
         </div>}
-      </div>
+      </div>;
 
     }
   }
