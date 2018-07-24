@@ -1,6 +1,8 @@
-## Modern Tiles 
+# Modern Tiles 
 
-This web parts makes it possible to create tiles in your modern intranet. 
+## Summary
+
+This webpart makes it possible to create tiles in your modern intranet. Just connect the webpart to a list using the webpart property pane. Also specify which fields the webpart should use to render; Description, Background image, Open in new tab, Url and order. Also set a fallback image if no background image is set.
 
 ### Building the code
 
