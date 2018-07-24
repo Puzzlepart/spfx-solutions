@@ -1,25 +1,62 @@
 import * as React from 'react';
 import styles from './Tiles.module.scss';
 import { ITilesProps } from './ITilesProps';
-import { escape } from '@microsoft/sp-lodash-subset';
+import * as pnp from "sp-pnp-js";
+import { Spinner, SpinnerType } from "office-ui-fabric-react/lib/Spinner";
 
-export default class Tiles extends React.Component<ITilesProps, {}> {
+export interface IShortcutsState {
+  items?: Array<any>;
+  isLoading?: boolean;
+}
+
+export default class Tiles extends React.Component<ITilesProps, IShortcutsState> {
+  public componentDidMount(): void {
+    this.fetchData();
+  }
+  public componentDidUpdate(prevprops): void {
+    if (this.props !== prevprops) {
+      this.fetchData();
+    }
+  }
   public render(): React.ReactElement<ITilesProps> {
-    return (
-      <div className={ styles.tiles }>
-        <div className={ styles.container }>
-          <div className={ styles.row }>
-            <div className={ styles.column }>
-              <span className={ styles.title }>Welcome to SharePoint!</span>
-              <p className={ styles.subTitle }>Customize SharePoint experiences using Web Parts.</p>
-              <p className={ styles.description }>{escape(this.props.description)}</p>
-              <a href="https://aka.ms/spfx" className={ styles.button }>
-                <span className={ styles.label }>Learn more</span>
-              </a>
-            </div>
+    let { isLoading, items } = this.state;
+    let elements = items.map((item: any, index: number) => {
+      return <a className={styles.promotedLink} style={{ width: `${this.props.imageWidth}px`, height: `${this.props.imageHeight}px` }} key={index} target={(item[this.props.newTabField]) ? "_blank" : ""} href={(item[this.props.linkField]) ? item[this.props.linkField].Url : "#"}>
+        <img className={styles.image} src={(item[this.props.backgroundImageField]) ? item[this.props.backgroundImageField].Url : this.props.fallbackImageUrl} />
+        <div className={styles.textArea} style={{ height: `${this.props.imageHeight}px`, top: `${this.props.imageHeight / 3 * 2}px` }}>
+          <div className={styles.container} style={{ padding: `${this.props.textPadding}px` }}>
+            <div className={styles.title}>{item.Title}</div>
+            <div className={styles.description}>{item[this.props.descriptionField]}</div>
           </div>
         </div>
-      </div>
-    );
+      </a>;
+    });
+    if (isLoading) {
+      return <Spinner type={SpinnerType.large} />;
+    } else {
+      if (elements.length) {
+        return (
+          <div className={styles.promotedLinks}>
+            {elements}
+          </div>);
+      } else {
+        return null;
+      }
+    }
+  }
+  private async fetchData(): Promise<void> {
+    try {
+      let filter = (this.props.tileTypeField && this.props.tileType) ? `${this.props.tileTypeField} eq '${this.props.tileType}'` : '';
+      let response = await pnp.sp.web.lists.getByTitle(this.props.list).items.filter(filter).orderBy((this.props.orderByField) ? this.props.orderByField : "ID").top(this.props.count).get();
+      this.setState({
+        items: response,
+        isLoading: false,
+      });
+    } catch (error) {
+      this.setState({
+        isLoading: false,
+      });
+      throw error;
+    }
   }
 }

@@ -1,6 +1,6 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-  "id": "80efb673-e8a6-4dd3-b8b3-409bb131c261",
+  "id": "ac715ac1-1178-4dcd-b3fa-e02bf4e62666",
   "alias": "TilesWebPart",
   "componentType": "WebPart",
 
