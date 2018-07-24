@@ -16,7 +16,6 @@ import * as pnp from "sp-pnp-js";
 import * as strings from 'TilesWebPartStrings';
 import Tiles from './components/Tiles';
 import { ITilesProps } from './components/ITilesProps';
-
 export interface ITilesWebPartProps {
   list: string;
   descriptionField: string;
@@ -34,9 +33,7 @@ export interface ITilesWebPartProps {
   tileTypeField: string;
   showAdvanced: boolean;
 }
-
 export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartProps> {
-
   private listOptions: IPropertyPaneDropdownOption[];
   private tileTypeFieldOptions: IPropertyPaneDropdownOption[];
   private tileTypeOptions: IPropertyPaneDropdownOption[];
@@ -73,7 +70,6 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
     );
     ReactDom.render(element, this.domElement);
   }
-
   protected get dataVersion(): Version {
     return Version.parse('1.0');
   }
@@ -86,7 +82,6 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
       throw error;
     }
   }
-
   protected onPropertyPaneFieldChanged(propertyPath: string, oldValue: any, newValue: any): void {
     if (propertyPath === 'list' &&
       newValue) {
@@ -141,7 +136,6 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
       this.render();
     }
   }
-
   private async loadTileTypeFieldDropdown() {
     this.tileTypeFieldDropdownDisabled = !this.tileTypeFieldOptions;
     if (!this.tileTypeFieldOptions && this.properties.list) {
@@ -154,7 +148,6 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
       this.render();
     }
   }
-
   private async loadTileTypeDropdown() {
     this.tileTypeDropdownDisabled = !this.tileTypeOptions;
     if (!this.tileTypeOptions && this.properties.list && this.properties.tileTypeField) {
@@ -168,7 +161,6 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
       this.render();
     }
   }
-
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
@@ -262,7 +254,6 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
       ]
     };
   }
-
   private async fetchListOptions(): Promise<IPropertyPaneDropdownOption[]> {
     try {
       const results = await pnp.sp.web.lists.filter('BaseTemplate eq 100 and Hidden eq false').get();
@@ -273,23 +264,28 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
       throw error;
     }
   }
-
   private async fetchChoiceFieldTypes(): Promise<IPropertyPaneDropdownOption[]> {
-    let fields = await pnp.sp.web.lists.getByTitle(this.properties.list).fields.filter("TypeAsString eq 'Choice'").get();
-    let options: Array<IPropertyPaneDropdownOption> = fields.map((field) => {
-      return { key: field.InternalName, text: field.Title };
-    });
-    return options;
+    try {
+      let fields = await pnp.sp.web.lists.getByTitle(this.properties.list).fields.filter("TypeAsString eq 'Choice'").get();
+      let options: Array<IPropertyPaneDropdownOption> = fields.map((field) => {
+        return { key: field.InternalName, text: field.Title };
+      });
+      return options;
+    } catch (error) {
+      throw error;
+    }
   }
-
   private async fetchFileTypeOptions(): Promise<IPropertyPaneDropdownOption[]> {
-    let field = await pnp.sp.web.lists.getByTitle(this.properties.list).fields.getByInternalNameOrTitle(this.properties.tileTypeField).get();
-    let options: Array<IPropertyPaneDropdownOption> = field.Choices.map((choice) => {
-      return { key: choice, text: choice };
-    });
-    return options;
+    try {
+      let field = await pnp.sp.web.lists.getByTitle(this.properties.list).fields.getByInternalNameOrTitle(this.properties.tileTypeField).get();
+      let options: Array<IPropertyPaneDropdownOption> = field.Choices.map((choice) => {
+        return { key: choice, text: choice };
+      });
+      return options;
+    } catch (error) {
+      throw error;
+    }
   }
-
   private validateFields(value: string): string {
     return (value) ? "" : "Vennligst fyll inn verdi.";
   }

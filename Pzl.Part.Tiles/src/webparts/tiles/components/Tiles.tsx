@@ -4,12 +4,19 @@ import { ITilesProps } from './ITilesProps';
 import * as pnp from "sp-pnp-js";
 import { Spinner, SpinnerType } from "office-ui-fabric-react/lib/Spinner";
 
-export interface IShortcutsState {
+export interface ITilesState {
   items?: Array<any>;
   isLoading?: boolean;
 }
 
-export default class Tiles extends React.Component<ITilesProps, IShortcutsState> {
+export default class Tiles extends React.Component<ITilesProps, ITilesState> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      items: [],
+      isLoading: true,
+    };
+  }
   public componentDidMount(): void {
     this.fetchData();
   }
@@ -19,7 +26,7 @@ export default class Tiles extends React.Component<ITilesProps, IShortcutsState>
     }
   }
   public render(): React.ReactElement<ITilesProps> {
-    let { isLoading, items } = this.state;
+    let { isLoading, items }: ITilesState = this.state;
     let elements = items.map((item: any, index: number) => {
       return <a className={styles.promotedLink} style={{ width: `${this.props.imageWidth}px`, height: `${this.props.imageHeight}px` }} key={index} target={(item[this.props.newTabField]) ? "_blank" : ""} href={(item[this.props.linkField]) ? item[this.props.linkField].Url : "#"}>
         <img className={styles.image} src={(item[this.props.backgroundImageField]) ? item[this.props.backgroundImageField].Url : this.props.fallbackImageUrl} />
@@ -34,14 +41,8 @@ export default class Tiles extends React.Component<ITilesProps, IShortcutsState>
     if (isLoading) {
       return <Spinner type={SpinnerType.large} />;
     } else {
-      if (elements.length) {
-        return (
-          <div className={styles.promotedLinks}>
-            {elements}
-          </div>);
-      } else {
-        return null;
-      }
+      return <div>{elements.length && <div className={styles.promotedLinks}>{elements}</div>}</div>
+
     }
   }
   private async fetchData(): Promise<void> {
