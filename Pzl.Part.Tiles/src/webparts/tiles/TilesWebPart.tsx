@@ -12,10 +12,11 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-webpart-base';
 import { IODataList } from '@microsoft/sp-odata-types';
-import * as pnp from "sp-pnp-js";
+import * as pnp from "sp-pnp-js/lib/pnp";
 import * as strings from 'TilesWebPartStrings';
 import Tiles from './components/Tiles';
 import { ITilesProps } from './components/ITilesProps';
+import { Placeholder } from "@pnp/spfx-controls-react/lib/Placeholder";
 export interface ITilesWebPartProps {
   list: string;
   descriptionField: string;
@@ -68,7 +69,12 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
         tileTypeField: this.properties.tileTypeField
       }
     );
-    ReactDom.render(element, this.domElement);
+    ReactDom.render((this.properties.list) ? element : <Placeholder
+      iconName='Edit'
+      iconText={strings.View_EmptyPlaceholder_Label}
+      description={strings.View_EmptyPlaceholder_Description}
+      buttonLabel={strings.View_EmptyPlaceholder_Button}
+      onConfigure={this._onConfigure.bind(this)} />, this.domElement);
   }
   protected get dataVersion(): Version {
     return Version.parse('1.0');
@@ -81,6 +87,9 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
     } catch (error) {
       throw error;
     }
+  }
+  private _onConfigure() {
+    this.context.propertyPane.open();
   }
   protected onPropertyPaneFieldChanged(propertyPath: string, oldValue: any, newValue: any): void {
     if (propertyPath === 'list' &&

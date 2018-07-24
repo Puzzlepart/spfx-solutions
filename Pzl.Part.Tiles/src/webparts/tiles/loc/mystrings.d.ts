@@ -23,6 +23,9 @@ declare interface ITilesWebPartStrings {
   Property_AdvancedSettings_OffText: string;
   Property_AdvancedSettings_OnText: string;
   View_NoOptionValue: string;
+  View_EmptyPlaceholder_Label: string,
+  View_EmptyPlaceholder_Description: string,
+  View_EmptyPlaceholder_Button: string,
 }
 
 declare module 'TilesWebPartStrings' {

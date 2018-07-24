@@ -20,9 +20,12 @@ define([], function () {
     "Property_OrderBy_Description": "Internal name of field containing the sort order (Date/Number/Single line of text).",
     "Property_TileType_Label": "Tile type",
     "Property_List_Label": "List",
+    "Property_AdvancedSettings_OffText": "Show",
+    "Property_AdvancedSettings_OnText": "Hide",
     "Property_AdvancedSettings_Label": "More settings",
     "View_NoOptionValue": "<None>",
-    "Property_AdvancedSettings_OffText": "Show",
-    "Property_AdvancedSettings_OnText": "Hide"
+    "View_EmptyPlaceholder_Label": 'Edit Web Part',
+    "View_EmptyPlaceholder_Description": "Property 'List' is not yet configured.",
+    "View_EmptyPlaceholder_Button": 'Edit',
   }
 });

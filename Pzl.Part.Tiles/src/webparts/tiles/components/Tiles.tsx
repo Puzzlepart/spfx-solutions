@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './Tiles.module.scss';
 import { ITilesProps } from './ITilesProps';
-import * as pnp from "sp-pnp-js";
+import * as pnp from "sp-pnp-js/lib/pnp";
 import { Spinner, SpinnerType } from "office-ui-fabric-react/lib/Spinner";
 
 export interface ITilesState {
