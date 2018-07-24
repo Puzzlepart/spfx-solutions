@@ -113,7 +113,7 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
       this.fetchFileTypeOptions()
         .then((itemOptions: IPropertyPaneDropdownOption[]): void => {
           this.tileTypeOptions = itemOptions;
-          this.tileTypeOptions.push({ text: "<Ingen verdi>", key: "" });
+          this.tileTypeOptions.push({ text: `${strings.View_NoOptionValue}`, key: "" });
           this.tileTypeDropdownDisabled = false;
           this.context.statusRenderer.clearLoadingIndicator(this.domElement);
           this.render();
@@ -166,7 +166,7 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
       pages: [
         {
           header: {
-            description: strings.PropertyPaneDescription
+            description: strings.Property_PropertyPaneDescription
           },
           groups: [
             {
@@ -174,12 +174,12 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
               groupName: "Innstillinger",
               groupFields: [
                 PropertyPaneDropdown('list', {
-                  label: 'Liste',
+                  label: strings.Property_List_Label,
                   options: this.listOptions,
                   disabled: this.listsDropdownDisabled
                 }),
                 PropertyPaneDropdown('tileTypeField', {
-                  label: 'Felt for flistype',
+                  label: strings.Property_TileType_Label,
                   options: this.tileTypeFieldOptions,
                   disabled: this.tileTypeFieldDropdownDisabled
                 }),
@@ -189,9 +189,9 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
                   disabled: this.tileTypeDropdownDisabled
                 }),
                 PropertyPaneToggle('showAdvanced', {
-                  label: 'Avanserte innstillinger',
-                  offText: "Vis",
-                  onText: "Skjul"
+                  label: strings.Property_AdvancedSettings_Label,
+                  offText: strings.Property_AdvancedSettings_OffText,
+                  onText: strings.Property_AdvancedSettings_OnText
                 }),
               ]
             },
@@ -199,28 +199,28 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
               isCollapsed: !this.properties.showAdvanced,
               groupFields: [
                 PropertyPaneTextField('descriptionField', {
-                  label: strings.DescriptionFieldLabel,
-                  description: strings.DescriptionFieldDescription,
+                  label: strings.Property_Description_Label,
+                  description: strings.Property_Description_Description,
                 }),
                 PropertyPaneTextField('backgroundImageField', {
-                  label: strings.BackgroundImageFieldLabel,
-                  description: strings.BackgroundImageFieldDescription,
+                  label: strings.Property_BackgroundImage_Label,
+                  description: strings.Property_BackgroundImage_Description,
                 }),
                 PropertyPaneTextField('fallbackImageUrl', {
-                  label: strings.FallbackImageUrlLabel,
-                  description: strings.FallbackImageUrlDescription,
+                  label: strings.Property_FallbackImageUrl_Label,
+                  description: strings.Property_FallbackImageUrl_Description,
                 }),
                 PropertyPaneTextField('newTabField', {
-                  label: strings.NewTabFieldLabel,
-                  description: strings.NewTabFieldDescription,
+                  label: strings.Property_NewTab_Label,
+                  description: strings.Property_NewTab_Description,
                 }),
                 PropertyPaneTextField('linkField', {
-                  label: strings.LinkFieldLabel,
-                  description: strings.LinkFieldDescription,
+                  label: strings.Property_Link_Label,
+                  description: strings.Property_Link_Description,
                 }),
                 PropertyPaneTextField('orderByField', {
-                  label: strings.OrderByFieldLabel,
-                  description: strings.OrderByFieldDescription,
+                  label: strings.Property_OrderBy_Label,
+                  description: strings.Property_OrderBy_Description,
                 }),
               ]
             },
@@ -228,22 +228,22 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
               isCollapsed: !this.properties.showAdvanced,
               groupFields: [
                 PropertyPaneSlider('count', {
-                  label: strings.CountFieldLabel,
+                  label: strings.Property_Count_Label,
                   min: 1,
                   max: 20
                 }),
                 PropertyPaneSlider('imageWidth', {
-                  label: strings.ImageWidthFieldLabel,
+                  label: strings.Property_ImageWidth_Label,
                   min: 100,
                   max: 500
                 }),
                 PropertyPaneSlider('imageHeight', {
-                  label: strings.ImageHeightFieldLabel,
+                  label: strings.Property_ImageHeight_Label,
                   min: 100,
                   max: 500
                 }),
                 PropertyPaneSlider('textPadding', {
-                  label: strings.TextPaddingFieldLabel,
+                  label: strings.Property_TextPadding_Label,
                   min: 2,
                   max: 20
                 }),

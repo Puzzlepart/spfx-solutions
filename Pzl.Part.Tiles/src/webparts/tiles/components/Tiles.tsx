@@ -41,7 +41,11 @@ export default class Tiles extends React.Component<ITilesProps, ITilesState> {
     if (isLoading) {
       return <Spinner type={SpinnerType.large} />;
     } else {
-      return <div>{elements.length && <div className={styles.promotedLinks}>{elements}</div>}</div>
+      return <div>{
+        elements.length > 0 && <div className={styles.promotedLinks}>
+          {elements}
+        </div>}
+      </div>
 
     }
   }
