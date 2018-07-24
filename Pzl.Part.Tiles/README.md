@@ -1,26 +1,20 @@
-## pzl-part-tiles
+## Modern Tiles 
 
-This is where you include your WebPart documentation.
+This web parts makes it possible to create tiles in your modern intranet. 
 
 ### Building the code
 
 ```bash
-git clone the repo
+git clone https://github.com/Puzzlepart/spfx-solutions.git
 npm i
-npm i -g gulp
-gulp
+gulp --ship
+gulp package-solution --ship
 ```
 
-This package produces the following:
+###
 
-* lib/* - intermediate-stage commonjs build artifacts
-* dist/* - the bundled script, along with other resources
-* deploy/* - all resources which should be uploaded to a CDN.
+### Installing
+* Copy `pzl-part-tiles.sppkg` from `sharepoint\solution` and install it in your tenant.
+* Install the app in your site
+* Enjoy the tiles!
 
-### Build options
-
-gulp clean - TODO
-gulp test - TODO
-gulp serve - TODO
-gulp bundle - TODO
-gulp package-solution - TODO
