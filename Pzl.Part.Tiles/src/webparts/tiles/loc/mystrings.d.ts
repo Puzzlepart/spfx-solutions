@@ -18,6 +18,7 @@ declare interface ITilesWebPartStrings {
   Property_OrderBy_Label: string;
   Property_OrderBy_Description: string;
   Property_TileType_Label: string;
+  Property_TileChoiceField_Label: string;
   Property_List_Label: string;
   Property_AdvancedSettings_Label: string;
   Property_AdvancedSettings_OffText: string;

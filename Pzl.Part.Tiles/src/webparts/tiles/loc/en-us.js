@@ -19,6 +19,7 @@ define([], function () {
     "Property_OrderBy_Label": "Order Field",
     "Property_OrderBy_Description": "Internal name of field containing the sort order (Date/Number/Single line of text).",
     "Property_TileType_Label": "Tile type",
+    "Property_TileChoiceField_Label": "Choice field",
     "Property_List_Label": "List",
     "Property_AdvancedSettings_OffText": "Show",
     "Property_AdvancedSettings_OnText": "Hide",

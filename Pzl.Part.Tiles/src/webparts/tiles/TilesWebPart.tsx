@@ -8,7 +8,6 @@ import {
   PropertyPaneSlider,
   IPropertyPaneDropdownOption,
   PropertyPaneDropdown,
-  PropertyPaneLabel,
   PropertyPaneToggle
 } from '@microsoft/sp-webpart-base';
 import { IODataList } from '@microsoft/sp-odata-types';
@@ -188,7 +187,6 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
           },
           groups: [
             {
-
               groupName: strings.Property_BasicGroupName,
               groupFields: [
                 PropertyPaneDropdown('list', {
@@ -197,12 +195,12 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
                   disabled: this.listsDropdownDisabled
                 }),
                 PropertyPaneDropdown('tileTypeField', {
-                  label: strings.Property_TileType_Label,
+                  label: strings.Property_TileChoiceField_Label,
                   options: this.tileTypeFieldOptions,
                   disabled: this.tileTypeFieldDropdownDisabled
                 }),
                 PropertyPaneDropdown('tileType', {
-                  label: 'Flistype',
+                  label: strings.Property_TileType_Label,
                   options: this.tileTypeOptions,
                   disabled: this.tileTypeDropdownDisabled
                 }),
