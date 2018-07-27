@@ -1,6 +1,6 @@
 # Sticky List Header by Puzzlepart
 
-This is an extension which performs DOM manipulation to ensure the header of lists and libraries are sticky, and does not scroll out of view when you have many items in the list.
+This is an extension which performs DOM manipulation to ensure the header of lists and libraries are sticky, and does not scroll out of view when you have many items in the list. This solutions is merely a band-aid until this User Voice request gets enough votes (please up-vote): https://sharepoint.uservoice.com/forums/329214-sites-and-collaboration/suggestions/16077640-freeze-column-headers
 
 ![Sticky list header](./sticky-header.png "Sticky list header")
 
