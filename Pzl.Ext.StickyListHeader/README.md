@@ -10,7 +10,7 @@ The code is build as a `ListViewCommandSet`, but it does not contain any buttons
 
 ## Deploying the solution
 
-The code as is is built as a globally available package named `pzl-ext-sticky-list-header.sppkg`. To enable it on a site collection (until globally deployed extensions are available in SPFx1.6?), you register a custom action for the list/library type where you want the stickiness applied :)
+The code as is is built as a globally available package named `pzl-ext-sticky-list-header.sppkg`. To enable it on a site collection (until globally deployed extensions are available in SPFx1.6?), you register the custom action where you want the stickiness applied :) The below template/command will register it on all lists and libraries.
 
 ## PnP PowerShell Command to apply sticky header
 ```ps
