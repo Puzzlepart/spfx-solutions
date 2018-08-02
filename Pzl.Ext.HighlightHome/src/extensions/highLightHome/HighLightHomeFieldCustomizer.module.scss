@@ -1,0 +1,12 @@
+@import '~office-ui-fabric-react/dist/sass/_References.scss';
+.homeIcon {
+    width: 100%;
+    @include ms-fontWeight-semibold;
+}
+.homeIcon:after {
+    @include ms-Icon;
+    @include ms-Icon--Home;
+    @include ms-fontSize-l;
+    margin-left: 10px;
+    position: absolute;
+}

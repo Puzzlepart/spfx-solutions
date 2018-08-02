@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+    <CustomAction
+        Title="HighLightActivationApplicationCustomizer"
+        Location="ClientSideExtension.ApplicationCustomizer"
+        Rights="ManageWeb"
+        ClientSideComponentId="a196c786-1eae-44d0-a46a-6c922453e1bf"
+        ClientSideComponentProperties="{}">
+    </CustomAction>
+</Elements>

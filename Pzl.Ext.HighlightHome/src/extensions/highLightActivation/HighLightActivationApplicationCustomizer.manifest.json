@@ -1,0 +1,10 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-extension-manifest.schema.json",
+    "id": "a196c786-1eae-44d0-a46a-6c922453e1bf",
+    "alias": "HighLightActivationApplicationCustomizer",
+    "componentType": "Extension",
+    "extensionType": "ApplicationCustomizer",
+    "version": "*",
+    "manifestVersion": 2,
+    "requiresCustomScript": false
+}
