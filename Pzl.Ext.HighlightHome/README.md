@@ -1,12 +1,15 @@
 # Hightlight Home Page by Puzzlepart
 
-This is a field customizer which will highlight which file in `Site Pages` is the actual home page for the site.
+Field customizer which will highlight the home page for a site in *Site Pages*.
+
+![Screenshot](./screenshot.png "Screenshot")
+
 
 ## Installing the solution
 
-- Upload the file `pzl-ext-highlight-home.sppkg` to either your tenant app catalog or to a site app catalog.
+- Upload the file [pzl-ext-highlight-home.sppkg](./pzl-ext-highlight-home.sppkg) to either your tenant app catalog or to a site app catalog.
 - Add the application named *Hightlight Home Page by Puzzlepart* to your site, and wait for install to finish.
-- Make sure your user is a site administrator or owner.
+- Make sure your user is a site administrator or owner the first time you test it to ensure proper installation.
 - Navigate to the `Site Pages` library, and you should see the current home page being high lighted in the list of all pages in the site.
 
 ## Troubleshooting
