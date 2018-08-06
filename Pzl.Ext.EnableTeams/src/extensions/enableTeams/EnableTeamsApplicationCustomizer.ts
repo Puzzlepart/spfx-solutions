@@ -24,6 +24,7 @@ export default class EnableTeamsApplicationCustomizer
 
     @override
     public onInit(): Promise<void> {
+        this.arrayPolyfill();
         // Extra check for siteadmin to ensure it's run by a Group owner
         let isSiteAdmin = this.context.pageContext.legacyPageContext.isSiteAdmin;
         if (isSiteAdmin) {
@@ -31,8 +32,6 @@ export default class EnableTeamsApplicationCustomizer
             let shouldRedirect = this.properties.shouldRedirect.toString().toLowerCase() === 'true';
             this.DoWork(autoCreate, shouldRedirect);
         }
-
-        this.arrayPolyfill();
         return Promise.resolve();
     }
 
