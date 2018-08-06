@@ -1,0 +1,31 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "ac715ac1-1178-4dcd-b3fa-e02bf4e62666",
+  "alias": "PzlTilesWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Other"
+      },
+      "title": {
+        "default": "Tiles"
+      },
+      "description": {
+        "default": "Tiles description"
+      },
+      "officeFabricIconFontName": "Tiles",
+      "properties": {
+        "orderByField": "Created",
+        "count": 6,
+        "imageWidth": 250,
+        "imageHeight": 130,
+        "textPadding": 10
+      }
+    }
+  ]
+}

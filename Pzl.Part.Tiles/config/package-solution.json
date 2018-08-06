@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "pzl-part-tiles-client-side-solution",
+    "id": "62b3c13c-4c0f-4d65-acc0-e82cea7a335c",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true
+  },
+  "paths": {
+    "zippedPackage": "solution/pzl-part-tiles.sppkg"
+  }
+}
