@@ -1,0 +1,54 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+.promotedLinks {
+    .promotedLink {
+        cursor: pointer;
+        margin: 0px 10px 5px 0px;
+        display: inline-block;
+        position: relative;
+        overflow: hidden;
+        .textArea {
+            @include ms-font-l;
+            position: absolute;
+            width: 100%;
+            background: #333;
+            opacity: 0.8;
+            top: 80px;
+            overflow: hidden;
+            transition: all 0.5s ease 0s;
+            .container {
+                color: white;
+                padding: 10px;
+                .title {
+                    @include ms-font-l;
+                    color: white;
+                    height: 25px;
+                    overflow: hidden;
+                }
+                .description {
+                    display: none;
+                    @include ms-font-s;
+                    color: white;
+                    height: 45px;
+                    overflow: hidden;
+                }
+            }
+        }
+        .image {
+            width: 100%;
+        }
+        &:hover {
+            .textArea {
+                transition: all 0.5s ease 0s;
+                top: 0 !important;
+                .container {
+                    .description {
+                        display: block;
+                    }
+                    .title {
+                        height: 45px;
+                    }
+                }
+            }
+        }
+    }
+}
