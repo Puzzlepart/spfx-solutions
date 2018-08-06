@@ -22,10 +22,10 @@ export default class HighLightActivationApplicationCustomizer
     private async DoWork() {
         let web = new Web(this.context.pageContext.web.absoluteUrl);
         let updateResult = await web.getList(`${this.context.pageContext.web.serverRelativeUrl}/SitePages`)
-            .fields.getByInternalNameOrTitle("LinkFilename").update({
+            .fields.getByInternalNameOrTitle("DocIcon").update({
                 ClientSideComponentId: "9c89c914-ae2c-4d7d-8d72-de3b72fbbe9f",
             });
-        Log.info(LOG_SOURCE, `Added field customizer to LinkFilename: ${updateResult.data}`);
+        Log.info(LOG_SOURCE, `Added field customizer to DocIcon: ${updateResult.data}`);
         await this.removeCustomizer();
     }
 

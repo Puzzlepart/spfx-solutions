@@ -16,7 +16,7 @@ Field customizer which will highlight the home page for a site in *Site Pages*.
 If you don't see the page highlighted right away, refresh your page. Also make sure you access the site as a site administrator or owner in order for the field customizer to be installed.
 
 ## Technical details
-The solution adds a field customizer to the field `LinkFileName` which is the backing field for the `Name` column. It's not possible to modify this field using `elements.xml` directly, so the application also includes a run-once application customizer which will install the field customizer, and then remove itself.
+The solution adds a field customizer to the field `DocIcon`, and replace the default icon with an icon for Home. The row is also bolded. It's not possible to modify this field using `elements.xml` directly, so the application also includes a run-once application customizer which will install the field customizer, and then remove itself.
 
 ## Building the code
 
