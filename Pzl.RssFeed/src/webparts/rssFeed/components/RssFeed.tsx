@@ -5,6 +5,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { IRssFeedProps } from './IRssFeedProps';
 import { IRssFeedState } from './IRssFeedState';
 import * as pnp from 'sp-pnp-js';
+import * as strings from 'RssFeedWebPartStrings';
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
 
 export default class RssFeed extends React.Component<IRssFeedProps, IRssFeedState> {
@@ -48,7 +49,7 @@ export default class RssFeed extends React.Component<IRssFeedProps, IRssFeedStat
                   <div className={`${styles.listItemTitle}`}>
                     {title}
                   </div>
-                  {pubDate ? <div className={`${styles.listItemPubDate} ms-font-xs`}>Publisert {moment(pubDate).format("DD.MM.YYYY")}</div> : null}
+                  {pubDate ? <div className={`${styles.listItemPubDate} ms-font-xs`}>{strings.View_PublishLabel} {moment(pubDate).format("DD.MM.YYYY")}</div> : null}
                 </div>
               </a>
             )) : null}

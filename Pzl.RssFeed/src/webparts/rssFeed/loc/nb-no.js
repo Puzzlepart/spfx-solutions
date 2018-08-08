@@ -7,8 +7,9 @@ define([], function () {
         "ItemsCountFieldLabel": "Antall elementer",
         "IconLabel": "Ikon",
         "CacheExpirationTimeFieldLabel": "Cache varighet (minutter)",
-        "View_EmptyPlaceholder_Label": 'Edit Web Part',
-        "View_EmptyPlaceholder_Description": "Property 'List' is not yet configured.",
-        "View_EmptyPlaceholder_Button": 'Edit',
+        "View_PublishLabel": "Publisert",
+        "View_EmptyPlaceholder_Label": 'Rediger nettdel',
+        "View_EmptyPlaceholder_Description": "Egenskap 'RSS-Feed URL' er ikke konfigurert.",
+        "View_EmptyPlaceholder_Button": 'Rediger',
     }
 });

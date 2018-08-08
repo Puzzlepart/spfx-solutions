@@ -7,7 +7,7 @@ declare interface IRssFeedWebPartStrings {
   IconLabel: string;
   CacheExpirationTimeFieldLabel: string;
   Rss2jsonApiKeyFieldLabel: string;
-
+  View_PublishLabel: string;
   View_EmptyPlaceholder_Label: string;
   View_EmptyPlaceholder_Description: string;
   View_EmptyPlaceholder_Button: string;
