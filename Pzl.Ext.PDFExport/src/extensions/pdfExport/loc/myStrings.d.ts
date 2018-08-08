@@ -1,9 +1,9 @@
 declare interface IPdfExportCommandSetStrings {
-  Command1: string;
-  Command2: string;
+    DownloadAsPdf: string;
+    SaveAsPdf: string;
 }
 
 declare module 'PdfExportCommandSetStrings' {
-  const strings: IPdfExportCommandSetStrings;
-  export = strings;
+    const strings: IPdfExportCommandSetStrings;
+    export = strings;
 }

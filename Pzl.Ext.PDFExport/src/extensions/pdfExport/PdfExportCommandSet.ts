@@ -10,20 +10,22 @@ import { Dialog } from '@microsoft/sp-dialog';
 import { Web, List, RenderListDataOptions } from '@pnp/sp';
 import { HttpClient, HttpClientResponse } from '@microsoft/sp-http';
 import * as JSZip from 'jszip';
-
+import * as FileSaver from 'file-saver';
+import WaitDialog from './WaitDialog';
 import * as strings from 'PdfExportCommandSetStrings';
 
 export interface IPdfExportCommandSetProperties {
-
 }
 
 interface SharePointFile {
     serverRelativeUrl: string;
     pdfUrl: string;
     fileType: string;
+    pdfFileName: string;
 }
 
 const LOG_SOURCE: string = 'PdfExportCommandSet';
+const DIALOG = new WaitDialog();
 
 export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExportCommandSetProperties> {
 
@@ -45,21 +47,75 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
         }
     }
 
+    private toBuffer(ab) {
+        var buffer = new Buffer(ab.byteLength);
+        var view = new Uint8Array(ab);
+        for (var i = 0; i < buffer.length; ++i) {
+            buffer[i] = view[i];
+        }
+        return buffer;
+    }
+
     @override
     public async onExecute(event: IListViewCommandSetExecuteEventParameters): Promise<void> {
+        let itemIds = event.selectedRows.map(i => i.getValueByName("ID"));
         switch (event.itemId) {
-            case 'EXPORT':
-                //Dialog.alert(`${this.properties.sampleTextOne}`);
-                let zipFile: JSZip = new JSZip();
-                
+            case 'EXPORT': {
+                DIALOG.title = "Save as PDF";
+                DIALOG.message = "Generating files..."
+                DIALOG.error = "";
+                DIALOG.show();
+                let files = await this.generatePdfUrls(itemIds);
+                if (itemIds.length == 1) {
+                    const file = files[0];                    
+                    DIALOG.message = `Processing ${file.pdfFileName}...`;
+                    DIALOG.render();
+                    const response = await this.context.httpClient.get(file.pdfUrl, HttpClient.configurations.v1);
+                    if (response.ok) {
+                        const blob = await response.blob();
+                        FileSaver.saveAs(blob, file.pdfFileName);
+                    } else {
+                        const error = await response.json();
+                        let errorMessage = error.error.innererror ? error.error.innererror.code : error.error.message;
+                        DIALOG.error = `Failed to process ${file.pdfFileName} - ${errorMessage}`;
+                        DIALOG.render();
+                    }
+                } else {
+                    const zip: JSZip = new JSZip();
+                    for (let i = 0; i < files.length; i++) {
+                        const file = files[i];
+                        DIALOG.message = `Processing ${file.pdfFileName}...`;
+                        DIALOG.render();
+                        const response = await this.context.httpClient.get(file.pdfUrl, HttpClient.configurations.v1);
+                        if (response.ok) {
+                            const blob = await response.blob();
+                            zip.file(file.pdfFileName, blob, { binary: true });
+                        } else {
+                            const error = await response.json();
+                            let errorMessage = error.error.innererror ? error.error.innererror.code : error.error.message;
+                            DIALOG.error = `Failed to process ${file.pdfFileName} - ${errorMessage}`;
+                            DIALOG.render();
+                        }
+                    }
+                    let d = new Date();
+                    let dateString = d.getFullYear() + "-" + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+
+                    const zipBlob = await zip.generateAsync({ type: "blob" });
+                    FileSaver.saveAs(zipBlob, `files-${dateString}.zip`);
+                }
+                DIALOG.close();
                 break;
-            case 'SAVE_AS':
-                let item = event.selectedRows[0];
-                let itemIds = event.selectedRows.map(i => i.getValueByName("ID"));
-                //let itemId = parseInt(item.getValueByName("ID"));
+            }
+            case 'SAVE_AS': {
+                DIALOG.title = "Generating PDF's";
+                DIALOG.message = "Please wait while files are being processed...";
+                DIALOG.show();
                 let files = await this.generatePdfUrls(itemIds);
                 await this.saveAsPdf(files);
+                DIALOG.close();
+                window.location.href = window.location.href;
                 break;
+            }
             default:
                 throw new Error('Unknown command');
         }
@@ -69,13 +125,21 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
         let web: Web = new Web(this.context.pageContext.web.absoluteUrl);
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
+            DIALOG.message = `Processing ${file.pdfFileName}...`;
+            DIALOG.render();
             let pdfUrl = file.serverRelativeUrl.replace("." + file.fileType, ".pdf");
             await web.getFileByServerRelativeUrl(file.serverRelativeUrl).copyTo(pdfUrl);
             let response = await this.context.httpClient.get(file.pdfUrl, HttpClient.configurations.v1);
-            let blob = await response.blob();
-            await web.getFileByServerRelativeUrl(pdfUrl).setContentChunked(blob);
+            if (response.ok) {
+                let blob = await response.blob();
+                await web.getFileByServerRelativeUrl(pdfUrl).setContentChunked(blob);
+            } else {
+                const error = await response.json();
+                let errorMessage = error.error.innererror ? error.error.innererror.code : error.error.message;
+                DIALOG.error = `Failed to process ${file.pdfFileName} - ${errorMessage}`;
+                DIALOG.render();
+            }
         }
-        window.location.href = window.location.href;
     }
 
     private async generatePdfUrls(listItemIds: string[]): Promise<SharePointFile[]> {
@@ -109,7 +173,7 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
 
         let pdfUrls: SharePointFile[] = [];
         response.ListData.Row.forEach(element => {
-            let fileType = element[".fileType"]
+            let fileType = element[".fileType"];
             let spItemUrl = element[".spItemUrl"];
             let pdfUrl = pdfConversionUrl
                 .replace("{.mediaBaseUrl}", mediaBaseUrl)
@@ -117,8 +181,8 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
                 .replace("{.callerStack}", callerStack)
                 .replace("{.spItemUrl}", spItemUrl)
                 .replace("{.driveAccessToken}", driveAccessToken);
-            //console.log(pdfUrl);
-            pdfUrls.push({ serverRelativeUrl: element["FileRef"], pdfUrl: pdfUrl, fileType: fileType });
+            let pdfFileName = element.FileLeafRef.replace(fileType, "pdf");
+            pdfUrls.push({ serverRelativeUrl: element["FileRef"], pdfUrl: pdfUrl, fileType: fileType, pdfFileName: pdfFileName });
         });
         return pdfUrls;
     }
