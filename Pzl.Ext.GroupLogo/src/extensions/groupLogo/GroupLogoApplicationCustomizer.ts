@@ -21,6 +21,7 @@ export default class GroupLogoApplicationCustomizer
 
     @override
     public onInit(): Promise<void> {
+        if (typeof console == "undefined" || typeof console.log == "undefined") var console = { log: function() {} };
         this.DoWork(this.properties.logoUrl);
         return Promise.resolve();
     }

@@ -24,15 +24,22 @@ export default class EnableTeamsApplicationCustomizer
 
     @override
     public onInit(): Promise<void> {
+        this.arrayPolyfill();
+        if (typeof console == "undefined" || typeof console.log == "undefined") var console = { log: function() {} };
         // Extra check for siteadmin to ensure it's run by a Group owner
         let isSiteAdmin = this.context.pageContext.legacyPageContext.isSiteAdmin;
         if (isSiteAdmin) {
-            let autoCreate = this.properties.autoCreate.toString().toLowerCase() === 'true';
-            let shouldRedirect = this.properties.shouldRedirect.toString().toLowerCase() === 'true';
+            debugger;
+            let autoCreate = false;
+            if (typeof this.properties.autoCreate !== 'undefined') {
+                autoCreate = this.properties.autoCreate.toString().toLowerCase() === 'true';
+            }
+            let shouldRedirect = false;
+            if (typeof this.properties.shouldRedirect !== 'undefined') {
+                shouldRedirect = this.properties.shouldRedirect.toString().toLowerCase() === 'true';
+            }
             this.DoWork(autoCreate, shouldRedirect);
         }
-
-        this.arrayPolyfill();
         return Promise.resolve();
     }
 
@@ -68,19 +75,19 @@ export default class EnableTeamsApplicationCustomizer
             if (shouldRedirect) {
                 document.location.href = teamsUri;
             }
-        } else {
-            if (!this._topPlaceholder) {
-                this._topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top, {});
-                if (!this._topPlaceholder || !this._topPlaceholder.domElement) {
-                    Log.info(LOG_SOURCE, 'The expected placeholder (Top) was not found.');
-                    return;
-                }
-                Log.info(LOG_SOURCE, 'The expected placeholder (Top) was found. Rendering <NavigationContainer />');
-
-                let buttonProps = { graphClient: this.context.graphHttpClient, groupId: groupId, siteUrl: this.context.pageContext.site.absoluteUrl, componentId: this.componentId, shouldRedirect: shouldRedirect };
-                ReactDOM.render(React.createElement(TeamsButton, buttonProps, null), this._topPlaceholder.domElement);
-            }
         }
+        if (!this._topPlaceholder && !autoCreate) {
+            this._topPlaceholder = this.context.placeholderProvider.tryCreateContent(PlaceholderName.Top, {});
+            if (!this._topPlaceholder || !this._topPlaceholder.domElement) {
+                Log.info(LOG_SOURCE, 'The expected placeholder (Top) was not found.');
+                return;
+            }
+            Log.info(LOG_SOURCE, 'The expected placeholder (Top) was found. Rendering <NavigationContainer />');
+
+            let buttonProps = { graphClient: this.context.graphHttpClient, groupId: groupId, siteUrl: this.context.pageContext.site.absoluteUrl, componentId: this.componentId, shouldRedirect: shouldRedirect };
+            ReactDOM.render(React.createElement(TeamsButton, buttonProps, null), this._topPlaceholder.domElement);
+        }
+
     }
 
     private arrayPolyfill() {

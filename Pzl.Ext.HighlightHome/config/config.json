@@ -1,0 +1,24 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+    "version": "2.0",
+    "bundles": {
+        "high-light-home-field-customizer": {
+            "components": [
+                {
+                    "entrypoint": "./lib/extensions/highLightHome/HighLightHomeFieldCustomizer.js",
+                    "manifest": "./src/extensions/highLightHome/HighLightHomeFieldCustomizer.manifest.json"
+                }
+            ]
+        },
+        "high-light-activation-application-customizer": {
+            "components": [
+                {
+                    "entrypoint": "./lib/extensions/highLightActivation/HighLightActivationApplicationCustomizer.js",
+                    "manifest": "./src/extensions/highLightActivation/HighLightActivationApplicationCustomizer.manifest.json"
+                }
+            ]
+        }
+    },
+    "externals": {},
+    "localizedResources": {}
+}

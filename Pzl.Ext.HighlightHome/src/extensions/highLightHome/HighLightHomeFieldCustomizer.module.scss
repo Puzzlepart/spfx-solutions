@@ -1,0 +1,12 @@
+.ext {
+    @import '~office-ui-fabric-react/dist/sass/_References.scss';
+    .homeIcon {
+        vertical-align: text-bottom;
+        @include ms-Icon;
+        @include ms-fontSize-l;
+        
+    }
+    .homeIcon:before {
+        @include ms-Icon--Home;       
+    }
+}

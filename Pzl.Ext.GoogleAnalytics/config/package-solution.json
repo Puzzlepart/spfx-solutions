@@ -1,0 +1,13 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "Google analytics by Puzzlepart",
+    "id": "24ee2b0d-2cd7-462c-8ad7-1692054c14fc",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true
+  },
+  "paths": {
+    "zippedPackage": "solution/pzl-ext-google-analytics.sppkg"
+  }
+}

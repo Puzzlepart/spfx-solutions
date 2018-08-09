@@ -1,0 +1,30 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "65315586-9600-4d76-9a87-d0ec4aa8c1e2",
+  "alias": "RssFeedWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Other"
+      },
+      "title": {
+        "default": "RSS-feed"
+      },
+      "description": {
+        "default": "RSS-feed description"
+      },
+      "officeFabricIconFontName": "News",
+      "properties": {
+        "officeUIFabricIcon": "News",
+        "itemsCount": "3",
+        "rssFeedUrl": "",
+        "title": "RSS-Feed"
+      }
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "Hightlight Home Page by Puzzlepart",
+    "id": "1b8eca52-cf5f-4f92-a466-fb48a5ba2c55",
+    "version": "1.0.0.10",
+    "includeClientSideAssets": true,
+    "features": [
+      {
+        "title": "Field Extension - Deployment of custom field.",
+        "description": "Deploys a custom field with ClientSideComponentId association",
+        "id": "dd78eb92-4514-4c28-b9c7-df766c21bc63",
+        "version": "1.0.0.10",
+        "assets": {
+          "elementManifests": [
+            "elements.xml"
+          ]
+        }
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/pzl-ext-highlight-home.sppkg"
+  }
+}
