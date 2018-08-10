@@ -1,0 +1,216 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Local workbench",
+            "type": "chrome",
+            "request": "launch",
+            "url": "https://localhost:4321/temp/workbench.html",
+            "webRoot": "${workspaceRoot}",
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+                "webpack:///../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../../src/*": "${webRoot}/src/*"
+            },
+            "runtimeArgs": [
+                "--remote-debugging-port=9222"
+            ]
+        },
+        {
+            "name": "Hosted workbench",
+            "type": "chrome",
+            "request": "launch",
+            "url": "https://contoso.sharepoint.com/_layouts/workbench.aspx",
+            "webRoot": "${workspaceRoot}",
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+                "webpack:///../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../../src/*": "${webRoot}/src/*"
+            },
+            "runtimeArgs": [
+                "--remote-debugging-port=9222"
+            ]
+        },
+        {
+            "name": "Debug EnableTeamsApplicationCustomizer",
+            "type": "chrome",
+            "request": "launch",
+            "url": "https://contoso.sharepoint.com/sites/documents?loadSPFX=true&debugManifestsFile=https://localhost:4321/temp/manifests.js&customActions={\"fa80f680-bda9-4c15-a8fe-4e86be0bf593\":{\"location\":\"ClientSideExtension.ApplicationCustomizer\",\"properties\":{\"autoCreate\":\"true\",\"payload\":{\"memberSettings\":{\"allowCreateUpdateChannels\":false,\"allowDeleteChannels\":false,\"allowAddRemoveApps\":false,\"allowCreateUpdateRemoveTabs\":false,\"allowCreateUpdateRemoveConnectors\":false}}}}}",
+            "webRoot": "${workspaceRoot}",
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+                "webpack:///../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../../src/*": "${webRoot}/src/*"
+            },
+            "runtimeArgs": [
+                "--remote-debugging-port=9222"
+            ]
+        },
+        {
+            "name": "Debug GoogleAnalyticsApplicationCustomizer",
+            "type": "chrome",
+            "request": "launch",
+            "url": "https://contoso.sharepoint.com/documents?loadSPFX=true&debugManifestsFile=https://localhost:4321/temp/manifests.js&customActions={\"9a936eb0-8370-418e-b4f7-3c6e7f952b50\":{\"location\":\"ClientSideExtension.ApplicationCustomizer\",\"properties\":{\"prop1\":\"val1\"}}}",
+            "webRoot": "${workspaceRoot}",
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+                "webpack:///../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../../src/*": "${webRoot}/src/*"
+            },
+            "runtimeArgs": [
+                "--remote-debugging-port=9222"
+            ]
+        },
+        {
+            "name": "Debug GroupLogoApplicationCustomizer",
+            "type": "chrome",
+            "request": "launch",
+            "url": "https://contoso.sharepoint.com/documents?loadSPFX=true&debugManifestsFile=https://localhost:4321/temp/manifests.js&customActions={\"349f176f-ae79-4adf-a680-be7f187628d1\":{\"location\":\"ClientSideExtension.ApplicationCustomizer\",\"properties\":{\"prop1\":\"val1\"}}}",
+            "webRoot": "${workspaceRoot}",
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+                "webpack:///../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../../src/*": "${webRoot}/src/*"
+            },
+            "runtimeArgs": [
+                "--remote-debugging-port=9222"
+            ]
+        },
+        {
+            "name": "Debug HighLightActivationApplicationCustomizer",
+            "type": "chrome",
+            "request": "launch",
+            "url": "https://contoso.sharepoint.com/documents?loadSPFX=true&debugManifestsFile=https://localhost:4321/temp/manifests.js&customActions={\"a196c786-1eae-44d0-a46a-6c922453e1bf\":{\"location\":\"ClientSideExtension.ApplicationCustomizer\",\"properties\":{\"prop1\":\"val1\"}}}",
+            "webRoot": "${workspaceRoot}",
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+                "webpack:///../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../../src/*": "${webRoot}/src/*"
+            },
+            "runtimeArgs": [
+                "--remote-debugging-port=9222"
+            ]
+        },
+        {
+            "name": "Debug HighLightHomeFieldCustomizer",
+            "type": "chrome",
+            "request": "launch",
+            "url": "https://contoso.sharepoint.com/documents?loadSPFX=true&debugManifestsFile=https://localhost:4321/temp/manifests.js&fieldCustomizers={\"FieldName\":{\"id\":\"9c89c914-ae2c-4d7d-8d72-de3b72fbbe9f\",\"properties\":{\"prop1\":\"val1\"}}}",
+            "webRoot": "${workspaceRoot}",
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+                "webpack:///../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../../src/*": "${webRoot}/src/*"
+            },
+            "runtimeArgs": [
+                "--remote-debugging-port=9222"
+            ]
+        },
+        {
+            "name": "Debug MoveEveryoneApplicationCustomizer",
+            "type": "chrome",
+            "request": "launch",
+            "url": "https://contoso.sharepoint.com/documents?loadSPFX=true&debugManifestsFile=https://localhost:4321/temp/manifests.js&customActions={\"0ec55642-6231-464b-a4c2-dc72cb61d6f4\":{\"location\":\"ClientSideExtension.ApplicationCustomizer\",\"properties\":{\"prop1\":\"val1\"}}}",
+            "webRoot": "${workspaceRoot}",
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+                "webpack:///../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../../src/*": "${webRoot}/src/*"
+            },
+            "runtimeArgs": [
+                "--remote-debugging-port=9222"
+            ]
+        },
+        {
+            "name": "Debug PdfExportCommandSet",
+            "type": "chrome",
+            "request": "launch",
+            "url": "https://contoso.sharepoint.com/documents?loadSPFX=true&debugManifestsFile=https://localhost:4321/temp/manifests.js&customActions={\"ea401ac9-3abc-4e27-b93b-09c9a0587ee9\":{\"location\":\"ClientSideExtension.ListViewCommandSet.CommandBar\"}}",
+            "webRoot": "${workspaceRoot}",
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+                "webpack:///../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../../src/*": "${webRoot}/src/*"
+            },
+            "runtimeArgs": [
+                "--remote-debugging-port=9222"
+            ]
+        },
+        {
+            "name": "Debug ModernSiteStatusbarApplicationCustom",
+            "type": "chrome",
+            "request": "launch",
+            "url": "https://contoso.sharepoint.com/documents?loadSPFX=true&debugManifestsFile=https://localhost:4321/temp/manifests.js&customActions={\"197aca47-f10e-4955-95df-202d2dafaea7\":{\"location\":\"ClientSideExtension.ApplicationCustomizer\",\"properties\":{\"prop1\":\"val1\"}}}",
+            "webRoot": "${workspaceRoot}",
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+                "webpack:///../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../../src/*": "${webRoot}/src/*"
+            },
+            "runtimeArgs": [
+                "--remote-debugging-port=9222"
+            ]
+        },
+        {
+            "name": "Debug ClassificationNotificationApplicationCus",
+            "type": "chrome",
+            "request": "launch",
+            "url": "https://contoso.sharepoint.com/documents?loadSPFX=true&debugManifestsFile=https://localhost:4321/temp/manifests.js&customActions={\"65d69098-686c-44e7-9ac3-626f788d21fd\":{\"location\":\"ClientSideExtension.ApplicationCustomizer\",\"properties\":{\"prop1\":\"val1\"}}}",
+            "webRoot": "${workspaceRoot}",
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+                "webpack:///../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../../src/*": "${webRoot}/src/*"
+            },
+            "runtimeArgs": [
+                "--remote-debugging-port=9222"
+            ]
+        },
+        {
+            "name": "Debug ExternalAccessDisclaimerApplicationCusto",
+            "type": "chrome",
+            "request": "launch",
+            "url": "https://contoso.sharepoint.com/documents?loadSPFX=true&debugManifestsFile=https://localhost:4321/temp/manifests.js&customActions={\"2c565a15-92a5-4f51-9194-6a88a5edd482\":{\"location\":\"ClientSideExtension.ApplicationCustomizer\",\"properties\":{\"prop1\":\"val1\"}}}",
+            "webRoot": "${workspaceRoot}",
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+                "webpack:///../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../../src/*": "${webRoot}/src/*"
+            },
+            "runtimeArgs": [
+                "--remote-debugging-port=9222"
+            ]
+        },
+        {
+            "name": "Debug StickyHeaderCommandSet",
+            "type": "chrome",
+            "request": "launch",
+            "url": "https://contoso.sharepoint.com/documents?loadSPFX=true&debugManifestsFile=https://localhost:4321/temp/manifests.js&customActions={\"18603209-c031-4905-b62f-8fff7cd00e83\":{\"location\":\"ClientSideExtension.ListViewCommandSet.CommandBar\"}}",
+            "webRoot": "${workspaceRoot}",
+            "sourceMaps": true,
+            "sourceMapPathOverrides": {
+                "webpack:///../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../src/*": "${webRoot}/src/*",
+                "webpack:///../../../../../src/*": "${webRoot}/src/*"
+            },
+            "runtimeArgs": [
+                "--remote-debugging-port=9222"
+            ]
+        }
+    ]
+}

@@ -15,6 +15,7 @@ export interface ITeamsButtonProps {
     siteUrl: string;
     componentId: string;
     shouldRedirect: boolean;
+    payload: any;
 }
 
 export default class TeamsButton extends React.Component<ITeamsButtonProps, { showPanel: boolean }> {
@@ -71,7 +72,7 @@ export default class TeamsButton extends React.Component<ITeamsButtonProps, { sh
         try {
             dialog.message = "Please wait while we set up Microsoft Teams and add a navigation link...";
             dialog.show();
-            let teamsUri = await Functions.CreateTeam(this.props.graphClient, this.props.groupId, this.props.siteUrl);
+            let teamsUri = await Functions.CreateTeam(this.props.graphClient, this.props.groupId, this.props.siteUrl, this.props.payload);
             await Functions.RemoveCustomizer(this.props.siteUrl, this.props.componentId);
 
             if (this.props.shouldRedirect) {

@@ -3,21 +3,8 @@ import { GraphHttpClient } from '@microsoft/sp-http';
 import { Web, Site } from '@pnp/sp';
 
 export class Functions {
-    public static async CreateTeam(graphHttpClient: GraphHttpClient, groupId: string, siteUrl: string) {
-        console.log("Creating team");
-        let payload: any = {
-            "memberSettings": {
-                "allowCreateUpdateChannels": true
-            },
-            "messagingSettings": {
-                "allowUserEditMessages": true,
-                "allowUserDeleteMessages": true
-            },
-            "funSettings": {
-                "allowGiphy": true,
-                "giphyContentRating": "strict"
-            }
-        };
+    public static async CreateTeam(graphHttpClient: GraphHttpClient, groupId: string, siteUrl: string, payload: any) {
+        console.log("Creating team(" + payload + ")");
         await MSGraph.Put(graphHttpClient, `beta/groups/${groupId}/team`, JSON.stringify(payload));
         let teamsUri;
         while (true) {

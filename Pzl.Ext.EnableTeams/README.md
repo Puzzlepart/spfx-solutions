@@ -6,6 +6,8 @@
 Extension which will create a Team for the group and add a navigation link to the Team.
 If the extension is initialized with `autoCreate=true` then a Team is automatically created instead of showing a "Get Teams" link.
 If the extension is initialized with `shouldRedirect=true` then the user is redirected to the new Team after it is created.
+If the extension is initialized with a `payload` then the Team will be created based on the specified settings, 
+see https://developer.microsoft.com/en-us/graph/docs/api-reference/beta/api/team_put_teams. Note! payload is a json object and not a string.
 
 The extension when added with `Rights="ManageWeb"` will only run for Group owners, which is a requirement.
 
