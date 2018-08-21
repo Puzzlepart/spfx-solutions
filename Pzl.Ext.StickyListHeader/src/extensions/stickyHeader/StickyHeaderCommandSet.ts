@@ -15,7 +15,7 @@ export default class StickyHeaderCommandSet extends BaseListViewCommandSet<IStic
         let listHeader: HTMLDivElement = document.querySelector("div[role='grid'] div") as HTMLDivElement;
         if (listHeader && listHeader.style.position === "") {
             listHeader.style.position = "sticky";
-            listHeader.style.zIndex = "1000";
+            listHeader.style.zIndex = "500";
             listHeader.style.top = "0px";
             if (console.log) {
                 console.log("Making list header sticky courtesy of Puzzlepart");
