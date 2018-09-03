@@ -4,7 +4,7 @@
     "https": true,
     "serveConfigurations": {
         "default": {
-            "pageUrl": "https://techmikael.sharepoint.com/teams/CommSite/Delte%20dokumenter/Forms/AllItems.aspx",
+            "pageUrl": "https://techmikael.sharepoint.com/Delte%20dokumenter/Forms/AllItems.aspx",
             "customActions": {
                 "ea401ac9-3abc-4e27-b93b-09c9a0587ee9": {
                     "location": "ClientSideExtension.ListViewCommandSet",

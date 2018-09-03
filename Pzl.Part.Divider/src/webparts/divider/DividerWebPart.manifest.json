@@ -1,0 +1,21 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "6a1a8d9e-13f0-43ac-8663-7f6278d1669e",
+  "alias": "DividerWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "supportsFullBleed": true,
+
+  "preconfiguredEntries": [{
+    "groupId": "cf066440-0614-43d6-98ae-0b31cf14c7c3",
+    "group": { "default": "Text, media, and content" },
+    "title": { "default": "Divider (flexible)" },
+    "description": { "default": "Add a line to help divide areas on your page" },
+    "officeFabricIconFontName": "CalculatorSubtract",
+    "properties": {
+      "width": 60
+    }
+  }]
+}
