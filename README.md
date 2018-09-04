@@ -1,4 +1,4 @@
-# Free SPFx from Puzzlepart
+# Free SPFx solutions from Puzzlepart
 
 This repository contains free to use SharePoint Framework solutions by Puzzlepart. You can use and modify these as you please.
 
