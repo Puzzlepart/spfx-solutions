@@ -25,9 +25,11 @@ interface SharePointFile {
 }
 
 const LOG_SOURCE: string = 'PdfExportCommandSet';
-const DIALOG = new WaitDialog();
+const DIALOG = new WaitDialog({});
 
 export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExportCommandSetProperties> {
+
+    private _validExts : string[] = ['csv', 'doc', 'docx', 'odp', 'ods', 'odt', 'pot', 'potm', 'potx', 'pps', 'ppsx', 'ppsxm', 'ppt', 'pptm', 'pptx', 'rtf', 'xls', 'xlsx'];
 
     @override
     public onInit(): Promise<void> {
@@ -47,22 +49,36 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
         }
     }
 
-    private toBuffer(ab) {
-        var buffer = new Buffer(ab.byteLength);
-        var view = new Uint8Array(ab);
-        for (var i = 0; i < buffer.length; ++i) {
-            buffer[i] = view[i];
-        }
-        return buffer;
-    }
+    // private toBuffer(ab) {
+    //     var buffer = new Buffer(ab.byteLength);
+    //     var view = new Uint8Array(ab);
+    //     for (var i = 0; i < buffer.length; ++i) {
+    //         buffer[i] = view[i];
+    //     }
+    //     return buffer;
+    // }
 
     @override
     public async onExecute(event: IListViewCommandSetExecuteEventParameters): Promise<void> {
         let itemIds = event.selectedRows.map(i => i.getValueByName("ID"));
+        let fileExts = event.selectedRows.map(i => i.getValueByName("File_x0020_Type").toLocaleLowerCase());
+        DIALOG.showClose = false;
+        for (let i = 0; i < fileExts.length; i++) {
+            const ext = fileExts[i];
+            if(this._validExts.indexOf(ext) === -1) {
+                DIALOG.title = "Supported file extensions";
+                DIALOG.message = "The current file extensions are supported: " + this._validExts.join(", ") + ".";
+                DIALOG.error = "";
+                DIALOG.showClose = true;
+                DIALOG.show();
+                return;
+            }            
+        }
+
         switch (event.itemId) {
             case 'EXPORT': {
                 DIALOG.title = "Save as PDF";
-                DIALOG.message = "Generating files..."
+                DIALOG.message = "Generating files...";
                 DIALOG.error = "";
                 DIALOG.show();
                 let files = await this.generatePdfUrls(itemIds);

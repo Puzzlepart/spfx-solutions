@@ -10,6 +10,8 @@ interface IWaitDialogContentProps {
     message: string;
     error: string;
     title: string;
+    showClose: boolean;
+    closeCallback: () => void;
 }
 
 class WaitDialogContent extends React.Component<IWaitDialogContentProps, {}> {
@@ -22,7 +24,8 @@ class WaitDialogContent extends React.Component<IWaitDialogContentProps, {}> {
             <DialogContent
                 title={this.props.title}
                 subText={this.props.message}
-                showCloseButton={false}
+                showCloseButton={this.props.showClose}
+                onDismiss={this.props.closeCallback}
             >
                 <Label>
                     {this.props.error}
@@ -37,18 +40,30 @@ export default class WaitDialog extends BaseDialog {
     public message: string;
     public title: string;
     public error: string;
+    public showClose: boolean = false;
+
+    constructor(props) {
+        super(props);
+        this.closeDialog = this.closeDialog.bind(this);
+    }
 
     public render(): void {
         ReactDOM.render(<WaitDialogContent
             message={this.message}
             title={this.title}
             error={this.error}
+            showClose={this.showClose}
+            closeCallback={this.closeDialog}
         />, this.domElement);
+    }
+
+    private closeDialog() {
+        this.close();
     }
 
     public getConfig(): IDialogConfiguration {
         return {
-            isBlocking: true
+            isBlocking: true,
         };
     }
 }
