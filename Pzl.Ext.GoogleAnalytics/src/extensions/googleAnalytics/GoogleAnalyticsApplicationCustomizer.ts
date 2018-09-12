@@ -35,14 +35,18 @@ export default class GoogleAnalyticsApplicationCustomizer
   private track(): void {
     let trackerID: string = this.properties.trackerID;
     if (trackerID) {
-      var iframe: any = document.createElement("iframe");
+      let iframe: any = document.createElement("iframe");
+      iframe.id = "GoogleAnalyticsApplicationCustomizerIframe";
       iframe.height = "0";
       iframe.width = "0";
       iframe.style = "display:none;visibility:hidden";
       iframe.src = `https://www.googletagmanager.com/ns.html?id=${trackerID}`;
 
+      let element = document.getElementById("GoogleAnalyticsApplicationCustomizerIframe");
+      if (typeof (element) !== 'undefined' && element !== null) {
+        document.body.removeChild(element);
+      }
       document.body.appendChild(iframe);
-
       eval(`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
       new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
       j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
