@@ -1,11 +1,23 @@
 ## Google analytics SPFx extension
 
-This webpart makes it possible to gather analytics on modern SharePoint sites with Google Analytics and Google Tag Manager.
+This webpart makes it possible to gather analytics on modern SharePoint sites with Google Analytics and Google Tag Manager. By default it is a Tenant Wide Deploy.
 
-### Building the code
+### Get started
 
+#### Clone the repo 
 ```bash
 git clone https://github.com/Puzzlepart/spfx-solutions.git
+```
+
+#### Pre-build
+Before building the code remember to update the *trackerID* property in the following files
+* sharepoint/assets/ClientSideInstance.xml
+* sharepoint/elements.xml
+
+Update config/package-solution.json if you don't want to do a tenant wide deploy
+
+#### Build the code
+```bash
 npm i
 gulp --ship
 gulp package-solution --ship
