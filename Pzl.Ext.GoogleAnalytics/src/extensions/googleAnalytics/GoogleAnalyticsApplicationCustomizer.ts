@@ -20,7 +20,6 @@ export default class GoogleAnalyticsApplicationCustomizer
    */
   @override
   public onInit(): Promise<void> {
-    this.track();
     this.context.application.navigatedEvent.add(this, () => {
       this.track();
     });
