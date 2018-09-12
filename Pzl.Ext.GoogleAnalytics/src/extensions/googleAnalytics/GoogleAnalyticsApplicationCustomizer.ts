@@ -12,8 +12,28 @@ export interface IGoogeAnalyticsApplicationCustomizerProperties {
 export default class GoogleAnalyticsApplicationCustomizer
   extends BaseApplicationCustomizer<IGoogeAnalyticsApplicationCustomizerProperties> {
 
+  /**
+   *
+   *
+   * @returns {Promise<void>}
+   * @memberof GoogleAnalyticsApplicationCustomizer
+   */
   @override
   public onInit(): Promise<void> {
+    this.track();
+    this.context.application.navigatedEvent.add(this, () => {
+      this.track();
+    });
+    return Promise.resolve();
+  }
+
+  /**
+   *
+   *
+   * @private
+   * @memberof GoogleAnalyticsApplicationCustomizer
+   */
+  private track(): void {
     let trackerID: string = this.properties.trackerID;
     if (trackerID) {
       var iframe: any = document.createElement("iframe");
@@ -34,6 +54,5 @@ export default class GoogleAnalyticsApplicationCustomizer
     } else {
       Log.info(LOG_SOURCE, "Tracking ID not provided");
     }
-    return Promise.resolve();
   }
 }
