@@ -23,7 +23,8 @@
     "@types/webpack-env": "1.13.1",
     "moment": "^2.22.2",
     "react": "15.6.2",
-    "react-dom": "15.6.2"
+    "react-dom": "15.6.2",
+    "sp-pnp-js": "^3.0.10"
   },
   "devDependencies": {
     "@microsoft/sp-build-web": "1.5.1",
