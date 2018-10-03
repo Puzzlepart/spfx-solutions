@@ -1,27 +1,35 @@
 {
-  "compilerOptions": {
-    "target": "es5",
-    "forceConsistentCasingInFileNames": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "jsx": "react",
-    "declaration": true,
-    "sourceMap": true,
-    "experimentalDecorators": true,
-    "skipLibCheck": true,
-    "typeRoots": [
-      "./node_modules/@types",
-      "./node_modules/@microsoft"
+    "compilerOptions": {
+        "target": "es5",
+        "forceConsistentCasingInFileNames": true,
+        "module": "esnext",
+        "moduleResolution": "node",
+        "jsx": "react",
+        "declaration": true,
+        "sourceMap": true,
+        "experimentalDecorators": true,
+        "skipLibCheck": true,
+        "outDir": "lib",
+        "typeRoots": [
+            "./node_modules/@types",
+            "./node_modules/@microsoft"
+        ],
+        "types": [
+            "es6-promise",
+            "webpack-env",
+            "jszip"
+        ],
+        "lib": [
+            "es5",
+            "dom",
+            "es2015.collection"
+        ]
+    },
+    "include": [
+        "src/**/*.ts"
     ],
-    "types": [
-      "es6-promise",
-      "webpack-env",
-      "jszip"
-    ],
-    "lib": [
-      "es5",
-      "dom",
-      "es2015.collection"
+    "exclude": [
+        "node_modules",
+        "lib"
     ]
-  }
 }

@@ -5,6 +5,7 @@ import {
     PropertyPaneSlider,
     PropertyPaneTextField
 } from '@microsoft/sp-webpart-base';
+import { DisplayMode } from '@microsoft/sp-core-library';
 import { loadStyles } from '@microsoft/load-themed-styles';
 import PropertyPaneLogo from './PropertyPaneLogo';
 import styles from './DividerWebPart.module.scss';
@@ -18,23 +19,29 @@ export interface IDividerWebPartProps {
 
 export default class DividerWebPart extends BaseClientSideWebPart<IDividerWebPartProps> {
 
-    public render(): void {        
+    public render(): void {
         let color = this.properties.color;
-        if(!color || color.trim().length === 0){
+        if (!color || color.trim().length === 0) {
             color = "[theme: neutralTertiaryAlt, default: #c8c8c8]";
         }
 
         // Enclose theme colors with quotes
         if (color.toLocaleLowerCase().indexOf("theme") !== -1) {
             color = '"' + color.trim() + '"';
-        }        
+        }
 
         let propClass = `.${styles.divider} {
             background-color: ${color};
             width: ${this.properties.width}%;
         }`;
+
+        let cssString = ``;
+        if (this.displayMode == DisplayMode.Edit) {
+            cssString = `margin-bottom:50px`;
+        }
+
         loadStyles(propClass);
-        this.domElement.innerHTML = `<hr aria-hidden="true" role="presentation" class="${styles.divider}">`;
+        this.domElement.innerHTML = `<hr aria-hidden="true" role="presentation" class="${styles.divider}" style="${cssString}">`;
     }
 
     protected renderLogo(domElement: HTMLElement) {
