@@ -11,7 +11,29 @@ export interface IGoogeAnalyticsApplicationCustomizerProperties {
 
 export default class GoogleAnalyticsApplicationCustomizer
   extends BaseApplicationCustomizer<IGoogeAnalyticsApplicationCustomizerProperties> {
+  
+  private currentPage = "";
+  private isInitialLoad = true;
 
+  private getFreshCurrentPage(): string {
+    return window.location.pathname + window.location.search;
+  }
+  private updateCurrentPage(): void {
+    this.currentPage = this.getFreshCurrentPage();
+  }
+
+  private navigatedEvent(): void {
+    const navigatedPage = this.getFreshCurrentPage();
+    if (!this.isInitialLoad && (navigatedPage !== this.currentPage)) {
+      this.realNavigatedEvent();
+      this.updateCurrentPage();
+    }
+    this.isInitialLoad = false;
+  }
+
+  private realNavigatedEvent(): void {
+    this.track();
+  }
   /**
    *
    *
@@ -20,8 +42,9 @@ export default class GoogleAnalyticsApplicationCustomizer
    */
   @override
   public onInit(): Promise<void> {
+    this.track();
     this.context.application.navigatedEvent.add(this, () => {
-      this.track();
+      this.navigatedEvent();
     });
     return Promise.resolve();
   }
