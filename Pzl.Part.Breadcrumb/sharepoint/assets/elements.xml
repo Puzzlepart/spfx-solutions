@@ -3,12 +3,12 @@
    <Field
         ID="{9F895944-AB17-4012-B4FC-2231D2265096}"
         Type="Lookup"
-        DisplayName="Overordnet side"
+        DisplayName="Parent page"
         Required="false"
         List="SitePages"
         ShowField="Title"
         UnlimitedLengthInDocumentLibrary="TRUE"
-        Group="SharePoint Framework kolonner"
+        Group="SharePoint Framework provisioned columns"
         StaticName="SpfxParentPage"
         Name="SpfxParentPage"
         Version="1" />
