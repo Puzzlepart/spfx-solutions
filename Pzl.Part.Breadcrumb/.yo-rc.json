@@ -1,0 +1,11 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "isCreatingSolution": false,
+    "environment": "spo",
+    "version": "1.6.0",
+    "libraryName": "pzl-part-breadcrumb",
+    "libraryId": "035a6b74-22d5-4523-8546-9b729e61dd13",
+    "packageManager": "npm",
+    "componentType": "webpart"
+  }
+}

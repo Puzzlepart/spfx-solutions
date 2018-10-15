@@ -1,0 +1,27 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "breadcrumb-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/breadcrumb/BreadcrumbWebPart.js",
+          "manifest": "./src/webparts/breadcrumb/BreadcrumbWebPart.manifest.json"
+        }
+      ]
+    },
+    "page-navigation-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/pageNavigation/PageNavigationWebPart.js",
+          "manifest": "./src/webparts/pageNavigation/PageNavigationWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "BreadcrumbWebPartStrings": "lib/webparts/breadcrumb/loc/{locale}.js",
+    "PageNavigationWebPartStrings": "lib/webparts/pageNavigation/loc/{locale}.js"
+  }
+}

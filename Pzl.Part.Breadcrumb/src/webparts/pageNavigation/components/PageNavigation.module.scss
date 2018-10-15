@@ -1,0 +1,8 @@
+@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+.pageNavigation {
+  .rootLabel {
+    @include ms-font-l;
+    color: $ms-color-themePrimary;
+  }
+}

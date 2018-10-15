@@ -1,0 +1,23 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "Breadcrumb and page navigation by Puzzlepart",
+    "id": "035a6b74-22d5-4523-8546-9b729e61dd13",
+    "version": "1.0.0.3",
+    "includeClientSideAssets": true,
+    "features": [{
+      "title": "Breadcrumb and navigation - parent page lookup field",
+      "description": "This feature configures fields for Breadcrumb and page navigation by Puzzlepart SPFx.",
+      "id": "27639016-B146-490A-9653-82BDA94BABCE",
+      "version": "1.0.0.3",
+      "assets": {
+          "elementManifests": [
+              "elements.xml"
+          ]
+      }
+  }]
+  },
+  "paths": {
+    "zippedPackage": "solution/pzl-part-breadcrumb.sppkg"
+  }
+}
