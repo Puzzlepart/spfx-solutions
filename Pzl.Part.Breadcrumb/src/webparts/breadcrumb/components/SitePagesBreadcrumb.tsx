@@ -49,7 +49,14 @@ export default class SitePagesBreadcrumb extends React.Component<IBreadcrumbProp
       <Breadcrumb
           className= {styles.breadcrumb}
           items={elements}
-          ariaLabel={'Communication site breadcrumb'}
+          getStyles={() => {
+            return {
+              itemLink: {
+                maxWidth: "100%"
+              },
+            };
+          }
+        }
         />
     );
   }
