@@ -45,17 +45,17 @@ export default class PageNavigation extends React.Component<IPageNavigationProps
     return (<div>
       <Nav
         getStyles={() => {
-          return {
-            chevronButton: {
-              selectors: {
-                '&:after': {
-                  borderLeft: "none",
-                  content: '""',
+            return {
+              chevronButton: {
+                selectors: {
+                  '&:after': {
+                    borderLeft: "none",
+                    content: '""',
+                  }
                 }
               }
-            }
-          };
-        }
+            };
+          }
         }
         groups={[
           {
