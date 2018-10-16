@@ -61,7 +61,7 @@ export default class SitePagesBreadcrumb extends React.Component<IBreadcrumbProp
    */
   public async componentDidMount(): Promise<void> {
     await this.fetchListItems();
-    await this.buidBreadcrumb();
+    await this.buildBreadcrumb();
   }
   /**
    *
@@ -72,7 +72,7 @@ export default class SitePagesBreadcrumb extends React.Component<IBreadcrumbProp
    */
   public componentDidUpdate(prevProps): void {
     if (this.props.lookupField !== prevProps.lookupField) {
-      this.buidBreadcrumb();
+      this.buildBreadcrumb();
     }
   }
   /**
@@ -81,7 +81,7 @@ export default class SitePagesBreadcrumb extends React.Component<IBreadcrumbProp
    * @private
    * @memberof Breadcrumb
    */
-  private buidBreadcrumb() {
+  private buildBreadcrumb() {
     this.breadcrumb = [];
     try {
       this.setBreadcrumb(this.props.currentPage.id, 0);
