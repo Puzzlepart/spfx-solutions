@@ -116,8 +116,8 @@ export default class PageNavigation extends React.Component<IPageNavigationProps
    *
    *
    * @private
-   * @param {*} pageId
-   * @returns {Promise<void>}
+   * @param {INavLink} [parentNode]
+   * @returns {INavLink}
    * @memberof PageNavigation
    */
   private setPageNavigation(parentNode?: INavLink): INavLink {
