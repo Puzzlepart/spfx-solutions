@@ -21,8 +21,8 @@ export default class GroupLogoApplicationCustomizer
 
     @override
     public onInit(): Promise<void> {
-        if (typeof console == "undefined" || typeof console.log == "undefined") var console = { log: function() {} };
-        this.DoWork(this.properties.logoUrl);
+        if (typeof console == "undefined" || typeof console.log == "undefined") var console = { log: function () { } };
+        this.context.placeholderProvider.changedEvent.add(this, () => { this.DoWork(this.properties.logoUrl) });
         return Promise.resolve();
     }
 
@@ -43,7 +43,7 @@ export default class GroupLogoApplicationCustomizer
 
         let hasError = false;
         let groupId = this.context.pageContext.legacyPageContext.groupId;
-       
+
         try {
             Dialog.alert(strings.SettingUp);
             await MSGraph.Patch(this.context.graphHttpClient, `v1.0/groups/${groupId}/photo/$value`, buffer);
