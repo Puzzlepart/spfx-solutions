@@ -43,11 +43,14 @@ export default class EnableTeamsApplicationCustomizer
         return Promise.resolve();
     }
 
-    private async DoWork(autoCreate: boolean, shouldRedirect: boolean, ) {
+    private async DoWork(autoCreate: boolean, shouldRedirect: boolean) {
         let failed = false;
         let teamsUri;
         let hasTeam = false;
         let groupId = this.context.pageContext.legacyPageContext.groupId;
+        if (groupId === null) {
+            return;
+        }
 
         let endPointInfo = await MSGraph.Get(this.context.graphHttpClient, `beta/groups/${groupId}/endpoints`);
         if (endPointInfo && endPointInfo.value) {
