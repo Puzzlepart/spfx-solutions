@@ -13,6 +13,7 @@ declare interface IRssFeedWebPartStrings {
   View_EmptyPlaceholder_Description: string;
   View_EmptyPlaceholder_Button: string;
   SeeAllUrlFieldLabel: string;
+  SeeAllText: string;
 }
 
 declare module 'RssFeedWebPartStrings' {

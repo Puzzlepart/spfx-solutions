@@ -7,7 +7,7 @@
     .headerContainer {
         display: flex;
         justify-content: space-between;
-        > div {
+        >div {
             margin: 0;
         }
         .header {
@@ -19,11 +19,15 @@
         }
         .showAll {
             float: right;
-            align-self: center;
             a {
+                position: relative;
+                color: rgb(89, 94, 102);
+                outline: transparent;
                 text-decoration: none;
-                color: #2C7399;
-                font-size: 16px;
+                font-family: "Segoe UI Web (West European)", Segoe UI, -apple-system, BlinkMacSystemFont, Roboto, Helvetica Neue, sans-serif;
+                font-size: 14px;
+                white-space: nowrap;
+                margin-left: auto;
             }
         }
     }

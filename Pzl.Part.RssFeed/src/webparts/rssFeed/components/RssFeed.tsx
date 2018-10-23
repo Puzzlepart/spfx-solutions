@@ -42,7 +42,7 @@ export default class RssFeed extends React.Component<IRssFeedProps, IRssFeedStat
         <div className={styles.container}>
           <div className={styles.headerContainer}>
             <WebPartTitle displayMode={this.props.displayMode} title={this.props.title} updateProperty={this.props.updateProperty} />
-            {this.props.seeAllUrl && <span className={styles.showAll}><a href={this.props.seeAllUrl}>View all</a></span>}
+            {this.props.seeAllUrl && <span className={styles.showAll}><a href={this.props.seeAllUrl}>{strings.SeeAllText}</a></span>}
           </div>
           <ul className={styles.itemsList}>
             {(this.state.items) ? this.state.items.map(({ title, pubDate, link }, index) => (
