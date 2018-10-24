@@ -4,16 +4,36 @@
         max-width: auto;
         margin: 0px auto;
     }
-    .header {
-        margin-bottom: 20px;
-        font-weight: 100;
-        font-size: 24px;
-        flex-grow: 1;
-        text-align: left;
+    .headerContainer {
+        display: flex;
+        justify-content: space-between;
+        >div {
+            margin: 0;
+        }
+        .header {
+            margin-bottom: 20px;
+            font-weight: 100;
+            font-size: 24px;
+            flex-grow: 1;
+            text-align: left;
+        }
+        .showAll {
+            float: right;
+            a {
+                position: relative;
+                color: rgb(89, 94, 102);
+                outline: transparent;
+                text-decoration: none;
+                font-family: "Segoe UI Web (West European)", Segoe UI, -apple-system, BlinkMacSystemFont, Roboto, Helvetica Neue, sans-serif;
+                font-size: 14px;
+                white-space: nowrap;
+                margin-left: auto;
+            }
+        }
     }
     .itemsList {
         list-style-type: none;
-        margin: 0;
+        margin: 20px 0 0 0;
         padding: 0;
     }
     @include ms-Grid;

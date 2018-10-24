@@ -3,6 +3,7 @@ import { WebPartContext } from "@microsoft/sp-webpart-base";
 
 export interface IRssFeedProps {
   title: string;
+  seeAllUrl: string;
   rssFeedUrl: string;
   apiKey: string;
   itemsCount: number;

@@ -25,11 +25,10 @@ export default class EnableTeamsApplicationCustomizer
     @override
     public onInit(): Promise<void> {
         this.arrayPolyfill();
-        if (typeof console == "undefined" || typeof console.log == "undefined") var console = { log: function() {} };
+        if (typeof console == "undefined" || typeof console.log == "undefined") var console = { log: function () { } };
         // Extra check for siteadmin to ensure it's run by a Group owner
         let isSiteAdmin = this.context.pageContext.legacyPageContext.isSiteAdmin;
         if (isSiteAdmin) {
-            debugger;
             let autoCreate = false;
             if (typeof this.properties.autoCreate !== 'undefined') {
                 autoCreate = this.properties.autoCreate.toString().toLowerCase() === 'true';
@@ -38,16 +37,20 @@ export default class EnableTeamsApplicationCustomizer
             if (typeof this.properties.shouldRedirect !== 'undefined') {
                 shouldRedirect = this.properties.shouldRedirect.toString().toLowerCase() === 'true';
             }
-            this.DoWork(autoCreate, shouldRedirect);
+
+            this.context.placeholderProvider.changedEvent.add(this, () => { this.DoWork(autoCreate, shouldRedirect); });
         }
         return Promise.resolve();
     }
 
-    private async DoWork(autoCreate: boolean, shouldRedirect: boolean, ) {
+    private async DoWork(autoCreate: boolean, shouldRedirect: boolean) {
         let failed = false;
         let teamsUri;
         let hasTeam = false;
         let groupId = this.context.pageContext.legacyPageContext.groupId;
+        if (groupId === null) {
+            return;
+        }
 
         let endPointInfo = await MSGraph.Get(this.context.graphHttpClient, `beta/groups/${groupId}/endpoints`);
         if (endPointInfo && endPointInfo.value) {

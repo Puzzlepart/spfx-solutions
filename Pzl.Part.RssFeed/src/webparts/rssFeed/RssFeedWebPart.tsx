@@ -20,6 +20,7 @@ export interface IRssFeedWebPartProps {
   officeUIFabricIcon: string;
   cacheDuration: number;
   apiKey: string;
+  seeAllUrl: string;
 }
 
 export default class RssFeedWebPart extends BaseClientSideWebPart<IRssFeedWebPartProps> {
@@ -39,7 +40,8 @@ export default class RssFeedWebPart extends BaseClientSideWebPart<IRssFeedWebPar
         displayMode: this.displayMode,
         context: this.context,
         cacheDuration: this.properties.cacheDuration,
-        instanceId: this.instanceId
+        instanceId: this.instanceId,
+        seeAllUrl: this.properties.seeAllUrl,
       }
     );
 
@@ -70,6 +72,9 @@ export default class RssFeedWebPart extends BaseClientSideWebPart<IRssFeedWebPar
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
+                PropertyPaneTextField('seeAllUrl', {
+                  label: strings.SeeAllUrlFieldLabel
+                }),
                 PropertyPaneTextField('rssFeedUrl', {
                   label: strings.RssFeedUrlFieldLabel
                 }),
@@ -85,7 +90,7 @@ export default class RssFeedWebPart extends BaseClientSideWebPart<IRssFeedWebPar
                   max: 20,
                 }),
                 PropertyPaneSlider('cacheDuration', {
-                  label: strings.CacheExpirationTimeFieldLabel,
+                  label: strings.CacheExpirationTimeFieldDescription,
                   min: 0,
                   max: 1440
                 }),
