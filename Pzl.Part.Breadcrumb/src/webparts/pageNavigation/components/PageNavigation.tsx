@@ -143,7 +143,7 @@ export default class PageNavigation extends React.Component<IPageNavigationProps
    */
   private async fetchListItems(): Promise<void> {
     try {
-      let pages = await sp.web.getList(this.props.listServerRelativeUrl).items.select(this.props.lookupField + "Id", "Id", "Title", "FileRef").get();
+      let pages = await sp.web.getList(this.props.listServerRelativeUrl).items.select(this.props.lookupField + "Id", "Id", "Title", "FileRef").orderBy("Title").get();
       this.setState({ pages: pages });
     } catch (error) {
       throw error;
