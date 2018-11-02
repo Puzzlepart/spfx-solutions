@@ -12,14 +12,14 @@
             "title": {
                 "default": "Download as PDF"
             },
-            "iconImageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAB8SURBVDhPY4CC/0RgByDGCUAK8AGChhBjAEgzTkOIMQAEMAxhhNIgQRgbG8BmAYp6Qi5AB3D1TFCaYkCqC+CAXBdQzwt0N2A+EMPSgAEQg/hgQGwgwhISCN8H4gAgBgNSYgFkyHsghmsGAVIMAAEBKI2SlAkBkFo0dQwMAKAzJR1JBRvhAAAAAElFTkSuQmCCQHkAJp6HldBMoL8AAAAASUVORK5CYII=",
+            "iconImageUrl": "/export.svg",
             "type": "command"
         },
         "SAVE_AS": {
             "title": {
                 "default": "Save as PDF"
             },
-            "iconImageUrl": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAACoSURBVDhPzZLbDYJAEEVHK6AES7AES4BO6EQ7sARLMFRAC3QAHcC9ZGYz7sM1xg9PcjKbYe8sL/kVD7h+6BMm8IKvObJ7jlq/5j8H8BlzGjetL/gNNRp4hTPs2SA2wJ8YSxi+Q37KM7R+WIRGBE/04ZOu6U48IB6UC3PN/g4DF63ED6iGiYW9pdtOwu9o4QiL4YPWEgzxbU+QwQ4uMFD7Ey08wCQsIrIBOCBFmR42fo8AAAAASUVORK5CYII=",
+            "iconImageUrl": "/saveas.svg",
             "type": "command"
         }
     }
