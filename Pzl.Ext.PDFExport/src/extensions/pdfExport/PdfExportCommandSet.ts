@@ -7,6 +7,7 @@ import {
     IListViewCommandSetExecuteEventParameters
 } from '@microsoft/sp-listview-extensibility';
 import { Dialog } from '@microsoft/sp-dialog';
+import "@pnp/polyfill-ie11";
 import { Web, List, RenderListDataOptions } from '@pnp/sp';
 import { HttpClient, HttpClientResponse } from '@microsoft/sp-http';
 import * as JSZip from 'jszip';
