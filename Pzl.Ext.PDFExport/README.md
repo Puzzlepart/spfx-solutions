@@ -13,6 +13,9 @@ A global list customizer which adds functionality to all document libraries in S
 
 _Note: It may take a little while before it shows the first time after install._
 
+## Supported file formats
+csv, doc, docx, odp, ods, odt, pot, potm, potx, pps, ppsx, ppsxm, ppt, pptm, pptx, rtf, xls, xlsx
+
 ### Building the code
 
 Ensure that at least SPFx v1.6 is installed.
