@@ -6,9 +6,8 @@ import {
     IListViewCommandSetListViewUpdatedParameters,
     IListViewCommandSetExecuteEventParameters
 } from '@microsoft/sp-listview-extensibility';
-import { Dialog } from '@microsoft/sp-dialog';
 import "@pnp/polyfill-ie11";
-import { Web, List, RenderListDataOptions } from '@pnp/sp';
+import { Web, RenderListDataOptions } from '@pnp/sp';
 import { HttpClient, HttpClientResponse } from '@microsoft/sp-http';
 import * as JSZip from 'jszip';
 import * as FileSaver from 'file-saver';
@@ -30,7 +29,7 @@ const DIALOG = new WaitDialog({});
 
 export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExportCommandSetProperties> {
 
-    private _validExts : string[] = ['csv', 'doc', 'docx', 'odp', 'ods', 'odt', 'pot', 'potm', 'potx', 'pps', 'ppsx', 'ppsxm', 'ppt', 'pptm', 'pptx', 'rtf', 'xls', 'xlsx'];
+    private _validExts: string[] = ['csv', 'doc', 'docx', 'odp', 'ods', 'odt', 'pot', 'potm', 'potx', 'pps', 'ppsx', 'ppsxm', 'ppt', 'pptm', 'pptx', 'rtf', 'xls', 'xlsx'];
 
     @override
     public onInit(): Promise<void> {
@@ -50,15 +49,6 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
         }
     }
 
-    // private toBuffer(ab) {
-    //     var buffer = new Buffer(ab.byteLength);
-    //     var view = new Uint8Array(ab);
-    //     for (var i = 0; i < buffer.length; ++i) {
-    //         buffer[i] = view[i];
-    //     }
-    //     return buffer;
-    // }
-
     @override
     public async onExecute(event: IListViewCommandSetExecuteEventParameters): Promise<void> {
         let itemIds = event.selectedRows.map(i => i.getValueByName("ID"));
@@ -66,26 +56,26 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
         DIALOG.showClose = false;
         for (let i = 0; i < fileExts.length; i++) {
             const ext = fileExts[i];
-            if(this._validExts.indexOf(ext) === -1) {
-                DIALOG.title = "Supported file extensions";
-                DIALOG.message = "The current file extensions are supported: " + this._validExts.join(", ") + ".";
+            if (this._validExts.indexOf(ext) === -1) {
+                DIALOG.title = strings.ExtSupport;
+                DIALOG.message = strings.CurrentExtSupport + ": " + this._validExts.join(", ") + ".";
                 DIALOG.error = "";
                 DIALOG.showClose = true;
                 DIALOG.show();
                 return;
-            }            
+            }
         }
 
         switch (event.itemId) {
             case 'EXPORT': {
-                DIALOG.title = "Save as PDF";
-                DIALOG.message = "Generating files...";
+                DIALOG.title = strings.DownloadAsPdf;
+                DIALOG.message = `${strings.GeneratingFiles}...`;
                 DIALOG.error = "";
                 DIALOG.show();
                 let files = await this.generatePdfUrls(itemIds);
                 if (itemIds.length == 1) {
-                    const file = files[0];                    
-                    DIALOG.message = `Processing ${file.pdfFileName}...`;
+                    const file = files[0];
+                    DIALOG.message = `${strings.Processing} ${file.pdfFileName}...`;
                     DIALOG.render();
                     const response = await this.context.httpClient.get(file.pdfUrl, HttpClient.configurations.v1);
                     if (response.ok) {
@@ -94,14 +84,14 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
                     } else {
                         const error = await response.json();
                         let errorMessage = error.error.innererror ? error.error.innererror.code : error.error.message;
-                        DIALOG.error = `Failed to process ${file.pdfFileName} - ${errorMessage}`;
+                        DIALOG.error = `${strings.FailedToProcess} ${file.pdfFileName} - ${errorMessage}`;
                         DIALOG.render();
                     }
                 } else {
                     const zip: JSZip = new JSZip();
                     for (let i = 0; i < files.length; i++) {
                         const file = files[i];
-                        DIALOG.message = `Processing ${file.pdfFileName}...`;
+                        DIALOG.message = `${strings.Processing} ${file.pdfFileName}...`;
                         DIALOG.render();
                         const response = await this.context.httpClient.get(file.pdfUrl, HttpClient.configurations.v1);
                         if (response.ok) {
@@ -110,7 +100,7 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
                         } else {
                             const error = await response.json();
                             let errorMessage = error.error.innererror ? error.error.innererror.code : error.error.message;
-                            DIALOG.error = `Failed to process ${file.pdfFileName} - ${errorMessage}`;
+                            DIALOG.error = `${strings.FailedToProcess} ${file.pdfFileName} - ${errorMessage}`;
                             DIALOG.render();
                         }
                     }
@@ -124,8 +114,8 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
                 break;
             }
             case 'SAVE_AS': {
-                DIALOG.title = "Generating PDF's";
-                DIALOG.message = "Please wait while files are being processed...";
+                DIALOG.title = strings.SaveAsPdf;
+                DIALOG.message = `${strings.GeneratingFiles}...`;
                 DIALOG.show();
                 let files = await this.generatePdfUrls(itemIds);
                 await this.saveAsPdf(files);
@@ -142,7 +132,7 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
         let web: Web = new Web(this.context.pageContext.web.absoluteUrl);
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
-            DIALOG.message = `Processing ${file.pdfFileName}...`;
+            DIALOG.message = `${strings.Processing} ${file.pdfFileName}...`;
             DIALOG.render();
             let pdfUrl = file.serverRelativeUrl.replace("." + file.fileType, ".pdf");
             await web.getFileByServerRelativeUrl(file.serverRelativeUrl).copyTo(pdfUrl);
@@ -153,7 +143,7 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
             } else {
                 const error = await response.json();
                 let errorMessage = error.error.innererror ? error.error.innererror.code : error.error.message;
-                DIALOG.error = `Failed to process ${file.pdfFileName} - ${errorMessage}`;
+                DIALOG.error = `${strings.FailedToProcess}s ${file.pdfFileName} - ${errorMessage}`;
                 DIALOG.render();
             }
         }
