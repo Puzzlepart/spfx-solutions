@@ -8,7 +8,7 @@ import {
 } from '@microsoft/sp-listview-extensibility';
 import "@pnp/polyfill-ie11";
 import { Web, RenderListDataOptions } from '@pnp/sp';
-import { HttpClient, HttpClientResponse } from '@microsoft/sp-http';
+import { HttpClient } from '@microsoft/sp-http';
 import * as JSZip from 'jszip';
 import * as FileSaver from 'file-saver';
 import WaitDialog from './WaitDialog';

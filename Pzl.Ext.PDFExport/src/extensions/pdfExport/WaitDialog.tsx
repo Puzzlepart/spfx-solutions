@@ -2,9 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { BaseDialog, IDialogConfiguration } from '@microsoft/sp-dialog';
 import { Label } from 'office-ui-fabric-react/lib/Label';
-import {
-    DialogContent
-} from 'office-ui-fabric-react';
+import { DialogContent } from 'office-ui-fabric-react/lib/Dialog';
 
 interface IWaitDialogContentProps {
     message: string;
