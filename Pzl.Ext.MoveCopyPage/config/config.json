@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "move-copy-page-command-set": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/moveCopyPage/MoveCopyPageCommandSet.js",
+          "manifest": "./src/extensions/moveCopyPage/MoveCopyPageCommandSet.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "MoveCopyPageCommandSetStrings": "lib/extensions/moveCopyPage/loc/{locale}.js"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "@pnp/generator-spfx": {
+    "framework": "react",
+    "pnpFramework": "react",
+    "pnp-libraries": []
+  },
+  "@microsoft/generator-sharepoint": {
+    "framework": "react",
+    "isCreatingSolution": true,
+    "environment": "spo",
+    "version": "1.6.0",
+    "libraryName": "pzl-ext-move-copy-page",
+    "libraryId": "e5f34229-8c1a-49af-8876-30517da79fc1",
+    "packageManager": "npm",
+    "componentType": "extension",
+    "extensionType": "ListViewCommandSet"
+  }
+}
