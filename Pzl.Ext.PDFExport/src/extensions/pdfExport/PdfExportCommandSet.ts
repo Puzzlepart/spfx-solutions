@@ -121,6 +121,7 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
                 let files = await this.generatePdfUrls(itemIds);
                 await this.saveAsPdf(files);
                 DIALOG.close();
+                window.location.href = window.location.href;
                 break;
             }
             default:
@@ -135,16 +136,26 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
             DIALOG.message = `${strings.Processing} ${file.pdfFileName}...`;
             DIALOG.render();
             let pdfUrl = file.serverRelativeUrl.replace("." + file.fileType, ".pdf");
-            await web.getFileByServerRelativeUrl(file.serverRelativeUrl).copyTo(pdfUrl);
-            let response = await this.context.httpClient.get(file.pdfUrl, HttpClient.configurations.v1);
-            if (response.ok) {
-                let blob = await response.blob();
-                await web.getFileByServerRelativeUrl(pdfUrl).setContentChunked(blob);
-            } else {
-                const error = await response.json();
-                let errorMessage = error.error.innererror ? error.error.innererror.code : error.error.message;
-                DIALOG.error = `${strings.FailedToProcess}s ${file.pdfFileName} - ${errorMessage}`;
-                DIALOG.render();
+            let exists = true;
+            try {
+                await web.getFileByServerRelativePath(pdfUrl).get();
+                DIALOG.message = `${file.pdfFileName} ${strings.Exists}`;
+                DIALOG.render();                
+            } catch (error) {
+                exists = false;
+            }
+            if (!exists) {
+                await web.getFileByServerRelativeUrl(file.serverRelativeUrl).copyTo(pdfUrl);
+                let response = await this.context.httpClient.get(file.pdfUrl, HttpClient.configurations.v1);
+                if (response.ok) {
+                    let blob = await response.blob();
+                    await web.getFileByServerRelativeUrl(pdfUrl).setContentChunked(blob);
+                } else {
+                    const error = await response.json();
+                    let errorMessage = error.error.innererror ? error.error.innererror.code : error.error.message;
+                    DIALOG.error = `${strings.FailedToProcess}s ${file.pdfFileName} - ${errorMessage}`;
+                    DIALOG.render();
+                }
             }
         }
     }

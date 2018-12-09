@@ -5,6 +5,7 @@ define([], function () {
         "ExtSupport": "Støttede filendelser",
         "CurrentExtSupport": "Følgende filendelser er støttet",
         "Processing": "Behandler",
-        "FailedToProcess": "Klarte ikke prosessere"
+        "FailedToProcess": "Klarte ikke prosessere",
+        "Exists" : "finnes allerede"
     }
 });
