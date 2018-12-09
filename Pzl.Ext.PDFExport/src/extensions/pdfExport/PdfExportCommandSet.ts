@@ -104,8 +104,9 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
                             DIALOG.render();
                         }
                     }
+                    zip.file("Powered by Puzzlepart.txt", "https://www.puzzlepart.com/");
                     let d = new Date();
-                    let dateString = d.getFullYear() + "-" + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
+                    let dateString = d.getFullYear() + "-" + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2) + '-' + ('0' + d.getHours()).slice(-2) + '-' + ('0' + d.getMinutes()).slice(-2) + '-' + ('0' + d.getSeconds()).slice(-2);
 
                     const zipBlob = await zip.generateAsync({ type: "blob" });
                     FileSaver.saveAs(zipBlob, `files-${dateString}.zip`);
@@ -120,7 +121,6 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
                 let files = await this.generatePdfUrls(itemIds);
                 await this.saveAsPdf(files);
                 DIALOG.close();
-                window.location.href = window.location.href;
                 break;
             }
             default:
