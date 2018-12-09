@@ -2,9 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { BaseDialog, IDialogConfiguration } from '@microsoft/sp-dialog';
 import { Label } from 'office-ui-fabric-react/lib/Label';
-import {
-    DialogContent
-} from 'office-ui-fabric-react';
+import { DialogContent } from 'office-ui-fabric-react/lib/Dialog';
 
 interface IWaitDialogContentProps {
     message: string;
@@ -20,6 +18,8 @@ class WaitDialogContent extends React.Component<IWaitDialogContentProps, {}> {
     }
 
     public render(): JSX.Element {
+        let logo = require('./pzl-logo-black-transparent.png');
+
         return (<div style={{ width: "400px" }}>
             <DialogContent
                 title={this.props.title}
@@ -30,6 +30,13 @@ class WaitDialogContent extends React.Component<IWaitDialogContentProps, {}> {
                 <Label>
                     {this.props.error}
                 </Label>
+                <div style={{ fontSize: '0.8em', float: 'right' }}>
+                    <a href="https://www.puzzlepart.com">
+                        Powered by
+                    <br />
+                        <img src={logo} style={{ width: '100px' }} />
+                    </a>
+                </div>
             </DialogContent>
         </div>);
     }
