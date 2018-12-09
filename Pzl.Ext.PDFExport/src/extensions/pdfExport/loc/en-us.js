@@ -6,6 +6,7 @@ define([], function () {
         "CurrentExtSupport": "The current file extensions are supported",
         "Processing": "Processing",
         "GeneratingFiles": "Generating files",
-        "FailedToProcess": "Failed to process"
+        "FailedToProcess": "Failed to process",
+        "Exists": "already exists"
     }
 });
