@@ -119,9 +119,14 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
                 DIALOG.message = `${strings.GeneratingFiles}...`;
                 DIALOG.show();
                 let files = await this.generatePdfUrls(itemIds);
-                await this.saveAsPdf(files);
-                DIALOG.close();
-                window.location.href = window.location.href;
+                let ok = await this.saveAsPdf(files);
+                if (ok) {
+                    DIALOG.close();
+                    window.location.href = window.location.href;
+                } else {
+                    DIALOG.showClose = true;
+                    DIALOG.render();
+                }
                 break;
             }
             default:
@@ -129,7 +134,7 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
         }
     }
 
-    private async saveAsPdf(files: SharePointFile[]) {
+    private async saveAsPdf(files: SharePointFile[]): Promise<boolean> {
         let web: Web = new Web(this.context.pageContext.web.absoluteUrl);
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
@@ -140,24 +145,26 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
             try {
                 await web.getFileByServerRelativePath(pdfUrl).get();
                 DIALOG.message = `${file.pdfFileName} ${strings.Exists}`;
-                DIALOG.render();                
+                DIALOG.render();
             } catch (error) {
                 exists = false;
             }
             if (!exists) {
-                await web.getFileByServerRelativeUrl(file.serverRelativeUrl).copyTo(pdfUrl);
                 let response = await this.context.httpClient.get(file.pdfUrl, HttpClient.configurations.v1);
                 if (response.ok) {
                     let blob = await response.blob();
+                    await web.getFileByServerRelativeUrl(file.serverRelativeUrl).copyTo(pdfUrl);
                     await web.getFileByServerRelativeUrl(pdfUrl).setContentChunked(blob);
                 } else {
                     const error = await response.json();
                     let errorMessage = error.error.innererror ? error.error.innererror.code : error.error.message;
                     DIALOG.error = `${strings.FailedToProcess}s ${file.pdfFileName} - ${errorMessage}`;
                     DIALOG.render();
+                    return false;
                 }
             }
         }
+        return true;
     }
 
     private async generatePdfUrls(listItemIds: string[]): Promise<SharePointFile[]> {

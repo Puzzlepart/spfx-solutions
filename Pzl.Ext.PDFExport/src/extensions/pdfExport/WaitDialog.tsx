@@ -31,7 +31,7 @@ class WaitDialogContent extends React.Component<IWaitDialogContentProps, {}> {
                     {this.props.error}
                 </Label>
                 <div style={{ fontSize: '0.8em', float: 'right' }}>
-                    <a href="https://www.puzzlepart.com">
+                    <a href="https://www.puzzlepart.com" target="_blank" data-interception="off">
                         Powered by
                     <br />
                         <img src={logo} style={{ width: '100px' }} />
@@ -66,6 +66,7 @@ export default class WaitDialog extends BaseDialog {
 
     private closeDialog() {
         this.close();
+        window.location.href = window.location.href;
     }
 
     public getConfig(): IDialogConfiguration {
