@@ -1,34 +1,40 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { BaseDialog, IDialogConfiguration } from '@microsoft/sp-dialog';
 import { Label } from 'office-ui-fabric-react/lib/Label';
-import { DialogContent } from 'office-ui-fabric-react/lib/Dialog';
+import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
+import { sp } from '@pnp/sp';
 
 interface IWaitDialogContentProps {
     message: string;
     error: string;
     title: string;
     showClose: boolean;
+    hidden: boolean;
     closeCallback: () => void;
 }
 
 class WaitDialogContent extends React.Component<IWaitDialogContentProps, {}> {
     constructor(props) {
         super(props);
+        this.closeDialog = this.closeDialog.bind(this);
     }
 
     public render(): JSX.Element {
         let logo = require('./pzl-logo-black-transparent.png');
 
+        let dialogType = this.props.showClose ? DialogType.close : DialogType.normal;
+
         return (<div style={{ width: "400px" }}>
-            <DialogContent
-                title={this.props.title}
-                subText={this.props.message}
-                showCloseButton={this.props.showClose}
-                onDismiss={this.props.closeCallback}
-            >
+
+            <Dialog hidden={this.props.hidden} isDarkOverlay={true} isBlocking={true}
+                onDismiss={this.closeDialog}
+                dialogContentProps={{
+                    type: dialogType,
+                    title: this.props.title,
+                    subText: this.props.message
+                }} >
                 <Label>
-                    {this.props.error}
+                    <span dangerouslySetInnerHTML={{ __html: this.props.error }} />
                 </Label>
                 <div style={{ fontSize: '0.8em', float: 'right' }}>
                     <a href="https://www.puzzlepart.com" target="_blank" data-interception="off">
@@ -37,21 +43,28 @@ class WaitDialogContent extends React.Component<IWaitDialogContentProps, {}> {
                         <img src={logo} style={{ width: '100px' }} />
                     </a>
                 </div>
-            </DialogContent>
+            </Dialog>
         </div>);
+    }
+    private closeDialog() {
+        //this.setState({ hidden: true });
+        if (this.props.closeCallback) {
+            this.props.closeCallback();
+        }
     }
 }
 
-
-export default class WaitDialog extends BaseDialog {
+const div = document.createElement("div");
+export default class WaitDialog {
     public message: string;
     public title: string;
     public error: string;
     public showClose: boolean = false;
+    public hidden: boolean = true;
 
     constructor(props) {
-        super(props);
-        this.closeDialog = this.closeDialog.bind(this);
+        //        this.closeDialog = this.closeDialog.bind(this);
+        this.close = this.close.bind(this);
     }
 
     public render(): void {
@@ -60,18 +73,31 @@ export default class WaitDialog extends BaseDialog {
             title={this.title}
             error={this.error}
             showClose={this.showClose}
-            closeCallback={this.closeDialog}
-        />, this.domElement);
+            closeCallback={this.close}
+            hidden={this.hidden}
+            key={"b" + new Date().toISOString()}
+        />, div);
     }
 
-    private closeDialog() {
-        this.close();
-        window.location.href = window.location.href;
+    // private closeDialog() {
+    //     //window.location.href = window.location.href;
+    //     this.hidden = true;
+    //     this.render();
+    // }
+    public show() {
+        this.hidden = false;
+        this.render();
+    }
+    public close() {
+        this.hidden = true;
+        this.render();
     }
 
-    public getConfig(): IDialogConfiguration {
-        return {
-            isBlocking: true,
-        };
-    }
+
+
+    // public getConfig(): IDialogConfiguration {
+    //     return {
+    //         isBlocking: true,
+    //     };
+    // }
 }

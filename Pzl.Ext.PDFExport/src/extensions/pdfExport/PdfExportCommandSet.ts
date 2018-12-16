@@ -53,13 +53,14 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
     public async onExecute(event: IListViewCommandSetExecuteEventParameters): Promise<void> {
         let itemIds = event.selectedRows.map(i => i.getValueByName("ID"));
         let fileExts = event.selectedRows.map(i => i.getValueByName("File_x0020_Type").toLocaleLowerCase());
+
         DIALOG.showClose = false;
+        DIALOG.error = "";
         for (let i = 0; i < fileExts.length; i++) {
             const ext = fileExts[i];
             if (this._validExts.indexOf(ext) === -1) {
                 DIALOG.title = strings.ExtSupport;
                 DIALOG.message = strings.CurrentExtSupport + ": " + this._validExts.join(", ") + ".";
-                DIALOG.error = "";
                 DIALOG.showClose = true;
                 DIALOG.show();
                 return;
@@ -70,9 +71,9 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
             case 'EXPORT': {
                 DIALOG.title = strings.DownloadAsPdf;
                 DIALOG.message = `${strings.GeneratingFiles}...`;
-                DIALOG.error = "";
                 DIALOG.show();
                 let files = await this.generatePdfUrls(itemIds);
+                let isOk = true;
                 if (itemIds.length == 1) {
                     const file = files[0];
                     DIALOG.message = `${strings.Processing} ${file.pdfFileName}...`;
@@ -84,8 +85,9 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
                     } else {
                         const error = await response.json();
                         let errorMessage = error.error.innererror ? error.error.innererror.code : error.error.message;
-                        DIALOG.error = `${strings.FailedToProcess} ${file.pdfFileName} - ${errorMessage}`;
+                        DIALOG.error = `${strings.FailedToProcess} ${file.pdfFileName} - ${errorMessage}<br/>`;
                         DIALOG.render();
+                        isOk = false;
                     }
                 } else {
                     const zip: JSZip = new JSZip();
@@ -100,18 +102,29 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
                         } else {
                             const error = await response.json();
                             let errorMessage = error.error.innererror ? error.error.innererror.code : error.error.message;
-                            DIALOG.error = `${strings.FailedToProcess} ${file.pdfFileName} - ${errorMessage}`;
+                            DIALOG.error = `${strings.FailedToProcess} ${file.pdfFileName} - ${errorMessage}<br/>`;
                             DIALOG.render();
+                            isOk = false;
                         }
                     }
-                    zip.file("Powered by Puzzlepart.txt", "https://www.puzzlepart.com/");
-                    let d = new Date();
-                    let dateString = d.getFullYear() + "-" + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2) + '-' + ('0' + d.getHours()).slice(-2) + '-' + ('0' + d.getMinutes()).slice(-2) + '-' + ('0' + d.getSeconds()).slice(-2);
+                    if (isOk) {
+                        zip.file("Powered by Puzzlepart.txt", "https://www.puzzlepart.com/");
+                        let d = new Date();
+                        let dateString = d.getFullYear() + "-" + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2) + '-' + ('0' + d.getHours()).slice(-2) + '-' + ('0' + d.getMinutes()).slice(-2) + '-' + ('0' + d.getSeconds()).slice(-2);
 
-                    const zipBlob = await zip.generateAsync({ type: "blob" });
-                    FileSaver.saveAs(zipBlob, `files-${dateString}.zip`);
+                        const zipBlob = await zip.generateAsync({ type: "blob" });
+                        FileSaver.saveAs(zipBlob, `files-${dateString}.zip`);
+                    }
                 }
-                DIALOG.close();
+
+                if (!isOk) {
+                    DIALOG.showClose = true;
+                    DIALOG.render();
+                }
+                else {
+                    DIALOG.close();
+                }
+
                 break;
             }
             case 'SAVE_AS': {
@@ -122,7 +135,6 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
                 let ok = await this.saveAsPdf(files);
                 if (ok) {
                     DIALOG.close();
-                    window.location.href = window.location.href;
                 } else {
                     DIALOG.showClose = true;
                     DIALOG.render();
@@ -136,6 +148,7 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
 
     private async saveAsPdf(files: SharePointFile[]): Promise<boolean> {
         let web: Web = new Web(this.context.pageContext.web.absoluteUrl);
+        let isOk = true;
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
             DIALOG.message = `${strings.Processing} ${file.pdfFileName}...`;
@@ -144,8 +157,9 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
             let exists = true;
             try {
                 await web.getFileByServerRelativePath(pdfUrl).get();
-                DIALOG.message = `${file.pdfFileName} ${strings.Exists}`;
+                DIALOG.error += `${file.pdfFileName} ${strings.Exists}.<br/>`;
                 DIALOG.render();
+                isOk = false;
             } catch (error) {
                 exists = false;
             }
@@ -158,13 +172,13 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
                 } else {
                     const error = await response.json();
                     let errorMessage = error.error.innererror ? error.error.innererror.code : error.error.message;
-                    DIALOG.error = `${strings.FailedToProcess}s ${file.pdfFileName} - ${errorMessage}`;
+                    DIALOG.error += `${strings.FailedToProcess}s ${file.pdfFileName} - ${errorMessage}<br/>`;
                     DIALOG.render();
-                    return false;
+                    isOk = false;
                 }
             }
         }
-        return true;
+        return isOk;
     }
 
     private async generatePdfUrls(listItemIds: string[]): Promise<SharePointFile[]> {
