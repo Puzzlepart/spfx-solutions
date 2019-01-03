@@ -2,7 +2,6 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Label } from 'office-ui-fabric-react/lib/Label';
 import { Dialog, DialogType } from 'office-ui-fabric-react/lib/Dialog';
-import { sp } from '@pnp/sp';
 
 interface IWaitDialogContentProps {
     message: string;
@@ -47,7 +46,6 @@ class WaitDialogContent extends React.Component<IWaitDialogContentProps, {}> {
         </div>);
     }
     private closeDialog() {
-        //this.setState({ hidden: true });
         if (this.props.closeCallback) {
             this.props.closeCallback();
         }
@@ -63,7 +61,6 @@ export default class WaitDialog {
     public hidden: boolean = true;
 
     constructor(props) {
-        //        this.closeDialog = this.closeDialog.bind(this);
         this.close = this.close.bind(this);
     }
 
@@ -79,25 +76,13 @@ export default class WaitDialog {
         />, div);
     }
 
-    // private closeDialog() {
-    //     //window.location.href = window.location.href;
-    //     this.hidden = true;
-    //     this.render();
-    // }
     public show() {
         this.hidden = false;
         this.render();
     }
+
     public close() {
         this.hidden = true;
         this.render();
     }
-
-
-
-    // public getConfig(): IDialogConfiguration {
-    //     return {
-    //         isBlocking: true,
-    //     };
-    // }
 }
