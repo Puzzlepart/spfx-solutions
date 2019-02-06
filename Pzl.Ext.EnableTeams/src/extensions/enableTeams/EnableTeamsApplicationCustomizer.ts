@@ -45,7 +45,6 @@ export default class EnableTeamsApplicationCustomizer
 
     private async DoWork(autoCreate: boolean, shouldRedirect: boolean) {
         let failed = false;
-        let teamsUri;
         let hasTeam = false;
         let groupId = this.context.pageContext.legacyPageContext.groupId;
         if (groupId === null) {
@@ -63,7 +62,7 @@ export default class EnableTeamsApplicationCustomizer
             if (!hasTeam && autoCreate) {
                 dialog.message = "Please wait while we set up Microsoft Teams and add a navigation link...";
                 dialog.show();
-                teamsUri = await Functions.CreateTeam(this.context.graphHttpClient, groupId, this.context.pageContext.site.absoluteUrl);
+                await Functions.CreateTeam(this.context.graphHttpClient, groupId, this.context.pageContext.site.absoluteUrl);
                 hasTeam = true;
             }
         } catch (error) {
@@ -74,6 +73,7 @@ export default class EnableTeamsApplicationCustomizer
         }
 
         if (!failed && hasTeam) {
+            const teamsUri = await Functions.CreateNavLink(this.context.graphHttpClient, groupId, this.context.pageContext.site.absoluteUrl);
             await Functions.RemoveCustomizer(this.context.pageContext.site.absoluteUrl, this.componentId);
             if (shouldRedirect) {
                 document.location.href = teamsUri;
