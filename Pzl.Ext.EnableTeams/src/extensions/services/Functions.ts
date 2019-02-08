@@ -3,7 +3,7 @@ import { GraphHttpClient } from '@microsoft/sp-http';
 import { Web, Site } from '@pnp/sp';
 
 export class Functions {
-    public static async CreateTeam(graphHttpClient: GraphHttpClient, groupId: string, siteUrl: string) {
+    public static async CreateTeam(graphHttpClient: GraphHttpClient, groupId: string, siteUrl: string): Promise<void> {
         console.log("Creating team");
         let payload: any = {
             "memberSettings": {
@@ -19,6 +19,9 @@ export class Functions {
             }
         };
         await MSGraph.Put(graphHttpClient, `beta/groups/${groupId}/team`, JSON.stringify(payload));
+    }
+
+    public static async CreateNavLink(graphHttpClient: GraphHttpClient, groupId: string, siteUrl: string): Promise<string> {
         let teamsUri;
         while (true) {
             let endPointInfo = await MSGraph.Get(graphHttpClient, `beta/groups/${groupId}/endpoints`);

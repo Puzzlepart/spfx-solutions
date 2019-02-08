@@ -30,7 +30,8 @@ export default class DividerWebPart extends BaseClientSideWebPart<IDividerWebPar
             color = '"' + color.trim() + '"';
         }
 
-        let propClass = `.${styles.divider} {
+        let className = "pzl" + this.makeId();
+        let propClass = `.${className} {
             background-color: ${color};
             width: ${this.properties.width}%;
         }`;
@@ -41,7 +42,7 @@ export default class DividerWebPart extends BaseClientSideWebPart<IDividerWebPar
         }
 
         loadStyles(propClass);
-        this.domElement.innerHTML = `<hr aria-hidden="true" role="presentation" class="${styles.divider}" style="${cssString}">`;
+        this.domElement.innerHTML = `<hr aria-hidden="true" role="presentation" class="${className}" style="${cssString}">`;
     }
 
     protected renderLogo(domElement: HTMLElement) {
@@ -50,6 +51,16 @@ export default class DividerWebPart extends BaseClientSideWebPart<IDividerWebPar
         <div style="float:right">Author: <a href="mailto:mikael.svenson@puzzlepart.com" tabindex="-1">Mikael Svenson</a></div>
         <div style="float:right"><a href="https://www.puzzlepart.com/" target="_blank"><img src="//www.puzzlepart.com/wp-content/uploads/2017/08/Pzl-LogoType-200.png" onerror="this.style.display = \'none\'";"></a></div>
       </div>`;
+    }
+
+    private makeId() {
+        let text = "";
+        let possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+        for (let i = 0; i < 5; i++)
+            text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+        return text;
     }
 
     protected get dataVersion(): Version {

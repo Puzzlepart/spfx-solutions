@@ -3,7 +3,7 @@
     "solution": {
         "name": "Save and export as PDF by Puzzlepart",
         "id": "06babd6f-e62f-41e8-87c9-6cb516203a2d",
-        "version": "1.0.0.2",
+        "version": "1.0.0.3",
         "includeClientSideAssets": true,
         "skipFeatureDeployment": true,
         "features": [

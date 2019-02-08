@@ -2,7 +2,7 @@
     "@microsoft/generator-sharepoint": {
         "isCreatingSolution": true,
         "environment": "spo",
-        "version": "1.7.0",
+        "version": "1.7.1",
         "libraryName": "pzl-ext-pdf-export",
         "libraryId": "06babd6f-e62f-41e8-87c9-6cb516203a2d",
         "packageManager": "npm",

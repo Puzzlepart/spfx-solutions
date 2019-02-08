@@ -20,7 +20,7 @@
     "@pnp/odata": "^1.0.2",
     "@pnp/sp": "^1.0.2",
     "@types/webpack-env": ">=1.12.1 <1.14.0",
-    "office-ui-fabric-react": "^6.0.1"
+    "office-ui-fabric-react": "^5.135.0"
   },
   "devDependencies": {
     "@microsoft/sp-build-web": "~1.4.1",
