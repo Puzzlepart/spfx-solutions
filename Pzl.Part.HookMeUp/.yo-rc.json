@@ -1,0 +1,11 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "isCreatingSolution": true,
+    "environment": "onprem",
+    "version": "1.7.1",
+    "libraryName": "hook-me-up-by-puzzlepart",
+    "libraryId": "0a06bf06-5c88-4734-ab8e-72e2fc49cccb",
+    "packageManager": "npm",
+    "componentType": "webpart"
+  }
+}

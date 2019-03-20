@@ -1,0 +1,13 @@
+{
+  "entries": [
+    {
+      "entry": "./lib/webparts/hookMeUp/HookMeUpWebPart.js",
+      "manifest": "./src/webparts/hookMeUp/HookMeUpWebPart.manifest.json",
+      "outputPath": "./dist/hook-me-up-web-part.js"
+    }
+  ],
+  "externals": {},
+  "localizedResources": {
+    "HookMeUpWebPartStrings": "webparts/hookMeUp/loc/{locale}.js"
+  }
+}
