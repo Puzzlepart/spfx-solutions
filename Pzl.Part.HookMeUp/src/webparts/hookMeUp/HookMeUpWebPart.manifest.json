@@ -1,0 +1,27 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+    "id": "4ca3a982-9cb4-433a-a59f-b36b1c960f1e",
+    "alias": "HookMeUpWebPart",
+    "componentType": "WebPart",
+    "version": "*",
+    "manifestVersion": 2,
+    "requiresCustomScript": false,
+    "preconfiguredEntries": [
+        {
+            "groupId": "cf066440-0614-43d6-98ae-0b31cf14c7c3",
+            "group": {
+                "default": "Text, media, and content"
+            },
+            "title": {
+                "default": "Hook me up!"
+            },
+            "description": {
+                "default": "Add an anchor hook on the page"
+            },
+            "officeFabricIconFontName": "AnchorLock",
+            "properties": {
+                "anchorId": "hook-me-up"
+            }
+        }
+    ]
+}
