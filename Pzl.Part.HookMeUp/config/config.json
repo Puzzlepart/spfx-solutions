@@ -1,13 +1,18 @@
 {
-  "entries": [
-    {
-      "entry": "./lib/webparts/hookMeUp/HookMeUpWebPart.js",
-      "manifest": "./src/webparts/hookMeUp/HookMeUpWebPart.manifest.json",
-      "outputPath": "./dist/hook-me-up-web-part.js"
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "hook-me-up-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/hookMeUp/HookMeUpWebPart.js",
+          "manifest": "./src/webparts/hookMeUp/HookMeUpWebPart.manifest.json"
+        }
+      ]
     }
-  ],
-  "externals": {},
+  },
   "localizedResources": {
-    "HookMeUpWebPartStrings": "webparts/hookMeUp/loc/{locale}.js"
-  }
+    "HookMeUpWebPartStrings": "lib/webparts/hookMeUp/loc/{locale}.js"
+  },
+  "externals": {}
 }

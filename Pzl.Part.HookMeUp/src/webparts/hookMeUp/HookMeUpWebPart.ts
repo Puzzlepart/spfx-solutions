@@ -39,6 +39,9 @@ export default class HookMeUpWebPart extends BaseClientSideWebPart<IHookMeUpWebP
                 element = element.parentElement;
             }
             this.domElement.innerHTML = this.domElement.innerHTML = `<span id="${this.properties.anchorId}"></span>`;
+            if (document.location.hash === '#' + this.properties.anchorId) {
+                this.domElement.scrollIntoView();
+            }
         }
     }
 
