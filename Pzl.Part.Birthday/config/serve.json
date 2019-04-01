@@ -1,0 +1,29 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/core-build/serve.schema.json",
+  "port": 4321,
+  "https": true,
+  "serveConfigurations": {
+    "default": {
+      "pageUrl": "https://jkaonline.sharepoint.com/sites/Bursdagstest/SitePages/Home.aspx",
+      "customActions": {
+        "3d2b9c05-1869-4f79-9be3-c54edffb52ab": {
+          "location": "ClientSideExtension.ApplicationCustomizer",
+          "properties": {
+            "testMessage": "Test"
+          }
+        }
+      }
+    },
+    "modernClientSideSetup": {
+      "pageUrl": "https://jkaonline.sharepoint.com/sites/Bursdagstest/SitePages/Home.aspx",
+      "customActions": {
+        "3d2b9c05-1869-4f79-9be3-c54edffb52ab": {
+          "location": "ClientSideExtension.ApplicationCustomizer",
+          "properties": {
+            "testMessage": "Test"
+          }
+        }
+      }
+    }
+  }
+}
