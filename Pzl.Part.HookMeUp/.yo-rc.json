@@ -1,6 +1,7 @@
 {
     "@microsoft/generator-sharepoint": {
         "isCreatingSolution": true,
+        "isDomainIsolated": false,
         "environment": "spo",
         "version": "1.7.1",
         "libraryName": "hook-me-up-by-puzzlepart",
