@@ -13,10 +13,10 @@
     "group": { "default": "Other" },
     "title": { "default": "Bursdager" },
     "description": { "default": "Viser kommende bursdager" },
-    "officeFabricIconFontName": "Page",
+    "officeFabricIconFontName": "BirthdayCake",
     "properties": {
       "title": "Bursdager",
-      "itemsCount": "3"
+      "itemsCount": "10"
     }
   }]
 }
