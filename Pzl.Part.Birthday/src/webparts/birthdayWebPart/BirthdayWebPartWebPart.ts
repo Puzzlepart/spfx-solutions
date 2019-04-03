@@ -1,10 +1,11 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import { Version } from '@microsoft/sp-core-library';
-import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
+import { Version, DisplayMode } from '@microsoft/sp-core-library';
+import { BaseClientSideWebPart, WebPartContext } from '@microsoft/sp-webpart-base';
 import {
   IPropertyPaneConfiguration,
-  PropertyPaneTextField
+  PropertyPaneTextField,
+  PropertyPaneSlider
 } from '@microsoft/sp-property-pane';
 import {sp} from '@pnp/sp';
 import * as strings from 'BirthdayWebPartWebPartStrings';
@@ -12,7 +13,11 @@ import BirthdayWebPart from './components/BirthdayWebPart';
 import { IBirthdayWebPartProps } from './components/IBirthdayWebPartProps';
 
 export interface IBirthdayWebPartWebPartProps {
-  description: string;
+  title: string;
+  itemsCount: number;
+  displayMode: DisplayMode;
+  context: WebPartContext;
+  updateProperty: (value: string) => void;
 }
 
 export default class BirthdayWebPartWebPart extends BaseClientSideWebPart<IBirthdayWebPartWebPartProps> {
@@ -21,7 +26,13 @@ export default class BirthdayWebPartWebPart extends BaseClientSideWebPart<IBirth
     const element: React.ReactElement<IBirthdayWebPartProps > = React.createElement(
       BirthdayWebPart,
       {
-        description: this.properties.description
+        title: this.properties.title,
+        itemsCount: this.properties.itemsCount,
+        displayMode: this.displayMode,
+        context: this.context,
+        updateProperty: (value: string) =>{
+          this.properties.title = value;
+        }
       }
     );
 
@@ -55,9 +66,14 @@ export default class BirthdayWebPartWebPart extends BaseClientSideWebPart<IBirth
             {
               groupName: strings.BasicGroupName,
               groupFields: [
-                PropertyPaneTextField('description', {
+                PropertyPaneTextField('title', {
                   label: strings.DescriptionFieldLabel
-                })
+                }),
+                PropertyPaneSlider('itemsCount', {
+                  label: strings.ItemsCountFieldLabel,
+                  min: 1,
+                  max: 20,
+                }),
               ]
             }
           ]

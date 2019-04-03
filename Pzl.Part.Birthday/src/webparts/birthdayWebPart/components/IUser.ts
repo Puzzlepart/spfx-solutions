@@ -6,7 +6,7 @@ export interface IUser {
     jobDescription?: string;
     day: string;
     birthday: string;
-    birthyear?: string;
-    daysleft?: string;
+    years?: number;
+    daysleft?: number;
     happybirthday?: string;
   }
