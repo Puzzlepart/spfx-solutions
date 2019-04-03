@@ -1,18 +1,16 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
-  "version": "2.0",
-  "bundles": {
-    "hook-me-up-web-part": {
-      "components": [
-        {
-          "entrypoint": "./lib/webparts/hookMeUp/HookMeUpWebPart.js",
-          "manifest": "./src/webparts/hookMeUp/HookMeUpWebPart.manifest.json"
+    "$schema": "https://dev.office.com/json-schemas/spfx-build/config.2.0.schema.json",
+    "version": "2.0",
+    "bundles": {
+        "hook-me-up-web-part": {
+            "components": [{
+                "entrypoint": "./lib/webparts/hookMeUp/HookMeUpWebPart.js",
+                "manifest": "./src/webparts/hookMeUp/HookMeUpWebPart.manifest.json"
+            }]
         }
-      ]
-    }
-  },
-  "localizedResources": {
-    "HookMeUpWebPartStrings": "lib/webparts/hookMeUp/loc/{locale}.js"
-  },
-  "externals": {}
+    },
+    "localizedResources": {
+        "HookMeUpWebPartStrings": "lib/webparts/hookMeUp/loc/{locale}.js"
+    },
+    "externals": {}
 }

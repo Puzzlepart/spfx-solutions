@@ -1,9 +1,9 @@
 {
-    "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+    "$schema": "https://dev.office.com/json-schemas/spfx-build/package-solution.schema.json",
     "solution": {
         "name": "Hook me up - by Puzzlepart",
         "id": "0a06bf06-5c88-4734-ab8e-72e2fc49cccb",
-        "version": "1.0.0.2",
+        "version": "1.0.0.3",
         "includeClientSideAssets": true,
         "skipFeatureDeployment": false
     },
