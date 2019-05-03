@@ -1,6 +1,6 @@
 export interface IUser {
     key: string;
-    userImage?: string;
+    userEmail?: string;
     userName:string;
     department?: string;
     jobDescription?: string;

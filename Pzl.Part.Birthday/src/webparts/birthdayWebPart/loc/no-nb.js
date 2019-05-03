@@ -2,8 +2,8 @@ define([], function() {
   return {
     "PropertyPaneDescription": "",
     "BasicGroupName": "",
-    "DescriptionFieldLabel": "Web part heading",
-    "ItemsCountFieldLabel": "Number of birthdays to show",
+    "DescriptionFieldLabel": "Overskrift",
+    "ItemsCountFieldLabel": "Antall bursdager som skal vises",
     "CakeIconName": "BirthdayCake",
   }
 });

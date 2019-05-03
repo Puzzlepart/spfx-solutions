@@ -1,29 +1,33 @@
 ## pzl-part-birthday
 
-This is where you include your WebPart documentation.
+If you need a birthday webpart to display upcomming birthdays, this is what you are looking for. You have option to set web part header and the number of persons to list.
+
+![Demo](./preview.png "Demo")
+
 
 ### Prerequisites
-For at bursdag skal fanges opp av appen må SPS-Birthday legges til i RefinableDate-- (samme hvilken) og alias settes til "Birthday".
+
+The web part is using the Local People results query for fetching data. Getting the properties for: 'WorkEmail', 'PreferredName', 'Department', 'JobTitle'.
+
+For the web part to work you must add the clawled value for SPS-Birthday to a managed property 'RefinableDateXX' (You can use any RefinableDate. For exampel RefinableDate00). This can be set in the Search Schema settings.
+
+IMPORTANT!
+Set the Alias in RefinableDate00 (in the used RefinableDateXX) property to 'Birthday'.
+
+OPTIONAL
+By adding a year of birth property to the user profile you can get the age display for every person in the web part.
+You must then in the Search Schema settings add the crawled value of year of birth to a managed property of 'RefinableStringXX' and set the alias to 'Birthyear'.
+
 
 ### Building the code
 
 ```bash
 git clone the repo
 npm i
-npm i -g gulp
-gulp
+gulp --ship
+gulp package-solution --ship
 ```
 
 This package produces the following:
 
-* lib/* - intermediate-stage commonjs build artifacts
-* dist/* - the bundled script, along with other resources
-* deploy/* - all resources which should be uploaded to a CDN.
-
-### Build options
-
-gulp clean - TODO
-gulp test - TODO
-gulp serve - TODO
-gulp bundle - TODO
-gulp package-solution - TODO
+* sharepoint/solution/pzl-part-birthday.sppkg - package to install in the App Catalog
