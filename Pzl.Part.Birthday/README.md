@@ -2,7 +2,7 @@
 
 If you need a birthday webpart to display upcomming birthdays, this is what you are looking for. You have option to set web part header and the number of persons to list.
 
-![Demo](./preview.png "Demo")
+![Demo](./Preview.png "Demo")
 
 
 ### Prerequisites
