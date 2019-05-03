@@ -24,7 +24,7 @@ You must then in the Search Schema settings add the crawled value of year of bir
 ```bash
 git clone the repo
 npm i
-gulp --ship
+gulp bundle --ship
 gulp package-solution --ship
 ```
 
