@@ -6,6 +6,9 @@ declare interface IBirthdayWebPartWebPartStrings {
   BasicGroupName: string;
   DescriptionFieldLabel: string;
   CakeIconName: string;
+  TextBecomes: string,
+  TextYears: string,
+  TextDays: string
 }
 
 declare module 'BirthdayWebPartWebPartStrings' {

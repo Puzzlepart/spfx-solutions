@@ -14,11 +14,6 @@ import { dataFile } from './data/dataFile';
 import * as strings from 'BirthdayWebPartWebPartStrings';
 
 export default class BirthdayWebPart extends React.Component<IBirthdayWebPartProps, IBirthdayState> {
-  private _SETTINGS = {
-    TEXT_BECOMES: "fyller",
-    TEXT_YEARS: "år",
-    TEXT_DAYS: "dager"
-  };
   private _users: IUser[] = [];
   constructor(props: IBirthdayWebPartProps) {
     super(props);
@@ -40,7 +35,7 @@ export default class BirthdayWebPart extends React.Component<IBirthdayWebPartPro
             <tr key={`${index}`}>
               <td><img src={`/_layouts/15/userphoto.aspx?size=S&username=${userEmail}`} alt={userName} className={styles.userImage} /></td>
               <td className={styles.userInfo}><span className={styles.userName}>{userName}</span><br />
-              <span className={styles.userBirthdayInfo}>{day}{(years<100)? `, ${this._SETTINGS.TEXT_BECOMES} ${years} ${this._SETTINGS.TEXT_YEARS}`: ``}</span>
+              <span className={styles.userBirthdayInfo}>{day}{(years<100)? `, ${strings.TextBecomes} ${years} ${strings.TextYears}`: ``}</span>
               </td>
               <td className={styles.userJob}>{jobDescription}<br />{department}</td>
               <td className={styles.daysleft}>
@@ -48,7 +43,7 @@ export default class BirthdayWebPart extends React.Component<IBirthdayWebPartPro
                 (daysleft === 0) ?
                   <Icon className={styles.icon} iconName={strings.CakeIconName} />  
                 :               
-                `${daysleft} ${this._SETTINGS.TEXT_DAYS}`
+                `${daysleft} ${strings.TextDays}`
               }          
               </td>
             </tr>
@@ -71,8 +66,7 @@ export default class BirthdayWebPart extends React.Component<IBirthdayWebPartPro
   }
 
   private async fetchBirthdayData() {
-    //let people = await this.search();
-    let people = dataFile;
+    let people = await this.search();
     if (people && people.length > 0) {
       const today = moment.utc(new Date).format("YYYY-MM-DD");
       const thisYear: any = moment(today).format("YYYY");
