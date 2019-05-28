@@ -31,6 +31,6 @@
     "ajv": "~5.2.2",
     "gulp": "~3.9.1",
     "office-ui-fabric-react": "^6.45.0",
-    "webpack-bundle-analyzer": "^2.13.1"
+    "webpack-bundle-analyzer": "^3.3.2"
   }
 }
