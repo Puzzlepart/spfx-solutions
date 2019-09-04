@@ -1,13 +1,8 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
-import {
-  BaseClientSideWebPart,
-  IPropertyPaneConfiguration,
-  IPropertyPaneDropdownOption,
-  PropertyPaneDropdown
-} from '@microsoft/sp-webpart-base';
-
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
+import { IPropertyPaneConfiguration, IPropertyPaneDropdownOption, PropertyPaneDropdown } from '@microsoft/sp-property-pane';
 import * as strings from 'BreadcrumbWebPartStrings';
 import SitePagesBreadcrumb from './components/SitePagesBreadcrumb';
 import { IBreadcrumbProps } from './components/IBreadcrumbProps';

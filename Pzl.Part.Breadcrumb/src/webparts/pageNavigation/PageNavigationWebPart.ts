@@ -1,14 +1,13 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import {
-  BaseClientSideWebPart,
   IPropertyPaneConfiguration,
-  PropertyPaneTextField,
-  PropertyPaneDropdown,
   IPropertyPaneDropdownOption,
+  PropertyPaneDropdown,
   PropertyPaneToggle
-} from '@microsoft/sp-webpart-base';
+} from '@microsoft/sp-property-pane';
 
 import * as strings from 'PageNavigationWebPartStrings';
 import PageNavigation from './components/PageNavigation';
@@ -27,7 +26,7 @@ export default class PageNavigationWebPart extends BaseClientSideWebPart<IPageNa
   private lookupFieldOptions: IPropertyPaneDropdownOption[];
   private lookupFieldOptionsDisabled: boolean;
   public render(): void {
-    const element: React.ReactElement<IPageNavigationProps > = React.createElement(
+    const element: React.ReactElement<IPageNavigationProps> = React.createElement(
       PageNavigation,
       {
         lookupField: this.properties.lookupField,
@@ -84,7 +83,7 @@ export default class PageNavigationWebPart extends BaseClientSideWebPart<IPageNa
       this.render();
     }
   }
-  
+
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [

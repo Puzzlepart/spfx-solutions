@@ -5,6 +5,7 @@
     "id": "035a6b74-22d5-4523-8546-9b729e61dd13",
     "version": "1.0.0.3",
     "includeClientSideAssets": true,
+    "isDomainIsolated": false,
     "features": [{
       "title": "Breadcrumb and navigation - parent page lookup field",
       "description": "This feature configures fields for Breadcrumb and page navigation by Puzzlepart SPFx.",

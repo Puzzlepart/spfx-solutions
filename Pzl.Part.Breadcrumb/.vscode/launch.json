@@ -28,6 +28,7 @@
       "webRoot": "${workspaceRoot}",
       "sourceMaps": true,
       "sourceMapPathOverrides": {
+        "webpack:///.././src/*": "${webRoot}/src/*",
         "webpack:///../../../src/*": "${webRoot}/src/*",
         "webpack:///../../../../src/*": "${webRoot}/src/*",
         "webpack:///../../../../../src/*": "${webRoot}/src/*"

@@ -44,7 +44,7 @@ export default class PageNavigation extends React.Component<IPageNavigationProps
     rootNode.isExpanded = true;
     return (<div>
       <Nav
-        getStyles={() => {
+        styles={() => {
             return {
               chevronButton: {
                 selectors: {

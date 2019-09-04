@@ -1,10 +1,8 @@
 import * as React from 'react';
 import styles from './Breadcrumb.module.scss';
-import { Breadcrumb, IBreadcrumbItem, IDividerAsProps } from 'office-ui-fabric-react/lib/Breadcrumb';
-import { TooltipHost } from 'office-ui-fabric-react/lib/Tooltip';
+import { Breadcrumb, IBreadcrumbItem, Spinner, SpinnerSize } from 'office-ui-fabric-react';
 import { IBreadcrumbProps } from './IBreadcrumbProps';
 import { IBreadcrumbState } from './IBreadcrumbState';
-import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { sp } from "sp-pnp-js";
 import { IODataListItem } from '@microsoft/sp-odata-types';
 
@@ -49,7 +47,7 @@ export default class SitePagesBreadcrumb extends React.Component<IBreadcrumbProp
       <Breadcrumb
           className= {styles.breadcrumb}
           items={elements}
-          getStyles={() => {
+          styles={() => {
             return {
               itemLink: {
                 maxWidth: "100%"
@@ -117,7 +115,7 @@ export default class SitePagesBreadcrumb extends React.Component<IBreadcrumbProp
       let currentPage = this.state.pages.filter((item)=> (item.Id === pageId))[0];
       this.breadcrumb.push(currentPage);
       depth ++;
-      if(depth < 1000) { 
+      if(depth < 1000) {
         if (currentPage[this.props.lookupField + "Id"] && currentPage[this.props.lookupField + "Id"] !== currentPage.Id ) {
           return this.setBreadcrumb(currentPage[this.props.lookupField + "Id"], depth);
         } else {
@@ -128,12 +126,12 @@ export default class SitePagesBreadcrumb extends React.Component<IBreadcrumbProp
         this.breadcrumb = null;
         return null;
       }
-     
+
     } catch (error) {
       throw error;
     }
   }
-  
+
   /**
    *
    *
