@@ -1,5 +1,9 @@
 {
+  "extends": "./node_modules/@microsoft/rush-stack-compiler-2.9/includes/tsconfig-web.json",
   "compilerOptions": {
+    "inlineSources": false,
+    "strictNullChecks": false,
+    "noUnusedLocals": false,
     "target": "es5",
     "forceConsistentCasingInFileNames": true,
     "module": "esnext",
@@ -9,6 +13,7 @@
     "sourceMap": true,
     "experimentalDecorators": true,
     "skipLibCheck": true,
+    "outDir": "lib",
     "typeRoots": [
       "./node_modules/@types",
       "./node_modules/@microsoft"
@@ -22,5 +27,12 @@
       "dom",
       "es2015.collection"
     ]
-  }
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "lib"
+  ]
 }

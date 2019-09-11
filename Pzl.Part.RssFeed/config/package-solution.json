@@ -2,10 +2,11 @@
     "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
     "solution": {
         "title": "RSS-Feed by Puzzlepart",
-        "name": "RSS-Feed by Puzzlepart",
+        "name": "pzl-rssfeed-webpart",
         "id": "9e4eb1e9-89a9-40a3-a486-4a61090f8def",
-        "version": "1.0.0.1",
-        "includeClientSideAssets": true
+        "version": "1.0.1.0",
+        "includeClientSideAssets": true,
+        "isDomainIsolated": false
     },
     "paths": {
         "zippedPackage": "solution/pzl-rss-feed.sppkg"
