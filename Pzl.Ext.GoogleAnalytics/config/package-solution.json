@@ -1,27 +1,26 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
-  "solution": {
-    "name": "Google Tag Manager extension by Puzzlepart",
-    "id": "24ee2b0d-2cd7-462c-8ad7-1692054c14fc",
-    "version": "1.0.0.0",
-    "includeClientSideAssets": true,
-    "skipFeatureDeployment": true,
-    "features": [
-      {
-        "title": "Google Tag Manager extension Application Extension - Deployment of custom action.",
-        "description": "Deploys a custom action with ClientSideComponentId association",
-        "id": "c699df39-2ade-4a9f-b9e9-20a57265b2c2",
-        "version": "1.0.0.0",
-        "assets": {
-          "elementManifests": [
-            "elements.xml",
-            "clientsideinstance.xml"
-          ]
-        }
-      }
-    ]
-  },
-  "paths": {
-    "zippedPackage": "solution/pzl-ext-google-analytics.sppkg"
-  }
+    "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+    "solution": {
+        "name": "Google Tag Manager extension by Puzzlepart",
+        "id": "24ee2b0d-2cd7-462c-8ad7-1692054c14fc",
+        "version": "1.0.0.1",
+        "includeClientSideAssets": true,
+        "skipFeatureDeployment": true,
+        "isDomainIsolated": false,
+        "features": [{
+            "title": "Google Tag Manager extension Application Extension - Deployment of custom action.",
+            "description": "Deploys a custom action with ClientSideComponentId association",
+            "id": "c699df39-2ade-4a9f-b9e9-20a57265b2c2",
+            "version": "1.0.0.1",
+            "assets": {
+                "elementManifests": [
+                    "elements.xml",
+                    "clientsideinstance.xml"
+                ]
+            }
+        }]
+    },
+    "paths": {
+        "zippedPackage": "solution/pzl-ext-google-analytics.sppkg"
+    }
 }

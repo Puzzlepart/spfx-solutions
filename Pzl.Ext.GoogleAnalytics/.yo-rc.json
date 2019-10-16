@@ -1,12 +1,13 @@
 {
-  "@microsoft/generator-sharepoint": {
-    "isCreatingSolution": true,
-    "environment": "spo",
-    "version": "1.6.0",
-    "libraryName": "pzl-ext-google-analytics",
-    "libraryId": "24ee2b0d-2cd7-462c-8ad7-1692054c14fc",
-    "packageManager": "npm",
-    "componentType": "extension",
-    "extensionType": "ApplicationCustomizer"
-  }
+    "@microsoft/generator-sharepoint": {
+        "isCreatingSolution": true,
+        "environment": "spo",
+        "version": "1.9.1",
+        "libraryName": "pzl-ext-google-analytics",
+        "libraryId": "24ee2b0d-2cd7-462c-8ad7-1692054c14fc",
+        "packageManager": "npm",
+        "componentType": "extension",
+        "extensionType": "ApplicationCustomizer",
+        "isDomainIsolated": false
+    }
 }

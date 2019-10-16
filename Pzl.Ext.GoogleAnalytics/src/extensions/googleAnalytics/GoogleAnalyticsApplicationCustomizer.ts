@@ -11,7 +11,7 @@ export interface IGoogeAnalyticsApplicationCustomizerProperties {
 
 export default class GoogleAnalyticsApplicationCustomizer
   extends BaseApplicationCustomizer<IGoogeAnalyticsApplicationCustomizerProperties> {
-  
+
   private currentPage = "";
   private isInitialLoad = true;
 
@@ -58,14 +58,14 @@ export default class GoogleAnalyticsApplicationCustomizer
   private track(): void {
     let trackerID: string = this.properties.trackerID;
     if (trackerID) {
-      if(trackerID.startsWith("GTM-")) {
+      if (trackerID.indexOf("GTM-") === 0) {
         let iframe: any = document.createElement("iframe");
         iframe.id = "GoogleAnalyticsApplicationCustomizerIframe";
         iframe.height = "0";
         iframe.width = "0";
         iframe.style = "display:none;visibility:hidden";
         iframe.src = `https://www.googletagmanager.com/ns.html?id=${trackerID}`;
-  
+
         let element = document.getElementById("GoogleAnalyticsApplicationCustomizerIframe");
         if (typeof (element) !== 'undefined' && element !== null) {
           document.body.removeChild(element);
@@ -77,15 +77,15 @@ export default class GoogleAnalyticsApplicationCustomizer
         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
         })(window,document,'script','dataLayer','${trackerID}');
         `);
-        Log.info(LOG_SOURCE, `Tracking with ID ${this.properties.trackerID}`);
-      } else if (trackerID.startsWith("UA-")) {
-         eval(`(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        Log.info(LOG_SOURCE, `Tracking with ID ${trackerID}`);
+      } else if (trackerID.indexOf("UA-") === 0) {
+        eval(`(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
           (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
           m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
           })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
           ga('create', '${trackerID}', 'auto');
           ga('send', 'pageview');`);
-        Log.info(LOG_SOURCE, `Tracking with ID ${this.properties.trackerID}`);
+        Log.info(LOG_SOURCE, `Tracking with ID ${trackerID}`);
       }
     } else {
       Log.info(LOG_SOURCE, "Tracking ID not provided");
