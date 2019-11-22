@@ -1,0 +1,63 @@
+@import '~office-ui-fabric-react/dist/sass/References.scss';
+
+.quickLinks {
+    .webpartHeader {
+        padding-bottom: 10px;
+        font-size: 24px;
+        font-weight: 100;
+        .showAll {
+            float: right;
+            a {
+                text-decoration: none;
+                color: "[theme: themePrimary, default: #2C7399]";
+                font-size: 14px;
+                font-weight: 400;
+            }
+        }
+    }
+    .linkGrid {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        .categorySection {
+            display: block;
+            width: 100%;
+            padding: 20px 10px 10px 0;
+        }
+        .linkCategoryHeading {
+            @include ms-fontSize-xl;
+            color: "[theme: themePrimary, default: #2C7399]";
+            width: 100%;
+            white-space: nowrap;
+        }
+        .linkGridColumn {
+            line-height: 40px;
+            display: inline-block;
+            .linkContainer {
+                text-decoration: none;
+                display: inline-block;
+                margin: 0 30px 0 0;
+                color: $ms-color-neutralPrimary;
+                span,
+                i {
+                    display: inline-block;
+                    color: $ms-color-neutralPrimary;
+                    vertical-align: middle;
+                }
+                span {
+                    @include ms-fontWeight-regular;
+                    @include ms-fontSize-mPlus;
+                    color: $ms-color-neutralPrimary;
+                    text-overflow: ellipsis;
+                    width: 200px;
+                    white-space: nowrap;
+                    overflow: hidden;
+                }
+                .icon {
+                    font-size: 25px;
+                    margin-right: 10px;
+                }
+            }
+        }
+    }
+}
