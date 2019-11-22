@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<pnp:Provisioning 
+        xmlns:pnp="http://schemas.dev.office.com/PnP/2017/05/ProvisioningSchema">
+        <pnp:Preferences Generator="OfficeDevPnP.Core" Version="1.0" >
+                <pnp:Parameters>
+                        <pnp:Parameter Key="GenericFieldsPrefix">Pzl</pnp:Parameter>
+                        <pnp:Parameter Key="GenericColumnGroup">{resource:QuickLinks_Parameters_GenericColumnGroup}</pnp:Parameter>
+                        <pnp:Parameter Key="GenericContentTypeGroup">{resource:QuickLinks_Parameters_GenericContentTypeGroup}</pnp:Parameter>
+                </pnp:Parameters>
+        </pnp:Preferences>
+        <pnp:Localizations>
+                <pnp:Localization LCID="1033" Name="English" ResourceFile="QuickLinks-en.resx"/>
+                <pnp:Localization LCID="1044" Name="Norwegian" ResourceFile="QuickLinks-no.resx"/>
+        </pnp:Localizations>
+        <pnp:Templates ID="CONTAINER-PZL-QUICKLINKS">
+                <pnp:ProvisioningTemplate ID="TEMPLATE-PZL-QUICKLINKS" Version="1">
+                <xi:include 
+                        xmlns:xi="http://www.w3.org/2001/XInclude" href="objects/SiteFields.xml" />
+                <xi:include 
+                        xmlns:xi="http://www.w3.org/2001/XInclude" href="objects/ContentTypes.xml" />
+                <xi:include 
+                        xmlns:xi="http://www.w3.org/2001/XInclude" href="objects/Lists.xml" />
+                </pnp:ProvisioningTemplate>
+        </pnp:Templates>
+</pnp:Provisioning>
