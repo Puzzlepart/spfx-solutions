@@ -47,8 +47,6 @@ export default class GroupLogoApplicationCustomizer
         let relativeUrlLogo = decodeURIComponent(logoUrl).replace(replace, "");
         let buffer = await web.getFileByServerRelativeUrl(relativeUrlLogo).getBuffer();
 
-        // Url wont propagate from exchange, so also setting it directly on group
-        this.setGroupLogo(buffer);
         console.log(relativeUrlLogo);
         let hasError = false;
         let groupId = this.context.pageContext.legacyPageContext.groupId;
@@ -57,6 +55,8 @@ export default class GroupLogoApplicationCustomizer
             Dialog.alert(strings.SettingUp);
             let graphUrl = `/groups/${groupId}/photo`;
             let graphClient: MSGraphClient = await this.context.msGraphClientFactory.getClient();
+            // Url wont propagate from exchange, so also setting it directly on group
+            this.setGroupLogo(buffer);
             let caller = await graphClient.api(graphUrl).version("beta").header("Content-Type", "image/jpeg").put(buffer);
         } catch (err) {
             // Most likely due to user not having Exchange Online license or Group not ready
@@ -66,8 +66,6 @@ export default class GroupLogoApplicationCustomizer
 
         if (!hasError) {
             window.setTimeout(async () => {
-                let currentWeb = new Web(this.context.pageContext.web.absoluteUrl);
-                await currentWeb.getFolderByServerRelativeUrl(`${this.context.pageContext.web.serverRelativeUrl}/SiteAssets/__siteIcon__.jpg`).delete();
                 this.removeCustomizer();
             }, 3000);
         }
