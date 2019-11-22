@@ -53,11 +53,11 @@ export default class GroupLogoApplicationCustomizer
 
         try {
             Dialog.alert(strings.SettingUp);
-            let graphUrl = `/groups/${groupId}/photo`;
+            let graphUrl = `/groups/${groupId}/photo/$value`;
             let graphClient: MSGraphClient = await this.context.msGraphClientFactory.getClient();
             // Url wont propagate from exchange, so also setting it directly on group
             this.setGroupLogo(buffer);
-            let caller = await graphClient.api(graphUrl).version("beta").header("Content-Type", "image/jpeg").put(buffer);
+            let caller = await graphClient.api(graphUrl).version("v1.0").header("Content-Type", "image/jpeg").patch(buffer);
         } catch (err) {
             // Most likely due to user not having Exchange Online license or Group not ready
             hasError = true;
