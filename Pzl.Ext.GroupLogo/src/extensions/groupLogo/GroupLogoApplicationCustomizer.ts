@@ -55,7 +55,6 @@ export default class GroupLogoApplicationCustomizer
 
         try {
             Dialog.alert(strings.SettingUp);
-
             let graphUrl = `/groups/${groupId}/photo`;
             let graphClient: MSGraphClient = await this.context.msGraphClientFactory.getClient();
             let caller = await graphClient.api(graphUrl).version("beta").header("Content-Type", "image/jpeg").put(buffer);
@@ -68,8 +67,8 @@ export default class GroupLogoApplicationCustomizer
         if (!hasError) {
             window.setTimeout(async () => {
                 let currentWeb = new Web(this.context.pageContext.web.absoluteUrl);
-                 await currentWeb.getFolderByServerRelativeUrl(`${this.context.pageContext.web.serverRelativeUrl}/SiteAssets/__siteIcon__.jpg`).delete();
-                // this.removeCustomizer();
+                await currentWeb.getFolderByServerRelativeUrl(`${this.context.pageContext.web.serverRelativeUrl}/SiteAssets/__siteIcon__.jpg`).delete();
+                this.removeCustomizer();
             }, 3000);
         }
     }
@@ -94,7 +93,7 @@ export default class GroupLogoApplicationCustomizer
         }
     }
 
-    
+
     /**
      *
      *
@@ -104,8 +103,8 @@ export default class GroupLogoApplicationCustomizer
      */
     private async  setGroupLogo(fileBuffer: ArrayBuffer) {
         try {
-            let requestUrl = this.context.pageContext.web.serverRelativeUrl +  "/_api/groupservice/setgroupimage";
-           await this.context.spHttpClient.post(requestUrl, SPHttpClient.configurations.v1, {body: fileBuffer, headers: { 'Content-Type': 'image/png' } });
+            let requestUrl = this.context.pageContext.web.serverRelativeUrl + "/_api/groupservice/SetGroupImage";
+            await this.context.spHttpClient.post(requestUrl, SPHttpClient.configurations.v1, { body: fileBuffer, headers: { 'Content-Type': 'image/png' } });
         } catch (error) {
             throw error;
         }
