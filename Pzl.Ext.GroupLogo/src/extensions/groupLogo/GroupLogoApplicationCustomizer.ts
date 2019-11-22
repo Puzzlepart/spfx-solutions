@@ -47,7 +47,6 @@ export default class GroupLogoApplicationCustomizer
         let relativeUrlLogo = decodeURIComponent(logoUrl).replace(replace, "");
         let buffer = await web.getFileByServerRelativeUrl(relativeUrlLogo).getBuffer();
 
-        console.log(relativeUrlLogo);
         let hasError = false;
         let groupId = this.context.pageContext.legacyPageContext.groupId;
 
@@ -90,8 +89,6 @@ export default class GroupLogoApplicationCustomizer
             }
         }
     }
-
-
     /**
      *
      *
