@@ -1,5 +1,14 @@
 @import '~office-ui-fabric-react/dist/sass/References.scss';
 
+:global {
+    .emphasisBackground-67 {
+        background: transparent;
+    }
+    .ControlZoneEmphasisBackground {
+        background: transparent;
+    }
+}
+
 .rssFeed {
     .container {
         max-width: auto;

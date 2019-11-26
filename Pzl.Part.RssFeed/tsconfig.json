@@ -1,19 +1,19 @@
 {
   "extends": "./node_modules/@microsoft/rush-stack-compiler-2.9/includes/tsconfig-web.json",
   "compilerOptions": {
-    "inlineSources": false,
-    "strictNullChecks": false,
-    "noUnusedLocals": false,
     "target": "es5",
     "forceConsistentCasingInFileNames": true,
     "module": "esnext",
-    "moduleResolution": "node",
     "jsx": "react",
     "declaration": true,
     "sourceMap": true,
     "experimentalDecorators": true,
     "skipLibCheck": true,
     "outDir": "lib",
+    "moduleResolution": "node",
+    "inlineSources": false,
+    "noUnusedLocals": false,
+    "strictNullChecks": false,
     "typeRoots": [
       "./node_modules/@types",
       "./node_modules/@microsoft"
@@ -29,7 +29,7 @@
     ]
   },
   "include": [
-    "src/**/*.ts"
+    "src/**/*.ts", "src/webparts/rssFeed/RssFeedWebPart.tsx"
   ],
   "exclude": [
     "node_modules",

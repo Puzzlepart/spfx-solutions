@@ -19,7 +19,6 @@ export interface IRssFeedWebPartProps {
 }
 
 export default class RssFeedWebPart extends BaseClientSideWebPart<IRssFeedWebPartProps> {
-
   public render(): void {
     const element: React.ReactElement<IRssFeedProps> = React.createElement(
       RssFeed,
@@ -37,7 +36,7 @@ export default class RssFeedWebPart extends BaseClientSideWebPart<IRssFeedWebPar
         cacheDuration: this.properties.cacheDuration,
         instanceId: this.instanceId,
         seeAllUrl: this.properties.seeAllUrl,
-      }
+      },
     );
 
     ReactDom.render((this.properties.rssFeedUrl) ? element : <Placeholder
@@ -97,4 +96,3 @@ export default class RssFeedWebPart extends BaseClientSideWebPart<IRssFeedWebPar
     };
   }
 }
-

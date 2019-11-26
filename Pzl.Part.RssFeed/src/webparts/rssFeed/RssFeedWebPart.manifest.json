@@ -4,6 +4,7 @@
   "alias": "RssFeedWebPart",
   "componentType": "WebPart",
   "version": "*",
+  "supportsThemeVariants": true,
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "supportedHosts": ["SharePointWebPart"],

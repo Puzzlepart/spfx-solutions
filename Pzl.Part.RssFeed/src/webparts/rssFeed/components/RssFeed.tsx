@@ -11,6 +11,7 @@ import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
 export default class RssFeed extends React.Component<IRssFeedProps, IRssFeedState> {
   constructor(props: IRssFeedProps) {
     super(props);
+
     this.state = { items: [] };
   }
 
@@ -36,7 +37,7 @@ export default class RssFeed extends React.Component<IRssFeedProps, IRssFeedStat
     }
   }
 
-  public render(): React.ReactElement<IRssFeedProps> {
+  public render(): React.ReactElement<IRssFeedProps> {    
     return (
       <div className={styles.rssFeed}>
         <div className={styles.container}>

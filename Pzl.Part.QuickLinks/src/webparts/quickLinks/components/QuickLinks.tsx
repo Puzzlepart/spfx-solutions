@@ -20,7 +20,6 @@ export default class QuickLinks extends React.Component<IQuickLinksProps, IQuick
         this.fetchData();
     }
 
-
     public render(): React.ReactElement<IQuickLinksProps> {
         let links = this.generateLinks(this.state.linkStructure);
         return (

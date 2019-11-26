@@ -1,8 +1,15 @@
 @import '~office-ui-fabric-react/dist/sass/References.scss';
 
+:global {
+    .emphasisBackground-67 {
+        background: transparent;
+    }
+    .ControlZoneEmphasisBackground {
+        background: transparent;
+    }
+}
+
 .quickLinks {
-    background: transparent;
-    
     .webpartHeader {
         padding-bottom: 10px;
         font-size: 24px;
