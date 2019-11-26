@@ -12,6 +12,7 @@ export default class QuickLinks extends React.Component<IQuickLinksProps, IQuick
 
     public constructor(props) {
         super(props);
+
         this.state = { linkStructure: [] };
     }
 
