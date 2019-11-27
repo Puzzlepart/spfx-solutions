@@ -1,12 +1,7 @@
 @import '~office-ui-fabric-react/dist/sass/References.scss';
 
-:global {
-    .emphasisBackground-67 {
-        background: transparent;
-    }
-    .ControlZoneEmphasisBackground {
-        background: transparent;
-    }
+[class^="ControlZone--emph"]{
+    background-color: rgba(0, 0, 0, 0) !important;
 }
 
 .quickLinks {
@@ -16,11 +11,12 @@
         font-weight: 100;
         .showAll {
             float: right;
-            a {
+            > span {
                 text-decoration: none;
-                color: "[theme: themePrimary, default: #2C7399]";
+                //color: "[theme: themePrimary, default: #2C7399]";
                 font-size: 14px;
                 font-weight: 400;
+                cursor: pointer;
             }
         }
     }
@@ -35,28 +31,29 @@
         }
         .linkCategoryHeading {
             @include ms-fontSize-xl;
-            color: "[theme: themePrimary, default: #2C7399]";
+            //color: "[theme: themePrimary, default: #2C7399]";
             width: 100%;
             white-space: nowrap;
         }
         .linkGridColumn {
             line-height: 40px;
             display: inline-block;
+            cursor: pointer;
             .linkContainer {
                 text-decoration: none;
                 display: inline-block;
                 margin: 0 30px 0 0;
-                color: $ms-color-neutralPrimary;
+                //color: $ms-color-neutralPrimary;
                 span,
                 i {
                     display: inline-block;
-                    color: $ms-color-neutralPrimary;
+                    //color: $ms-color-neutralPrimary;
                     vertical-align: middle;
                 }
                 span {
                     @include ms-fontWeight-regular;
                     @include ms-fontSize-mPlus;
-                    color: $ms-color-neutralPrimary;
+                    //color: $ms-color-neutralPrimary;
                     text-overflow: ellipsis;
                     width: 200px;
                     white-space: nowrap;

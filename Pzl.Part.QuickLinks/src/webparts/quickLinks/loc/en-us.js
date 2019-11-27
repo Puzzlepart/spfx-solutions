@@ -6,7 +6,7 @@ define([], function () {
         "propertyPane_DefaultOfficeFabricIconLabel": "Default icon",
         "propertyPane_GroupByCategoryLabel": "Group by category",
         "propertyPane_MaxLinkLengthLabel": "Max link width (pixels)",
-        "component_AllLinksLabel": "View all",
+        "component_AllLinksLabel": "See all",
         "component_NoCategoryLabel": "No category"
     }
 });

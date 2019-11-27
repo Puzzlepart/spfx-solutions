@@ -1,3 +1,5 @@
+import { IReadonlyTheme } from "@microsoft/sp-component-base";
+
 export interface IAllLinksProps {
   currentUserId: number;
   currentUserName: string;

@@ -8,6 +8,7 @@ import AllLinks from './components/AllLinks';
 import { IAllLinksProps } from './components/IAllLinksProps';
 import "@pnp/polyfill-ie11";
 import { sp } from "@pnp/sp";
+import { ThemeProvider, ThemeChangedEventArgs, IReadonlyTheme } from '@microsoft/sp-component-base';
 
 export interface IAllLinksWebPartProps {
   defaultOfficeFabricIcon: string;
@@ -27,16 +28,18 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
         webServerRelativeUrl: this.context.pageContext.web.serverRelativeUrl,
         mylinksOnTop: this.properties.mylinksOnTop,
         listingByCategory: this.properties.listingByCategory,
-        listingByCategoryTitle: this.properties.listingByCategoryTitle
+        listingByCategoryTitle: this.properties.listingByCategoryTitle,
       }
     );
 
     ReactDom.render(element, this.domElement);
   }
+
   public async onInit(): Promise<void> {
     sp.setup({
       spfxContext: this.context,
     });
+
     try {
       await super.onInit();
       return;

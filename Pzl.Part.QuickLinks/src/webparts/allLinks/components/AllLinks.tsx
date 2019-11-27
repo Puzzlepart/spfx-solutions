@@ -12,6 +12,7 @@ import * as strings from 'AllLinksWebPartStrings';
 import "@pnp/polyfill-ie11";
 import { sp } from "@pnp/sp";
 import { find, isEqual, findIndex } from '@microsoft/sp-lodash-subset';
+import { Text } from 'office-ui-fabric-react/lib/Text';
 
 export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksState> {
   public constructor(props) {
@@ -26,7 +27,8 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
       isLoading: true,
     };
   }
-  public render(): React.ReactElement<IAllLinksProps> {
+
+  public render(): React.ReactElement<IAllLinksProps> {          
     if (this.state.isLoading) {
       return (
         <Spinner type={SpinnerType.large} />
@@ -41,7 +43,7 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
       let successMessage = this.state.showSuccessMessage ? <MessageBar messageBarType={MessageBarType.success} onDismiss={() => this.setState({ showSuccessMessage: false })} >{strings.component_SaveOkLabel}</MessageBar> : null;
       let loadingSpinner = this.state.showLoadingSpinner ? <Spinner className={styles.spinner} type={SpinnerType.normal} /> : null;
       let linkListing = this.props.listingByCategory ?
-        <div className={styles.allLinks} >
+        <div className={styles.allLinks}>
           <div className={styles.webpartHeader}>
             <span>{this.props.listingByCategoryTitle}</span>
           </div>
@@ -61,12 +63,11 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
         <div className={styles.webpartHeading}>{strings.component_YourLinksLabel}</div>
         <div className={styles.editorLinksContainer}>{favouriteLinks}</div>
         <div className={styles.buttonRow} >
-          <Button onClick={() => this.saveData()} text={strings.component_SaveYourLinksLabel} disabled={this.state.saveButtonDisabled} primary={true} />
+          <Button onClick={() => this.saveData()} text={strings.component_SaveYourLinksLabel} disabled={this.state.saveButtonDisabled} />
           <Button onClick={() => this.openNewItemModal()} text={strings.component_NewLinkLabel} iconProps={{ iconName: 'Add' }} />
           {loadingSpinner}
         </div>
       </div>;
-
       return (
         <div className={styles.allLinks}>
           {errorMessage}
@@ -144,13 +145,12 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
 
   private generateEditorLinkComponents(links: Array<Link>) {
     return links.map(link => {
-      let linkIcon = <Icon iconName={(link.icon) ? link.icon : this.props.defaultIcon} className={styles.icon} />;
       return (
         <div className={styles.linkParent}>
-          <a className={styles.linkContainer} href={link.url}>
-            {linkIcon}
+          <Text className={styles.linkContainer} onClick={() => window.open(link.url, "_blank")}>
+            <Icon iconName={(link.icon) ? link.icon : this.props.defaultIcon} className={styles.icon} />
             <span>{link.displayText}</span>
-          </a>
+          </Text>
           <Icon className={styles.actionIcon} iconName='CirclePlus' onClick={() => this.appendToFavourites(link)} />
         </div>
       );
@@ -159,13 +159,12 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
 
   private generateMandatoryLinkComponents(links: Array<Link>) {
     return links.map(link => {
-      let linkIcon = <Icon iconName={(link.icon) ? link.icon : this.props.defaultIcon} className={styles.icon} />;
       return (
         <div className={styles.linkParent}>
-          <a className={styles.linkContainer} href={link.url}>
-            {linkIcon}
+          <Text className={styles.linkContainer} onClick={() => window.open(link.url, "_blank")}>
+            <Icon iconName={(link.icon) ? link.icon : this.props.defaultIcon} className={styles.icon} />
             <span>{link.displayText}</span>
-          </a>
+          </Text>
         </div>
       );
     });
@@ -179,10 +178,10 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
         <Icon className={styles.actionIcon} iconName='SkypeCircleMinus' onClick={() => this.removeCustomFromFavourites(link)} />;
       return (
         <div className={styles.linkParent}>
-          <a className={styles.linkContainer} href={link.url}>
+          <Text className={styles.linkContainer} onClick={() => window.open(link.url, "_blank")}>
             {linkIcon}
-            <span>{link.displayText}</span>
-          </a>
+            <div>{link.displayText}</div>
+          </Text>
           {removeLinkButton}
         </div>
       );
@@ -196,7 +195,7 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
         <div className={styles.modalBody}>
           <TextField label='Url' onChanged={(newVal) => this.onModalValueChanged('url', newVal)} value={this.state.modalData['url']} onGetErrorMessage={(value) => this.getUrlErrorMessage(value)} />
           <TextField label={strings.component_TitleLabel} onChanged={(newVal) => this.onModalValueChanged('displayText', newVal)} value={this.state.modalData['displayText']} />
-          <DefaultButton text={strings.component_AddLabel} primary={true} onClick={() => this.addNewLink()} />
+          <DefaultButton text={strings.component_AddLabel} onClick={() => this.addNewLink()} />
           <Button text={strings.component_CancelLabel} onClick={() => { this.setState({ modalData: null, showModal: false }); }} />
         </div>
       </Modal>

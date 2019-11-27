@@ -1,16 +1,11 @@
 @import '~office-ui-fabric-react/dist/sass/References.scss';
 
-:global {
-    .emphasisBackground-67 {
-        background: transparent;
-    }
-    .ControlZoneEmphasisBackground {
-        background: transparent;
-    }
+[class^="ControlZone--emph"] {
+    background-color: rgba(0, 0, 0, 0) !important;
 }
 
 $IconSize:25px;
-.allLinks {   
+.allLinks {
     .webpartHeading {
         font-weight: 100;
         font-size: 24px;
@@ -30,9 +25,10 @@ $IconSize:25px;
         font-weight: 100;
         .showAll {
             float: right;
-            a {
+            > span {
                 text-decoration: none;
-                color: "[theme: themePrimary, default: #2C7399]";
+                //color: "[theme: themePrimary, default: #2C7399]";
+                cursor: pointer;
                 font-size: 14px;
             }
         }
@@ -46,13 +42,14 @@ $IconSize:25px;
             margin: 10px 5px 10px 0px;
             * {
                 display: inline-block;
-                color: $ms-color-neutralPrimary;
+                //color: $ms-color-neutralPrimary;
                 vertical-align: middle;
+                cursor: pointer;
             }
             span {
                 @include ms-fontWeight-regular;
                 @include ms-fontSize-mPlus;
-                color: $ms-color-neutralPrimary;
+                //color: $ms-color-neutralPrimary;
             }
             .icon {
                 font-size: $IconSize;
@@ -60,7 +57,7 @@ $IconSize:25px;
             }
         }
         .linkContainer:hover {
-            background-color: $ms-color-neutralLighter;
+            //background-color: $ms-color-neutralLighter;
             cursor: pointer;
             outline: 1px solid transparent;
         }
@@ -72,7 +69,7 @@ $IconSize:25px;
             padding-right: 5px;
         }
         .actionIcon:hover {
-            color: #333333;
+            //color: #333333;
             cursor: pointer;
             outline: 1px solid transparent;
         }
@@ -88,7 +85,7 @@ $IconSize:25px;
         }
         .linkCategoryHeading {
             @include ms-fontSize-xl;
-            color: "[theme: themePrimary, default: #2C7399]";
+            //color: "[theme: themePrimary, default: #2C7399]";
             width: 100%;
             white-space: nowrap;
         }
@@ -96,11 +93,12 @@ $IconSize:25px;
             line-height: 40px;
             display: inline-block;
             margin-right: 40px;
+            cursor: pointer;
             .linkContainer {
                 text-decoration: none;
                 display: inline-block;
                 margin: 0 30px 0 0;
-                color: $ms-color-neutralPrimary;
+                //color: "[theme: themePrimary, default: #2C7399]";
                 span,
                 i {
                     display: inline-block;
@@ -110,7 +108,7 @@ $IconSize:25px;
                 span {
                     @include ms-fontWeight-regular;
                     @include ms-fontSize-mPlus;
-                    color: $ms-color-neutralPrimary;
+                    //color: "[theme: themePrimary, default: #2C7399]";
                     text-overflow: ellipsis;
                     white-space: nowrap;
                     overflow: hidden;
@@ -121,7 +119,7 @@ $IconSize:25px;
                 }
             }
             .actionIcon:hover {
-                color: #000000;
+                //color: #000000;
                 font-weight: 1000;
                 cursor: pointer;
                 outline: 1px solid transparent;

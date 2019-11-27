@@ -7,6 +7,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import "@pnp/polyfill-ie11";
 import { sp } from "@pnp/sp";
 import * as strings from 'QuickLinksWebPartStrings';
+import { Text } from 'office-ui-fabric-react/lib/Text';
 
 export default class QuickLinks extends React.Component<IQuickLinksProps, IQuickLinksState> {
 
@@ -26,7 +27,9 @@ export default class QuickLinks extends React.Component<IQuickLinksProps, IQuick
             <div className={styles.quickLinks} >
                 <div className={styles.webpartHeader}>
                     <span>{this.props.title}</span>
-                    <span className={styles.showAll}><a href={this.props.allLinksUrl}>{strings.component_AllLinksLabel}</a></span>
+                    <span className={styles.showAll}>
+                        <Text onClick={() => window.open(this.props.allLinksUrl, '_blank')} >{strings.component_AllLinksLabel}</Text>
+                    </span>
                 </div>
                 <div className={styles.linkGrid}>
                     {links}
@@ -43,10 +46,10 @@ export default class QuickLinks extends React.Component<IQuickLinksProps, IQuick
                 let linkTarget = link.openInSameTab ? '_self' : '_blank';
                 return (
                     <div className={styles.linkGridColumn}>
-                        <a className={styles.linkContainer} data-interception="off" href={link.url} title={link.displayText} target={linkTarget}>
+                        <Text className={styles.linkContainer} onClick={ () => window.open(link.url, linkTarget) }>
                             {linkIcon}
                             <span style={linkStyle}>{link.displayText}</span>
-                        </a>
+                        </Text>
                     </div>
                 );
             });
