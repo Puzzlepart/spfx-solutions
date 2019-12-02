@@ -4,9 +4,9 @@ import * as moment from 'moment';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { IRssFeedProps } from './IRssFeedProps';
 import { IRssFeedState } from './IRssFeedState';
-import * as pnp from 'sp-pnp-js';
+import { PnPClientStorage } from "@pnp/common";
 import * as strings from 'RssFeedWebPartStrings';
-import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
+import { Text } from 'office-ui-fabric-react/lib/Text';
 
 export default class RssFeed extends React.Component<IRssFeedProps, IRssFeedState> {
   constructor(props: IRssFeedProps) {
@@ -27,27 +27,31 @@ export default class RssFeed extends React.Component<IRssFeedProps, IRssFeedStat
 
   private async fetchData() {
     try {
-      let json = await pnp.storage.local.getOrPut(`rssfeed-${this.props.context.pageContext.web.serverRelativeUrl}-${this.props.instanceId}`, async () => {
+      const storage = new PnPClientStorage();
+      let now = new Date();
+      let json = await storage.local.getOrPut(`rssfeed-${this.props.context.pageContext.web.serverRelativeUrl}-${this.props.instanceId}`, async () => {
         const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${this.props.rssFeedUrl}&api_key=${this.props.apiKey}`);
         return await response.json();
-      }, pnp.util.dateAdd(new Date(), "minute", this.props.cacheDuration));
+      }, moment(now).add(this.props.cacheDuration, 'm').toDate());
       this.setState({ items: (json.items) ? json.items.splice(0, this.props.itemsCount) : [] });
     } catch (error) {
       throw error;
     }
   }
 
-  public render(): React.ReactElement<IRssFeedProps> {    
+  public render(): React.ReactElement<IRssFeedProps> {
     return (
       <div className={styles.rssFeed}>
         <div className={styles.container}>
-          <div className={styles.headerContainer}>
-            <WebPartTitle displayMode={this.props.displayMode} title={this.props.title} updateProperty={this.props.updateProperty} />
-            {this.props.seeAllUrl && <span className={styles.showAll}><a href={this.props.seeAllUrl}>{strings.SeeAllText}</a></span>}
+          <div className={styles.webpartHeader}>
+            <span>{this.props.title}</span>
+            <span className={styles.showAll}>
+              <Text onClick={() => window.open(this.props.seeAllUrl, '_blank')} >{strings.SeeAllText}</Text>
+            </span>
           </div>
           <ul className={styles.itemsList}>
             {(this.state.items) ? this.state.items.map(({ title, pubDate, link }, index) => (
-              <a target="_blank" key={`listItem_${index}`} className={styles.listItem} href={link.replace(/&amp;/g, '&')}>
+              <Text className={styles.listItem} onClick={() => window.open(link.replace(/&amp;/g, '&'), '_blank')} key={`listItem_${index}`} >
                 <Icon iconName={this.props.officeUIFabricIcon} className={styles.icon} />
                 <div>
                   <div className={`${styles.listItemTitle}`}>
@@ -55,7 +59,7 @@ export default class RssFeed extends React.Component<IRssFeedProps, IRssFeedStat
                   </div>
                   {pubDate ? <div className={`${styles.listItemPubDate} ms-font-xs`}>{strings.View_PublishLabel} {moment(pubDate).format("DD.MM.YYYY")}</div> : null}
                 </div>
-              </a>
+              </Text>
             )) : null}
           </ul>
         </div>
