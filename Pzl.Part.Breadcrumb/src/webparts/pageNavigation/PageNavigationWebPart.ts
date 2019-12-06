@@ -8,11 +8,10 @@ import {
   PropertyPaneDropdown,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane';
-
 import * as strings from 'PageNavigationWebPartStrings';
 import PageNavigation from './components/PageNavigation';
 import { IPageNavigationProps } from './components/IPageNavigationProps';
-import pnp from "sp-pnp-js";
+import { sp } from '@pnp/sp';
 import { IODataListItem } from '@microsoft/sp-odata-types';
 
 export interface IPageNavigationWebPartProps {
@@ -23,8 +22,13 @@ export interface IPageNavigationWebPartProps {
 export default class PageNavigationWebPart extends BaseClientSideWebPart<IPageNavigationWebPartProps> {
   private pageDropdownOptions: IPropertyPaneDropdownOption[];
   private pageDropdownDisabled: boolean;
+
   private lookupFieldOptions: IPropertyPaneDropdownOption[];
   private lookupFieldOptionsDisabled: boolean;
+
+  /**
+   * Rendering
+   */
   public render(): void {
     const element: React.ReactElement<IPageNavigationProps> = React.createElement(
       PageNavigation,
@@ -38,19 +42,35 @@ export default class PageNavigationWebPart extends BaseClientSideWebPart<IPageNa
     );
     ReactDom.render(element, this.domElement);
   }
+
+  /**
+   * On initialization
+   */
   public onInit(): Promise<void> {
     return super.onInit().then(_ => {
-      pnp.setup({
+      sp.setup({
         spfxContext: this.context
       });
     });
   }
+
+  /**
+   * 
+   */
   protected onDispose(): void {
     ReactDom.unmountComponentAtNode(this.domElement);
   }
+
+  /**
+   * @returns {Version} version
+   */
   protected get dataVersion(): Version {
     return Version.parse('1.0');
   }
+
+  /**
+   * 
+   */
   protected async onPropertyPaneConfigurationStart(): Promise<void> {
     try {
       await this.loadLookupDropdown();
@@ -59,7 +79,11 @@ export default class PageNavigationWebPart extends BaseClientSideWebPart<IPageNa
       throw error;
     }
   }
-  private async loadLookupDropdown() {
+
+  /**
+   * 
+   */
+  private async loadLookupDropdown(): Promise<void> {
     this.lookupFieldOptionsDisabled = !this.lookupFieldOptions;
     if (!this.lookupFieldOptions) {
       this.context.statusRenderer.displayLoadingIndicator(this.domElement, 'lookupField');
@@ -71,7 +95,11 @@ export default class PageNavigationWebPart extends BaseClientSideWebPart<IPageNa
       this.render();
     }
   }
-  private async loadPagesDropdown() {
+
+  /**
+   * 
+   */
+  private async loadPagesDropdown(): Promise<void> {
     this.pageDropdownDisabled = !this.pageDropdownOptions;
     if (!this.pageDropdownOptions) {
       this.context.statusRenderer.displayLoadingIndicator(this.domElement, 'lookupField');
@@ -84,6 +112,10 @@ export default class PageNavigationWebPart extends BaseClientSideWebPart<IPageNa
     }
   }
 
+  /**
+   * 
+   * @returns {IPropertyPaneConfiguration}
+   */
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
@@ -113,9 +145,14 @@ export default class PageNavigationWebPart extends BaseClientSideWebPart<IPageNa
       ]
     };
   }
+
+  /**
+   * 
+   * @param {Promise<IPropertyPaneDropdownOption[]>}
+   */
   private async fetchPagesOptions(): Promise<IPropertyPaneDropdownOption[]> {
     try {
-      let items = await pnp.sp.web.getList(this.context.pageContext.list.serverRelativeUrl).items.get();
+      let items = await sp.web.getList(this.context.pageContext.list.serverRelativeUrl).items.get();
       let options: Array<IPropertyPaneDropdownOption> = items.map((item: IODataListItem) => {
         return { key: item.ID, text: item.Title };
       });
@@ -124,10 +161,15 @@ export default class PageNavigationWebPart extends BaseClientSideWebPart<IPageNa
       throw error;
     }
   }
+
+  /**
+   * 
+   * @returns {Promise<IPropertyPaneDropdownOption[]>}
+   */
   private async fetchLookupValues(): Promise<IPropertyPaneDropdownOption[]> {
     try {
       const odataFilter = "TypeAsString eq 'Lookup' and Hidden eq false and AllowMultipleValues eq false and LookupList ne ''";
-      let fields = await pnp.sp.web.getList(this.context.pageContext.list.serverRelativeUrl).fields.filter(odataFilter).get();
+      let fields = await sp.web.getList(this.context.pageContext.list.serverRelativeUrl).fields.filter(odataFilter).get();
       let options: Array<IPropertyPaneDropdownOption> = fields.map((field) => {
         return { key: field.InternalName, text: field.Title };
       });

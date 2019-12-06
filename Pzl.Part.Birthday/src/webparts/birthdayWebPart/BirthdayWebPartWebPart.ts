@@ -21,7 +21,6 @@ export interface IBirthdayWebPartWebPartProps {
 }
 
 export default class BirthdayWebPartWebPart extends BaseClientSideWebPart<IBirthdayWebPartWebPartProps> {
-
   public render(): void {
     const element: React.ReactElement<IBirthdayWebPartProps > = React.createElement(
       BirthdayWebPart,
@@ -30,7 +29,7 @@ export default class BirthdayWebPartWebPart extends BaseClientSideWebPart<IBirth
         itemsCount: this.properties.itemsCount,
         displayMode: this.displayMode,
         context: this.context,
-        updateProperty: (value: string) =>{
+        updateProperty: (value: string) => {
           this.properties.title = value;
         }
       }
@@ -40,13 +39,13 @@ export default class BirthdayWebPartWebPart extends BaseClientSideWebPart<IBirth
   }
 
   public onInit(): Promise<void> {
-
     return super.onInit().then(_ => {
       sp.setup({
         spfxContext: this.context,
       });
     });
   }
+
   protected onDispose(): void {
     ReactDom.unmountComponentAtNode(this.domElement);
   }

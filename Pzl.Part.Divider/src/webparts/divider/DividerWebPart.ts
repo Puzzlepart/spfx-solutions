@@ -1,16 +1,9 @@
-import { Version } from '@microsoft/sp-core-library';
-import {
-    BaseClientSideWebPart,
-    IPropertyPaneConfiguration,
-    PropertyPaneSlider,
-    PropertyPaneTextField
-} from '@microsoft/sp-webpart-base';
-import { DisplayMode } from '@microsoft/sp-core-library';
 import { loadStyles } from '@microsoft/load-themed-styles';
-import PropertyPaneLogo from './PropertyPaneLogo';
-import styles from './DividerWebPart.module.scss';
+import { DisplayMode, Version } from '@microsoft/sp-core-library';
+import { IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField } from "@microsoft/sp-property-pane";
+import { BaseClientSideWebPart } from "@microsoft/sp-webpart-base";
 import * as strings from 'DividerWebPartStrings';
-
+import PropertyPaneLogo from './PropertyPaneLogo';
 
 export interface IDividerWebPartProps {
     width: number;
@@ -47,10 +40,10 @@ export default class DividerWebPart extends BaseClientSideWebPart<IDividerWebPar
 
     protected renderLogo(domElement: HTMLElement) {
         domElement.innerHTML = `
-      <div style="margin-top: 30px">
-        <div style="float:right">Author: <a href="mailto:mikael.svenson@puzzlepart.com" tabindex="-1">Mikael Svenson</a></div>
-        <div style="float:right"><a href="https://www.puzzlepart.com/" target="_blank"><img src="//www.puzzlepart.com/wp-content/uploads/2017/08/Pzl-LogoType-200.png" onerror="this.style.display = \'none\'";"></a></div>
-      </div>`;
+            <div style="margin-top: 30px">
+                <div style="float:right">Author: <a href="mailto:mikael.svenson@puzzlepart.com" tabindex="-1">Mikael Svenson</a></div>
+                <div style="float:right"><a href="https://www.puzzlepart.com/" target="_blank"><img src="//www.puzzlepart.com/wp-content/uploads/2017/08/Pzl-LogoType-200.png" onerror="this.style.display = \'none\'";"></a></div>
+            </div>`;
     }
 
     private makeId() {
