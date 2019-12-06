@@ -66,6 +66,9 @@ export default class RssFeedWebPart extends BaseClientSideWebPart<IRssFeedWebPar
             {
               groupName: strings.GeneralGroupName,
               groupFields: [
+                PropertyPaneTextField('title', {
+                  label: strings.WebPartTitle
+                }),
                 PropertyPaneTextField('seeAllUrl', {
                   label: strings.SeeAllUrlFieldLabel
                 }),

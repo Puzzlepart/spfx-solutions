@@ -16,18 +16,18 @@
     "@microsoft/sp-lodash-subset": "1.9.1",
     "@microsoft/sp-office-ui-fabric-core": "1.9.1",
     "@microsoft/sp-webpart-base": "1.9.1",
-    "@pnp/spfx-controls-react": "1.6.0",
-    "@pnp/spfx-property-controls": "1.8.0",
+    "@pnp/common": "^1.3.7",
+    "@pnp/spfx-controls-react": "1.15.0",
+    "@pnp/spfx-property-controls": "1.16.0",
     "@types/es6-promise": "0.0.33",
     "@types/react": "16.8.8",
     "@types/react-dom": "16.8.3",
     "@types/webpack-env": "1.13.1",
-    "moment": "^2.22.2",
+    "moment": "^2.24.0",
     "natives": "^1.1.6",
     "office-ui-fabric-react": "6.189.2",
     "react": "16.8.5",
-    "react-dom": "16.8.5",
-    "sp-pnp-js": "^3.0.10"
+    "react-dom": "16.8.5"
   },
   "devDependencies": {
     "@microsoft/rush-stack-compiler-2.9": "0.7.16",

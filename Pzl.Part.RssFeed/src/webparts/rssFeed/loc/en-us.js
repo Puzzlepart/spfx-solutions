@@ -13,6 +13,7 @@ define([], function() {
         "View_EmptyPlaceholder_Description": "Property 'RSS-Feed URL' is not yet configured.",
         "View_EmptyPlaceholder_Button": 'Edit',
         "SeeAllUrlFieldLabel": '"See all" - link',
-        "SeeAllText": 'See all'
+        "SeeAllText": 'See all',
+        "WebPartTitle": 'Web part title'
     }
 });
