@@ -1,8 +1,11 @@
-## pzl-rss-feed
+# RSS-feed by Puzzlepart
 
-This is where you include your WebPart documentation.
+Customizable RSS-feed web part.
 
-### Building the code
+![web part](./preview/rss_feed_webpart_06-12-19.png "Web part")
+![property pane](./preview/rss_feed_property_pane_webpart_06-12-19.png "Configuration")
+
+## Building the code
 
 ```bash
 git clone the repo
@@ -11,13 +14,7 @@ npm i -g gulp
 gulp
 ```
 
-This package produces the following:
-
-* lib/* - intermediate-stage commonjs build artifacts
-* dist/* - the bundled script, along with other resources
-* deploy/* - all resources which should be uploaded to a CDN.
-
-### Build options
+## Build options
 
 gulp clean - TODO
 gulp test - TODO

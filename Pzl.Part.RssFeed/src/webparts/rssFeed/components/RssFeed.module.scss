@@ -36,10 +36,12 @@
     @include ms-Grid;
     .listItem {
         @include ms-Grid-row;
-        padding-bottom: 20px;
-        display: list-item;
         @include ms-fontWeight-regular;
         @include ms-fontSize-mPlus;
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+        display: list-item;
+        cursor: pointer;
         div {
             @include ms-Grid-col;
             @include ms-sm10;
@@ -55,6 +57,9 @@
             @include ms-Grid-col;
             @include ms-sm2;
         }
+    }
+    .listItem:hover {
+        background-color: rgba(0, 0, 0, 0.060);
     }
     .listItemTitle {
         overflow: hidden;

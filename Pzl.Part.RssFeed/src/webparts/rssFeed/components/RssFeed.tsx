@@ -25,7 +25,7 @@ export default class RssFeed extends React.Component<IRssFeedProps, IRssFeedStat
     }
   }
 
-  private async fetchData() {
+  private async fetchData() {   
     try {
       const storage = new PnPClientStorage();
       let now = new Date();
