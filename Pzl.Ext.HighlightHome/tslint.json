@@ -1,5 +1,7 @@
 {
-  "rulesDirectory": [],
+  "rulesDirectory": [
+    "tslint-microsoft-contrib"
+  ],
   "rules": {
     "class-name": false,
     "export-name": false,
@@ -26,6 +28,5 @@
     "use-named-parameter": true,
     "variable-name": false,
     "whitespace": false
-  },
-  "extends": "@microsoft/sp-tslint-rules/base-tslint.json"
+  }
 }

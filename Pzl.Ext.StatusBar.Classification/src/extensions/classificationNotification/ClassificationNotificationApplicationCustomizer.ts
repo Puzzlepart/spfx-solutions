@@ -4,9 +4,7 @@ import { override } from '@microsoft/decorators';
 import {
     BaseApplicationCustomizer
 } from '@microsoft/sp-application-base';
-import { Dialog } from '@microsoft/sp-dialog';
 import ClassificationNotification, { IClassificationNotificationProps } from './ClassificationNotification/ClassificationNotification';
-import * as strings from 'ClassificationNotificationApplicationCustomizerStrings';
 
 const statusId: string = "PzlClassificationNotification";
 

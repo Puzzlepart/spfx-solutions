@@ -1,8 +1,12 @@
 {
   "@microsoft/generator-sharepoint": {
-    "version": "1.4.1",
+    "version": "1.9.1",
     "libraryName": "pzl-ext-group-logo",
     "libraryId": "8ac2fc44-9fb6-4876-8fb7-3e24b9bc6565",
-    "environment": "spo"
+    "environment": "spo",
+    "isDomainIsolated": false,
+    "isCreatingSolution": true,
+    "packageManager": "npm",
+    "componentType": "webpart"
   }
 }

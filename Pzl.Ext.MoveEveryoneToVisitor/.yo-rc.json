@@ -1,8 +1,12 @@
 {
   "@microsoft/generator-sharepoint": {
-    "version": "1.4.0",
+    "version": "1.9.1",
     "libraryName": "move-everyone-to-visitors-by-puzzlepart",
     "libraryId": "1964e6b4-0694-4d9d-b72a-f02a4db2c66e",
-    "environment": "spo"
+    "environment": "spo",
+    "isDomainIsolated": false,
+    "isCreatingSolution": true,
+    "packageManager": "npm",
+    "componentType": "webpart"
   }
 }

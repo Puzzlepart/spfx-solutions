@@ -1,5 +1,5 @@
 {
-    "$schema": "https://dev.office.com/json-schemas/spfx/client-side-extension-manifest.schema.json",
+    "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-extension-manifest.schema.json",
     "id": "349f176f-ae79-4adf-a680-be7f187628d1",
     "alias": "GroupLogoApplicationCustomizer",
     "componentType": "Extension",

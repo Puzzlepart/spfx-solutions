@@ -8,7 +8,7 @@
     "framework": "react",
     "isCreatingSolution": true,
     "environment": "spo",
-    "version": "1.7.0",
+    "version": "1.9.1",
     "libraryName": "pzl-ext-move-copy-page",
     "libraryId": "e5f34229-8c1a-49af-8876-30517da79fc1",
     "packageManager": "npm",
