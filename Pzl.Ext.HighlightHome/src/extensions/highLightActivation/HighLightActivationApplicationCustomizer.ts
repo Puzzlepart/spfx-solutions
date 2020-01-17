@@ -32,6 +32,14 @@ export default class HighLightActivationApplicationCustomizer
     private async removeCustomizer() {
         // Remove custom action from current sute
         let web = new Web(this.context.pageContext.web.absoluteUrl);
+
+        let updateResult = await web.getList(`${this.context.pageContext.web.serverRelativeUrl}/SitePages`)
+            .fields.getByInternalNameOrTitle("DocIcon").update({
+                ClientSideComponentId: "00000000-0000-0000-0000-000000000000",
+            });
+
+        Log.info(LOG_SOURCE, `Removed field customizer from DocIcon: ${updateResult.data}`);
+
         let customActions = await web.userCustomActions.get();
         for (let i = 0; i < customActions.length; i++) {
             var instance = customActions[i];
