@@ -22,3 +22,5 @@ npm i -g gulp
 gulp bundle --ship
 gulp package-solution --ship
 ```
+
+App-file is generated and available in the sharepoint/solution folder
