@@ -1,6 +1,18 @@
-## custom-text-editor
+## Custom-text-editor
 
-This is where you include your WebPart documentation.
+Simple web part with enhanced text editor to add text to page. Includes a most-wanted accordion mode to present your content like a professional.
+
+### Render mode
+
+![alt](RenderWebPart.PNG)
+
+### Edit mode
+
+![alt](EditWebPart.PNG)
+
+### Web part settings
+
+![alt](WebPartSettings.PNG)
 
 ### Building the code
 
@@ -17,10 +29,13 @@ This package produces the following:
 * dist/* - the bundled script, along with other resources
 * deploy/* - all resources which should be uploaded to a CDN.
 
-### Build options
 
-gulp clean - TODO
-gulp test - TODO
-gulp serve - TODO
-gulp bundle - TODO
-gulp package-solution - TODO
+### Build the code for production
+
+```bash
+npm i
+gulp bundle --ship
+gulp package-solution --ship
+```
+
+Bring the file sharepoint/solution/pzl-custom-text-editor.sppkg to an app catalog, add the app and have fun :)
