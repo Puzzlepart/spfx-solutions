@@ -7,7 +7,7 @@
   "manifestVersion": 2,
   "requiresCustomScript": false,
   "supportsFullBleed": true,
-
+  "supportedHosts": ["SharePointWebPart"],
   "preconfiguredEntries": [{
     "groupId": "cf066440-0614-43d6-98ae-0b31cf14c7c3",
     "group": { "default": "Text, media, and content" },

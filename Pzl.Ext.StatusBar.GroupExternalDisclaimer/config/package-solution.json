@@ -1,5 +1,5 @@
 {
-  "$schema": "https://dev.office.com/json-schemas/spfx-build/package-solution.schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
     "name": "External Access Disclaimer Status by Puzzlepart",
     "id": "45a9c21c-f312-4cf3-980d-8fe95bf19a24",

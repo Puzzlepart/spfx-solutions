@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { Icon } from "office-ui-fabric-react/lib/Icon";
-import { SPHttpClient, SPHttpClientResponse } from '@microsoft/sp-http';
 import { IWebPartContext } from '@microsoft/sp-webpart-base';
 import styles from './Styling.module.scss';
 import * as strings from 'ClassificationNotificationApplicationCustomizerStrings';
-import { Dialog } from '@microsoft/sp-dialog';
 
 export interface IClassificationNotificationProps {
     context: IWebPartContext;

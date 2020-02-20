@@ -3,6 +3,7 @@
     "id": "4ca3a982-9cb4-433a-a59f-b36b1c960f1e",
     "alias": "HookMeUpWebPart",
     "componentType": "WebPart",
+    "supportedHosts": ["SharePointWebPart"],
     "version": "*",
     "manifestVersion": 2,
     "requiresCustomScript": false,

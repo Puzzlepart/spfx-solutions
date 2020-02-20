@@ -3,7 +3,7 @@ import styles from './PageNavigation.module.scss';
 import { Spinner, SpinnerSize } from 'office-ui-fabric-react/lib/Spinner';
 import { IPageNavigationProps } from './IPageNavigationProps';
 import { IPageNavigationState } from './IPageNavigationState';
-import { sp } from "sp-pnp-js";
+import { sp } from '@pnp/sp';
 import { IODataListItem } from '@microsoft/sp-odata-types';
 import { Nav, INavLink, INavStyles, INavStyleProps } from 'office-ui-fabric-react/lib/Nav';
 
@@ -12,11 +12,7 @@ export interface IPage extends IODataListItem {
 }
 
 /**
- *
- *
- * @export
- * @class PageNavigation
- * @extends {React.Component<IPageNavigationProps, IPageNavigationState>}
+ * 
  */
 export default class PageNavigation extends React.Component<IPageNavigationProps, IPageNavigationState> {
   constructor(props) {
@@ -27,11 +23,10 @@ export default class PageNavigation extends React.Component<IPageNavigationProps
       pages: []
     });
   }
+
   /**
-   *
-   *
+   * 
    * @returns {React.ReactElement<IPageNavigationProps>}
-   * @memberof PageNavigation
    */
   public render(): React.ReactElement<IPageNavigationProps> {
     let { rootNode } = this.state;
@@ -42,9 +37,10 @@ export default class PageNavigation extends React.Component<IPageNavigationProps
       return <Spinner size={SpinnerSize.large} />;
     }
     rootNode.isExpanded = true;
-    return (<div>
-      <Nav
-        styles={() => {
+    return (
+      <div>
+        <Nav
+          styles={() => {
             return {
               chevronButton: {
                 selectors: {
@@ -55,24 +51,16 @@ export default class PageNavigation extends React.Component<IPageNavigationProps
                 }
               }
             };
-          }
-        }
-        groups={[
-          {
-            links: [
-              rootNode
-            ]
-          }
-        ]}
-      />
-    </div>
+          }}
+          groups={[{ links: [ rootNode ] }]}
+        />
+      </div>
     );
   }
+
   /**
-   *
-   *
+   * 
    * @returns {Promise<void>}
-   * @memberof PageNavigation
    */
   public async componentDidMount(): Promise<void> {
     await this.fetchListItems();
@@ -80,32 +68,25 @@ export default class PageNavigation extends React.Component<IPageNavigationProps
   }
 
   /**
-   *
-   *
+   * 
    * @param {*} prevprops
    * @returns {Promise<void>}
-   * @memberof PageNavigation
    */
   public async componentDidUpdate(prevprops): Promise<void> {
     if (this.props.topLevelPage !== prevprops.topLevelPage) {
       await this.buildPageNavigation();
     }
   }
+
   /**
-   *
-   *
-   * @private
-   * @memberof PageNavigation
+   * 
    */
   private async buildPageNavigation() {
     try {
       let currentPage = await sp.web.getList(this.props.listServerRelativeUrl).items.getById(this.props.topLevelPage).select("Id", "Title", "FileRef").get();
       let currentPageNode: INavLink = { key: currentPage.Id, name: currentPage.Title, url: currentPage.FileRef };
       let navigationTree = this.setPageNavigation(currentPageNode);
-      this.setState({
-        rootNode: navigationTree,
-        isLoading: false
-      });
+      this.setState({ rootNode: navigationTree, isLoading: false });
     }
     catch (error) {
       throw error;
@@ -113,12 +94,9 @@ export default class PageNavigation extends React.Component<IPageNavigationProps
   }
 
   /**
-   *
-   *
-   * @private
+   * 
    * @param {INavLink} [parentNode]
    * @returns {INavLink}
-   * @memberof PageNavigation
    */
   private setPageNavigation(parentNode?: INavLink): INavLink {
       let subPages = this.state.pages.filter((item: INavLink) => {
@@ -135,11 +113,8 @@ export default class PageNavigation extends React.Component<IPageNavigationProps
   }
 
   /**
-   *
-   *
-   * @private
+   * 
    * @returns {Promise<void>}
-   * @memberof Breadcrumb
    */
   private async fetchListItems(): Promise<void> {
     try {

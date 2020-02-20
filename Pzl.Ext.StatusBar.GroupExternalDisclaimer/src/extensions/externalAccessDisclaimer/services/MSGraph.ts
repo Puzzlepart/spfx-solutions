@@ -1,11 +1,11 @@
-import { GraphHttpClient, GraphHttpClientResponse } from '@microsoft/sp-http';
+import { AadHttpClient, HttpClientResponse } from '@microsoft/sp-http';
 import { Log } from '@microsoft/sp-core-library';
 
 export class MSGraph {
-    public static async Get(graphClient: GraphHttpClient, url: string) {
+    public static async Get(graphClient: AadHttpClient, url: string) {
         let values: any[] = [];
         while (true) {
-            let response: GraphHttpClientResponse = await graphClient.get(url, GraphHttpClient.configurations.v1);
+            let response: HttpClientResponse = await graphClient.get(url, AadHttpClient.configurations.v1);
             // Check that the request was successful
             if (response.ok) {
                 let result = await response.json();

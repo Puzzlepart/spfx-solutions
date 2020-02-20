@@ -5,6 +5,7 @@
     "id": "1b8eca52-cf5f-4f92-a466-fb48a5ba2c55",
     "version": "1.0.0.10",
     "includeClientSideAssets": true,
+    "isDomainIsolated": false,
     "features": [
       {
         "title": "Field Extension - Deployment of custom field.",

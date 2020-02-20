@@ -1,17 +1,13 @@
+import { ISearchQueryBuilder, SearchQuery, SearchQueryBuilder, sp } from '@pnp/sp';
+import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
+import * as strings from 'BirthdayWebPartWebPartStrings';
+import * as moment from 'moment';
+import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import * as React from 'react';
 import styles from './BirthdayWebPart.module.scss';
-import { IBirthdayWebPartProps } from './IBirthdayWebPartProps';
-import * as moment from 'moment';
 import { IBirthdayState } from './IBirthdayState';
-import { sp, SearchQuery, SortDirection, ISearchQueryBuilder, SearchQueryBuilder, SearchResults, Item } from '@pnp/sp';
-import { WebPartTitle} from '@pnp/spfx-controls-react/lib/WebPartTitle';
-import { escape, times } from '@microsoft/sp-lodash-subset';
-import { authentication } from '@microsoft/teams-js';
-import { SharePointPageContextDataProvider } from '@microsoft/sp-page-context';
+import { IBirthdayWebPartProps } from './IBirthdayWebPartProps';
 import { IUser } from './IUser';
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
-import { dataFile } from './data/dataFile';
-import * as strings from 'BirthdayWebPartWebPartStrings';
 
 export default class BirthdayWebPart extends React.Component<IBirthdayWebPartProps, IBirthdayState> {
   private _users: IUser[] = [];
@@ -21,9 +17,11 @@ export default class BirthdayWebPart extends React.Component<IBirthdayWebPartPro
       items: []
     };
   }
+
   public async componentDidMount() {
     await this.fetchBirthdayData();
   }
+
   public render(): React.ReactElement<IBirthdayWebPartProps> {
     return (
       <div className={styles.birthdayWebPart}>
@@ -41,10 +39,10 @@ export default class BirthdayWebPart extends React.Component<IBirthdayWebPartPro
               <td className={styles.daysleft}>
               {
                 (daysleft === 0) ?
-                  <Icon className={styles.icon} iconName={strings.CakeIconName} />  
-                :               
+                  <Icon className={styles.icon} iconName={strings.CakeIconName} />
+                :
                 `${daysleft} ${strings.TextDays}`
-              }          
+              }
               </td>
             </tr>
           )) : null}
@@ -62,6 +60,7 @@ export default class BirthdayWebPart extends React.Component<IBirthdayWebPartPro
     };
     const builder: ISearchQueryBuilder = SearchQueryBuilder('* Birthday>=1/1/2000', _searchQuerySettings);
     let result = await sp.search(builder);
+    console.log(result);
     return result.PrimarySearchResults;
   }
 
@@ -74,7 +73,7 @@ export default class BirthdayWebPart extends React.Component<IBirthdayWebPartPro
       people.forEach((person: any) => {
         let birthday = moment.utc(person.Birthday).year(thisYear);
         let birthdayAsString = moment(birthday).format("YYYY-MM-DD");
-        let nextBirthdayYear:number = Number(thisYear);
+        let nextBirthdayYear: number = Number(thisYear);
 
         // People having birthday next year, for sorting and numbers
         if (moment(birthdayAsString).isBefore(today)){
@@ -82,15 +81,13 @@ export default class BirthdayWebPart extends React.Component<IBirthdayWebPartPro
           birthdayAsString = moment(birthday).format("YYYY-MM-DD");
           nextBirthdayYear = nextBirthdayYear + 1;
         }
-        const daysbetween = moment(birthdayAsString).diff(moment(today), 'days');
-        const old:number = nextBirthdayYear - Number(person.Birthyear);      
+        const daysbetween: number = moment(birthdayAsString).diff(moment(today), 'days');
+        const old: number = nextBirthdayYear - Number(person.Birthyear);      
         this._users.push({ key: person.PreferredName, userEmail: person.WorkEmail ,userName: person.PreferredName, jobDescription: person.JobTitle, department: person.Department, daysleft: daysbetween, day: moment(birthday).format("DD.MM"), years: old , birthday: birthday.local().format() });
         this._users = this.sortBirthdays(this._users);
       });
       const items = this._users.splice(0, this.props.itemsCount);
-      this.setState(
-        { items }
-      );
+      this.setState({ items });
     }
   }
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from './Tiles.module.scss';
 import { ITilesProps } from './ITilesProps';
-import * as pnp from "sp-pnp-js/lib/pnp";
+import { sp } from '@pnp/sp';
 import { Spinner, SpinnerType } from "office-ui-fabric-react/lib/Spinner";
 
 export interface ITilesState {
@@ -17,6 +17,7 @@ export default class Tiles extends React.Component<ITilesProps, ITilesState> {
       isLoading: true,
     };
   }
+
   public componentDidMount(): void {
     this.fetchData();
   }
@@ -52,7 +53,7 @@ export default class Tiles extends React.Component<ITilesProps, ITilesState> {
   private async fetchData(): Promise<void> {
     try {
       let filter = (this.props.tileTypeField && this.props.tileType) ? `${this.props.tileTypeField} eq '${this.props.tileType}'` : '';
-      let response = await pnp.sp.web.lists.getByTitle(this.props.list).items.filter(filter).orderBy((this.props.orderByField) ? this.props.orderByField : "ID").top(this.props.count).get();
+      let response = await sp.web.lists.getByTitle(this.props.list).items.filter(filter).orderBy((this.props.orderByField) ? this.props.orderByField : "ID").top(this.props.count).get();
       this.setState({
         items: response,
         isLoading: false,

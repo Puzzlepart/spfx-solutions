@@ -6,7 +6,7 @@ import { IPropertyPaneConfiguration, IPropertyPaneDropdownOption, PropertyPaneDr
 import * as strings from 'BreadcrumbWebPartStrings';
 import SitePagesBreadcrumb from './components/SitePagesBreadcrumb';
 import { IBreadcrumbProps } from './components/IBreadcrumbProps';
-import pnp from "sp-pnp-js";
+import { sp } from '@pnp/sp';
 
 export interface IBreadcrumbWebPartProps {
   description: string;
@@ -17,6 +17,9 @@ export default class BreadcrumbWebPart extends BaseClientSideWebPart<IBreadcrumb
   private lookupFieldOptions: IPropertyPaneDropdownOption[];
   private lookupFieldOptionsDisabled: boolean;
 
+  /**
+   * Rendering
+   */
   public render(): void {
     const element: React.ReactElement<IBreadcrumbProps> = React.createElement(
       SitePagesBreadcrumb,
@@ -30,16 +33,28 @@ export default class BreadcrumbWebPart extends BaseClientSideWebPart<IBreadcrumb
 
     ReactDom.render(element, this.domElement);
   }
+
+  /**
+   * On initialization
+   */
   public onInit(): Promise<void> {
     return super.onInit().then(_ => {
-      pnp.setup({
+      sp.setup({
         spfxContext: this.context
       });
     });
   }
+
+  /**
+   * 
+   */
   protected onDispose(): void {
     ReactDom.unmountComponentAtNode(this.domElement);
   }
+
+  /**
+   * 
+   */
   protected async onPropertyPaneConfigurationStart(): Promise<void> {
     try {
       await this.loadLookupDropdown();
@@ -47,7 +62,11 @@ export default class BreadcrumbWebPart extends BaseClientSideWebPart<IBreadcrumb
       throw error;
     }
   }
-  private async loadLookupDropdown() {
+
+  /**
+   * 
+   */
+  private async loadLookupDropdown(): Promise<void> {
     this.lookupFieldOptionsDisabled = !this.lookupFieldOptions;
     if (!this.lookupFieldOptions) {
       this.context.statusRenderer.displayLoadingIndicator(this.domElement, 'lookupField');
@@ -60,10 +79,18 @@ export default class BreadcrumbWebPart extends BaseClientSideWebPart<IBreadcrumb
     }
   }
 
+  /**
+   * 
+   * @returns {Version} version
+   */
   protected get dataVersion(): Version {
     return Version.parse('1.0');
   }
 
+  /**
+   * 
+   * @returns {IPropertyPaneConfiguration}
+   */
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
@@ -71,25 +98,31 @@ export default class BreadcrumbWebPart extends BaseClientSideWebPart<IBreadcrumb
           header: {
             description: strings.PropertyPaneDescription
           },
-          groups: [
-            {
-              groupName: strings.BasicGroupName,
-              groupFields: [
-                PropertyPaneDropdown('lookupField', {
+          groups: [{
+            groupName: strings.BasicGroupName,
+            groupFields: [
+              PropertyPaneDropdown(
+                'lookupField', 
+                {
                   label: strings.lookupFieldLabel,
                   options: this.lookupFieldOptions,
-                })
-              ]
-            }
-          ]
+                }
+              )
+            ]
+          }]
         }
       ]
     };
   }
+
+  /**
+   * 
+   * @returns {Promise<IPropertyPaneDropdownOption[]>}
+   */
   private async fetchLookupValues(): Promise<IPropertyPaneDropdownOption[]> {
     try {
       const odataFilter = "TypeAsString eq 'Lookup' and Hidden eq false and AllowMultipleValues eq false and LookupList ne ''";
-      let fields = await pnp.sp.web.getList(this.context.pageContext.list.serverRelativeUrl).fields.filter(odataFilter).get();
+      let fields = await sp.web.getList(this.context.pageContext.list.serverRelativeUrl).fields.filter(odataFilter).get();
       let options: Array<IPropertyPaneDropdownOption> = fields.map((field) => {
         return { key: field.InternalName, text: field.Title };
       });

@@ -1,5 +1,5 @@
 {
-  "$schema": "https://dev.office.com/json-schemas/spfx/client-side-extension-manifest.schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-extension-manifest.schema.json",
 
   "id": "2c565a15-92a5-4f51-9194-6a88a5edd482",
   "alias": "ExternalAccessDisclaimerApplicationCusto",

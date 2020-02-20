@@ -4,7 +4,8 @@
     "name": "Tiles by Puzzlepart",
     "id": "62b3c13c-4c0f-4d65-acc0-e82cea7a335c",
     "version": "1.0.0.0",
-    "includeClientSideAssets": true
+    "includeClientSideAssets": true,
+    "isDomainIsolated": false
   },
   "paths": {
     "zippedPackage": "solution/pzl-part-tiles.sppkg"

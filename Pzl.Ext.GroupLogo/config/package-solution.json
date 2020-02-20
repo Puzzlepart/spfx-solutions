@@ -1,10 +1,11 @@
 {
-  "$schema": "https://dev.office.com/json-schemas/spfx-build/package-solution.schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
     "name": "Office 365 Group Logo by Puzzlepart",
     "id": "8ac2fc44-9fb6-4876-8fb7-3e24b9bc6565",
     "version": "1.0.0.0",
     "includeClientSideAssets": true,
+    "isDomainIsolated": false,
     "webApiPermissionRequests": [
       {
         "resource": "Microsoft Graph",

@@ -1,12 +1,11 @@
-## Divider by Puzzlepart
+# Divider by Puzzlepart
 
 If you need a more flexible page divider, this is what you are looking for. You have the option to set both width and color.
 
 ![Demo](./preview.gif "Demo")
 
-
-
 ## Replacing the out of the box divider web part with this one
+
 (This feature is not yet enabled in SPO)
 Using PnP PowerShell and the object model you can disable certain web parts from showing in the toolbox for your tenant.
 
@@ -24,7 +23,7 @@ $tenant.Update()
 Invoke-PnPQuery
 ```
 
-### Building the package
+## Building the package
 
 ```bash
 git clone the repo

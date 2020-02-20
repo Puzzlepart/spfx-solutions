@@ -2,11 +2,12 @@
   "@microsoft/generator-sharepoint": {
     "isCreatingSolution": false,
     "environment": "spo",
-    "version": "1.5.1",
+    "version": "1.9.1",
     "libraryName": "pzl-ext-highlight-home",
     "libraryId": "1b8eca52-cf5f-4f92-a466-fb48a5ba2c55",
     "packageManager": "npm",
     "componentType": "extension",
-    "extensionType": "ApplicationCustomizer"
+    "extensionType": "ApplicationCustomizer",
+    "isDomainIsolated": false
   }
 }

@@ -1,4 +1,5 @@
 {
+  "rulesDirectory": [],
   "rules": {
     "class-name": false,
     "export-name": false,
@@ -8,7 +9,6 @@
     "no-arg": false,
     "no-console": false,
     "no-construct": false,
-    "no-duplicate-case": true,
     "no-duplicate-variable": true,
     "no-eval": false,
     "no-function-expression": true,
@@ -24,8 +24,8 @@
     "typedef": false,
     "typedef-whitespace": false,
     "use-named-parameter": true,
-    "valid-typeof": true,
     "variable-name": false,
     "whitespace": false
-  }
+  },
+  "extends": "@microsoft/sp-tslint-rules/base-tslint.json"
 }

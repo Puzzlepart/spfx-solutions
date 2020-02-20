@@ -3,6 +3,7 @@
   "id": "ac715ac1-1178-4dcd-b3fa-e02bf4e62666",
   "alias": "PzlTilesWebPart",
   "componentType": "WebPart",
+  "supportedHosts": ["SharePointWebPart"],
   "version": "*",
   "manifestVersion": 2,
   "requiresCustomScript": false,

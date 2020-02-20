@@ -1,5 +1,9 @@
 
-### Build the code
+# Breadcrumb by Puzzlepart
+
+Breadcrumb navigation web part.
+
+## Build the code
 
 ```bash
 git clone https://ThomasGranheim@bitbucket.org/puzzlepart/pzl-spfx-parts.git
@@ -8,8 +12,7 @@ gulp --ship
 gulp package-solution --ship
 ```
 
-###
+## Install the app
 
-### Install the app
 * Copy `pzl-part-breadcrumb.sppkg` from `sharepoint\solution` and install it in your tenant app catalog.
 * Install the app in your communication site

@@ -18,6 +18,8 @@ export interface IExternalDisclaimerState {
     allowAnonymousSharing: boolean;
 }
 export default class ExternalDisclaimer extends React.PureComponent<IExternalDisclaimerProps, IExternalDisclaimerState> {
+    public aadHttpClient;
+    
     constructor(props) {
         super(props);
         this.state = {
@@ -25,6 +27,10 @@ export default class ExternalDisclaimer extends React.PureComponent<IExternalDis
             allowSharing: false,
             allowAnonymousSharing: false
         };
+    }
+
+    public async onInit(): Promise<void> {
+        this.aadHttpClient = await this.context.aadHttpClientFactory.getClient('https://graph.microsoft.com');
     }
 
     public componentDidMount(): void {
@@ -68,7 +74,7 @@ export default class ExternalDisclaimer extends React.PureComponent<IExternalDis
             let groupId = this.props.context.pageContext.legacyPageContext.groupId;
             let graphUrl = `v1.0/groups/${groupId}/settings`;
 
-            let groupSettings = await MSGraph.Get(this.props.context.graphHttpClient, graphUrl);
+            let groupSettings = await MSGraph.Get(this.aadHttpClient, graphUrl);
             let externalGuestsAllowed = false;
             for (var i = 0; i < groupSettings.value.length; i++) {
                 let setting = groupSettings.value[i];

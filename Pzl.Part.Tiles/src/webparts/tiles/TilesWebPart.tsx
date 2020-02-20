@@ -1,21 +1,15 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
-import {
-  BaseClientSideWebPart,
-  IPropertyPaneConfiguration,
-  PropertyPaneTextField,
-  PropertyPaneSlider,
-  IPropertyPaneDropdownOption,
-  PropertyPaneDropdown,
-  PropertyPaneToggle
-} from '@microsoft/sp-webpart-base';
+import { BaseClientSideWebPart } from "@microsoft/sp-webpart-base";
+import { IPropertyPaneConfiguration, IPropertyPaneDropdownOption, PropertyPaneDropdown, PropertyPaneSlider, PropertyPaneTextField, PropertyPaneToggle } from "@microsoft/sp-property-pane";
 import { IODataList } from '@microsoft/sp-odata-types';
-import * as pnp from "sp-pnp-js/lib/pnp";
+import { sp } from '@pnp/sp';
 import * as strings from 'TilesWebPartStrings';
 import Tiles from './components/Tiles';
 import { ITilesProps } from './components/ITilesProps';
 import { Placeholder } from "@pnp/spfx-controls-react/lib/Placeholder";
+
 export interface ITilesWebPartProps {
   list: string;
   descriptionField: string;
@@ -33,6 +27,7 @@ export interface ITilesWebPartProps {
   tileTypeField: string;
   showAdvanced: boolean;
 }
+
 export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartProps> {
   private listOptions: IPropertyPaneDropdownOption[];
   private tileTypeFieldOptions: IPropertyPaneDropdownOption[];
@@ -40,9 +35,10 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
   private tileTypeFieldDropdownDisabled: boolean;
   private tileTypeDropdownDisabled: boolean;
   private listsDropdownDisabled: boolean;
+  
   public onInit(): Promise<void> {
     return super.onInit().then(_ => {
-      pnp.setup({
+      sp.setup({
         spfxContext: this.context
       });
     });
@@ -272,7 +268,7 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
   }
   private async fetchListOptions(): Promise<IPropertyPaneDropdownOption[]> {
     try {
-      const results = await pnp.sp.web.lists.filter('BaseTemplate eq 100 and Hidden eq false').get();
+      const results = await sp.web.lists.filter('BaseTemplate eq 100 and Hidden eq false').get();
       return results.map((item: IODataList, index) => {
         return { text: item.Title, key: item.Title, index: index };
       });
@@ -282,7 +278,7 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
   }
   private async fetchChoiceFieldTypes(): Promise<IPropertyPaneDropdownOption[]> {
     try {
-      let fields = await pnp.sp.web.lists.getByTitle(this.properties.list).fields.filter("TypeAsString eq 'Choice'").get();
+      let fields = await sp.web.lists.getByTitle(this.properties.list).fields.filter("TypeAsString eq 'Choice'").get();
       let options: Array<IPropertyPaneDropdownOption> = fields.map((field) => {
         return { key: field.InternalName, text: field.Title };
       });
@@ -293,7 +289,7 @@ export default class TilesWebPart extends BaseClientSideWebPart<ITilesWebPartPro
   }
   private async fetchFileTypeOptions(): Promise<IPropertyPaneDropdownOption[]> {
     try {
-      let field = await pnp.sp.web.lists.getByTitle(this.properties.list).fields.getByInternalNameOrTitle(this.properties.tileTypeField).get();
+      let field = await sp.web.lists.getByTitle(this.properties.list).fields.getByInternalNameOrTitle(this.properties.tileTypeField).get();
       let options: Array<IPropertyPaneDropdownOption> = field.Choices.map((choice) => {
         return { key: choice, text: choice };
       });
