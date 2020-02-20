@@ -1,0 +1,112 @@
+@import '~office-ui-fabric-react/dist/sass/References.scss';
+@import '~office-ui-fabric-react/dist/sass/themeOverrides.scss';
+@import '~office-ui-fabric-react/dist/sass/Animation.scss';
+.underline {
+    A {
+        text-decoration: underline !important;
+    }
+}
+
+.editor {
+    A {
+        color: $ms-color-themePrimary;
+        text-decoration: none;
+    }
+    A:hover {
+        color: $ms-color-themeDarker;
+    }
+    .fadeMore {
+        color: $ms-color-themePrimary;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    .fadeMore:hover {
+        color: $ms-color-themeDarker;
+    }
+    min-height: 50px;
+    .headerContainer {
+        border-bottom: 1px solid $ms-color-themeDark;
+        padding-top: 8px;
+        padding-left: 10px;
+        cursor: pointer;
+        display: flex;
+        min-height: 40px;
+        &.expanded {
+            cursor: pointer;
+        }
+        .chevron {
+            padding-right: 10px;
+            padding-left: 10px;
+            padding-top: 10px;
+        }
+    }
+    .accordionContainer {
+        cursor: pointer;
+        margin: 10px 10px 10px 0;
+        width: 100%;
+        border: none;
+        text-align: left;
+        background-color: white;
+        outline: 0;
+        font-size: 15px;
+        transition: .4s;
+        border-bottom: 1px solid;
+        padding-top: 8px;
+        padding-left: 10px;
+        display: -ms-flexbox;
+        display: flex;
+        min-height: 40px;
+        &:focus {
+            box-shadow: 0 0 0 3px #FFBD65;
+            outline: none;
+        }
+    }
+    .contentBody {
+        position: relative;
+        font-family: "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+        overflow: hidden;
+        width: 100%;
+        .backgroundColorPadding {
+            padding: 5px 8px 5px 15px;
+        }
+        h1 {
+            font-size: 28px;
+            font-weight: 100;
+        }
+        h2 {
+            font-size: 24px;
+            font-weight: 100;
+        }
+        h3 {
+            font-size: 21px;
+            font-weight: 100;
+        }
+        h4,
+        h5,
+        h6 {
+            font-size: 17px;
+            font-weight: 400;
+        }
+        p {
+            font-size: 17px;
+            font-weight: 300;
+        }
+        span {
+            font-family: "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
+        }
+        li {
+            font-size: 17px;
+            font-weight: 300;
+        }
+    }
+    .fade {
+        height: 150px;
+    }
+    .showMoreIcon {
+        margin-left: 5px;
+        vertical-align: sub;
+    }
+    .slideInAndFade {
+        @include ms-slideDownIn20;
+    }
+}

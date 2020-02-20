@@ -1,0 +1,11 @@
+{
+    "@microsoft/generator-sharepoint": {
+        "isCreatingSolution": true,
+        "environment": "spo",
+        "version": "1.9.1",
+        "libraryName": "custom-text-editor",
+        "libraryId": "f41ed276-d629-4a8b-8172-2abbf9c1deeb",
+        "packageManager": "npm",
+        "componentType": "webpart"
+    }
+}
