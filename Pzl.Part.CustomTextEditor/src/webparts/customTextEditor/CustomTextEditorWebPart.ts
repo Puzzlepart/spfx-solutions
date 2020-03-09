@@ -4,23 +4,16 @@ import { Version, DisplayMode } from '@microsoft/sp-core-library';
 import { BaseClientSideWebPart, IWebPartPropertiesMetadata } from "@microsoft/sp-webpart-base";
 import { IPropertyPaneConfiguration, IPropertyPaneField, PropertyPaneCheckbox, PropertyPaneChoiceGroup } from "@microsoft/sp-property-pane";
 import * as strings from 'CustomTextEditorWebPartStrings';
-import CustomTextEditor, { TextBoxStyle } from './components/CustomTextEditor';
+import CustomTextEditor from './components/CustomTextEditor';
+import { TextBoxStyle } from "./components/TextBoxStyle";
 import { ICustomTextEditorProps } from './components/ICustomTextEditorProps';
-
-export interface ICustomTextEditorWebPartProps {
-    title: string;
-    Content: string;
-    searchableContent: string;
-    textBoxStyle: TextBoxStyle;
-    backgroundColor: string;
-    headerExpandColor: string;
-    underlineLinks: boolean;
-}
+import { ICustomTextEditorWebPartProps } from './ICustomTextEditorWebPartProps';
 
 /*
 Nothing really special in this class, just integartes it with sharepoint.
 */
 export default class CustomTextEditorWebPart extends BaseClientSideWebPart<ICustomTextEditorWebPartProps> {
+    private _colorPickerComponent: any;
 
     public render(): void {
         const element: React.ReactElement<ICustomTextEditorProps> = React.createElement(
@@ -28,9 +21,7 @@ export default class CustomTextEditorWebPart extends BaseClientSideWebPart<ICust
             {
                 title: this.properties.title,
                 displayMode: this.displayMode,
-                updateProperty: (value: string) => {
-                    this.properties.title = value;
-                },
+                setTitle: this.setTitle.bind(this),
                 saveRteContent: this.setRteContentProp.bind(this),
                 isReadMode: DisplayMode.Read === this.displayMode,
                 content: this.properties.Content,
@@ -49,12 +40,9 @@ export default class CustomTextEditorWebPart extends BaseClientSideWebPart<ICust
     }
 
     protected get propertiesMetadata(): IWebPartPropertiesMetadata {
-        return {
-            'searchableContent': { isHtmlString: true }
-        };
+        return { searchableContent: { isHtmlString: true } };
     }
 
-    private _colorPickerComponent;
     protected async loadPropertyPaneResources(): Promise<void> {
         let component = await import(
             /* webpackChunkName: 'color-picker' */
@@ -75,7 +63,7 @@ export default class CustomTextEditorWebPart extends BaseClientSideWebPart<ICust
         }));
 
         if (this.properties.textBoxStyle === TextBoxStyle.WithBackgroundColor) {
-            propertyControls.push( this._colorPickerComponent.PropertyFieldColorPicker("backgroundColor", {
+            propertyControls.push(this._colorPickerComponent.PropertyFieldColorPicker("backgroundColor", {
                 label: 'Color',
                 selectedColor: this.properties.backgroundColor,
                 onPropertyChange: this.onPropertyPaneFieldChanged,
@@ -89,7 +77,7 @@ export default class CustomTextEditorWebPart extends BaseClientSideWebPart<ICust
         }
 
         if (this.properties.textBoxStyle === TextBoxStyle.Accordion) {
-            propertyControls.push( this._colorPickerComponent.PropertyFieldColorPicker("headerExpandColor", {
+            propertyControls.push(this._colorPickerComponent.PropertyFieldColorPicker("headerExpandColor", {
                 label: 'Color',
                 selectedColor: this.properties.headerExpandColor,
                 onPropertyChange: this.onPropertyPaneFieldChanged,
@@ -101,10 +89,7 @@ export default class CustomTextEditorWebPart extends BaseClientSideWebPart<ICust
                 key: 'colorFieldIdHeadline'
             }));
         }
-        propertyControls.push(PropertyPaneCheckbox("underlineLinks",{
-            text: strings.LinkUnderline,
-            checked: this.properties.underlineLinks,            
-        }));
+        propertyControls.push(PropertyPaneCheckbox("underlineLinks", { text: strings.LinkUnderline, checked: this.properties.underlineLinks }));
 
         return {
             pages: [
@@ -121,7 +106,12 @@ export default class CustomTextEditorWebPart extends BaseClientSideWebPart<ICust
     }
 
     private setRteContentProp(content: string): void {
-        this.properties['Content'] = content;
-        this.properties.searchableContent = content;
+        this.properties.Content = content;
+        this.properties.searchableContent = `${this.properties.title}|${content}`;
+    }
+
+    private setTitle(title: string) {
+        this.properties.title = title;
+        this.properties.searchableContent = `${this.properties.title}|${this.properties.Content}`;
     }
 }

@@ -6,13 +6,7 @@ import ReactHtmlParser from 'react-html-parser';
 import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import * as strings from 'CustomTextEditorWebPartStrings';
-
-export enum TextBoxStyle {
-    WithBackgroundColor,
-    Accordion,
-    Regular,
-    RegularFade
-}
+import { TextBoxStyle } from './TextBoxStyle';
 
 /**
  * TinyMCE Class that contains a TinyMCE Editor instance.
@@ -140,7 +134,7 @@ export default class CustomTextEditor extends React.Component<ICustomTextEditorP
             <div>
                 <WebPartTitle displayMode={this.props.displayMode}
                     title={this.props.title}
-                    updateProperty={this.props.updateProperty} />
+                    updateProperty={this.props.setTitle} />
                 {editorComponent}
             </div>
         );
@@ -248,9 +242,9 @@ export default class CustomTextEditor extends React.Component<ICustomTextEditorP
                         <Icon iconName={(!this.state.isCollapsed) ? 'ChevronDown' : 'ChevronRightMed'} />
                     </div>
                     <div>
-                        <WebPartTitle displayMode={this.props.displayMode} title={this.props.title} updateProperty={this.props.updateProperty} />
+                        <WebPartTitle displayMode={this.props.displayMode} title={this.props.title} updateProperty={this.props.setTitle} />
                     </div>
-                </button> : <WebPartTitle displayMode={this.props.displayMode} title={this.props.title} updateProperty={this.props.updateProperty} />
+                </button> : <WebPartTitle displayMode={this.props.displayMode} title={this.props.title} updateProperty={this.props.setTitle} />
         );
     }
 }

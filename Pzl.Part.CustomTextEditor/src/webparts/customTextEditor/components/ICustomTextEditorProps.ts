@@ -1,9 +1,9 @@
 import { DisplayMode } from "@microsoft/sp-core-library";
-import { TextBoxStyle } from "./CustomTextEditor";
+import { TextBoxStyle } from "./TextBoxStyle";
 export interface ICustomTextEditorProps {
     title: string;
     displayMode: DisplayMode;
-    updateProperty: (value: string) => void;
+    setTitle: (title: string) => void;
     saveRteContent(content: string): void;
     isReadMode: boolean;
     content: string;
