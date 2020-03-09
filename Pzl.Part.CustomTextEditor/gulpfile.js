@@ -5,7 +5,7 @@ const path = require('path');
 const build = require('@microsoft/sp-build-web');
 const bundleAnalyzer = require('webpack-bundle-analyzer');
 
-build.addSuppression(`Warning - [sass] The local CSS class 'ms-Grid' is not camelCase and will not be type-safe.`);
+build.addSuppression(/Warning/gi);
 
 build.configureWebpack.mergeConfig({
     additionalConfiguration: (generatedConfiguration) => {
