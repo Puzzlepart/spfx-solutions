@@ -1,0 +1,57 @@
+{
+    "$schema": "https://dev.office.com/json-schemas/core-build/serve.schema.json",
+    "port": 4321,
+    "https": true,
+    "serveConfigurations": {
+        "default": {
+            "pageUrl": "https://tenant.sharepoint.com/sites/cdn/SitePages/Home.aspx",
+            "customActions": {
+                "2b44917b-f433-4d1b-8fb7-533db1bb974a": {
+                    "location": "ClientSideExtension.ApplicationCustomizer",
+                    "properties": {
+                        "dataSource": {
+                            "spList": {
+                                "serverRelativeWebUrl": "/sites/cdn/",
+                                "linksListUrl": "Lists/NavLinks",
+                                "settingsListUrl": "Lists/NavSettings",
+                                "headersListLookupFieldName": "PzlNavLinkHeaderLookup",
+                                "urlFieldName": "PzlNavUrl",
+                                "headersOrderFieldName": "PzlNavOrder",
+                                "hasHeaderNavLinks": true
+                            }
+                        },
+                        "serviceAnnouncements": {
+                            "serverRelativeWebUrl": "/sites/cdn/",
+                            "listUrl": "Lists/ServiceAnnouncements",
+                            "discardForSessionOnly": false
+                        }
+                    }
+                }
+            }
+        },
+        "globalNavigation": {
+            "pageUrl": "https://tenant.sharepoint.com/sites/cdn",
+            "customActions": {
+                "2b44917b-f433-4d1b-8fb7-533db1bb974a": {
+                    "location": "ClientSideExtension.ApplicationCustomizer",
+                    "properties": {
+                        "dataSource": {
+                            "spList": {
+                                "serverRelativeWebUrl": "/sites/cdn/",
+                                "linksListUrl": "Lists/NavLinks",
+                                "settingsListUrl": "Lists/NavSettings",
+                                "headersListLookupFieldName": "PzlNavLinkHeaderLookup",
+                                "urlFieldName": "PzlNavUrl",
+                                "headersOrderFieldName": "PzlNavOrder"
+                            }
+                        },
+                        "serviceAnnouncements": {
+                            "serverRelativeWebUrl": "/sites/cdn/",
+                            "listUrl": "Lists/ServiceAnnouncements"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

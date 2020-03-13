@@ -1,0 +1,12 @@
+{
+    "@microsoft/generator-sharepoint": {
+        "version": "1.9.1",
+        "libraryName": "pzl-simple-search-box",
+        "libraryId": "4035324e-6740-464f-a0d5-a8e150fd749e",
+        "environment": "spo",
+        "isDomainIsolated": false,
+        "isCreatingSolution": true,
+        "packageManager": "npm",
+        "componentType": "webpart"
+    }
+}
