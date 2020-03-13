@@ -1,0 +1,49 @@
+@import './node_modules/spfx-uifabric-themes/office.theme';
+@import '~office-ui-fabric-react/dist/sass/References.scss';
+
+.navigationLink {
+    line-height: 28px;
+    width: 50%;
+    min-width: 235px;
+    .anchor {
+        color: $ms-white;
+        text-decoration: none !important;
+        font-size: 15px;
+        font-weight: 400;
+        .anchorText {
+            vertical-align: middle;
+        }
+        .anchorIcon {
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+        &:visited {
+            color: $ms-white;
+        }
+        &:hover,
+        &:active {
+            color: $ms-themeTertiary !important;
+        }
+        .pzlExternalIcon {
+            color: $ms-white;
+            vertical-align: top;
+            margin-top: 2px;
+            margin-left: 5px;
+        }
+    }
+}
+
+.headerLink {
+    display: inline;
+    .anchor {
+        color: $ms-white;
+        text-decoration: none !important;
+        &:visited {
+            color: $ms-white;
+        }
+        &:hover,
+        &:active {
+            color: $ms-themeTertiary !important;
+        }
+    }
+}
