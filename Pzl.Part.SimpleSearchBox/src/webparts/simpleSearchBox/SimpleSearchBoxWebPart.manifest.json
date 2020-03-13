@@ -1,0 +1,28 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+    "id": "b88a3571-32ae-4e55-a250-48e071a85f0e",
+    "alias": "SimpleSearchBoxWebPart",
+    "componentType": "WebPart",
+    "version": "*",
+    "manifestVersion": 2,
+    "supportedHosts": ["SharePointWebPart"],
+    "requiresCustomScript": false,
+    "preconfiguredEntries": [{
+        "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+        "group": {
+            "default": "Other"
+        },
+        "title": {
+            "default": "Søkeboks"
+        },
+        "description": {
+            "default": "A simple search box that can redirect to anywhere"
+        },
+        "officeFabricIconFontName": "Zoom",
+        "properties": {
+            "title": "Søk i alt",
+            "searchurl": "/_layouts/15/search.aspx?q=",
+            "placeholder": "Skriv inn søkeord"
+        }
+    }]
+}
