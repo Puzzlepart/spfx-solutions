@@ -15,7 +15,7 @@ export default class SimpleSearchBox extends React.Component<ISimpleSearchBoxPro
       <div>
         <WebPartTitle displayMode={this.props.displayMode}
           title={this.props.title}
-          updateProperty={this.props.updateProperty} />
+          updateProperty={this.props.updateProperty} themeVariant={this.props.themeVariant} />
         <SearchBox labelText={this.props.placeholder} onSearch={(query) => this.executeSearch(query)} />
       </div>
     );

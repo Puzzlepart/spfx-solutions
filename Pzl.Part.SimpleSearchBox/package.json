@@ -15,6 +15,7 @@
         "@microsoft/sp-lodash-subset": "1.9.1",
         "@microsoft/sp-office-ui-fabric-core": "1.9.1",
         "@microsoft/sp-webpart-base": "1.9.1",
+        "@microsoft/sp-component-base": "1.9.1",
         "@pnp/common": "^1.3.7",
         "@pnp/logging": "^1.3.7",
         "@pnp/odata": "^1.3.7",
