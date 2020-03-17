@@ -1,6 +1,7 @@
 define([], function () {
   return {
-    "UrlFieldLabel": "Search Url",
-    "PlaceholderFieldLabel": "Label text"
+    "UrlFieldLabel": "Search page url",
+    "PlaceholderFieldLabel": "Search box placeholder text",
+    "OpenInNewTabLabel": "Open results in a new tab"
   }
 });

@@ -1,6 +1,7 @@
 define([], function () {
   return {
-    "UrlFieldLabel": "URL til søkesenter",
-    "PlaceholderFieldLabel": "Søkeboks tekst"
+    "UrlFieldLabel": "URL til søkeside",
+    "PlaceholderFieldLabel": "Tekst som vises i søkeboksen",
+    "OpenInNewTabLabel": "Åpne treff i ny fane"
   }
 });

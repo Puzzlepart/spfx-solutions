@@ -2,15 +2,15 @@ import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
 import { BaseClientSideWebPart } from "@microsoft/sp-webpart-base";
-import { IPropertyPaneConfiguration, PropertyPaneTextField } from "@microsoft/sp-property-pane";
+import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneCheckbox } from "@microsoft/sp-property-pane";
 import * as strings from 'SimpleSearchBoxWebPartStrings';
 import SimpleSearchBox from './components/SimpleSearchBox';
 import { ISimpleSearchBoxProps } from './components/ISimpleSearchBoxProps';
 
-
 export interface ISimpleSearchBoxWebPartProps {
   searchurl: string;
   title: string;
+  openInNewTab: boolean;
   placeholder: string;
 }
 
@@ -22,6 +22,7 @@ export default class SearchCentreWebPart extends BaseClientSideWebPart<ISimpleSe
       {
         searchurl: this.properties.searchurl,
         title: this.properties.title,
+        openInNewTab: this.properties.openInNewTab,
         displayMode: this.displayMode,
         placeholder: this.properties.placeholder,
         updateProperty: (value: string) => {
@@ -50,6 +51,9 @@ export default class SearchCentreWebPart extends BaseClientSideWebPart<ISimpleSe
                 PropertyPaneTextField('placeholder', {
                   label: strings.PlaceholderFieldLabel
                 }),
+                PropertyPaneCheckbox('openInNewTab', {
+                  text: strings.OpenInNewTabLabel
+                })
               ]
             }
           ]

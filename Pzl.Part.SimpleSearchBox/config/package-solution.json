@@ -4,7 +4,7 @@
         "title": "Simple search box by Puzzlepart",
         "name": "pzl-simple-search-box",
         "id": "4035324e-6740-464f-a0d5-a8e150fd749e",
-        "version": "1.0.0.4",
+        "version": "1.0.0.5",
         "includeClientSideAssets": true,
         "skipFeatureDeployment": false,
         "isDomainIsolated": false

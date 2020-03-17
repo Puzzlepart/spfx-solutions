@@ -1,8 +1,6 @@
 
 import * as React from 'react';
-import styles from './SimpleSearchBox.module.scss';
 import { ISimpleSearchBoxProps } from './ISimpleSearchBoxProps';
-import { escape } from '@microsoft/sp-lodash-subset';
 import { SearchBox } from 'office-ui-fabric-react';
 import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
 
@@ -11,6 +9,7 @@ export default class SimpleSearchBox extends React.Component<ISimpleSearchBoxPro
   constructor(props) {
     super(props);
   }
+
   public render() {
     return (
       <div>
@@ -22,6 +21,6 @@ export default class SimpleSearchBox extends React.Component<ISimpleSearchBoxPro
     );
   }
   private executeSearch(query) {
-    window.location.href = this.props.searchurl + encodeURIComponent(query);
+    window.open(this.props.searchurl + encodeURIComponent(query), this.props.openInNewTab ? '_blank' : '_parent');
   }
 }

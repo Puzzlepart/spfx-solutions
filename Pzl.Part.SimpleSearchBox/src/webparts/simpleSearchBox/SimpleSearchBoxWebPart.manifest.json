@@ -7,6 +7,7 @@
     "manifestVersion": 2,
     "supportedHosts": ["SharePointWebPart"],
     "requiresCustomScript": false,
+    "supportsThemeVariants": true,
     "preconfiguredEntries": [{
         "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
         "group": {
@@ -22,7 +23,8 @@
         "properties": {
             "title": "Søk i alt",
             "searchurl": "/_layouts/15/search.aspx?q=",
-            "placeholder": "Skriv inn søkeord"
+            "placeholder": "Skriv inn søkeord",
+            "openInNewTab": false
         }
     }]
 }
