@@ -29,7 +29,6 @@
         "react": "16.8.5",
         "react-dom": "16.8.5",
         "react-onclickout": "^2.0.8",
-        "spfx-jsom": "^0.6.4",
         "spfx-uifabric-themes": "^0.6.0",
         "url-join": "^4.0.0"
     },

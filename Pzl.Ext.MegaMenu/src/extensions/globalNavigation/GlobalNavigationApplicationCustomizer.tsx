@@ -14,10 +14,9 @@ import IGlobalNavigationApplicationCustomizerProperties from "./IGlobalNavigatio
 import {
   GlobalNavigationDataFetchBase,
   GlobalNavigationDataFetchJson,
-  GlobalNavigationDataFetchSpList,
-  GlobalNavigationDataFetchTaxonomy
+  GlobalNavigationDataFetchSpList
 } from "./GlobalNavigationDataFetch";
-import {NavigationSettings, fetchGlobalNavigationSettings} from './SettingsHelper/SettingsHelper';
+import {fetchGlobalNavigationSettings} from './SettingsHelper/SettingsHelper';
 import * as strings from 'GlobalNavigationApplicationCustomizerStrings';
 import ServiceAnnouncement from '../serviceAnnouncement/ServiceAnnouncement';
 import "core-js/modules/es6.promise";
@@ -40,8 +39,6 @@ export default class GlobalNavigationApplicationCustomizer extends BaseApplicati
         this.dataFetch = new GlobalNavigationDataFetchSpList(this.properties.dataSource.spList);
       } else if (this.properties.dataSource.json) {
         this.dataFetch = new GlobalNavigationDataFetchJson(this.properties.dataSource.json);
-      } else if (this.properties.dataSource.taxonomy) {
-        this.dataFetch = new GlobalNavigationDataFetchTaxonomy(this.properties.dataSource.taxonomy, this.context.pageContext.site.absoluteUrl);
       }
     } else {
       Log.info(LOG_SOURCE, 'No data fetch properties specified.');
@@ -98,8 +95,8 @@ export default class GlobalNavigationApplicationCustomizer extends BaseApplicati
             settings={settings}
             currentSiteUrl={this.context.pageContext.site.absoluteUrl}/>
         );
-        ReactDOM.render(globalNavigation, globalNavigationPlaceholder);
-
+          ReactDOM.render(globalNavigation, globalNavigationPlaceholder);
+        
         if (this.properties.serviceAnnouncements) {
           let serviceAnnouncementPlaceholderId = "service-announcement-placeholder";
           let serviceAnnouncementPlaceholder = document.getElementById(serviceAnnouncementPlaceholderId);

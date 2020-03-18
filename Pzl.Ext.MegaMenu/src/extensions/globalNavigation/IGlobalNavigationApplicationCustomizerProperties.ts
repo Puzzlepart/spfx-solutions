@@ -1,11 +1,10 @@
-import { IGlobalNavigationDataFetchSpListParams, IGlobalNavigationDataFetchJsonParams, IGlobalNavigationDataFetchTaxonomyParams } from "./GlobalNavigationDataFetch";
+import { IGlobalNavigationDataFetchSpListParams, IGlobalNavigationDataFetchJsonParams } from "./GlobalNavigationDataFetch";
 import { Alignment } from "../TextAlignment";
 
 export default interface IGlobalNavigationApplicationCustomizerProperties {
     dataSource: {
         spList?: IGlobalNavigationDataFetchSpListParams;
         json?: IGlobalNavigationDataFetchJsonParams;
-        taxonomy?: IGlobalNavigationDataFetchTaxonomyParams;
     };
     serviceAnnouncements?: {
         serverRelativeWebUrl: string;
