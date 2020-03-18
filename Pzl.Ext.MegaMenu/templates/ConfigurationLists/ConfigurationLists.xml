@@ -97,6 +97,10 @@
             </View>
           </pnp:Views>
            <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
+           <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">navHideTheMenu</pnp:DataValue>
+                <pnp:DataValue FieldName="PzlSettingValue">false</pnp:DataValue>           
+           </pnp:DataRow>
             <pnp:DataRow>
                 <pnp:DataValue FieldName="Title">navToggleText</pnp:DataValue>
                 <pnp:DataValue FieldName="PzlSettingValue">Menu</pnp:DataValue>

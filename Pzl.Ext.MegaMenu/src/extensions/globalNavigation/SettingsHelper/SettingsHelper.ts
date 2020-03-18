@@ -9,6 +9,7 @@ interface NavigationSettings {
   navToggleBackgroundColor?: string;
   navHeaderTextColor?: string;
   navContentBackgroundColor?: string;
+  navHideTheMenu?: string;
   linkTextColor?: string;
   navColumns?: string;
   helpButtonEnabled?: string;

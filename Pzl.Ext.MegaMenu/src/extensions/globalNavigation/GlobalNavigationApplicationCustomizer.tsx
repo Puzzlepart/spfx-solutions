@@ -94,9 +94,10 @@ export default class GlobalNavigationApplicationCustomizer extends BaseApplicati
             errorText={strings.DefaultLoadErrorText}
             settings={settings}
             currentSiteUrl={this.context.pageContext.site.absoluteUrl}/>
-        );
+        ); 
+        if (!settings.navHideTheMenu || !JSON.parse(settings.navHideTheMenu)) {
           ReactDOM.render(globalNavigation, globalNavigationPlaceholder);
-        
+        }
         if (this.properties.serviceAnnouncements) {
           let serviceAnnouncementPlaceholderId = "service-announcement-placeholder";
           let serviceAnnouncementPlaceholder = document.getElementById(serviceAnnouncementPlaceholderId);
