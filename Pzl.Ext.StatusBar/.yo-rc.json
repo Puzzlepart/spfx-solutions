@@ -1,6 +1,6 @@
 {
   "@microsoft/generator-sharepoint": {
-    "version": "1.9.1",
+    "version": "1.10.0",
     "libraryName": "pzl-ext-group-status",
     "libraryId": "43aa53a0-47e1-463b-8955-8db77c07234a",
     "environment": "spo",

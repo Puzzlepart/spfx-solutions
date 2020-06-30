@@ -1,6 +1,6 @@
 {
   "@microsoft/generator-sharepoint": {
-    "version": "1.9.1",
+    "version": "1.10.0",
     "libraryName": "global-navigation",
     "libraryId": "2ab59ae5-ffb4-4b99-9427-aec77a233541",
     "environment": "spo",

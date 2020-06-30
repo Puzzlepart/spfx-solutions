@@ -2,7 +2,7 @@
   "@microsoft/generator-sharepoint": {
     "isCreatingSolution": true,
     "environment": "spo",
-    "version": "1.9.1",
+    "version": "1.10.0",
     "libraryName": "divider-by-puzzlepart",
     "libraryId": "ef34fd6c-d86d-4fdf-8e72-ded668efe7ab",
     "packageManager": "npm",

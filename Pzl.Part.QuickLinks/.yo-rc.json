@@ -1,6 +1,6 @@
 {
     "@microsoft/generator-sharepoint": {
-        "version": "1.9.1",
+        "version": "1.10.0",
         "libraryName": "pzl-quick-links",
         "libraryId": "aa433587-aa66-4620-a8d8-7857015aaa96",
         "environment": "spo",
