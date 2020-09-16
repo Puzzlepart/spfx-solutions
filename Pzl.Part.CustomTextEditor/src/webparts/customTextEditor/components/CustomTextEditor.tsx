@@ -112,9 +112,20 @@ export default class CustomTextEditor extends React.Component<ICustomTextEditorP
             editorComponent = <this.state.editor.Editor
                 init={{
                     plugins: ['paste', 'link', 'image', 'lists', 'advlist', 'table'],
-                    content_style: `#tinymce .mce-content-body { color: #333333; font-family: "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;}
-.mce-content-body h1 {font-size: 28px; font-weight:normal;} .mce-content-body h2 { font-size: 24px; font-weight:normal;}.mce-content-body h3 {font-size: 21px; font-weight:normal;}.mce-content-body h4,
-.mce-content-body h5, .mce-content-body h6 {font-size: 17px;font-weight: bold;}.mce-content-body p { font-size: 17px;} .mce-content-body li { font-size: 17px; font-weight: 300;}`,
+                    content_style: `
+                        #tinymce .mce-content-body { color: #333333; font-family: "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;}
+                        .mce-content-body h1 { font-size: 36px; font-weight:600; }
+                        .mce-content-body h2 { font-size: 28px; font-weight:600; }
+                        .mce-content-body h3 { font-size: 24px; font-weight:600; }
+                        .mce-content-body h4,
+                        .mce-content-body h5,
+                        .mce-content-body h6 {
+                            font-size: 18px;
+                            font-weight: 600;
+                        }
+                        .mce-content-body p { font-size: 18px; font-weight: 400; }
+                        .mce-content-body li { font-size: 18px; font-weight: 400; }
+                    `,
                     skin_url: skinUrl,
                     height: 400,
                     menubar: 'edit insert format, table',
@@ -242,9 +253,9 @@ export default class CustomTextEditor extends React.Component<ICustomTextEditorP
                         <Icon iconName={(!this.state.isCollapsed) ? 'ChevronDown' : 'ChevronRightMed'} />
                     </div>
                     <div>
-                        <WebPartTitle displayMode={this.props.displayMode} title={this.props.title} updateProperty={this.props.setTitle} />
+                        <WebPartTitle displayMode={this.props.displayMode} title={this.props.title} updateProperty={this.props.setTitle} className={`${styles.customTextTitle__accordion}`} />
                     </div>
-                </button> : <WebPartTitle displayMode={this.props.displayMode} title={this.props.title} updateProperty={this.props.setTitle} />
+                </button> : <WebPartTitle displayMode={this.props.displayMode} title={this.props.title} updateProperty={this.props.setTitle} className={styles.customTextTitle__box} />
         );
     }
 }

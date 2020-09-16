@@ -1,18 +1,39 @@
 @import '~office-ui-fabric-react/dist/sass/References.scss';
 @import '~office-ui-fabric-react/dist/sass/themeOverrides.scss';
 @import '~office-ui-fabric-react/dist/sass/Animation.scss';
+
+.customTextTitle {
+    &__accordion {
+        div {
+            font-weight: 400;
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+    }
+    &__box {
+        div {
+            font-weight: 600;
+            font-size: 28px!important;
+            margin-bottom: 0px;
+        }
+    }
+}
+
 .underline {
-    A {
+    a {
         text-decoration: underline !important;
     }
 }
 
 .editor {
-    A {
+    font-family: "Segoe UI", "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    a {
         color: $ms-color-themePrimary;
         text-decoration: none;
     }
-    A:hover {
+    a:hover {
         color: $ms-color-themeDarker;
     }
     .fadeMore {
@@ -23,39 +44,36 @@
     .fadeMore:hover {
         color: $ms-color-themeDarker;
     }
-    min-height: 50px;
     .headerContainer {
         border-bottom: 1px solid $ms-color-themeDark;
         padding-top: 8px;
         padding-left: 10px;
         cursor: pointer;
         display: flex;
-        min-height: 40px;
         &.expanded {
             cursor: pointer;
         }
         .chevron {
-            padding-right: 10px;
-            padding-left: 10px;
-            padding-top: 10px;
+            font-size: 15px;
+            padding-right: 8px;
+            padding-left: 4px;
+            padding-top: 3px;
         }
     }
     .accordionContainer {
         cursor: pointer;
-        margin: 10px 10px 10px 0;
+        margin: 0px;
         width: 100%;
         border: none;
         text-align: left;
         background-color: white;
         outline: 0;
-        font-size: 15px;
         transition: .4s;
         border-bottom: 1px solid;
-        padding-top: 8px;
-        padding-left: 10px;
+        padding: 0px;
         display: -ms-flexbox;
         display: flex;
-        min-height: 40px;
+        min-height: inherit;
         &:focus {
             box-shadow: 0 0 0 3px #FFBD65;
             outline: none;
@@ -63,40 +81,27 @@
     }
     .contentBody {
         position: relative;
-        font-family: "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif;
         overflow: hidden;
         width: 100%;
+        font-size: 18px;
+        font-weight: 400;
+        line-height: 1.4;
         .backgroundColorPadding {
             padding: 5px 8px 5px 15px;
         }
-        h1 {
-            font-size: 28px;
-            font-weight: 100;
-        }
-        h2 {
-            font-size: 24px;
-            font-weight: 100;
-        }
-        h3 {
-            font-size: 21px;
-            font-weight: 100;
-        }
-        h4,
-        h5,
-        h6 {
-            font-size: 17px;
-            font-weight: 400;
-        }
-        p {
-            font-size: 17px;
-            font-weight: 300;
-        }
-        span {
-            font-family: "Segoe UI Web (West European)", "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, "Helvetica Neue", sans-serif !important;
-        }
-        li {
-            font-size: 17px;
-            font-weight: 300;
+        h1, h2, h3, h4, h5, h6 {font-weight: 600!important; }
+        h1 { font-size: 36px; }
+        h2 { font-size: 28px; }
+        h3 { font-size: 24px; }
+        h4, h5, h6 { font-size: 18px; }
+        ol, ul {
+            padding-left: 50px;
+            li {
+                margin-bottom: 8px;
+            }
+            ol, ul {
+                margin-top: 8px;
+            }
         }
     }
     .fade {
