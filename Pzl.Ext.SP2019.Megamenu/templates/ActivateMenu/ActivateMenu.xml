@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<pnp:Provisioning
+  xmlns:pnp="http://schemas.dev.office.com/PnP/2017/05/ProvisioningSchema">
+  <pnp:Preferences Generator="OfficeDevPnP.Core, Version=2.19.1710.2, Culture=neutral, PublicKeyToken=3751622786b357c2">
+  <pnp:Parameters>
+      <pnp:Parameter Key="ConfigUrl">/sites/cdn</pnp:Parameter>
+    </pnp:Parameters>
+  </pnp:Preferences>
+  <pnp:Templates ID="CONTAINER-TEMPLATE-GLOBALNAVIGATION">
+    <pnp:ProvisioningTemplate ID="TEMPLATE-GLOBALNAVIGATION" Version="1" BaseSiteTemplate="STS#0" Scope="RootSite">
+        <pnp:CustomActions>
+            <pnp:SiteCustomActions>
+                <pnp:CustomAction
+                Title="GlobalNavigation"
+                Name="GlobalNavigation"
+                Location="ClientSideExtension.ApplicationCustomizer" ClientSideComponentId="2b44917b-f433-4d1b-8fb7-533db1bb974a"
+                ClientSideComponentProperties="{
+	&quot;dataSource&quot;: {
+		&quot;spList&quot;: {
+			&quot;serverRelativeWebUrl&quot;: &quot;{parameter:ConfigUrl}&quot;,
+			&quot;linksListUrl&quot;: &quot;Lists/NavLinks&quot;,
+			&quot;settingsListUrl&quot;: &quot;Lists/NavSettings&quot;,
+			&quot;headersListLookupFieldName&quot;: &quot;PzlNavLinkHeaderLookup&quot;,
+			&quot;urlFieldName&quot;: &quot;PzlNavUrl&quot;,
+			&quot;headersOrderFieldName&quot;: &quot;PzlNavOrder&quot;,
+			&quot;hasHeaderNavLinks&quot;: true
+		}
+	},
+	&quot;serviceAnnouncements&quot;: {
+		&quot;serverRelativeWebUrl&quot;: &quot;{parameter:ConfigUrl}&quot;,
+		&quot;listUrl&quot;: &quot;Lists/serviceAnnouncements&quot;
+	}
+}
+" />
+            </pnp:SiteCustomActions>
+        </pnp:CustomActions>
+    </pnp:ProvisioningTemplate>
+  </pnp:Templates>
+</pnp:Provisioning>
