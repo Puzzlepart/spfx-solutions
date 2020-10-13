@@ -1,0 +1,13 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "pzl-part-sp2019-simplesearchbox-client-side-solution",
+    "title": "Simple Search Box by Puzzlepart",
+    "id": "56ed02ed-6591-4cf4-895e-cdb2c639c0ed",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true
+  },
+  "paths": {
+    "zippedPackage": "solution/pzl-part-sp2019-simplesearchbox.sppkg"
+  }
+}
