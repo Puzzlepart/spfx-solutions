@@ -1,9 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Elements xmlns="http://schemas.microsoft.com/sharepoint/">
-    <CustomAction
-        Title="GlobalNavigation"
-        Location="ClientSideExtension.ApplicationCustomizer"
-        ClientSideComponentId="b022ceff-c4e5-4f4e-aeef-fc4341a61e04"
-        ClientSideComponentProperties="{&quot;testMessage&quot;:&quot;Test message&quot;}">
+    <CustomAction Title="GlobalNavigation" Location="ClientSideExtension.ApplicationCustomizer" ClientSideComponentId="b022ceff-c4e5-4f4e-aeef-fc4341a61e04" ClientSideComponentProperties="{
+	&quot;dataSource&quot;: {
+		&quot;spList&quot;: {
+			&quot;serverRelativeWebUrl&quot;: &quot;/sites/cdn&quot;,
+			&quot;linksListUrl&quot;: &quot;Lists/NavLinks&quot;,
+      &quot;settingsListUrl&quot;: &quot;Lists/NavSettings&quot;,
+			&quot;headersListLookupFieldName&quot;: &quot;PzlNavLinkHeaderLookup&quot;,
+			&quot;urlFieldName&quot;: &quot;PzlNavUrl&quot;,
+			&quot;headersOrderFieldName&quot;: &quot;PzlNavOrder&quot;,
+			&quot;hasHeaderNavLinks&quot;: true
+		}
+	},
+	&quot;serviceAnnouncements&quot;: {
+		&quot;serverRelativeWebUrl&quot;: &quot;/sites/cdn/&quot;,
+		&quot;listUrl&quot;: &quot;Lists/serviceAnnouncements&quot;,
+		&quot;discardForSessionOnly&quot;: false,
+        &quot;textAlignment&quot;: 1,
+        &quot;boldText&quot;: false
+	}
+}">
     </CustomAction>
 </Elements>
