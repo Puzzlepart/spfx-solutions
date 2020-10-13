@@ -1,0 +1,138 @@
+@import './node_modules/spfx-uifabric-themes/office.theme';
+@import '~office-ui-fabric-react/dist/sass/References.scss';
+
+.globalNavigation {
+  padding: 0;
+  max-width: 100%;
+
+  .toggleNavRow {
+    position: inherit;
+    cursor: pointer;
+    background-color: $ms-themePrimary;
+    color: $ms-white;
+    margin: 0;
+    line-height: 45px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: flex-end;
+
+    .toggleNavColumn {
+      min-height: 1px;
+      width: 100%;
+    }
+
+    .searchBoxContainer {
+      height: max-content;
+      background-color: #ffffff;
+      margin: 0px 20px 0 20px;
+      align-self: center;
+      width: 200px;
+      .searchBox {
+        width: 200px;
+      }
+    }
+
+    .focusButtonContainer {
+      text-align: center;
+      color: $ms-white;
+      padding: 0 15px;
+      
+      i {
+        color: $ms-white;
+        vertical-align: middle;
+        font-size: 26px;
+      }
+    }
+
+    .homeButtonContainer {
+      text-align: center;
+      color: $ms-white;
+      padding: 0 15px;
+
+      >a {
+        text-align: center;
+        text-decoration: none;
+        color: $ms-white;
+      }
+
+      i {
+        color: $ms-white;
+        vertical-align: middle;
+        font-size: 26px;
+      }
+    }
+
+    .supportLinkContainer {
+      text-align: center;
+      opacity: 1;
+      background-color: #ff0000;
+      color: $ms-white;
+      white-space: nowrap;
+      padding: 0 20px 0 20px;
+
+      &:hover {
+        opacity: 0.8;
+      }
+
+      a {
+        text-align: center;
+        text-decoration: none;
+        color: $ms-white;
+
+        i {
+          vertical-align: sub;
+          width: 30px;
+          height: 30px;
+          line-height: 30px;
+          border: 2px solid $ms-white;
+          border-radius: 50%;
+          font-size: 16px;
+          font-weight: bold;
+        }
+
+        span.supportLinkText {
+          margin-left: 10px;
+          font-size: 18px;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+        }
+      }
+    }
+  }
+
+  .navRowsContainer {
+    position: relative;
+  }
+
+  .navElementsRow {
+    background-color: $ms-themeDarkAlt;
+    padding: 10px;
+    display: flex;
+    justify-content: right;
+    position: relative;
+    width: 100%;
+  }
+
+  .isLarge {
+    flex-direction: row;
+  }
+
+  .isSmall {
+    flex-direction: column;
+  }
+
+  .toggleNav {
+    font-size: 21px;
+    font-weight: 100;
+    text-align: center;
+  }
+
+  .toggleNavText {
+    margin: 0 10px 0 0;
+  }
+
+  .toggleNavIcon {
+    vertical-align: sub;
+  }
+}

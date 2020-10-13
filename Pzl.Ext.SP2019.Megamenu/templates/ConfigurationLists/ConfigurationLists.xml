@@ -1,0 +1,285 @@
+<?xml version="1.0"?>
+<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2020/02/ProvisioningSchema"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://schemas.dev.office.com/PnP/2020/02/ProvisioningSchema https://raw.githubusercontent.com/OfficeDev/PnP-Provisioning-Schema/master/OfficeDevPnP.ProvisioningSchema/ProvisioningSchema-2020-02.xsd">
+  <pnp:Preferences Generator="OfficeDevPnP.Core, Version=2.19.1710.2, Culture=neutral, PublicKeyToken=3751622786b357c2" />
+  <pnp:Localizations>
+    <pnp:Localization LCID="1044" Name="Norwegian" ResourceFile="nb-NO.resx" />
+    <pnp:Localization LCID="1033" Name="English (US)" ResourceFile="en-US.resx" />
+  </pnp:Localizations>
+  <pnp:Templates ID="CONTAINER-TEMPLATE-CONFIGURATIONLISTS">
+    <pnp:ProvisioningTemplate ID="TEMPLATE-CONFIGURATIONLISTS" Version="1" BaseSiteTemplate="STS#0" Scope="RootSite">
+      <pnp:SiteFields>
+        <Field Type="Lookup" DisplayName="{resource:Field_Heading_Title}" Group="Puzzlepart" ID="{c585a246-0c15-4aa4-bcc4-d574588b3d55}" List="{{listid:{resource:Lists_NavigationHeadings_Title}}}" ShowField="Title" StaticName="PzlNavLinkHeaderLookup" Name="PzlNavLinkHeaderLookup" />
+        <Field Type="Number" DisplayName="{resource:Field_Order_Title}" Group="Puzzlepart" ID="{8ef476fa-024f-4d7f-bfc3-3ff17c2ceea1}" StaticName="PzlNavOrder" Name="PzlNavOrder">
+          <Default>0</Default>
+        </Field>
+        <Field Type="Text" DisplayName="{resource:Field_Link_Title}" MaxLength="255" Group="Puzzlepart" ID="{f78d08e6-1b5c-4d4c-ab68-181f04242992}" StaticName="PzlNavUrl" Name="PzlNavUrl"></Field>
+        <Field Type="Text" DisplayName="{resource:Field_Setting_Value}" MaxLength="255" Group="Puzzlepart" ID="{e32892ba-cad5-41e5-885d-af222700e829}" StaticName="PzlSettingValue" Name="PzlSettingValue"></Field>
+        <Field Type="Text" DisplayName="{resource:Field_AffectedSystems_Title}" MaxLength="255" Group="Puzzlepart" ID="{5837187c-85c8-4fa9-87a1-4457f326df54}" StaticName="PzlAffectedSystems" Name="PzlAffectedSystems"></Field>
+        <Field Type="Note" DisplayName="{resource:Field_Description_Title}" NumLines="6" RichText="TRUE" RichTextMode="FullHtml" Group="Puzzlepart" ID="{28b815cc-3613-4118-a1be-694b47e88ecf}" StaticName="PzlContent" Name="PzlContent"></Field>
+        <Field Type="Note" DisplayName="{resource:Field_Consequence_Title}" NumLines="6" RichText="FALSE" Group="Puzzlepart" ID="{6f006ea9-73a4-497c-ac2c-39e0a01102d9}" StaticName="PzlConsequences" Name="PzlConsequences"></Field>
+        <Field Type="User" DisplayName="{resource:Field_Responsible_Title}" Group="Puzzlepart" ID="{078e1aaf-c463-41d3-80d4-c5239cc0986a}" StaticName="PzlResponsible" Name="PzlResponsible"></Field>
+        <Field Type="DateTime" DisplayName="{resource:Field_StartTime_Title}" Group="Puzzlepart" ID="{31cbeda7-3ddc-43c2-9f44-136147558b37}" Name="PzlStartDate" StaticName="PzlStartDate"></Field>
+        <Field Type="DateTime" DisplayName="{resource:Field_EndTime_Title}" Group="Puzzlepart" ID="{68ba85c1-53ff-4ada-a682-e4038dcd6506}" Name="PzlEndDate" StaticName="PzlEndDate"></Field>
+        <Field Type="Choice" DisplayName="{resource:Field_Severity_Title}" Group="Puzzlepart" ID="{8cfea964-4168-4775-8970-2709d85a04cc}" StaticName="PzlSeverity" Name="PzlSeverity" Format="Dropdown" Description="{resource:Field_Severity_Description}">
+          <Default>{resource:Field_Severity_Choice_Warning}</Default>
+          <CHOICES>
+            <CHOICE>{resource:Field_Severity_Choice_Information}</CHOICE>
+            <CHOICE>{resource:Field_Severity_Choice_Warning}</CHOICE>
+            <CHOICE>{resource:Field_Severity_Choice_Alert}</CHOICE>
+            <CHOICE>{resource:Field_Severity_Choice_Positive}</CHOICE>
+          </CHOICES>
+        </Field>
+      </pnp:SiteFields>
+      <pnp:ContentTypes>
+        <pnp:ContentType ID="0x01001A58CF6ADF6943E89CE71ACB741407FA" Name="{resource:ContentType_ServiceAnnouncement_Title}" Description="" Group="Puzzlepart" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
+            <pnp:FieldRef ID="8cfea964-4168-4775-8970-2709d85a04cc" Name="PzlSeverity" Required="true" />
+            <pnp:FieldRef ID="28b815cc-3613-4118-a1be-694b47e88ecf" Name="PzlContent" Required="true" />
+            <pnp:FieldRef ID="31cbeda7-3ddc-43c2-9f44-136147558b37" Name="PzlStartDate" Required="true" />
+            <pnp:FieldRef ID="68ba85c1-53ff-4ada-a682-e4038dcd6506" Name="PzlEndDate" Required="true" />
+            <pnp:FieldRef ID="5837187c-85c8-4fa9-87a1-4457f326df54" Name="PzlAffectedSystems" Required="false" />
+            <pnp:FieldRef ID="6f006ea9-73a4-497c-ac2c-39e0a01102d9" Name="PzlConsequences" Required="false" />
+            <pnp:FieldRef ID="078e1aaf-c463-41d3-80d4-c5239cc0986a" Name="PzlResponsible" Required="false" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x010091D7ED8EC92C244286353A799AC347B2" Name="{resource:ContentType_NavigationHeading_Title}" Description="" Group="Puzzlepart" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
+            <pnp:FieldRef ID="8ef476fa-024f-4d7f-bfc3-3ff17c2ceea1" Name="PzlNavOrder" />
+            <pnp:FieldRef ID="f78d08e6-1b5c-4d4c-ab68-181f04242992" Name="PzlNavUrl" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x0100D600AF8E62BD324281FF4FDE3203A67F" Name="{resource:ContentType_NavigationLink_Title}" Description="" Group="Puzzlepart" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
+            <pnp:FieldRef ID="8ef476fa-024f-4d7f-bfc3-3ff17c2ceea1" Name="PzlNavOrder" />
+            <pnp:FieldRef ID="f78d08e6-1b5c-4d4c-ab68-181f04242992" Name="PzlNavUrl" Required="true" />
+            <pnp:FieldRef ID="c585a246-0c15-4aa4-bcc4-d574588b3d55" Name="PzlNavLinkHeaderLookup" Required="true" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+        <pnp:ContentType ID="0x0100057E26B06FFA420291746426C18E97EC" Name="{resource:ContentType_NavigationSettings_Title}" Description="" Group="Puzzlepart" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
+            <pnp:FieldRef ID="e32892ba-cad5-41e5-885d-af222700e829" Name="PzlSettingValue" />
+          </pnp:FieldRefs>
+        </pnp:ContentType>
+      </pnp:ContentTypes>
+      <pnp:Navigation>
+        <pnp:CurrentNavigation NavigationType="StructuralLocal">
+          <pnp:StructuralNavigation RemoveExistingNodes="false">
+            <pnp:NavigationNode Title="{resource:Lists_NavigationLinks_Title}" Url="{site}/Lists/NavLinks" />
+            <pnp:NavigationNode Title="{resource:Lists_NavigationHeadings_Title}" Url="{site}/Lists/NavHeadings" />
+            <pnp:NavigationNode Title="{resource:Lists_ServiceAnnouncement_Title}" Url="{site}/Lists/ServiceAnnouncements" />
+            <pnp:NavigationNode Title="{resource:Lists_NavigationSettings_Title}" Url="{site}/Lists/NavSettings" />
+          </pnp:StructuralNavigation>
+        </pnp:CurrentNavigation>
+      </pnp:Navigation>
+      <pnp:Lists>
+        <pnp:ListInstance Title="{resource:Lists_NavigationSettings_Title}" Description="" EnableAttachments="false" TemplateType="100" MinorVersionLimit="0" MaxVersionLimit="0" Url="Lists/NavSettings" NoCrawl="true" EnableFolderCreation="false">
+          <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x0100057E26B06FFA420291746426C18E97EC" Default="true" />
+          </pnp:ContentTypeBindings>
+          <pnp:Views RemoveExistingViews="true">
+            <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:List_DefaultView_Title}" Url="{site}/Lists/NavSettings/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+              <Query>
+                <OrderBy>
+                  <FieldRef Name="ID" />
+                </OrderBy>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="Title" />
+                <FieldRef Name="PzlSettingValue" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <Aggregations Value="Off" />
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+          </pnp:Views>
+           <pnp:DataRows KeyColumn="Title" UpdateBehavior="Skip">
+           <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">navHideTheMenu</pnp:DataValue>
+                <pnp:DataValue FieldName="PzlSettingValue">false</pnp:DataValue>           
+           </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">navToggleText</pnp:DataValue>
+                <pnp:DataValue FieldName="PzlSettingValue">Menu</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">navToggleTextColor</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">navToggleBackgroundColor</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">navHeaderTextColor</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">navContentBackgroundColor</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">linkTextColor</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">navColumns</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">helpButtonEnabled</pnp:DataValue>
+                <pnp:DataValue FieldName="PzlSettingValue">false</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">helpButtonText</pnp:DataValue>
+                <pnp:DataValue FieldName="PzlSettingValue">Help</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">helpButtonUrl</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">helpButtonColor</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">helpButtonTextColor</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">helpButtonIcon</pnp:DataValue>
+                <pnp:DataValue FieldName="PzlSettingValue">Help</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">homeButtonEnabled</pnp:DataValue>
+                <pnp:DataValue FieldName="PzlSettingValue">false</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">homeButtonMobileOnly</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">homeButtonText</pnp:DataValue>
+                <pnp:DataValue FieldName="PzlSettingValue">Home</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">homeButtonUrl</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">homeButtonColor</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">homeButtonTextColor</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">homeButtonIcon</pnp:DataValue>
+                <pnp:DataValue FieldName="PzlSettingValue">Home</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">searchBarEnabled</pnp:DataValue>
+                <pnp:DataValue FieldName="PzlSettingValue">false</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">searchBarPlaceholder</pnp:DataValue>
+                <pnp:DataValue FieldName="PzlSettingValue">Search</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">searchBarSearchUrl</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">searchBarUrlParam</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">focusButtonEnabled</pnp:DataValue>
+                <pnp:DataValue FieldName="PzlSettingValue">false</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">focusButtonText</pnp:DataValue>
+                <pnp:DataValue FieldName="PzlSettingValue">Focus on content</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">focusButtonColor</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">focusButtonTextColor</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">focusButtonIcon</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">focusButtonActiveColor</pnp:DataValue>
+            </pnp:DataRow>
+          </pnp:DataRows>
+        </pnp:ListInstance>
+        <pnp:ListInstance Title="{resource:Lists_NavigationLinks_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/NavLinks" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableAttachments="false" EnableFolderCreation="false">
+          <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x0100D600AF8E62BD324281FF4FDE3203A67F" Default="true" />
+          </pnp:ContentTypeBindings>
+          <pnp:Views RemoveExistingViews="true">
+            <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:List_DefaultView_Title}" Url="{site}/Lists/NavLinks/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+              <Query>
+                <OrderBy>
+                  <FieldRef Name="ID" />
+                </OrderBy>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="PzlNavOrder" />
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="PzlNavUrl" />
+                <FieldRef Name="PzlNavLinkHeaderLookup" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <Aggregations Value="Off" />
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+          </pnp:Views>
+          <pnp:Fields>
+            <Field Type="Lookup" DisplayName="{resource:Field_Heading_Title}" Group="Puzzlepart" ID="{c585a246-0c15-4aa4-bcc4-d574588b3d55}" List="{{listid:{resource:Lists_NavigationHeadings_Title}}}" ShowField="Title" StaticName="PzlNavLinkHeaderLookup" Name="PzlNavLinkHeaderLookup" />
+          </pnp:Fields>
+        </pnp:ListInstance>
+        <pnp:ListInstance Title="{resource:Lists_NavigationHeadings_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/NavHeadings" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableAttachments="false" EnableFolderCreation="false">
+          <pnp:ContentTypeBindings>
+            <pnp:ContentTypeBinding ContentTypeID="0x010091D7ED8EC92C244286353A799AC347B2" Default="true" />
+          </pnp:ContentTypeBindings>
+          <pnp:Views RemoveExistingViews="true">
+            <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:List_DefaultView_Title}" Url="{site}/Lists/NavHeadings/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+              <Query>
+                <OrderBy>
+                  <FieldRef Name="ID" />
+                </OrderBy>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="PzlNavOrder" />
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="PzlNavUrl" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+          </pnp:Views>
+        </pnp:ListInstance>
+        <pnp:ListInstance Title="{resource:Lists_ServiceAnnouncement_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/ServiceAnnouncements" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableAttachments="false" EnableFolderCreation="false">
+          <pnp:ContentTypeBindings >
+            <pnp:ContentTypeBinding ContentTypeID="0x01001A58CF6ADF6943E89CE71ACB741407FA" Default="true" />
+          </pnp:ContentTypeBindings>
+          <pnp:Views RemoveExistingViews="true">
+            <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:List_DefaultView_Title}" Url="{site}/Lists/ServiceAnnouncements/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+              <Query>
+                <OrderBy>
+                  <FieldRef Name="ID" />
+                </OrderBy>
+              </Query>
+              <ViewFields>
+                <FieldRef Name="Title" />
+                <FieldRef Name="PzlSeverity" />
+                <FieldRef Name="PzlContent" />
+                <FieldRef Name="PzlStartDate" />
+                <FieldRef Name="PzlEndDate" />
+                <FieldRef Name="PzlAffectedSystems" />
+                <FieldRef Name="PzlConsequences" />
+                <FieldRef Name="PzlResponsible" />
+              </ViewFields>
+              <RowLimit Paged="TRUE">30</RowLimit>
+              <JSLink>clienttemplates.js</JSLink>
+            </View>
+          </pnp:Views>
+        </pnp:ListInstance>
+      </pnp:Lists>
+    </pnp:ProvisioningTemplate>
+  </pnp:Templates>
+</pnp:Provisioning>
