@@ -1,5 +1,7 @@
 <?xml version="1.0"?>
-<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2017/05/ProvisioningSchema">
+<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2020/02/ProvisioningSchema"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://schemas.dev.office.com/PnP/2020/02/ProvisioningSchema https://raw.githubusercontent.com/OfficeDev/PnP-Provisioning-Schema/master/OfficeDevPnP.ProvisioningSchema/ProvisioningSchema-2020-02.xsd">
   <pnp:Preferences Generator="OfficeDevPnP.Core, Version=2.19.1710.2, Culture=neutral, PublicKeyToken=3751622786b357c2" />
   <pnp:Localizations>
     <pnp:Localization LCID="1044" Name="Norwegian" ResourceFile="nb-NO.resx" />
