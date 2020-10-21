@@ -1,0 +1,17 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+      "simple-search-box-web-part": {
+          "components": [{
+              "entrypoint": "./lib/webparts/simpleSearchBox/SimpleSearchBoxWebPart.js",
+              "manifest": "./src/webparts/simpleSearchBox/SimpleSearchBoxWebPart.manifest.json"
+          }]
+      }
+  },
+  "externals": {},
+  "localizedResources": {
+      "SimpleSearchBoxWebPartStrings": "lib/webparts/simpleSearchBox/loc/{locale}.js",
+      "ControlStrings": "./node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js"
+  }
+}

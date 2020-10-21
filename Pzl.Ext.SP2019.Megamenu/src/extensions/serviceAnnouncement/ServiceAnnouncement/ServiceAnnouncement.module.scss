@@ -1,0 +1,28 @@
+
+@import '~office-ui-fabric-react/dist/sass/References.scss';
+
+.announcementMessage {
+    cursor: pointer;
+}
+
+.announcementMessageRight {
+    width: 100%;
+    position: absolute;
+    text-align: right;
+    right: 40px;
+}
+
+.announcementMessageMiddle {
+    width: 100%;
+    position: absolute;
+    text-align: center;
+    right: 0px;
+}
+
+.announcementMessageBold {
+    font-weight: bold;
+}
+
+.responsiblePersona {
+    cursor: pointer;
+}

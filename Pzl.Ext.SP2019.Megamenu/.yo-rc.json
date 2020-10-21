@@ -1,0 +1,12 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "version": "1.11.0",
+    "libraryName": "pzl-ext-sp-2019-megamenu",
+    "libraryId": "efef21cf-6edf-4207-b579-25e16c021ede",
+    "environment": "onprem19",
+    "packageManager": "npm",
+    "isCreatingSolution": true,
+    "componentType": "extension",
+    "extensionType": "ApplicationCustomizer"
+  }
+}
