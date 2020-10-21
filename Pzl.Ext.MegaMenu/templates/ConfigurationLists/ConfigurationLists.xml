@@ -171,6 +171,10 @@
                 <pnp:DataValue FieldName="PzlSettingValue">Home</pnp:DataValue>
             </pnp:DataRow>
             <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">homeButtonFloatLeft</pnp:DataValue>
+                <pnp:DataValue FieldName="PzlSettingValue">false</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
                 <pnp:DataValue FieldName="Title">searchBarEnabled</pnp:DataValue>
                 <pnp:DataValue FieldName="PzlSettingValue">false</pnp:DataValue>
             </pnp:DataRow>
