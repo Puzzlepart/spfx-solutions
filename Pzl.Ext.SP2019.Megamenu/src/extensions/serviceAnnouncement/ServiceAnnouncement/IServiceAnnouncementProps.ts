@@ -7,4 +7,5 @@ export default interface IServiceAnnouncementProps {
     isMobile: boolean;
     textAlignment: Alignment;
     boldText: boolean;
+    announcementLevels: string;
 }

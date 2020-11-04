@@ -36,6 +36,7 @@ interface NavigationSettings {
   focusButtonColor?: string;
   focusButtonIcon?: string;
   focusButtonActiveColor?: string;
+  announcementLevels?: string;
 }
 
 

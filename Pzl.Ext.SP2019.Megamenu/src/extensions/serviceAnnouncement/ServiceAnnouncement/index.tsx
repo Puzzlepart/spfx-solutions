@@ -102,6 +102,7 @@ export default class ServiceAnnouncement extends React.Component<ServiceAnnounce
         var alertContent = `${announcement.title}\n\n\n\n${strings.Field_AffectedSystems_Title}\n\n${affectedSystems}\n\n\n\n${strings.Field_Description_Title}\n\n${content}\n\n\n\n${strings.Field_Consequence_Title}\n\n${consequence}`;
         window.alert(alertContent);
     }
+
     private cleanHtmlFromTextString(fieldValue) {
         var htmlCleaningDomElement = document.createElement("span");
         htmlCleaningDomElement.innerHTML = fieldValue && fieldValue.length > 0 ? fieldValue : "";
@@ -151,6 +152,7 @@ export default class ServiceAnnouncement extends React.Component<ServiceAnnounce
     private async fetchData() {
         let now = new Date();
         let spWeb = new Web(`${document.location.protocol}//${document.location.hostname}${this.props.serverRelativeWebUrl}`);
+        const severityFilter = this.props.announcementLevels ? " and (" + this.props.announcementLevels.split(",").map(level => { return "PzlSeverity eq '" + level + "'"}).join(" or ") + ")" : "";
         let announcements: any[] = await spWeb.getList(`${this.props.serverRelativeWebUrl.replace(/\/$/, "")}/${this.props.serviceAnnouncementListUrl}`)
             .items.select("ID",
                 "Title",
@@ -162,7 +164,7 @@ export default class ServiceAnnouncement extends React.Component<ServiceAnnounce
                 "PzlAffectedSystems",
                 "PzlStartDate",
                 "PzlEndDate")
-            .filter("(PzlStartDate le datetime'" + now.toISOString() + "') and (PzlEndDate ge datetime'" + now.toISOString() + "')")
+            .filter("(PzlStartDate le datetime'" + now.toISOString() + "') and (PzlEndDate ge datetime'" + now.toISOString() + "')" + severityFilter)
             .expand("PzlResponsible").usingCaching().get();
 
         let seenAnnouncements = JSON.parse(this.getAnnouncementReadStorage());

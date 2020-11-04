@@ -115,6 +115,7 @@ export default class GlobalNavigationApplicationCustomizer extends BaseApplicati
               discardForSessionOnly={this.properties.serviceAnnouncements.discardForSessionOnly}
               textAlignment={this.properties.serviceAnnouncements.textAlignment}
               boldText={this.properties.serviceAnnouncements.boldText}
+              announcementLevels={settings.announcementLevels}
               isMobile={isMobile} />
           );
           ReactDOM.render(serviceAnnouncement, serviceAnnouncementPlaceholder);
