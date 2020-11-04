@@ -172,7 +172,7 @@
             </pnp:DataRow>
             <pnp:DataRow>
                 <pnp:DataValue FieldName="Title">homeButtonFloatLeft</pnp:DataValue>
-                <pnp:DataValue FieldName="PzlSettingValue">false</pnp:DataValue>
+                <pnp:DataValue FieldName="PzlSettingValue">true</pnp:DataValue>
             </pnp:DataRow>
             <pnp:DataRow>
                 <pnp:DataValue FieldName="Title">searchBarEnabled</pnp:DataValue>
@@ -207,6 +207,9 @@
             </pnp:DataRow>
             <pnp:DataRow>
                 <pnp:DataValue FieldName="Title">focusButtonActiveColor</pnp:DataValue>
+            </pnp:DataRow>
+            <pnp:DataRow>
+                <pnp:DataValue FieldName="Title">announcementLevels</pnp:DataValue>
             </pnp:DataRow>
           </pnp:DataRows>
         </pnp:ListInstance>
