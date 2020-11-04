@@ -4,14 +4,14 @@
     "name": "pzl-ext-sp-2019-megamenu-client-side-solution",
     "title": "Global navigation by Puzzlepart",
     "id": "efef21cf-6edf-4207-b579-25e16c021ede",
-    "version": "1.0.0.0",
+    "version": "2.8.3.0",
     "includeClientSideAssets": true,
     "features": [
       {
         "title": "Global navigation by Puzzlepart - custom action activation",
         "description": "Enables a custom action that toggles the global navigation menu",
         "id": "224e59c4-ac94-445c-96f3-506ffcff7692",
-        "version": "1.0.0.0",
+        "version": "2.8.3.0",
         "assets": {
           "elementManifests": [
             "elements.xml"

@@ -1,6 +1,6 @@
 {
   "name": "pzl-ext-sp-2019-megamenu",
-  "version": "0.0.1",
+  "version": "2.8.3",
   "private": true,
   "main": "lib/index.js",
   "engines": {
