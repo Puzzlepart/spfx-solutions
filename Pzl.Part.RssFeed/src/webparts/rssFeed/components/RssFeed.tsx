@@ -30,8 +30,8 @@ export default class RssFeed extends React.Component<IRssFeedProps, IRssFeedStat
       const storage = new PnPClientStorage();
       let now = new Date();
       let json = await storage.local.getOrPut(`rssfeed-${this.props.context.pageContext.web.serverRelativeUrl}-${this.props.instanceId}`, async () => {
-        const apiKey = this.props.apiKey ? this.props.apiKey : '';
-        const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(this.props.rssFeedUrl)}&api_key=${apiKey}`);
+        const apiKey = this.props.apiKey && this.props.apiKey !== undefined ? `&api_key=${this.props.apiKey}` : '';
+        const response = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(this.props.rssFeedUrl)}${apiKey}`);
         return await response.json();
       }, moment(now).add(this.props.cacheDuration, 'm').toDate());
       this.setState({ items: (json.items) ? json.items.splice(0, this.props.itemsCount) : [] });
