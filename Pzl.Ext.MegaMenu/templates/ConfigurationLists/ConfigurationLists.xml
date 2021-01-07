@@ -10,7 +10,6 @@
   <pnp:Templates ID="CONTAINER-TEMPLATE-CONFIGURATIONLISTS">
     <pnp:ProvisioningTemplate ID="TEMPLATE-CONFIGURATIONLISTS" Version="1" BaseSiteTemplate="STS#0" Scope="RootSite">
       <pnp:SiteFields>
-        <Field Type="Lookup" DisplayName="{resource:Field_Heading_Title}" Group="Puzzlepart" ID="{c585a246-0c15-4aa4-bcc4-d574588b3d55}" List="{{listid:{resource:Lists_NavigationHeadings_Title}}}" ShowField="Title" StaticName="PzlNavLinkHeaderLookup" Name="PzlNavLinkHeaderLookup" />
         <Field Type="Number" DisplayName="{resource:Field_Order_Title}" Group="Puzzlepart" ID="{8ef476fa-024f-4d7f-bfc3-3ff17c2ceea1}" StaticName="PzlNavOrder" Name="PzlNavOrder">
           <Default>0</Default>
         </Field>
@@ -57,7 +56,6 @@
             <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
             <pnp:FieldRef ID="8ef476fa-024f-4d7f-bfc3-3ff17c2ceea1" Name="PzlNavOrder" />
             <pnp:FieldRef ID="f78d08e6-1b5c-4d4c-ab68-181f04242992" Name="PzlNavUrl" Required="true" />
-            <pnp:FieldRef ID="c585a246-0c15-4aa4-bcc4-d574588b3d55" Name="PzlNavLinkHeaderLookup" Required="true" />
           </pnp:FieldRefs>
         </pnp:ContentType>
         <pnp:ContentType ID="0x0100057E26B06FFA420291746426C18E97EC" Name="{resource:ContentType_NavigationSettings_Title}" Description="" Group="Puzzlepart" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
@@ -235,6 +233,9 @@
               <JSLink>clienttemplates.js</JSLink>
             </View>
           </pnp:Views>
+          <pnp:Fields>
+            <Field Type="Lookup" DisplayName="{resource:Field_Heading_Title}" ID="{c585a246-0c15-4aa4-bcc4-d574588b3d55}" List="{{listid:{resource:Lists_NavigationHeadings_Title}}}" ShowField="Title" StaticName="PzlNavLinkHeaderLookup" Name="PzlNavLinkHeaderLookup" />
+          </pnp:Fields>
         </pnp:ListInstance>
         <pnp:ListInstance Title="{resource:Lists_NavigationHeadings_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/NavHeadings" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableAttachments="false" EnableFolderCreation="false">
           <pnp:ContentTypeBindings>
