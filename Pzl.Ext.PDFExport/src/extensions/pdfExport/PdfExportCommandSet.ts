@@ -29,7 +29,7 @@ const DIALOG = new WaitDialog({});
 
 export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExportCommandSetProperties> {
 
-    private _validExts: string[] = ['csv', 'doc', 'docx', 'odp', 'ods', 'odt', 'pot', 'potm', 'potx', 'pps', 'ppsx', 'ppsxm', 'ppt', 'pptm', 'pptx', 'rtf', 'xls', 'xlsx'];
+    private _validExts: string[] = ['html','csv', 'doc', 'docx', 'odp', 'ods', 'odt', 'pot', 'potm', 'potx', 'pps', 'ppsx', 'ppsxm', 'ppt', 'pptm', 'pptx', 'rtf', 'xls', 'xlsx'];
 
     @override
     public onInit(): Promise<void> {
