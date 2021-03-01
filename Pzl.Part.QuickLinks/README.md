@@ -30,6 +30,8 @@ Solution consists of two web parts and two lists.
 
 ### Create the needed lists on the site where you want to host the quick links solutions
 
+Clone the project or download all artefacts. The template QuickLinks.xml is located in the templates-folder.
+
 ```powershell
 Connect-PnPOnline -Url https://tenantnamehere.sharepoint.com/sites/intranet
 Apply-PnPProvisioningTemplate -Path .\templates\QuickLinks.xml
