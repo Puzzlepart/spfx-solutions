@@ -1,4 +1,4 @@
-<pnp:ContentTypes xmlns:pnp="http://schemas.dev.office.com/PnP/2017/05/ProvisioningSchema">
+<pnp:ContentTypes xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
     <pnp:ContentType ID="0x01000632690D108F403A8D7ABE0B3B6328EA" Name="{resource:QuickLinks_ContentTypes_Name_PromotedLink}"  Group="{parameter:GenericContentTypeGroup}">
         <pnp:FieldRefs>
             <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
