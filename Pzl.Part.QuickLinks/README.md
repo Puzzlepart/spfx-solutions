@@ -2,20 +2,17 @@
 
 Solution consists of two web parts and two lists.
 
-* Quick links web part - add to a page for managing all links
-* All links web part - used for adding links for the user
-
 ## Web parts
 
-### Quick links web part - add to a page for managing all links
+### Quick links web part - used typically on the front page to see mandatory and user-selected links
 
 ![Quick links web part preview](./preview/quick_links_webpart_06-12-19png.png "Web part")
 ![Quick links property pane preview](./preview/quick_links_property_pane_webpart_06-12-19png.png "Property pane")
 
-### All links web part - used for adding links for the user
+### All links web part - used for seeing all links and adding personal links
 
-![All links web part preview](./TODO_ADD_IMAGE "Web part")
-![All links property pane preview](./TODO_ADD_IMAGE "Property pane")
+![All links web part preview](./preview/allinks_example.PNG "Web part")
+![All links property pane preview](./preview/allinks_propertypane.PNG "Property pane")
 
 ## Lists
 
@@ -24,35 +21,28 @@ Solution consists of two web parts and two lists.
   * Icons can be names from Office UI Fabric - [https://developer.microsoft.com/en-us/fabric#/styles/icons](https://developer.microsoft.com/en-us/fabric#/styles/icons)
 * FavouriteLinks
   * It's important that all employees have write access to this list
+  * Configure in advanced settings that users can only see and edit their own items
   * The list stores one entry per user
 
 ## Installation
 
 ### Create the needed lists on the site where you want to host the quick links solutions
 
-Clone the project or download all artefacts. The template QuickLinks.xml is located in the templates-folder.
+Clone the project or download all artefacts. The template QuickLinks.xml is located in the templates-folder. Use PnP.PowerShell to install, see example:
 
 ```powershell
-Connect-PnPOnline -Url https://tenantnamehere.sharepoint.com/sites/intranet
-Apply-PnPProvisioningTemplate -Path .\templates\QuickLinks.xml
+Connect-PnPOnline -Url "https://tenantnamehere.sharepoint.com/sites/intranet" -Interactive
+Invoke-PnPSiteTemplate -Path ".\templates\QuickLinks.xml"
 ```
 
 ### Upload the web part package to a site collection app catalog
 
-```powershell
-Connect-PnPOnline -Url https://tenantnamehere.sharepoint.com/sites/intranet
-# Create app catalog if not present
-$site = Get-PnPSite
-# Upload the app package
-$app = Add-PnPApp -Path .\sharepoint\solution\pzl-quick-links.sppkg -Scope Site -Publish
-# Install the web parts on the site
-Install-PnPApp -Identity $app.Id -Scope Site -Wait
-```
+This can be done manually by navigating to the app catalog and uploading the sppkg package from the build.
 
 ### Pages
 
-* Create a page for the *All links* web part.
-* Add the *Your links* web page to a page, and set the web part properties to point to the *all links* page
+* Create a page for the *All links* web part, and add the*ALl links* web part
+* Add the *Your links* web page to the frontpage, and set the URL for all links in the web part properties to point to the *all links* page
 
 ## Building
 
