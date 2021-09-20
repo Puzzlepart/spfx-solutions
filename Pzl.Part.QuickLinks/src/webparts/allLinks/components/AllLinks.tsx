@@ -6,7 +6,7 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Button, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
+import { Spinner, SpinnerSize, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
 import { Modal } from 'office-ui-fabric-react/lib/Modal';
 import * as strings from 'AllLinksWebPartStrings';
 import "@pnp/polyfill-ie11";
@@ -28,7 +28,7 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
     };
   }
 
-  public render(): React.ReactElement<IAllLinksProps> {          
+  public render(): React.ReactElement<IAllLinksProps> {
     if (this.state.isLoading) {
       return (
         <Spinner type={SpinnerType.large} />
@@ -40,8 +40,8 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
       let newLinkModal = this.state.showModal ? this.generateNewLinkModal() : null;
       let categoryLinks = this.generateLinks(this.state.categoryLinks);
       let errorMessage = this.state.showErrorMessage ? <MessageBar messageBarType={MessageBarType.error} onDismiss={() => this.setState({ showErrorMessage: false })}>{strings.component_SaveErrorLabel}</MessageBar> : null;
-      let successMessage = this.state.showSuccessMessage ? <MessageBar messageBarType={MessageBarType.success} onDismiss={() => this.setState({ showSuccessMessage: false })} >{strings.component_SaveOkLabel}</MessageBar> : null;
-      let loadingSpinner = this.state.showLoadingSpinner ? <Spinner className={styles.spinner} type={SpinnerType.normal} /> : null;
+      //let successMessage = this.state.showSuccessMessage ? <MessageBar messageBarType={MessageBarType.success} onDismiss={() => this.setState({ showSuccessMessage: false })} >{strings.component_SaveOkLabel}</MessageBar> : null;
+      let loadingSpinner = this.state.showLoadingSpinner ? <Spinner style={{position:'absolute',right:10,top:-10}} className={styles.spinner} size={SpinnerSize.small} /> : null;
       let linkListing = this.props.listingByCategory ?
         <div className={styles.allLinks}>
           <div className={styles.webpartHeader}>
@@ -63,15 +63,16 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
         <div className={styles.webpartHeading}>{strings.component_YourLinksLabel}</div>
         <div className={styles.editorLinksContainer}>{favouriteLinks}</div>
         <div className={styles.buttonRow} >
-          <Button onClick={() => this.saveData()} text={strings.component_SaveYourLinksLabel} disabled={this.state.saveButtonDisabled} />
+          {/* <Button onClick={() => this.saveData()} text={strings.component_SaveYourLinksLabel} disabled={this.state.saveButtonDisabled} /> */}
           <Button onClick={() => this.openNewItemModal()} text={strings.component_NewLinkLabel} iconProps={{ iconName: 'Add' }} />
-          {loadingSpinner}
+
         </div>
       </div>;
       return (
         <div className={styles.allLinks}>
           {errorMessage}
-          {successMessage}
+
+          {loadingSpinner}
           {newLinkModal}
           {(this.props.mylinksOnTop) ?
             <div>
@@ -121,7 +122,8 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
       favouriteLinks: newFavourites,
       editorLinks: newEditorLinks,
       saveButtonDisabled: false
-    });
+    },()=>this.saveData())
+
   }
   private removeFromFavourites(link: Link) {
     let newEditorLinks = this.state.editorLinks.slice();
@@ -132,7 +134,7 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
       favouriteLinks: newFavourites,
       editorLinks: newEditorLinks,
       saveButtonDisabled: false
-    });
+    },()=>this.saveData());
   }
   private removeCustomFromFavourites(link: Link) {
     let newFavourites = this.state.favouriteLinks.slice();
@@ -149,7 +151,7 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
         <div className={styles.linkParent}>
           <Text className={styles.linkContainer} onClick={() => window.open(link.url, "_blank")}>
             <Icon iconName={(link.icon) ? link.icon : this.props.defaultIcon} className={styles.icon} />
-            <span>{link.displayText}</span>
+            <span title={link.displayText}>{link.displayText}</span>
           </Text>
           <Icon className={styles.actionIcon} iconName='CirclePlus' onClick={() => this.appendToFavourites(link)} />
         </div>
@@ -210,7 +212,7 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
       modalData: null,
       showModal: false,
       saveButtonDisabled: false
-    });
+    },()=>this.saveData());
   }
 
   private onModalValueChanged(field, newVal) {

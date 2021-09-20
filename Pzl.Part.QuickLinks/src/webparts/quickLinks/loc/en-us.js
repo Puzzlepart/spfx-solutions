@@ -6,6 +6,8 @@ define([], function () {
         "propertyPane_DefaultOfficeFabricIconLabel": "Default icon",
         "propertyPane_GroupByCategoryLabel": "Group by category",
         "propertyPane_MaxLinkLengthLabel": "Max link width (pixels)",
+        "propertyPane_LineHeightLabel": "Line height (pixels)",
+        "propertyPane_IconOpacityLabel": "Icon opacity (percent)",
         "component_AllLinksLabel": "See all",
         "component_NoCategoryLabel": "No category"
     }

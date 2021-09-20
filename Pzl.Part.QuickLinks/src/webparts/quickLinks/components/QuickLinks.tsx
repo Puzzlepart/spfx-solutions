@@ -41,11 +41,11 @@ export default class QuickLinks extends React.Component<IQuickLinksProps, IQuick
     private generateLinks(categories: Array<ICategory>) {
         return categories.map(cat => {
             let linkItems = cat.links.map(link => {
-                let linkIcon = <Icon iconName={(link.icon) ? link.icon : this.props.defaultIcon} className={styles.icon} />;
+                let linkIcon = <Icon iconName={(link.icon) ? link.icon : this.props.defaultIcon} className={styles.icon} style={{opacity: this.props.iconOpacity/100}}/>;
                 let linkStyle = { width: this.props.maxLinkLength };
                 let linkTarget = link.openInSameTab ? '_self' : '_blank';
                 return (
-                    <div className={styles.linkGridColumn}>
+                    <div className={styles.linkGridColumn} style={ {lineHeight: `${this.props.lineHeight}px`} }>
                         <Text className={styles.linkContainer} onClick={ () => window.open(link.url, linkTarget) }>
                             {linkIcon}
                             <span style={linkStyle}>{link.displayText}</span>
@@ -69,11 +69,11 @@ export default class QuickLinks extends React.Component<IQuickLinksProps, IQuick
         });
         let favouriteLinkStrings = await sp.web.getList(this.props.webServerRelativeUrl + "/Lists/FavouriteLinks").items.select("Id", "AuthorId", "PzlPersonalLinks").filter(searchString).get();
         let favouriteLinksObject: Array<ILink> = favouriteLinkStrings.length > 0 ? JSON.parse(favouriteLinkStrings[0].PzlPersonalLinks) : [];
-        
+
         let displayLinks = editorLinks.map(link => {
             return { displayText: link.Title, url: link.PzlUrl, icon: link.PzlOfficeUIFabricIcon || "Link", priority: link.PzlLinkPriority || "0", category: link.PzlLinkCategory || "Ingen kategori", openInSameTab: link.PzlOpenInSameTab };
         });
-        
+
         if (favouriteLinkStrings.length > 0) {
             let updatedFavoriteLinksObject = await this.checkForUpdatedLinks(favouriteLinksObject, newNonMandatoryLinksObject, favouriteLinkStrings[0].Id);
             displayLinks.push(...updatedFavoriteLinksObject);
@@ -92,7 +92,7 @@ export default class QuickLinks extends React.Component<IQuickLinksProps, IQuick
     }
 
     private async checkForUpdatedLinks(userFavoriteLinks: ILink[], allFavoriteLinks: ILink[], currentItemId: number) {
-        let personalLinks = new Array<ILink>(); 
+        let personalLinks = new Array<ILink>();
         let shouldUpdate = false;
         userFavoriteLinks.forEach(userLink => {
             let linkMatch = find(allFavoriteLinks, (favoriteLink => favoriteLink.id === userLink.id));

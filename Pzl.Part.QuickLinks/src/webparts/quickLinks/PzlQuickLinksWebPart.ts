@@ -16,6 +16,8 @@ export interface IQuickLinksWebPartProps {
   defaultOfficeFabricIcon: string;
   groupByCategory: boolean;
   maxLinkLength: number;
+  lineHeight: number;
+  iconOpacity: number;
 }
 
 export default class PzlQuickLinksWebPart extends BaseClientSideWebPart<IQuickLinksWebPartProps> {
@@ -31,6 +33,8 @@ export default class PzlQuickLinksWebPart extends BaseClientSideWebPart<IQuickLi
         defaultIcon: this.properties.defaultOfficeFabricIcon,
         groupByCategory: this.properties.groupByCategory,
         maxLinkLength: this.properties.maxLinkLength,
+        lineHeight: this.properties.lineHeight,
+        iconOpacity: this.properties.iconOpacity,
         webServerRelativeUrl: this.context.pageContext.web.serverRelativeUrl
       }
     );
@@ -71,6 +75,16 @@ export default class PzlQuickLinksWebPart extends BaseClientSideWebPart<IQuickLi
                   label: strings.propertyPane_MaxLinkLengthLabel,
                   min: 50,
                   max: 500
+                }),
+                PropertyPaneSlider('lineHeight', {
+                  label: strings.propertyPane_LineHeightLabel,
+                  min: 15,
+                  max: 50
+                }),
+                PropertyPaneSlider('iconOpacity', {
+                  label: strings.propertyPane_IconOpacityLabel,
+                  min: 0,
+                  max: 100
                 }),
                 PropertyPaneTextField('allLinksUrl', {
                   label: strings.propertyPane_AllLinksUrlLabel
