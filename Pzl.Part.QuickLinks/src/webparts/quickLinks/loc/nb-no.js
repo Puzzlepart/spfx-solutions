@@ -6,6 +6,8 @@ define([], function() {
         "propertyPane_DefaultOfficeFabricIconLabel": "Standard ikon",
         "propertyPane_GroupByCategoryLabel": "Grupper etter kategorier",
         "propertyPane_MaxLinkLengthLabel": "Maks bredde på lenkene (piksler)",
+        "propertyPane_LineHeightLabel": "Linjehøyde (piksler)",
+        "propertyPane_IconOpacityLabel": "Ikon opasitet (prosent)",
         "component_AllLinksLabel": "Se alle",
         "component_NoCategoryLabel": "Ingen kategori"
     }

@@ -63,6 +63,15 @@ npm i -g gulp
 gulp bundle
 ```
 
+### Testing
+You can test by using the workbench
+`gulp serve`
+
+
+```
+https://<tenant>.sharepoint.com/sites/<site>/_layouts/15/workbench.aspx?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/manifests.js
+```
+
 ### Building the code for production
 
 ```bash
