@@ -1,6 +1,6 @@
 {
     "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-    "id": "2131da04-d324-48c9-91a2-8b3861e295fd",
+    "id": "3131da04-d324-48c9-91a2-8b3861e295fd",
     "alias": "PzlQuickLinksWebPart",
     "componentType": "WebPart",
     "version": "*",
@@ -13,12 +13,12 @@
             "default": "Other"
         },
         "title": {
-            "default": "(dev) Your links",
-            "no-nb": "(DEV) Dine lenker"
+            "default": "Your links",
+            "no-nb": "Dine lenker"
         },
         "description": {
-            "default": "(dev) Your links",
-            "no-nb": "(dev) Dine lenker"
+            "default": "Your links",
+            "no-nb": "Dine lenker"
         },
         "officeFabricIconFontName": "Globe",
         "properties": {
