@@ -1,4 +1,7 @@
 declare interface IAllLinksWebPartStrings {
+    propertyPane_MandatoryLinksTitleLabel: string;
+    propertyPane_ReccomendedLinksTitleLabel: string;
+    propertyPane_MyLinksTitleLabel: string;
     propertyPane_defaultOfficeFabricIcon: string;
     propertyPane_myLinksOnTop: string;
     propertyPane_listingByCategory: string;

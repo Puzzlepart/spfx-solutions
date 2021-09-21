@@ -13,6 +13,7 @@ import "@pnp/polyfill-ie11";
 import { sp } from "@pnp/sp";
 import { find, isEqual, findIndex } from '@microsoft/sp-lodash-subset';
 import { Text } from 'office-ui-fabric-react/lib/Text';
+import { stringIsNullOrEmpty } from '@pnp/common';
 
 export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksState> {
   public constructor(props) {
@@ -24,7 +25,7 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
       favouriteLinks: [],
       showModal: false,
       saveButtonDisabled: true,
-      isLoading: true,
+      isLoading: true
     };
   }
 
@@ -53,14 +54,14 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
         </div>
         :
         <div>
-          <div className={styles.webpartHeading} >{strings.component_MandatoryLinksLabel}</div>
+          <div className={styles.webpartHeading} >{stringIsNullOrEmpty(this.props.mandatoryLinksTitle) ? strings.component_MandatoryLinksLabel : this.props.mandatoryLinksTitle}</div>
           <div className={styles.editorLinksContainer}>{mandatoryLinks}</div>
           <hr />
-          <div className={styles.webpartHeading} >{strings.component_PromotedLinksLabel}</div>
+          <div className={styles.webpartHeading} >{stringIsNullOrEmpty(this.props.reccomendedLinksTitle) ? strings.component_PromotedLinksLabel : this.props.reccomendedLinksTitle}</div>
           <div className={styles.editorLinksContainer}>{editorLinks}</div>
         </div>;
       let myLinks = <div>
-        <div className={styles.webpartHeading}>{strings.component_YourLinksLabel}</div>
+        <div className={styles.webpartHeading}>{stringIsNullOrEmpty(this.props.myLinksTitle) ? strings.component_YourLinksLabel : this.props.myLinksTitle}</div>
         <div className={styles.editorLinksContainer}>{favouriteLinks}</div>
         <div className={styles.buttonRow} >
           {/* <Button onClick={() => this.saveData()} text={strings.component_SaveYourLinksLabel} disabled={this.state.saveButtonDisabled} /> */}

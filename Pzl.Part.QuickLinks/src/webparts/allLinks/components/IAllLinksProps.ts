@@ -10,6 +10,9 @@ export interface IAllLinksProps {
   listingByCategoryTitle: string;
   maxLinkLength: number;
   iconOpacity: number;
+  mandatoryLinksTitle: string;
+  reccomendedLinksTitle: string;
+  myLinksTitle: string;
 }
 
 
