@@ -12,11 +12,11 @@ $IconSize:25px;
         flex-grow: 1;
         text-align: left;
         margin-top: 30px;
+        margin-bottom: 20px;
     }
     .editorLinksContainer {
         display: flex;
         flex-direction: row;
-        justify-content: right;
         flex-wrap: wrap;
     }
     .webpartHeader {
@@ -35,7 +35,7 @@ $IconSize:25px;
     }
     .linkParent {
 
-        margin-right: 40px;
+        margin-left: 40px;
         .linkContainer {
             height: $IconSize;
             width:170px;
