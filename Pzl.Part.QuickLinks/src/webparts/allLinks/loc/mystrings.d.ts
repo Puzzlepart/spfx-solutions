@@ -18,6 +18,7 @@ declare interface IAllLinksWebPartStrings {
     component_SaveErrorLabel: string;
     component_SaveOkLabel: string;
     component_NoCategoryLabel: string;
+    component_action_removeMandatory: string;
 }
 
 declare module 'AllLinksWebPartStrings' {

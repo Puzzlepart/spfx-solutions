@@ -246,7 +246,8 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
               <span style={linkStyle}>{link.displayText}</span>
             </a>
             {(link.mandatory) ?
-              null
+
+              <Icon className={styles.icon} iconName='Lock' title={strings.component_action_removeMandatory} />
               :
               <Icon className={styles.actionIcon} iconName='CirclePlus' onClick={() => this.appendToFavourites(link)} />
             }
