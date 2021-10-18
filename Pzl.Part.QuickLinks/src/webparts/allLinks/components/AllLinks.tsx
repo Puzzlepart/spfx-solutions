@@ -14,7 +14,9 @@ import { sp } from "@pnp/sp";
 import { find, isEqual, findIndex } from '@microsoft/sp-lodash-subset';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { stringIsNullOrEmpty } from '@pnp/common';
+import { add } from 'lodash';
 
+enum CategoryOperation {add,remove}
 export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksState> {
   public constructor(props) {
     super(props);
@@ -28,6 +30,7 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
       isLoading: true
     };
   }
+
 
   public render(): React.ReactElement<IAllLinksProps> {
     if (this.state.isLoading) {
@@ -119,24 +122,54 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
     newFavourites.push(link);
     let newEditorLinks = this.state.editorLinks.slice();
     newEditorLinks.splice(newEditorLinks.indexOf(link), 1);
-    this.setState({
-      favouriteLinks: newFavourites,
-      editorLinks: newEditorLinks,
-      saveButtonDisabled: false
-    },()=>this.saveData())
+    let categoryLinks = this.state.categoryLinks;
 
-  }
-  private removeFromFavourites(link: Link) {
-    let newEditorLinks = this.state.editorLinks.slice();
-    newEditorLinks.push(link);
-    let newFavourites = this.state.favouriteLinks.slice();
-    newFavourites.splice(newFavourites.indexOf(link), 1);
+    categoryLinks = this.updateCategoryLinks(CategoryOperation.remove, link as ILink, categoryLinks);
+
     this.setState({
       favouriteLinks: newFavourites,
       editorLinks: newEditorLinks,
       saveButtonDisabled: false
     },()=>this.saveData());
+
   }
+
+
+  private removeFromFavourites(link: Link) {
+    let newEditorLinks = this.state.editorLinks.slice();
+    newEditorLinks.push(link);
+    let newFavourites = this.state.favouriteLinks.slice();
+    newFavourites.splice(newFavourites.indexOf(link), 1);
+
+    let categoryLinks = this.state.categoryLinks;
+
+    categoryLinks = this.updateCategoryLinks(CategoryOperation.add, link as ILink, categoryLinks);
+
+    this.setState({
+      favouriteLinks: newFavourites,
+      editorLinks: newEditorLinks,
+      categoryLinks: categoryLinks,
+      saveButtonDisabled: false
+    },()=>this.saveData());
+  }
+
+  private updateCategoryLinks(operation: CategoryOperation, link: ILink, categoryLinks: ICategory[]) {
+    if (this.props.listingByCategory) {
+      console.log("###***", link);
+      categoryLinks = categoryLinks.map(category => {
+        if (category.displayText === link['category']) {
+          if(operation === CategoryOperation.remove ){
+            category.links = category.links.filter(clink => link.url !== clink.url);
+          } else {
+            category.links.push(link);
+          }
+        }
+        return category;
+      });
+    }
+    return categoryLinks;
+  }
+
   private removeCustomFromFavourites(link: Link) {
     let newFavourites = this.state.favouriteLinks.slice();
     newFavourites.splice(newFavourites.indexOf(link), 1);
