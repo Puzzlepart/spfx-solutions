@@ -155,7 +155,7 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
 
   private updateCategoryLinks(operation: CategoryOperation, link: ILink, categoryLinks: ICategory[]) {
     if (this.props.listingByCategory) {
-      console.log("###***", link);
+
       categoryLinks = categoryLinks.map(category => {
         if (category.displayText === link['category']) {
           if(operation === CategoryOperation.remove ){
