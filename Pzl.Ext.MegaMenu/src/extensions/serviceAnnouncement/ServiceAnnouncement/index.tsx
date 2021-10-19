@@ -46,7 +46,7 @@ export default class ServiceAnnouncement extends React.Component<ServiceAnnounce
                             secondaryText={strings.Dialog_Contact_SecondaryText}
                             className={styles.responsiblePersona}
                             title={strings.Responsible_Hover_Title}
-                            onClick={() => window.location.href = `mailto:${this.state.modalAnnouncement.responsibleMail}&subject=${this.state.modalAnnouncement.title}`} />
+                            onClick={() => window.location.href = `mailto:${this.state.modalAnnouncement.responsibleMail}?subject=${this.state.modalAnnouncement.title}`} />
                     </p>
                 </div>
             </Dialog>
