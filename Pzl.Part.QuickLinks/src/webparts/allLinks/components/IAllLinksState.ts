@@ -22,6 +22,7 @@ export interface Link {
     icon?: string;
     priority?: string;
     mandatory?: number;
+    category?:string;
     linkType: LinkType;
 }
 

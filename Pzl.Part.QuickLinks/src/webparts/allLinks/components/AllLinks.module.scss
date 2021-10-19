@@ -91,18 +91,20 @@ $IconSize:25px;
         .linkCategoryHeading {
             @include ms-fontSize-xl;
             //color: "[theme: themePrimary, default: #2C7399]";
-            width: 100%;
+            width: 75%;
             white-space: nowrap;
         }
         .linkGridColumn {
             line-height: 40px;
             display: inline-block;
-            margin-right: 40px;
+            width:245px;
+            padding-right: 10px;
             cursor: pointer;
             .linkContainer {
                 text-decoration: none;
                 display: inline-block;
                 margin: 0 30px 0 0;
+                width: 160px;
                 //color: "[theme: themePrimary, default: #2C7399]";
                 span,
                 i {
@@ -117,6 +119,8 @@ $IconSize:25px;
                     text-overflow: ellipsis;
                     white-space: nowrap;
                     overflow: hidden;
+                    width: 75%;
+
                 }
                 .icon {
                     font-size: 25px;

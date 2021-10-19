@@ -19,5 +19,6 @@ define([], function () {
         "component_SaveErrorLabel": "Error: something went wrong saving your links.",
         "component_SaveOkLabel": "Your links was saved succesfully.",
         "component_NoCategoryLabel": "No category",
+        "component_action_removeMandatory": "Mandatory links cannot be removed"
     }
 });
