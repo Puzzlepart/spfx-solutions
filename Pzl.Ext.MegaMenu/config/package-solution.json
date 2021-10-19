@@ -6,18 +6,20 @@
         "id": "2ab59ae5-ffb4-4b99-9427-aec77a233541",
         "skipFeatureDeployment": false,
         "includeClientSideAssets": true,
-        "version": "2.8.3.0",
-        "features": [{
-            "title": "Global navigation by Puzzlepart - custom action activation",
-            "description": "Enables a custom action that toggles the global navigation menu",
-            "id": "9480a25a-6704-48b8-97a2-6417d99f67e7",
-            "version": "2.8.3.0",
-            "assets": {
-                "elementManifests": [
-                    "elements.xml"
-                ]
+        "version": "2.8.5.0",
+        "features": [
+            {
+                "title": "Global navigation by Puzzlepart - custom action activation",
+                "description": "Enables a custom action that toggles the global navigation menu",
+                "id": "9480a25a-6704-48b8-97a2-6417d99f67e7",
+                "version": "2.8.3.0",
+                "assets": {
+                    "elementManifests": [
+                        "elements.xml"
+                    ]
+                }
             }
-        }]
+        ]
     },
     "paths": {
         "zippedPackage": "solution/global-navigation-extension.sppkg"
