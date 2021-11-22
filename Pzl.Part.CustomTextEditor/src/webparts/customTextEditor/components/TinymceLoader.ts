@@ -15,6 +15,7 @@ import 'tinymce/plugins/code';
 import 'tinymce/plugins/nonbreaking';
 import 'tinymce/plugins/table';
 import 'tinymce/plugins/paste';
+import 'tinymce/plugins/autoresize';
 
 export class TinymceLoader {
     public static init(){

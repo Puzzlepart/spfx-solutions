@@ -130,7 +130,7 @@ export default class CustomTextEditor extends React.Component<ICustomTextEditorP
         if (this.state.editor) {
             editorComponent = <this.state.editor.Editor
                 init={{
-                    plugins: ['paste', 'link', 'image', 'lists', 'table'],
+                    plugins: ['paste', 'link', 'image', 'lists', 'table', 'autoresize'],
                     content_style: `
                         .mce-content-body {
                             background-color: ${colors.body.backgroundColor};
@@ -177,7 +177,8 @@ export default class CustomTextEditor extends React.Component<ICustomTextEditorP
                             -moz-osx-font-smoothing: ${fonts.large.MozOsxFontSmoothing};
                          }
                     `,
-                    height: 350,
+                    autoresize_bottom_margin: 50,
+                    max_height: 500,
                     toolbar: 'formatselect | bold italic strikethrough | bullist numlist | link image | table',
                     block_formats: 'Normal tekst=p;Overskrift 1=h2;Overskrift 2=h3;Overskrift 3=h4;Sitat=blockquote;Fast tegnavstand=pre',
                     menubar: false,
