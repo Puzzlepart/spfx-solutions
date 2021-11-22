@@ -7,7 +7,6 @@ import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import * as strings from 'CustomTextEditorWebPartStrings';
 import { TextBoxStyle } from './TextBoxStyle';
-import { DisplayMode } from '@microsoft/sp-core-library';
 
 /**
  * TinyMCE Class that contains a TinyMCE Editor instance.
@@ -39,9 +38,8 @@ export default class CustomTextEditor extends React.Component<ICustomTextEditorP
     public constructor(props: ICustomTextEditorProps) {
         super(props);
         this.state = {
-            content: this.props.content,
             isCollapsed: true
-        } as ICustomTextEditorState;
+        };
 
         this.handleChange = this.handleChange.bind(this);
         this.findHandler = this.findHandler.bind(this);
@@ -69,7 +67,7 @@ export default class CustomTextEditor extends React.Component<ICustomTextEditorP
      */
     private loadEditor() {
         this.setState({ editor: undefined }, async () => {
-            let loader = await import(
+            const loader = await import(
                 /* webpackChunkName: 'tinymce' */
                 './TinymceLoader');
             loader.TinymceLoader.init();
@@ -95,6 +93,7 @@ export default class CustomTextEditor extends React.Component<ICustomTextEditorP
             this.loadEditor();
         }
     }
+
     /**
      * Renders the editor in read mode or edit mode depending
      * on the site page.
@@ -129,11 +128,9 @@ export default class CustomTextEditor extends React.Component<ICustomTextEditorP
         const { fonts } = this.props.themeVariant;
         const colors = this.getBackgroundAndTextColor();
         if (this.state.editor) {
-            const runtimePath: string = require('./dummy.png');
-            const skinUrl = runtimePath.substr(0, runtimePath.lastIndexOf("/"));
             editorComponent = <this.state.editor.Editor
                 init={{
-                    plugins: ['paste', 'link', 'image', 'lists', 'advlist', 'table'],
+                    plugins: ['paste', 'link', 'image', 'lists', 'table'],
                     content_style: `
                         .mce-content-body {
                             background-color: ${colors.body.backgroundColor};
@@ -180,60 +177,28 @@ export default class CustomTextEditor extends React.Component<ICustomTextEditorP
                             -moz-osx-font-smoothing: ${fonts.large.MozOsxFontSmoothing};
                          }
                     `,
-                    style_formats: [
-                        { title: 'Overskrifter', items: [
-                            { title: 'Overskrift 1', format: 'h2' },
-                            { title: 'Overskrift 2', format: 'h3' },
-                            { title: 'Overskrift 3', format: 'h4' },
-                            { title: 'Overskrift 4', format: 'h5' },
-                        ]},
-                        { title: 'Brødtekst', items: [
-                            { title: 'Avsnitt', format: 'p' },
-                            { title: 'Sitat', format: 'blockquote' },
-                            { title: 'Uformatert', format: 'pre' }
-                        ]},
-                        { title: 'Tekststiler', items: [
-                            { title: 'Uthevet', format: 'bold' },
-                            { title: 'Kursiv', format: 'italic' },
-                            { title: 'Understreket', format: 'underline' },
-                            { title: 'Gjennomstreket', format: 'strikethrough' },
-                            { title: 'Superscript', format: 'superscript' },
-                            { title: 'Subscript', format: 'subscript' },
-                            { title: 'Code', format: 'code' }
-                        ]},
-                        { title: 'Juster', items: [
-                            { title: 'Venstre', format: 'alignleft' },
-                            { title: 'Midtstilt', format: 'aligncenter' },
-                            { title: 'Høyre', format: 'alignright' },
-                            { title: 'Fulljustert', format: 'alignjustify' }
-                        ]}
-                    ],
-                    skin_url: skinUrl,
-                    height: 400,
-                    menubar: 'edit insert format, table',
-                    table_default_styles: {
-                        'border-collapse': 'collapse',
-                        'width': '100%'
-                    },
-                    table_responsive_width: true,
+                    height: 350,
+                    toolbar: 'formatselect | bold italic underline strikethrough | bullist numlist | link image | table',
+                    block_formats: 'Normal tekst=p;Overskrift 1=h2;Overskrift 2=h3;Overskrift 3=h4;Sitat=blockquote;Fast tegnavstand=pre',
+                    menubar: false,
+                    statusbar: false,
                     convert_urls: false,
-                    relative_urls: false
+                    relative_urls: false,
                 }}
-                initialValue={this.state.content}
+                initialValue={this.props.content}
                 onChange={(event) => { this.handleChange(event.target.getContent()); }}
             />;
         }
         return (
-            <div>
+            <>
                 <WebPartTitle
                     displayMode={this.props.displayMode}
                     title={this.props.title}
                     updateProperty={this.props.setTitle}
                     themeVariant={this.props.themeVariant}
-                    className={styles.customTextTitle__edit}
                 />
                 {editorComponent}
-            </div>
+            </>
         );
     }
 
@@ -245,9 +210,9 @@ export default class CustomTextEditor extends React.Component<ICustomTextEditorP
      * @memberof CustomTextEditor
      */
     private renderReadMode(): React.ReactElement<any> {
-        const {fonts} = this.props.themeVariant;
+        const {fonts, isInverted} = this.props.themeVariant;
 
-        let content = this.state.content;
+        let content = this.props.content;
         let dataInterception = /<a/gi;
         if (content) {
             content = content.replace(dataInterception, '<a data-interception="off"');
@@ -273,7 +238,7 @@ export default class CustomTextEditor extends React.Component<ICustomTextEditorP
                             ...this.getBackgroundAndTextColor().body,
                             ...this.props.textBoxStyle === TextBoxStyle.WithBackgroundColor ? {padding: '5px 8px 5px 15px'} : {},
                         }}
-                        className={this.props.themeVariant.isInverted ? styles.body__inverted : styles.body}
+                        className={isInverted ? styles.body : styles.body__inverted}
                     >
                         {ReactHtmlParser(content)}
                     </div>
@@ -293,16 +258,15 @@ export default class CustomTextEditor extends React.Component<ICustomTextEditorP
      * invokes the saveRteContent callback with
      * the states content.
      * @private
-  * @param {string} content
-      * @memberof CustomTextEditor
-      */
+     * @param {string} content
+     * @memberof CustomTextEditor
+    */
     private handleChange(content: string): void {
-        this.setState({ content: content }, () => {
-            this.props.saveRteContent(content);
-        });
+        this.props.saveRteContent(content);
     }
+
     private toggle() {
-        (this.state.isCollapsed) ? this.setState({ isCollapsed: false }) : this.setState({ isCollapsed: true });
+        this.setState({ isCollapsed: !this.state.isCollapsed });
     }
 
     private keyToggle(event) {

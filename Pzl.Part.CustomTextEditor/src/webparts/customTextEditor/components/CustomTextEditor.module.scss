@@ -1,7 +1,3 @@
-@import '~office-ui-fabric-react/dist/sass/References.scss';
-@import '~office-ui-fabric-react/dist/sass/themeOverrides.scss';
-@import '~office-ui-fabric-react/dist/sass/Animation.scss';
-
 .customTextTitle {
     &__accordion {
         div {
@@ -15,13 +11,6 @@
             font-weight: 600;
             font-size: 28px!important;
             margin-bottom: 0px;
-        }
-    }
-    &__edit{
-        div {
-            font-weight: 400;
-            font-size: 20px;
-            margin-bottom: 8px;
         }
     }
 }
