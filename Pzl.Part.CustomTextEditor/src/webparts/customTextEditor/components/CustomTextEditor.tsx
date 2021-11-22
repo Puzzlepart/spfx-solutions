@@ -178,7 +178,7 @@ export default class CustomTextEditor extends React.Component<ICustomTextEditorP
                          }
                     `,
                     height: 350,
-                    toolbar: 'formatselect | bold italic underline strikethrough | bullist numlist | link image | table',
+                    toolbar: 'formatselect | bold italic strikethrough | bullist numlist | link image | table',
                     block_formats: 'Normal tekst=p;Overskrift 1=h2;Overskrift 2=h3;Overskrift 3=h4;Sitat=blockquote;Fast tegnavstand=pre',
                     menubar: false,
                     statusbar: false,
@@ -238,7 +238,7 @@ export default class CustomTextEditor extends React.Component<ICustomTextEditorP
                             ...this.getBackgroundAndTextColor().body,
                             ...this.props.textBoxStyle === TextBoxStyle.WithBackgroundColor ? {padding: '5px 8px 5px 15px'} : {},
                         }}
-                        className={isInverted ? styles.body : styles.body__inverted}
+                        className={isInverted ? styles.body__inverted : styles.body}
                     >
                         {ReactHtmlParser(content)}
                     </div>
