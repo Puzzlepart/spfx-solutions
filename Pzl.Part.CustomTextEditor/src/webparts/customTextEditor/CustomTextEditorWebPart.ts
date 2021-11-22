@@ -2,18 +2,63 @@ import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { Version, DisplayMode } from '@microsoft/sp-core-library';
 import { BaseClientSideWebPart, IWebPartPropertiesMetadata } from "@microsoft/sp-webpart-base";
-import { IPropertyPaneConfiguration, IPropertyPaneField, PropertyPaneCheckbox, PropertyPaneChoiceGroup } from "@microsoft/sp-property-pane";
+import { IPropertyPaneConfiguration, IPropertyPaneField, PropertyPaneCheckbox, PropertyPaneChoiceGroup, PropertyPaneToggle } from "@microsoft/sp-property-pane";
 import * as strings from 'CustomTextEditorWebPartStrings';
 import CustomTextEditor from './components/CustomTextEditor';
 import { TextBoxStyle } from "./components/TextBoxStyle";
 import { ICustomTextEditorProps } from './components/ICustomTextEditorProps';
 import { ICustomTextEditorWebPartProps } from './ICustomTextEditorWebPartProps';
+import {
+    ThemeProvider,
+    ThemeChangedEventArgs,
+    IReadonlyTheme
+  } from '@microsoft/sp-component-base';
+
 
 /*
 Nothing really special in this class, just integartes it with sharepoint.
 */
+
 export default class CustomTextEditorWebPart extends BaseClientSideWebPart<ICustomTextEditorWebPartProps> {
-    private _colorPickerComponent: any;
+
+    private _themeProvider: ThemeProvider;
+    private _themeVariant: IReadonlyTheme | undefined;
+
+    protected onInit(): Promise<void> {
+        // Consume the new ThemeProvider service
+        this._themeProvider = this.context.serviceScope.consume(ThemeProvider.serviceKey);
+
+        // If it exists, get the theme variant
+        this._themeVariant = this._themeProvider.tryGetTheme();
+
+        // Register a handler to be notified if the theme variant changes
+        this._themeProvider.themeChangedEvent.add(this, this._handleThemeChangedEvent);
+
+        return super.onInit();
+    }
+
+    public colorOptions = [
+        {
+            'key': 'factbox',
+            'text': 'Faktaboks',
+        },
+        {
+            'key': 'changelog',
+            'text': 'Endringslogg',
+        },
+        {
+            'key': 'aside',
+            'text': 'Tilleggsopplysninger (spørsmål, kontaktinfo)',
+        },
+        {
+            'key': 'other',
+            'text': 'Generell boks',
+        },
+        {
+            'key': 'none',
+            'text': 'Ingen bakgrunnsfarge',
+        },
+    ];
 
     public render(): void {
         const element: React.ReactElement<ICustomTextEditorProps> = React.createElement(
@@ -26,9 +71,10 @@ export default class CustomTextEditorWebPart extends BaseClientSideWebPart<ICust
                 isReadMode: DisplayMode.Read === this.displayMode,
                 content: this.properties.Content,
                 textBoxStyle: this.properties.textBoxStyle,
-                backgroundColor: this.properties.backgroundColor,
-                headerExpandColor: this.properties.headerExpandColor,
-                underlineLinks: typeof this.properties.underlineLinks === 'undefined' ? true : this.properties.underlineLinks
+                backgroundColor: this.properties.backgroundColor, /* deprecated */
+                backgroundColorChoice: this.properties.backgroundColorChoice,
+                borderBottomChoice: this.properties.borderBottomChoice,
+                themeVariant: this._themeVariant,
             }
         );
 
@@ -43,53 +89,24 @@ export default class CustomTextEditorWebPart extends BaseClientSideWebPart<ICust
         return { searchableContent: { isHtmlString: true } };
     }
 
-    protected async loadPropertyPaneResources(): Promise<void> {
-        let component = await import(
-            /* webpackChunkName: 'color-picker' */
-            '@pnp/spfx-property-controls/lib/PropertyFieldColorPicker'
-        );
-        this._colorPickerComponent = component;
-    }
-
     protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
         let propertyControls: IPropertyPaneField<any>[] = [];
         propertyControls.push(PropertyPaneChoiceGroup("textBoxStyle", {
             options: [
                 { text: strings.StandardLabel, key: TextBoxStyle.Regular, iconProps: { officeFabricIconFontName: "TextBox" } },
-                { text: strings.StandardLabelFade, key: TextBoxStyle.RegularFade, iconProps: { officeFabricIconFontName: "AddNotes" } },
                 { text: strings.AccordionLabel, key: TextBoxStyle.Accordion, iconProps: { officeFabricIconFontName: "Dropdown" } },
                 { text: strings.BackgroundLabel, key: TextBoxStyle.WithBackgroundColor, iconProps: { officeFabricIconFontName: "BackgroundColor" } }
             ],
         }));
 
         if (this.properties.textBoxStyle === TextBoxStyle.WithBackgroundColor) {
-            propertyControls.push(this._colorPickerComponent.PropertyFieldColorPicker("backgroundColor", {
-                label: 'Color',
-                selectedColor: this.properties.backgroundColor,
-                onPropertyChange: this.onPropertyPaneFieldChanged,
-                properties: this.properties,
-                disabled: false,
-                alphaSliderHidden: false,
-                style: this._colorPickerComponent.PropertyFieldColorPickerStyle.Inline,
-                iconName: 'Precipitation',
-                key: 'colorFieldId'
-            }));
+            propertyControls.push(PropertyPaneChoiceGroup('backgroundColorChoice', {label: "Bakgrunnsfarge", options: this.colorOptions}));
         }
 
         if (this.properties.textBoxStyle === TextBoxStyle.Accordion) {
-            propertyControls.push(this._colorPickerComponent.PropertyFieldColorPicker("headerExpandColor", {
-                label: 'Color',
-                selectedColor: this.properties.headerExpandColor,
-                onPropertyChange: this.onPropertyPaneFieldChanged,
-                properties: this.properties,
-                disabled: false,
-                alphaSliderHidden: false,
-                style: this._colorPickerComponent.PropertyFieldColorPickerStyle.Inline,
-                iconName: 'Precipitation',
-                key: 'colorFieldIdHeadline'
-            }));
+            propertyControls.push(PropertyPaneToggle('borderBottomChoice', {label: "Vis skillelinje mellom inndelinger"}));
         }
-        propertyControls.push(PropertyPaneCheckbox("underlineLinks", { text: strings.LinkUnderline, checked: this.properties.underlineLinks }));
+
 
         return {
             pages: [
@@ -114,4 +131,15 @@ export default class CustomTextEditorWebPart extends BaseClientSideWebPart<ICust
         this.properties.title = title;
         this.properties.searchableContent = `${this.properties.title}|${this.properties.Content}`;
     }
+
+    /**
+     * Update the current theme variant reference and re-render.
+     *
+     * @param args The new theme
+     */
+     private _handleThemeChangedEvent(args: ThemeChangedEventArgs): void {
+        this._themeVariant = args.theme;
+        this.render();
+    }
+
 }
