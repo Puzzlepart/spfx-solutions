@@ -104,7 +104,7 @@ export default class CustomTextEditorWebPart extends BaseClientSideWebPart<ICust
         }
 
         if (this.properties.textBoxStyle === TextBoxStyle.Accordion) {
-            propertyControls.push(PropertyPaneToggle('borderBottomChoice', {label: "Vis skillelinje mellom inndelinger"}));
+            propertyControls.push(PropertyPaneToggle('borderBottomChoice', {label: "Vis skillelinje mellom trekkspill"}));
         }
 
 
