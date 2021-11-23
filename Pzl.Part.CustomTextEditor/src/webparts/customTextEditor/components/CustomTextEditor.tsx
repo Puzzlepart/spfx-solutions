@@ -105,7 +105,7 @@ export default class CustomTextEditor extends React.Component<ICustomTextEditorP
         return (
             <div style={{
                 backgroundColor: semanticColors.bodyBackground,
-                ...this.props.textBoxStyle === TextBoxStyle.Accordion && this.props.borderBottomChoice !== false
+                ...this.props.textBoxStyle === TextBoxStyle.Accordion && this.props.useBottomBorder !== false
                 ? {borderBottom: `1px solid ${semanticColors.bodyText}`}
                 : {},
             }}>
@@ -238,6 +238,7 @@ export default class CustomTextEditor extends React.Component<ICustomTextEditorP
                         style={{
                             ...this.getBackgroundAndTextColor().body,
                             ...this.props.textBoxStyle === TextBoxStyle.WithBackgroundColor ? {padding: '5px 8px 5px 15px'} : {},
+                            ...this.props.textBoxStyle === TextBoxStyle.Regular && this.props.useBorder ? {border: `1px solid ${this.getBackgroundAndTextColor().body.color}`, padding: '5px 8px 5px 15px'} : {},
                         }}
                         className={isInverted ? styles.body__inverted : styles.body}
                     >

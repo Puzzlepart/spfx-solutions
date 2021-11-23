@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { Version, DisplayMode } from '@microsoft/sp-core-library';
 import { BaseClientSideWebPart, IWebPartPropertiesMetadata } from "@microsoft/sp-webpart-base";
-import { IPropertyPaneConfiguration, IPropertyPaneField, PropertyPaneCheckbox, PropertyPaneChoiceGroup, PropertyPaneToggle } from "@microsoft/sp-property-pane";
+import { IPropertyPaneConfiguration, IPropertyPaneField, PropertyPaneChoiceGroup, PropertyPaneToggle } from "@microsoft/sp-property-pane";
 import * as strings from 'CustomTextEditorWebPartStrings';
 import CustomTextEditor from './components/CustomTextEditor';
 import { TextBoxStyle } from "./components/TextBoxStyle";
@@ -12,8 +12,7 @@ import {
     ThemeProvider,
     ThemeChangedEventArgs,
     IReadonlyTheme
-  } from '@microsoft/sp-component-base';
-
+} from '@microsoft/sp-component-base';
 
 /*
 Nothing really special in this class, just integartes it with sharepoint.
@@ -73,7 +72,8 @@ export default class CustomTextEditorWebPart extends BaseClientSideWebPart<ICust
                 textBoxStyle: this.properties.textBoxStyle,
                 backgroundColor: this.properties.backgroundColor, /* deprecated */
                 backgroundColorChoice: this.properties.backgroundColorChoice,
-                borderBottomChoice: this.properties.borderBottomChoice,
+                useBorder: this.properties.useBorder,
+                useBottomBorder: this.properties.useBottomBorder,
                 themeVariant: this._themeVariant,
             }
         );
@@ -99,14 +99,21 @@ export default class CustomTextEditorWebPart extends BaseClientSideWebPart<ICust
             ],
         }));
 
-        if (this.properties.textBoxStyle === TextBoxStyle.WithBackgroundColor) {
-            propertyControls.push(PropertyPaneChoiceGroup('backgroundColorChoice', {label: "Bakgrunnsfarge", options: this.colorOptions}));
-        }
+        switch (this.properties.textBoxStyle) {
+            case TextBoxStyle.Regular:
+                propertyControls.push(PropertyPaneToggle('useBorder', {label: "Bruk ramme på tekstboksen"}));
+            break;
 
-        if (this.properties.textBoxStyle === TextBoxStyle.Accordion) {
-            propertyControls.push(PropertyPaneToggle('borderBottomChoice', {label: "Vis skillelinje mellom trekkspill"}));
-        }
+            case TextBoxStyle.Accordion:
+                propertyControls.push(PropertyPaneToggle('useBottomBorder', {label: "Vis skillelinje mellom trekkspill"}));
+            break;
 
+            case TextBoxStyle.WithBackgroundColor:
+                propertyControls.push(PropertyPaneChoiceGroup('backgroundColorChoice', {label: "Bakgrunnsfarge", options: this.colorOptions}));
+            break;
+
+            default: break;
+        }
 
         return {
             pages: [

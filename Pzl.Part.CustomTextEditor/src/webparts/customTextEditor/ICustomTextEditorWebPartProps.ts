@@ -7,5 +7,6 @@ export interface ICustomTextEditorWebPartProps {
     textBoxStyle: TextBoxStyle;
     backgroundColor: string; /* deprecated */
     backgroundColorChoice: string;
-    borderBottomChoice: boolean;
+    useBorder: boolean;
+    useBottomBorder: boolean;
 }
