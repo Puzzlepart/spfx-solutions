@@ -10,7 +10,6 @@ export interface ICustomTextEditorProps {
     isReadMode: boolean;
     content: string;
     textBoxStyle: TextBoxStyle;
-    backgroundColor: string; /* deprecated */
     backgroundColorChoice: string;
     useBorder: boolean;
     useBottomBorder: boolean;

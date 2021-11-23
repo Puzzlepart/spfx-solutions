@@ -70,8 +70,11 @@ export default class CustomTextEditorWebPart extends BaseClientSideWebPart<ICust
                 isReadMode: DisplayMode.Read === this.displayMode,
                 content: this.properties.Content,
                 textBoxStyle: this.properties.textBoxStyle,
-                backgroundColor: this.properties.backgroundColor, /* deprecated */
-                backgroundColorChoice: this.properties.backgroundColorChoice,
+                backgroundColorChoice: this.properties.backgroundColorChoice
+                    ? this.properties.backgroundColorChoice
+                    : this.properties.backgroundColor
+                        ? 'other'
+                        : 'none',
                 useBorder: this.properties.useBorder,
                 useBottomBorder: this.properties.useBottomBorder,
                 themeVariant: this._themeVariant,

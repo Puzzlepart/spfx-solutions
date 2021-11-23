@@ -344,7 +344,7 @@ export default class CustomTextEditor extends React.Component<ICustomTextEditorP
             && this.props.backgroundColorChoice !== 'none'
         ) return {
             body: {
-                backgroundColor: Colors[this.props.backgroundColorChoice] || this.props.backgroundColor /* deprecated */ || 'inherit',
+                backgroundColor: Colors[this.props.backgroundColorChoice],
                 color: this.props.themeVariant.palette['BodyText'],
             },
             links: {color: this.props.themeVariant.palette['Hyperlink']},
