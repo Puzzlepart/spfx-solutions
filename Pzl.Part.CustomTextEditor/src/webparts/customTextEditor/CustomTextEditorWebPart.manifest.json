@@ -1,5 +1,5 @@
 {
-    "$schema": "https://dev.office.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+    "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
     "id": "b0b7a7d8-183b-4447-bdd3-246d84c67ee7",
     "alias": "PzlCustomTextEditorWebPart",
     "componentType": "WebPart",
@@ -7,7 +7,7 @@
     "manifestVersion": 2,
     "requiresCustomScript": false,
     "supportsFullBleed": true,
-    "supportedHosts": ["SharePointWebPart"],
+    "supportedHosts": ["SharePointWebPart", "TeamsPersonalApp", "TeamsTab", "SharePointFullPage"],
     "supportsThemeVariants": true,
     "preconfiguredEntries": [
         {
@@ -27,7 +27,8 @@
             "officeFabricIconFontName": "TextBox",
             "properties": {
                 "description": "CustomTextEditor",
-                "borderBottomChoice" : true,
+                "textBoxStyle": 2,
+                "useBottomBorder" : true,
                 "backgroundColorChoice": "none"
             }
         }
