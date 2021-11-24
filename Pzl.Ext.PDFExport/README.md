@@ -18,7 +18,7 @@ csv, doc, docx, odp, ods, odt, pot, potm, potx, pps, ppsx, ppsxm, ppt, pptm, ppt
 
 ### Building the code
 
-Ensure that at least SPFx v1.6 is installed.
+Ensure SPFx v1.10 is installed.
 
 ```bash
 git clone https://github.com/Puzzlepart/spfx-solutions.git

@@ -26,7 +26,9 @@
             "numberOfItems": 20,
             "defaultOfficeFabricIcon": "Link",
             "groupByCategory": false,
-            "maxLinkLength": 130
+            "maxLinkLength": 130,
+            "lineHeight": 40,
+            "iconOpacity": 100
         }
     }]
 }

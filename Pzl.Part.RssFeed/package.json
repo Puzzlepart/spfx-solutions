@@ -1,7 +1,7 @@
 {
   "name": "pzl-rss-feed",
   "main": "lib/index.js",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "private": true,
   "engines": {
     "node": ">=0.10.0"

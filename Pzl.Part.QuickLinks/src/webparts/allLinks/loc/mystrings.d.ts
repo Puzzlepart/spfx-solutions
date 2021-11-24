@@ -1,4 +1,7 @@
 declare interface IAllLinksWebPartStrings {
+    propertyPane_MandatoryLinksTitleLabel: string;
+    propertyPane_ReccomendedLinksTitleLabel: string;
+    propertyPane_MyLinksTitleLabel: string;
     propertyPane_defaultOfficeFabricIcon: string;
     propertyPane_myLinksOnTop: string;
     propertyPane_listingByCategory: string;
@@ -15,6 +18,7 @@ declare interface IAllLinksWebPartStrings {
     component_SaveErrorLabel: string;
     component_SaveOkLabel: string;
     component_NoCategoryLabel: string;
+    component_action_removeMandatory: string;
 }
 
 declare module 'AllLinksWebPartStrings' {

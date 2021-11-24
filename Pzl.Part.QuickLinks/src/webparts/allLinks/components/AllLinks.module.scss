@@ -12,11 +12,11 @@ $IconSize:25px;
         flex-grow: 1;
         text-align: left;
         margin-top: 30px;
+        margin-bottom: 20px;
     }
     .editorLinksContainer {
         display: flex;
         flex-direction: row;
-        justify-content: right;
         flex-wrap: wrap;
     }
     .webpartHeader {
@@ -34,12 +34,16 @@ $IconSize:25px;
         }
     }
     .linkParent {
-        line-height: $IconSize;
-        margin-right: 40px;
+
+        margin-left: 40px;
         .linkContainer {
+            height: $IconSize;
+            width:170px;
+            overflow:hidden;
             text-decoration: none;
+            white-space: nowrap;
             display: inline-block;
-            margin: 10px 5px 10px 0px;
+            margin: 5px 5px 0 0;
             * {
                 display: inline-block;
                 //color: $ms-color-neutralPrimary;
@@ -63,7 +67,7 @@ $IconSize:25px;
         }
         .actionIcon {
             display: inline-block;
-            line-height: inherit;
+            height: $IconSize;
             vertical-align: middle;
             padding-left: 5px;
             padding-right: 5px;
@@ -75,7 +79,8 @@ $IconSize:25px;
         }
     }
     .linkGrid {
-        display: flex;
+        display: inline-block;
+
         justify-content: space-between;
         flex-wrap: wrap;
         .categorySection {
@@ -86,18 +91,20 @@ $IconSize:25px;
         .linkCategoryHeading {
             @include ms-fontSize-xl;
             //color: "[theme: themePrimary, default: #2C7399]";
-            width: 100%;
+            width: 75%;
             white-space: nowrap;
         }
         .linkGridColumn {
             line-height: 40px;
             display: inline-block;
-            margin-right: 40px;
+            width:245px;
+            padding-right: 10px;
             cursor: pointer;
             .linkContainer {
                 text-decoration: none;
                 display: inline-block;
                 margin: 0 30px 0 0;
+                width: 160px;
                 //color: "[theme: themePrimary, default: #2C7399]";
                 span,
                 i {
@@ -112,6 +119,8 @@ $IconSize:25px;
                     text-overflow: ellipsis;
                     white-space: nowrap;
                     overflow: hidden;
+                    width: 75%;
+
                 }
                 .icon {
                     font-size: 25px;

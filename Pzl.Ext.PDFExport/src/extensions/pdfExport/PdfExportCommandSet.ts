@@ -7,7 +7,7 @@ import {
     IListViewCommandSetExecuteEventParameters
 } from '@microsoft/sp-listview-extensibility';
 import "@pnp/polyfill-ie11";
-import { Web, RenderListDataOptions } from '@pnp/sp';
+import { Web, RenderListDataOptions } from '@pnp/sp/presets/all';
 import { HttpClient } from '@microsoft/sp-http';
 import * as JSZip from 'jszip';
 import * as FileSaver from 'file-saver';
@@ -29,7 +29,7 @@ const DIALOG = new WaitDialog({});
 
 export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExportCommandSetProperties> {
 
-    private _validExts: string[] = ['csv', 'doc', 'docx', 'odp', 'ods', 'odt', 'pot', 'potm', 'potx', 'pps', 'ppsx', 'ppsxm', 'ppt', 'pptm', 'pptx', 'rtf', 'xls', 'xlsx'];
+    private _validExts: string[] = ['html','csv', 'doc', 'docx', 'odp', 'ods', 'odt', 'pot', 'potm', 'potx', 'pps', 'ppsx', 'ppsxm', 'ppt', 'pptm', 'pptx', 'rtf', 'xls', 'xlsx'];
 
     @override
     public onInit(): Promise<void> {
@@ -147,7 +147,7 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
     }
 
     private async saveAsPdf(files: SharePointFile[]): Promise<boolean> {
-        let web: Web = new Web(this.context.pageContext.web.absoluteUrl);
+        const web = Web(this.context.pageContext.web.absoluteUrl);
         let isOk = true;
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
@@ -169,6 +169,13 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
                     let blob = await response.blob();
                     await web.getFileByServerRelativeUrl(file.serverRelativeUrl).copyTo(pdfUrl);
                     await web.getFileByServerRelativeUrl(pdfUrl).setContentChunked(blob);
+                    const item = await web.getFileByServerRelativeUrl(pdfUrl).getItem("File_x0020_Type");
+                    // Potential fix for edge cases where file type is not set correctly
+                    if (item["File_x0020_Type"] !== "pdf") {                        
+                        await item.update({
+                            "File_x0020_Type": "pdf"
+                        });
+                    }
                 } else {
                     const error = await response.json();
                     let errorMessage = error.error.innererror ? error.error.innererror.code : error.error.message;
@@ -182,7 +189,7 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
     }
 
     private async generatePdfUrls(listItemIds: string[]): Promise<SharePointFile[]> {
-        let web: Web = new Web(this.context.pageContext.web.absoluteUrl);
+        let web = Web(this.context.pageContext.web.absoluteUrl);
         let options: RenderListDataOptions = RenderListDataOptions.EnableMediaTAUrls | RenderListDataOptions.ContextInfo | RenderListDataOptions.ListData | RenderListDataOptions.ListSchema;
 
         var values = listItemIds.map(i => { return `<Value Type='Counter'>${i}</Value>`; });
@@ -203,7 +210,7 @@ export default class PdfExportCommandSet extends BaseListViewCommandSet<IPdfExpo
         </View>`;
 
 
-        let response = await web.lists.getById(this.context.pageContext.list.id.toString()).renderListDataAsStream({ RenderOptions: options, ViewXml: viewXml });
+        let response = await web.lists.getById(this.context.pageContext.list.id.toString()).renderListDataAsStream({ RenderOptions: options, ViewXml: viewXml }) as any;
         // "{.mediaBaseUrl}/transform/pdf?provider=spo&inputFormat={.fileType}&cs={.callerStack}&docid={.spItemUrl}&{.driveAccessToken}"
         let pdfConversionUrl = response.ListSchema[".pdfConversionUrl"];
         let mediaBaseUrl = response.ListSchema[".mediaBaseUrl"];

@@ -6,5 +6,7 @@ export interface IQuickLinksProps {
   defaultIcon: string;
   groupByCategory: boolean;
   maxLinkLength: number;
+  lineHeight: number;
+  iconOpacity: number;
   webServerRelativeUrl: string;
 }
