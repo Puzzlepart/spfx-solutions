@@ -17,12 +17,12 @@
                 "nb-no": "Andre"
             },
             "title": {
-                "default": "Rich text",
-                "nb-no": "Tekst"
+                "default": "Trekkspill / bakgrunnsfarge",
+                "nb-no": "Trekkspill / bakgrunnsfarge"
             },
             "description": {
-                "default": "Add and format rich text",
-                "nb-no": "Legg til og formater tekst"
+                "default": "Legg til tekstboks som trekkspill eller med bakgrunnsfarge",
+                "nb-no": "Legg til tekstboks som trekkspill eller med bakgrunnsfarge"
             },
             "officeFabricIconFontName": "TextBox",
             "properties": {
