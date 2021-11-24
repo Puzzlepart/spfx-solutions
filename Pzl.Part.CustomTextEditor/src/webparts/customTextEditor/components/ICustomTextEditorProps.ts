@@ -6,7 +6,7 @@ export interface ICustomTextEditorProps {
     title: string;
     displayMode: DisplayMode;
     setTitle: (title: string) => void;
-    saveRteContent(content: string): void;
+    saveRteContent: (content: string) => void;
     isReadMode: boolean;
     content: string;
     textBoxStyle: TextBoxStyle;
