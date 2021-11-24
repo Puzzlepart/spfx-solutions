@@ -130,7 +130,7 @@ export default class CustomTextEditor extends React.Component<ICustomTextEditorP
         if (this.state.editor) {
             editorComponent = <this.state.editor.Editor
                 init={{
-                    plugins: ['paste', 'link', 'image', 'lists', 'table', 'autoresize'],
+                    plugins: ['paste', 'link', 'image', 'imagetools', 'lists', 'table', 'autoresize', 'code'],
                     content_style: `
                         .mce-content-body {
                             background-color: ${colors.body.backgroundColor};
@@ -179,7 +179,7 @@ export default class CustomTextEditor extends React.Component<ICustomTextEditorP
                     `,
                     autoresize_bottom_margin: 50,
                     max_height: 500,
-                    toolbar: 'formatselect | bold italic strikethrough | bullist numlist | link image | table',
+                    toolbar: 'formatselect | bold italic strikethrough | bullist numlist | link image align | table | code',
                     block_formats: 'Normal tekst=p;Overskrift 1=h2;Overskrift 2=h3;Overskrift 3=h4;Sitat=blockquote;Fast tegnavstand=pre',
                     menubar: false,
                     statusbar: false,
@@ -263,7 +263,7 @@ export default class CustomTextEditor extends React.Component<ICustomTextEditorP
      * @param {string} content
      * @memberof CustomTextEditor
     */
-    private handleChange(content: string): void {
+    private handleChange(content: string) {
         this.props.saveRteContent(content);
     }
 
