@@ -4,7 +4,7 @@ import { ICustomTextEditorProps } from './ICustomTextEditorProps';
 import { ICustomTextEditorState } from './ICustomTextEditorState';
 import ReactHtmlParser from 'react-html-parser';
 import { WebPartTitle } from "@pnp/spfx-controls-react/lib/WebPartTitle";
-import { Icon } from 'office-ui-fabric-react/lib/Icon';
+import { Icon } from '@fluentui/react';
 import * as strings from 'CustomTextEditorWebPartStrings';
 import { TextBoxStyle } from './TextBoxStyle';
 
