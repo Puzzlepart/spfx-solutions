@@ -4,7 +4,7 @@
         "title": "RSS-Feed by Puzzlepart",
         "name": "pzl-rssfeed-webpart",
         "id": "9e4eb1e9-89a9-40a3-a486-4a61090f8def",
-        "version": "1.0.1.3",
+        "version": "1.0.1.5",
         "includeClientSideAssets": true,
         "isDomainIsolated": false
     },

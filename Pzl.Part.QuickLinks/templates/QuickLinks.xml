@@ -1,7 +1,6 @@
 <?xml version="1.0"?>
-<pnp:Provisioning 
-        xmlns:pnp="http://schemas.dev.office.com/PnP/2017/05/ProvisioningSchema">
-        <pnp:Preferences Generator="OfficeDevPnP.Core" Version="1.0" >
+<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+        <pnp:Preferences Generator="Puzzlepart" Author="Puzzlepart" Version="1.0">
                 <pnp:Parameters>
                         <pnp:Parameter Key="GenericFieldsPrefix">Pzl</pnp:Parameter>
                         <pnp:Parameter Key="GenericColumnGroup">{resource:QuickLinks_Parameters_GenericColumnGroup}</pnp:Parameter>
@@ -14,12 +13,9 @@
         </pnp:Localizations>
         <pnp:Templates ID="CONTAINER-PZL-QUICKLINKS">
                 <pnp:ProvisioningTemplate ID="TEMPLATE-PZL-QUICKLINKS" Version="1">
-                <xi:include 
-                        xmlns:xi="http://www.w3.org/2001/XInclude" href="objects/SiteFields.xml" />
-                <xi:include 
-                        xmlns:xi="http://www.w3.org/2001/XInclude" href="objects/ContentTypes.xml" />
-                <xi:include 
-                        xmlns:xi="http://www.w3.org/2001/XInclude" href="objects/Lists.xml" />
+                        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="objects/SiteFields.xml" />
+                        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="objects/ContentTypes.xml" />
+                        <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="objects/Lists.xml" />
                 </pnp:ProvisioningTemplate>
         </pnp:Templates>
 </pnp:Provisioning>

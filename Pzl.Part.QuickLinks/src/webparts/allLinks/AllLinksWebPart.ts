@@ -11,6 +11,9 @@ import { sp } from "@pnp/sp";
 import { ThemeProvider, ThemeChangedEventArgs, IReadonlyTheme } from '@microsoft/sp-component-base';
 
 export interface IAllLinksWebPartProps {
+  reccomendedLinksTitle: string;
+  myLinksTitle: string;
+  mandatoryLinksTitle: string;
   defaultOfficeFabricIcon: string;
   mylinksOnTop: boolean;
   listingByCategory: boolean;
@@ -29,6 +32,10 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
         mylinksOnTop: this.properties.mylinksOnTop,
         listingByCategory: this.properties.listingByCategory,
         listingByCategoryTitle: this.properties.listingByCategoryTitle,
+        mandatoryLinksTitle: this.properties.mandatoryLinksTitle,
+        reccomendedLinksTitle: this.properties.reccomendedLinksTitle,
+        myLinksTitle: this.properties.myLinksTitle,
+
       }
     );
 
@@ -66,16 +73,25 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
                   label: strings.propertyPane_defaultOfficeFabricIcon
                 }),
                 PropertyPaneCheckbox('mylinksOnTop', {
-                   text: strings.propertyPane_myLinksOnTop,
-                   checked: false
+                  text: strings.propertyPane_myLinksOnTop,
+                  checked: false
                 }),
                 PropertyPaneCheckbox('listingByCategory', {
                   text: strings.propertyPane_listingByCategory,
                   checked: false
-               }),
-               PropertyPaneTextField('listingByCategoryTitle', {
-                label: strings.propertyPane_CategoryTitleFieldLabel
-              }),
+                }),
+                PropertyPaneTextField('listingByCategoryTitle', {
+                  label: strings.propertyPane_CategoryTitleFieldLabel
+                }),
+                PropertyPaneTextField('mandatoryLinksTitle', {
+                  label: strings.propertyPane_MandatoryLinksTitleLabel
+                }),
+                PropertyPaneTextField('reccomendedLinksTitle', {
+                  label: strings.propertyPane_ReccomendedLinksTitleLabel
+                }),
+                PropertyPaneTextField('myLinksTitle', {
+                  label: strings.propertyPane_MyLinksTitleLabel
+                }),
               ]
             }
           ]

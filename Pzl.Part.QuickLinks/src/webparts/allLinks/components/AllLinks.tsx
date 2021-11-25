@@ -6,14 +6,17 @@ import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Button, DefaultButton } from 'office-ui-fabric-react/lib/Button';
 import { TextField } from 'office-ui-fabric-react/lib/TextField';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
-import { Spinner, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
+import { Spinner, SpinnerSize, SpinnerType } from 'office-ui-fabric-react/lib/Spinner';
 import { Modal } from 'office-ui-fabric-react/lib/Modal';
 import * as strings from 'AllLinksWebPartStrings';
 import "@pnp/polyfill-ie11";
 import { sp } from "@pnp/sp";
 import { find, isEqual, findIndex } from '@microsoft/sp-lodash-subset';
 import { Text } from 'office-ui-fabric-react/lib/Text';
+import { stringIsNullOrEmpty } from '@pnp/common';
+import { add } from 'lodash';
 
+enum CategoryOperation {add,remove}
 export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksState> {
   public constructor(props) {
     super(props);
@@ -24,11 +27,12 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
       favouriteLinks: [],
       showModal: false,
       saveButtonDisabled: true,
-      isLoading: true,
+      isLoading: true
     };
   }
 
-  public render(): React.ReactElement<IAllLinksProps> {          
+
+  public render(): React.ReactElement<IAllLinksProps> {
     if (this.state.isLoading) {
       return (
         <Spinner type={SpinnerType.large} />
@@ -40,8 +44,8 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
       let newLinkModal = this.state.showModal ? this.generateNewLinkModal() : null;
       let categoryLinks = this.generateLinks(this.state.categoryLinks);
       let errorMessage = this.state.showErrorMessage ? <MessageBar messageBarType={MessageBarType.error} onDismiss={() => this.setState({ showErrorMessage: false })}>{strings.component_SaveErrorLabel}</MessageBar> : null;
-      let successMessage = this.state.showSuccessMessage ? <MessageBar messageBarType={MessageBarType.success} onDismiss={() => this.setState({ showSuccessMessage: false })} >{strings.component_SaveOkLabel}</MessageBar> : null;
-      let loadingSpinner = this.state.showLoadingSpinner ? <Spinner className={styles.spinner} type={SpinnerType.normal} /> : null;
+      //let successMessage = this.state.showSuccessMessage ? <MessageBar messageBarType={MessageBarType.success} onDismiss={() => this.setState({ showSuccessMessage: false })} >{strings.component_SaveOkLabel}</MessageBar> : null;
+      let loadingSpinner = this.state.showLoadingSpinner ? <Spinner style={{position:'absolute',right:10,top:-10}} className={styles.spinner} size={SpinnerSize.small} /> : null;
       let linkListing = this.props.listingByCategory ?
         <div className={styles.allLinks}>
           <div className={styles.webpartHeader}>
@@ -53,25 +57,26 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
         </div>
         :
         <div>
-          <div className={styles.webpartHeading} >{strings.component_MandatoryLinksLabel}</div>
+          <div className={styles.webpartHeading} >{stringIsNullOrEmpty(this.props.mandatoryLinksTitle) ? strings.component_MandatoryLinksLabel : this.props.mandatoryLinksTitle}</div>
           <div className={styles.editorLinksContainer}>{mandatoryLinks}</div>
           <hr />
-          <div className={styles.webpartHeading} >{strings.component_PromotedLinksLabel}</div>
+          <div className={styles.webpartHeading} >{stringIsNullOrEmpty(this.props.reccomendedLinksTitle) ? strings.component_PromotedLinksLabel : this.props.reccomendedLinksTitle}</div>
           <div className={styles.editorLinksContainer}>{editorLinks}</div>
         </div>;
       let myLinks = <div>
-        <div className={styles.webpartHeading}>{strings.component_YourLinksLabel}</div>
+        <div className={styles.webpartHeading}>{stringIsNullOrEmpty(this.props.myLinksTitle) ? strings.component_YourLinksLabel : this.props.myLinksTitle}</div>
         <div className={styles.editorLinksContainer}>{favouriteLinks}</div>
         <div className={styles.buttonRow} >
-          <Button onClick={() => this.saveData()} text={strings.component_SaveYourLinksLabel} disabled={this.state.saveButtonDisabled} />
+          {/* <Button onClick={() => this.saveData()} text={strings.component_SaveYourLinksLabel} disabled={this.state.saveButtonDisabled} /> */}
           <Button onClick={() => this.openNewItemModal()} text={strings.component_NewLinkLabel} iconProps={{ iconName: 'Add' }} />
-          {loadingSpinner}
+
         </div>
       </div>;
       return (
         <div className={styles.allLinks}>
           {errorMessage}
-          {successMessage}
+
+          {loadingSpinner}
           {newLinkModal}
           {(this.props.mylinksOnTop) ?
             <div>
@@ -117,23 +122,54 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
     newFavourites.push(link);
     let newEditorLinks = this.state.editorLinks.slice();
     newEditorLinks.splice(newEditorLinks.indexOf(link), 1);
+    let categoryLinks = this.state.categoryLinks;
+
+    categoryLinks = this.updateCategoryLinks(CategoryOperation.remove, link as ILink, categoryLinks);
+
     this.setState({
       favouriteLinks: newFavourites,
       editorLinks: newEditorLinks,
       saveButtonDisabled: false
-    });
+    },()=>this.saveData());
+
   }
+
+
   private removeFromFavourites(link: Link) {
     let newEditorLinks = this.state.editorLinks.slice();
     newEditorLinks.push(link);
     let newFavourites = this.state.favouriteLinks.slice();
     newFavourites.splice(newFavourites.indexOf(link), 1);
+
+    let categoryLinks = this.state.categoryLinks;
+
+    categoryLinks = this.updateCategoryLinks(CategoryOperation.add, link as ILink, categoryLinks);
+
     this.setState({
       favouriteLinks: newFavourites,
       editorLinks: newEditorLinks,
+      categoryLinks: categoryLinks,
       saveButtonDisabled: false
-    });
+    },()=>this.saveData());
   }
+
+  private updateCategoryLinks(operation: CategoryOperation, link: ILink, categoryLinks: ICategory[]) {
+    if (this.props.listingByCategory) {
+
+      categoryLinks = categoryLinks.map(category => {
+        if (category.displayText === link['category']) {
+          if(operation === CategoryOperation.remove ){
+            category.links = category.links.filter(clink => link.url !== clink.url);
+          } else {
+            category.links.push(link);
+          }
+        }
+        return category;
+      });
+    }
+    return categoryLinks;
+  }
+
   private removeCustomFromFavourites(link: Link) {
     let newFavourites = this.state.favouriteLinks.slice();
     newFavourites.splice(newFavourites.indexOf(link), 1);
@@ -149,7 +185,7 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
         <div className={styles.linkParent}>
           <Text className={styles.linkContainer} onClick={() => window.open(link.url, "_blank")}>
             <Icon iconName={(link.icon) ? link.icon : this.props.defaultIcon} className={styles.icon} />
-            <span>{link.displayText}</span>
+            <span title={link.displayText}>{link.displayText}</span>
           </Text>
           <Icon className={styles.actionIcon} iconName='CirclePlus' onClick={() => this.appendToFavourites(link)} />
         </div>
@@ -210,7 +246,7 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
       modalData: null,
       showModal: false,
       saveButtonDisabled: false
-    });
+    },()=>this.saveData());
   }
 
   private onModalValueChanged(field, newVal) {
@@ -243,7 +279,8 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
               <span style={linkStyle}>{link.displayText}</span>
             </a>
             {(link.mandatory) ?
-              null
+
+              <Icon className={styles.icon} iconName='Lock' title={strings.component_action_removeMandatory} />
               :
               <Icon className={styles.actionIcon} iconName='CirclePlus' onClick={() => this.appendToFavourites(link)} />
             }
