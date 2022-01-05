@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "yammer-page-comments-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/yammerPageComments/YammerPageCommentsWebPart.js",
+          "manifest": "./src/webparts/yammerPageComments/YammerPageCommentsWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "YammerPageCommentsWebPartStrings": "lib/webparts/yammerPageComments/loc/{locale}.js"
+  }
+}

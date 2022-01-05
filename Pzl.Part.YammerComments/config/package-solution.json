@@ -1,0 +1,21 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "Yammer Comments by Puzzlepart",
+    "id": "c655c275-a3ed-49d7-9815-0cab63b287f1",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "Puzzlepart AS",
+      "websiteUrl": "https://github.com/Puzzlepart/spfx-solutions",
+      "privacyUrl": "https://github.com/Puzzlepart/spfx-solutions",
+      "termsOfUseUrl": "https://github.com/Puzzlepart/spfx-solutions",
+      "mpnId": "5128564"
+    }
+  },
+  "paths": {
+    "zippedPackage": "solution/pzl-yammer-comments.sppkg"
+  }
+}
