@@ -5,14 +5,15 @@
     "yammer-page-comments-web-part": {
       "components": [
         {
-          "entrypoint": "./lib/webparts/yammerPageComments/YammerPageCommentsWebPart.js",
-          "manifest": "./src/webparts/yammerPageComments/YammerPageCommentsWebPart.manifest.json"
+          "entrypoint": "./lib/webparts/YammerComments/YammerCommentsWebPart.js",
+          "manifest": "./src/webparts/YammerComments/YammerCommentsWebPart.manifest.json"
         }
       ]
     }
   },
   "externals": {},
   "localizedResources": {
-    "YammerPageCommentsWebPartStrings": "lib/webparts/yammerPageComments/loc/{locale}.js"
+    "YammerCommentsWebPartStrings": "lib/webparts/YammerComments/loc/{locale}.js",
+    "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js"
   }
 }

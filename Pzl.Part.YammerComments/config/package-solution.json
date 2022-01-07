@@ -5,7 +5,7 @@
     "id": "c655c275-a3ed-49d7-9815-0cab63b287f1",
     "version": "1.0.0.0",
     "includeClientSideAssets": true,
-    "skipFeatureDeployment": true,
+    "skipFeatureDeployment": true,    
     "isDomainIsolated": false,
     "developer": {
       "name": "Puzzlepart AS",
@@ -13,7 +13,13 @@
       "privacyUrl": "https://github.com/Puzzlepart/spfx-solutions",
       "termsOfUseUrl": "https://github.com/Puzzlepart/spfx-solutions",
       "mpnId": "5128564"
-    }
+    },
+    "webApiPermissionRequests": [
+      {
+        "resource": "Yammer",
+        "scope": "user_impersonation"
+      }
+    ]
   },
   "paths": {
     "zippedPackage": "solution/pzl-yammer-comments.sppkg"
