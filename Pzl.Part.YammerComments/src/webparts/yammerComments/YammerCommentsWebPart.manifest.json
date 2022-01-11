@@ -18,8 +18,8 @@
         "no-nb": "Kommentarer"
       },
       "description": {
-        "default": "Show conversations about current page",
-        "no-nb": "Vis kommentarer for denne siden"
+        "default": "Show Yammer conversations about current page",
+        "no-nb": "Vis Yammer-kommentarer for denne siden"
       },
       "officeFabricIconFontName": "YammerLogo",
       "properties": {

@@ -1,35 +1,36 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
+import * as packageSolution from '../../../config/package-solution.json';
+import * as strings from 'YammerCommentsWebPartStrings';
+import { AadTokenProvider, AadHttpClient } from '@microsoft/sp-http';
 import { Version } from '@microsoft/sp-core-library';
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import {
   IPropertyPaneConfiguration,
   PropertyPaneLink,
-  PropertyPaneTextField
+  IPropertyPaneDropdownOption,
+  PropertyPaneDropdown
 } from '@microsoft/sp-property-pane';
-import { AadTokenProvider, AadHttpClient } from '@microsoft/sp-http';
-import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { PropertyPaneWebPartInformation } from '@pnp/spfx-property-controls/lib/PropertyPaneWebPartInformation';
-import * as strings from 'YammerCommentsWebPartStrings';
-import YammerComments from './components/YammerComments';
-import { IYammerCommentsProps } from './components/IYammerCommentsProps';
-import * as packageSolution from '../../../config/package-solution.json';
-import YammerService, { IYammerService } from './services/YammerService';
-
+import { YammerComments, IYammerCommentsProps } from './components/YammerComments';
+import { YammerService, IYammerService } from './services/YammerService';
 
 export interface IYammerCommentsWebPartProps {
   documentationUrl: string;
-  communityId: string;
+  community: IPropertyPaneDropdownOption;
 }
 
 export default class YammerCommentsWebPart extends BaseClientSideWebPart<IYammerCommentsWebPartProps> {
 
   private yammerService: IYammerService;
 
+  private yammerCommunities: IPropertyPaneDropdownOption[];
+
   public async onInit(): Promise<void> {
 
-      const tokenProvider: AadTokenProvider = await this.context.aadTokenProviderFactory.getTokenProvider();
-      const aadHttpClient: AadHttpClient = await this.context.aadHttpClientFactory.getClient("https://api.yammer.com");
-      this.yammerService = new YammerService(tokenProvider, aadHttpClient);
+    const tokenProvider: AadTokenProvider = await this.context.aadTokenProviderFactory.getTokenProvider();
+    const aadHttpClient: AadHttpClient = await this.context.aadHttpClientFactory.getClient("https://api.yammer.com");
+    this.yammerService = new YammerService(tokenProvider, aadHttpClient);
   }
 
   public render(): void {
@@ -37,8 +38,9 @@ export default class YammerCommentsWebPart extends BaseClientSideWebPart<IYammer
     const element: React.ReactElement<IYammerCommentsProps> = React.createElement(
       YammerComments,
       {
+        propertyPane: this.context.propertyPane,
         yammerService: this.yammerService,
-        communityId: this.properties.communityId
+        community: this.properties.community
       }
     );
     ReactDom.render(element, this.domElement);
@@ -52,32 +54,48 @@ export default class YammerCommentsWebPart extends BaseClientSideWebPart<IYammer
     return Version.parse('1.0');
   }
 
+  protected async loadPropertyPaneResources(): Promise<void> {
+    if (!this.yammerCommunities) {
+      try {
+        var communities = await this.yammerService.getCommunities();
+        this.yammerCommunities = new Array<IPropertyPaneDropdownOption>();
+        communities.map(group => {
+          this.yammerCommunities.push({ key: group.id, text: group.full_name });
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  }
+
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
         {
           header: {
-            description: strings.PropertyPaneDescription
+            description: strings.WebPartDescription
           },
           groups: [
             {
               groupFields: [
-                PropertyPaneTextField('communityId', {
-                  label: strings.CommunityFieldLabel
-                })
-              ]
-            },
-            {
-              groupName: strings.PropertyPaneGroupAbout,
-              groupFields: [
-                PropertyPaneWebPartInformation({
-                  description: `${strings.Version}: ${(<any>packageSolution).solution.version}`,
-                  key: 'version'
-                }),
                 PropertyPaneLink('', {
                   text: strings.DocumentationLinkLabel,
                   href: this.properties.documentationUrl,
                   target: "_blank"
+                }),
+                PropertyPaneDropdown('community', {
+                  label: strings.CommunityFieldLabel,
+                  options: this.yammerCommunities /*,
+                  selectedKey: this.properties.community.key */
+                })
+              ]
+            },
+            {
+              groupName: strings.WebPartAbout,
+              groupFields: [
+                PropertyPaneWebPartInformation({
+                  description: `${strings.Version}: ${(<any>packageSolution).solution.version}`,
+                  key: 'version'
                 })
               ]
             }

@@ -1,8 +1,10 @@
 define([], function() {
   return {
-    "PropertyPaneDescription": "Use Yammer instead of SharePoint for comments to increase engagement.",
-    "PropertyPaneGroupAbout":"About",
-    "DocumentationLinkLabel":"Documentation",
+    "WebPartTitle": "Comments",
+    "WebPartDescription": "Use Yammer instead of SharePoint for comments to increase engagement.",
+    "WebPartSetUp":"Set Up",
+    "WebPartAbout":"About",
+    "DocumentationLinkLabel":"Learn more",
     "CommunityFieldLabel": "Community",
     "Version": "Version"
   }

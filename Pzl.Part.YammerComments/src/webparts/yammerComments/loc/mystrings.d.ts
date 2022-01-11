@@ -1,6 +1,8 @@
 declare interface IYammerCommentsWebPartStrings {
-  PropertyPaneDescription: string;
-  PropertyPaneGroupAbout:string;
+  WebPartTitle: string;
+  WebPartDescription: string;
+  WebPartSetUp: string;
+  WebPartAbout:string;
   DocumentationLinkLabel: string;
   CommunityFieldLabel: string;
   Version: string;
