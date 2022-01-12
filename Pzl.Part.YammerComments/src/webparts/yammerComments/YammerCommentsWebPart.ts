@@ -31,6 +31,8 @@ export default class YammerCommentsWebPart extends BaseClientSideWebPart<IYammer
     const tokenProvider: AadTokenProvider = await this.context.aadTokenProviderFactory.getTokenProvider();
     const aadHttpClient: AadHttpClient = await this.context.aadHttpClientFactory.getClient("https://api.yammer.com");
     this.yammerService = new YammerService(tokenProvider, aadHttpClient);
+
+    console.log(this.context);
   }
 
   public render(): void {

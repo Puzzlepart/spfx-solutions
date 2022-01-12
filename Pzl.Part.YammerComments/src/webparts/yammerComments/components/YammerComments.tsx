@@ -5,6 +5,9 @@ import { Icon, MessageBar, MessageBarType, PrimaryButton } from 'office-ui-fabri
 import { IYammerService } from "../services/YammerService";
 import styles from './YammerComments.module.scss';
 import * as strings from 'YammerCommentsWebPartStrings';
+import IUser from '../interfaces/IUser';
+import { CommentCard } from './CommentCard';
+import IComment from '../interfaces/IComment';
 
 export interface IYammerCommentsProps {
   propertyPane: IPropertyPaneAccessor;
@@ -16,7 +19,7 @@ export const YammerComments: React.FunctionComponent<IYammerCommentsProps> = (pr
 
   const [community, setCommunity] = useState<string>(props.community);
 
-  const [comment, setComment] = React.useState("");
+  const [user, setUser] = useState<IUser>();
 
   const [messageBarStatus, setMessageBarStatus] = React.useState({
     type: MessageBarType.info,
@@ -25,7 +28,6 @@ export const YammerComments: React.FunctionComponent<IYammerCommentsProps> = (pr
   });
 
   useEffect(() => {
-    console.log('Community:' + props.community);
     setCommunity(props.community);
   }, [props]);
 
@@ -33,7 +35,17 @@ export const YammerComments: React.FunctionComponent<IYammerCommentsProps> = (pr
   useEffect(() => {
     (async () => {
       try {
-        let webLink = await props.yammerService.getWebLink();
+        const currentUser = await props.yammerService.getCurrentUser();
+        setUser(currentUser);
+
+        const webLink = await props.yammerService.getWebLink();
+        if (webLink) {
+          // TODO Go grab the messages for webLink.id
+          const messages = await props.yammerService.getWebLinkMessages(webLink.id);
+        } else {
+          // TODO Be the first to comment
+        }
+        console.log(webLink);
       } catch (error) {
         if ('InteractionRequiredAuthError' === error.name) {
           setMessageBarStatus({
@@ -49,6 +61,11 @@ export const YammerComments: React.FunctionComponent<IYammerCommentsProps> = (pr
   function openPropertyPanel() {
     props.propertyPane.open();
   }
+
+  const onNewComment = async (comment: IComment): Promise<void> => {
+    // TODO: Update list of comments
+    let newComment = await props.yammerService.postComment(comment);
+  };
 
   return (
     <>
@@ -68,7 +85,7 @@ export const YammerComments: React.FunctionComponent<IYammerCommentsProps> = (pr
             </div>
             <div className={styles.row}>
               <div className={styles.column}>
-                <span className={styles.title}>Welcome to SharePoint!</span>
+                <CommentCard user={user} comment={{ text: '', groupId: props.community }} onNewComment={onNewComment} />
                 <p className={styles.subTitle}>Customize SharePoint experiences using Web Parts.</p>
                 <p className={styles.description}>{props.community}</p>
               </div>

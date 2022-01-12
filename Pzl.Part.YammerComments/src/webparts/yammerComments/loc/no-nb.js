@@ -6,6 +6,8 @@ define([], function() {
     "WebPartAbout":"Om",
     "DocumentationLinkLabel":"Lær mer",
     "CommunityFieldLabel": "Fellesskap",
-    "Version": "Versjon"
+    "Version": "Versjon",
+    "Post": "Send",
+    "Posting": "Sender..."
   }
 });

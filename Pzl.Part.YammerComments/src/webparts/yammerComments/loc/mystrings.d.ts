@@ -6,6 +6,8 @@ declare interface IYammerCommentsWebPartStrings {
   DocumentationLinkLabel: string;
   CommunityFieldLabel: string;
   Version: string;
+  Post: string;
+  Posting: string;
 }
 
 declare module 'YammerCommentsWebPartStrings' {
