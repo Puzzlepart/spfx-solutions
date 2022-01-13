@@ -16,6 +16,7 @@
     "@microsoft/sp-webpart-base": "1.13.1",
     "@pnp/spfx-controls-react": "3.5.0",
     "@pnp/spfx-property-controls": "3.3.0",
+    "dayjs": "^1.10.7",
     "office-ui-fabric-react": "7.174.1",
     "react": "16.13.1",
     "react-dom": "16.13.1"

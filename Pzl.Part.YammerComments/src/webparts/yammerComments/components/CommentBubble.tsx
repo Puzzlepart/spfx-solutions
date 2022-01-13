@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { Persona, PersonaSize } from 'office-ui-fabric-react';
+import * as dayjs from 'dayjs';
+import * as relativeTime from 'dayjs/plugin/relativeTime';
+import { Icon, Persona, PersonaSize } from 'office-ui-fabric-react';
 import { ServiceScope } from "@microsoft/sp-core-library";
 import { LivePersona } from "@pnp/spfx-controls-react/lib/controls/LivePersona";
 import IComment from '../interfaces/IComment';
@@ -11,6 +13,8 @@ export interface ICommentBubbleProps {
 }
 
 export const CommentBubble: React.FunctionComponent<ICommentBubbleProps> = (props) => {
+
+    dayjs.extend(relativeTime);
 
     const createThread = (comment: IComment, level: number) => {
 
@@ -28,16 +32,25 @@ export const CommentBubble: React.FunctionComponent<ICommentBubbleProps> = (prop
                         } />
                     </div>
                     <div className={styles.CommentGap}></div>
-                    <div className={styles.CommentArea}>
-                        <div className={styles.NameAndDate}>
-                            <div className={styles.Name}>
-                                <LivePersona upn={comment.user.email} serviceScope={props.serviceScope} disableHover={false} template={
-                                    <span className={styles.NameSpan}>{comment.user.name}</span>
-                                } />
+                    <div className={styles.CommentColumn}>
+                        <div className={styles.CommentArea}>
+                            <div className={styles.NameAndDate}>
+                                <div className={styles.Name}>
+                                    <LivePersona upn={comment.user.email} serviceScope={props.serviceScope} disableHover={false} template={
+                                        <span className={styles.NameSpan}>{comment.user.name}</span>
+                                    } />
+                                </div>
+                                <div>{dayjs(comment.created,).fromNow()}</div>
                             </div>
-                            <div>{comment.created}</div>
+                            <div><span className={styles.CommentSpan}>{comment.text}</span></div>
                         </div>
-                        <div><span className={styles.CommentSpan}>{comment.text}</span></div>
+                        <div className={styles.CommentActions} >
+
+                            <Icon iconName='Like' className={styles.Icon}></Icon>
+                            <Icon iconName='Comment' className={styles.Icon}></Icon>
+                            <Icon iconName='More' className={styles.Icon}></Icon>
+
+                        </div>
                     </div>
                 </div>
                 {

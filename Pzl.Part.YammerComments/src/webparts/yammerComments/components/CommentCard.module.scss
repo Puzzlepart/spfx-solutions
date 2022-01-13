@@ -16,6 +16,14 @@
     .CommentArea {
         margin: 0 0px 30px;
         flex-grow: 1;
+
+        .CommentTextField {
+            padding: 8px 16px;
+            border-radius: 2px 8px 8px;
+            border-width: 1px;
+            border-style: solid;
+            border-color: rgb(225, 223, 221);
+        }
     }
 
     .CommentButton {

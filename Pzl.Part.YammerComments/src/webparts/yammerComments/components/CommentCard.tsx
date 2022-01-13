@@ -16,11 +16,13 @@ export interface ICommentCardProps {
 export const CommentCard: React.FunctionComponent<ICommentCardProps> = (props) => {
 
     const [comment, setComment] = useState<string>('');
+    const [isMultiline, setIsMultiline] = useState<boolean>(false);
     const [isPosting, setIsPosting] = useState<boolean>(false);
 
     const onCommentChange = React.useCallback(
         (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
             setComment(newValue || '');
+            setIsMultiline(newValue && (50 < newValue.length || 0 < newValue.indexOf('\n')));
         },
         [],
     );
@@ -47,7 +49,8 @@ export const CommentCard: React.FunctionComponent<ICommentCardProps> = (props) =
                 </div>
                 <div className={styles.CommentGap}></div>
                 <div className={styles.CommentArea}>
-                    <TextField placeholder='Add a comment. Type @ to mention someone' onChange={onCommentChange} multiline autoAdjustHeight />
+                    <TextField className={styles.CommentTextField} placeholder='Add a comment. Type @ to mention someone'
+                        onChange={onCommentChange} multiline={isMultiline} autoAdjustHeight borderless />
                 </div>
                 <div className={styles.CommentGap}></div>
                 <div className={styles.CommentButton}>

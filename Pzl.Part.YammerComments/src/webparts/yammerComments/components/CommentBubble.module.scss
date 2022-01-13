@@ -14,9 +14,13 @@
         padding-right: 20px;
     }
 
-    .CommentArea {
+    .CommentColumn {
         flex-grow: 1;
         display: inline-block;
+    }
+
+    .CommentArea {
+
         background-color: rgb(243, 242, 241);
         padding: 12px 16px;
         position: relative;
@@ -28,6 +32,14 @@
             overflow-wrap: break-word;
             word-break: break-word;
         }
+    }
+
+    .CommentActions {
+        position: relative;
+        display: flex;
+        flex-wrap: nowrap;
+        height: 16px;
+        padding: 12px 0px 0px 20px;
     }
 
     .NameAndDate {
@@ -49,5 +61,12 @@
         }
     }
 
+    .Icon {
+        display: inline-block;
+        vertical-align: middle;
+        white-space: normal;
+        font-size: 16px;
+        padding-right: 16px;
+    }
 
 }
