@@ -45,10 +45,11 @@ export const CommentCard: React.FunctionComponent<ICommentCardProps> = (props) =
                         size={PersonaSize.size32}
                     />
                 </div>
+                <div className={styles.CommentGap}></div>
                 <div className={styles.CommentArea}>
                     <TextField placeholder='Add a comment. Type @ to mention someone' onChange={onCommentChange} multiline autoAdjustHeight />
                 </div>
-                <div></div>
+                <div className={styles.CommentGap}></div>
                 <div className={styles.CommentButton}>
                     <PrimaryButton text={isPosting ? strings.Posting : strings.Post} disabled={isPosting || comment.length < 1} onClick={postComment} />
                 </div>

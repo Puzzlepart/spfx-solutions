@@ -32,7 +32,7 @@ export default class YammerCommentsWebPart extends BaseClientSideWebPart<IYammer
     const aadHttpClient: AadHttpClient = await this.context.aadHttpClientFactory.getClient("https://api.yammer.com");
     this.yammerService = new YammerService(tokenProvider, aadHttpClient);
 
-    console.log(this.context);
+    console.log(this.context.pageContext);
   }
 
   public render(): void {
@@ -40,6 +40,7 @@ export default class YammerCommentsWebPart extends BaseClientSideWebPart<IYammer
     const element: React.ReactElement<IYammerCommentsProps> = React.createElement(
       YammerComments,
       {
+        serviceScope: this.context.serviceScope,
         propertyPane: this.context.propertyPane,
         yammerService: this.yammerService,
         community: this.properties.community

@@ -1,15 +1,19 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { IPropertyPaneAccessor } from '@microsoft/sp-webpart-base';
+import { ServiceScope } from "@microsoft/sp-core-library";
 import { Icon, MessageBar, MessageBarType, PrimaryButton } from 'office-ui-fabric-react';
 import { IYammerService } from "../services/YammerService";
-import styles from './YammerComments.module.scss';
 import * as strings from 'YammerCommentsWebPartStrings';
+import styles from './YammerComments.module.scss';
 import IUser from '../interfaces/IUser';
-import { CommentCard } from './CommentCard';
 import IComment from '../interfaces/IComment';
+import { CommentCard } from './CommentCard';
+import { CommentBubble } from './CommentBubble';
+import { CommentShimmer } from './CommentShimmer';
 
 export interface IYammerCommentsProps {
+  serviceScope: ServiceScope;
   propertyPane: IPropertyPaneAccessor;
   yammerService: IYammerService;
   community: any;
@@ -17,15 +21,15 @@ export interface IYammerCommentsProps {
 
 export const YammerComments: React.FunctionComponent<IYammerCommentsProps> = (props) => {
 
+  const [comments, setComments] = useState<IComment[]>();
   const [community, setCommunity] = useState<string>(props.community);
-
-  const [user, setUser] = useState<IUser>();
-
-  const [messageBarStatus, setMessageBarStatus] = React.useState({
+  const [isLoading, setIsLoading] = useState<boolean>(props.community !== null);
+  const [messageBarStatus, setMessageBarStatus] = useState({
     type: MessageBarType.info,
     message: <span></span>,
     show: false
   });
+  const [user, setUser] = useState<IUser>();
 
   useEffect(() => {
     setCommunity(props.community);
@@ -33,19 +37,28 @@ export const YammerComments: React.FunctionComponent<IYammerCommentsProps> = (pr
 
 
   useEffect(() => {
-    (async () => {
+
+    const fetchData = async () => {
       try {
+
         const currentUser = await props.yammerService.getCurrentUser();
         setUser(currentUser);
 
         const webLink = await props.yammerService.getWebLink();
         if (webLink) {
-          // TODO Go grab the messages for webLink.id
-          const messages = await props.yammerService.getWebLinkMessages(webLink.id);
-        } else {
-          // TODO Be the first to comment
+          const threadIds: string[] = await props.yammerService.getWebLinkMessages(webLink.id);
+
+          const messageThreads = await Promise.all(threadIds.map(async threadId => { return await props.yammerService.getMessagesInThread(threadId); }));
+
+          const messages: IComment[] = [];
+          messageThreads.forEach(thread => {
+            const tree = props.yammerService.buildHierarchy(thread);
+            messages.push(tree);
+          });
+
+          setComments(messages);
+          setIsLoading(false);
         }
-        console.log(webLink);
       } catch (error) {
         if ('InteractionRequiredAuthError' === error.name) {
           setMessageBarStatus({
@@ -55,7 +68,9 @@ export const YammerComments: React.FunctionComponent<IYammerCommentsProps> = (pr
           });
         }
       }
-    })();
+    };
+
+    fetchData();
   }, []);
 
   function openPropertyPanel() {
@@ -86,8 +101,13 @@ export const YammerComments: React.FunctionComponent<IYammerCommentsProps> = (pr
             <div className={styles.row}>
               <div className={styles.column}>
                 <CommentCard user={user} comment={{ text: '', groupId: props.community }} onNewComment={onNewComment} />
-                <p className={styles.subTitle}>Customize SharePoint experiences using Web Parts.</p>
-                <p className={styles.description}>{props.community}</p>
+                {!isLoading && <CommentBubble serviceScope={props.serviceScope} comments={comments} />}
+                {isLoading && <div>
+                  <CommentShimmer isReply={false} />
+                  <div>&nbsp;</div>
+                  <CommentShimmer isReply={true} />
+                </div>
+                }
               </div>
             </div>
           </aside>
