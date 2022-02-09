@@ -1,0 +1,21 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "pzl-local-page-navigation",
+    "id": "e514111f-13b1-4444-93aa-63f82a140107",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.13.1"
+    }
+  },
+  "paths": {
+    "zippedPackage": "solution/local-page-nav.sppkg"
+  }
+}
