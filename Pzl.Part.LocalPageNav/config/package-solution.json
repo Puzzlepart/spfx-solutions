@@ -3,7 +3,7 @@
   "solution": {
     "name": "pzl-local-page-navigation",
     "id": "e514111f-13b1-4444-93aa-63f82a140107",
-    "version": "1.0.0.0",
+    "version": "1.0.0.1",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
