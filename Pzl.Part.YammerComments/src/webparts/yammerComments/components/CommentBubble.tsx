@@ -47,7 +47,7 @@ export const CommentBubble: React.FunctionComponent<ICommentBubbleProps> = (prop
                         <div className={styles.CommentActions} >
 
                             <Icon iconName='Like' className={styles.Icon}></Icon>
-                            <Icon iconName='Comment' className={styles.Icon}></Icon>
+                            <Icon iconName='Chat' className={styles.Icon}></Icon>
                             <Icon iconName='More' className={styles.Icon}></Icon>
 
                         </div>
