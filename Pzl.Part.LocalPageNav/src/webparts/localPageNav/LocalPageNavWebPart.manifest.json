@@ -6,18 +6,30 @@
   "version": "*",
   "manifestVersion": 2,
   "requiresCustomScript": false,
-  "supportedHosts": ["SharePointWebPart", "TeamsPersonalApp", "TeamsTab", "SharePointFullPage"],
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
   "supportsThemeVariants": true,
-
-  "preconfiguredEntries": [{
-    "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
-    "group": { "default": "Other" },
-    "title": { "default": "Local page navigation" },
-    "description": { "default": "Local page navigation menu" },
-    "officeFabricIconFontName": "SecondaryNav",
-    "properties": {
-      "title": "Table of contents",
-      "selector": ["h2", "h3", "h4"]
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "title": {
+        "default": "Local page navigation",
+        "no-nb": "Lokal sidenavigasjon"
+      },
+      "description": {
+        "default": "Table of contents based on headings used on current page",
+        "no-nb": "Innholdsfortegnelse basert på overskrifter brukt på denne siden"
+      },
+      "officeFabricIconFontName": "SecondaryNav",
+      "properties": {
+        "title": "Table of contents",
+        "selector": [
+          "h2",
+          "h3",
+          "h4"
+        ]
+      }
     }
-  }]
+  ]
 }

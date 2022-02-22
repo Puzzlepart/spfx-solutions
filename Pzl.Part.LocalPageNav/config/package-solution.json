@@ -1,18 +1,18 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "pzl-local-page-navigation",
+    "name": "Local page navigation by Puzzlepart",
     "id": "e514111f-13b1-4444-93aa-63f82a140107",
-    "version": "1.0.0.1",
+    "version": "1.0.0.3",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
     "developer": {
-      "name": "",
-      "websiteUrl": "",
-      "privacyUrl": "",
-      "termsOfUseUrl": "",
-      "mpnId": "Undefined-1.13.1"
+      "name": "Puzzlepart AS",
+      "websiteUrl": "https://github.com/Puzzlepart/spfx-solutions",
+      "privacyUrl": "https://github.com/Puzzlepart/spfx-solutions",
+      "termsOfUseUrl": "https://github.com/Puzzlepart/spfx-solutions",
+      "mpnId": "5128564"
     }
   },
   "paths": {
