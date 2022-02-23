@@ -15,7 +15,7 @@ export const getNavLinks = (selector: string[]): INavLinkGroup => {
     let currentSubheader: INavLink;
     let prevPosition: number;
     nodes.forEach((node: any, key, parent) => {
-        if (node.id && node.id !== '') {
+        if (node.id !== '') {
             const currentPosition: number = parseInt(node.localName.substring(1));
             const navLink: INavLink = { name: node.innerText, key: `#${node.id}`, url: `#${node.id}`, links: [], isExpanded: true, linkStyle: currentPosition };
             if (prevPosition) {
@@ -33,9 +33,13 @@ export const getNavLinks = (selector: string[]): INavLinkGroup => {
                     }
                 }
                 if (currentPosition < prevPosition) {
-                    if (currentSubheader) currentHeader.links.push(currentSubheader);
-                    navLinks.push(currentHeader);
-                    currentHeader = navLink;
+                    if (currentSubheader && !includes(currentHeader.links, currentSubheader)) currentHeader.links.push(currentSubheader);
+                    if (navLink.linkStyle > currentHeader.linkStyle) {
+                        currentHeader.links.push(navLink);
+                    } else {
+                        navLinks.push(currentHeader);
+                        currentHeader = navLink;
+                    }
                     currentSubheader = null;
                 }
                 if (currentPosition === prevPosition) {
