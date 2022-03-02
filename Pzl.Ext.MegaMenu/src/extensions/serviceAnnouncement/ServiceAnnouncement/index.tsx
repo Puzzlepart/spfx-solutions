@@ -61,9 +61,10 @@ export default class ServiceAnnouncement extends React.Component<ServiceAnnounce
             if (this.props.textAlignment == Alignment.Right) {
                 textClass = styles.announcementMessageRight;
             }
-            if(this.props.boldText) {
+            if (this.props.boldText) {
                 textClass += " " + styles.announcementMessageBold;
             }
+
 
             let messageBars = this.state.AnnouncementsToBeShown.map((announcement, idx) => {
                 // Set background with on-demand class as style={{}} doesn't work, and styles={{}} is not available in ouifr until v6
@@ -82,6 +83,7 @@ export default class ServiceAnnouncement extends React.Component<ServiceAnnounce
                     }}>{announcement.title}</div>
                 </MessageBar>;
             });
+
             return (
                 <div>
                     {messageBars}
@@ -152,7 +154,7 @@ export default class ServiceAnnouncement extends React.Component<ServiceAnnounce
     private async fetchData() {
         let now = new Date();
         let spWeb = new Web(`${document.location.protocol}//${document.location.hostname}${this.props.serverRelativeWebUrl}`);
-        const severityFilter = this.props.announcementLevels ? " and (" + this.props.announcementLevels.split(",").map(level => { return "PzlSeverity eq '" + level + "'"}).join(" or ") + ")" : "";
+        const severityFilter = this.props.announcementLevels ? " and (" + this.props.announcementLevels.split(",").map(level => { return "PzlSeverity eq '" + level + "'" }).join(" or ") + ")" : "";
         let announcements: any[] = await spWeb.getList(`${this.props.serverRelativeWebUrl.replace(/\/$/, "")}/${this.props.serviceAnnouncementListUrl}`)
             .items.select("ID",
                 "Title",
@@ -162,6 +164,7 @@ export default class ServiceAnnouncement extends React.Component<ServiceAnnounce
                 "PzlContent",
                 "PzlConsequences",
                 "PzlAffectedSystems",
+                "PzlForceAnnouncement",
                 "PzlStartDate",
                 "PzlEndDate")
             .filter("(PzlStartDate le datetime'" + now.toISOString() + "') and (PzlEndDate ge datetime'" + now.toISOString() + "')" + severityFilter)
@@ -187,6 +190,7 @@ export default class ServiceAnnouncement extends React.Component<ServiceAnnounce
                 id: item.ID,
                 title: item.Title,
                 severity: item.PzlSeverity,
+                forceDialog: item.PzlForceAnnouncement,
                 content: item.PzlContent,
                 consequence: item.PzlConsequences,
                 affectedSystems: item.PzlAffectedSystems,
@@ -215,5 +219,13 @@ export default class ServiceAnnouncement extends React.Component<ServiceAnnounce
             };
         });
         this.setState({ AnnouncementsToBeShown: relevantAnnouncements, isloading: false });
+        
+        if (this.state.AnnouncementsToBeShown) {
+            this.state.AnnouncementsToBeShown.forEach((msg, idx) => {
+                if (msg.forceDialog) {
+                    this.setState({ modalShouldRender: true, modalAnnouncement: msg });
+                }
+            });
+        }
     }
 }

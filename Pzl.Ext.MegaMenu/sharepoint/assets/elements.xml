@@ -5,7 +5,7 @@
 		&quot;spList&quot;: {
 			&quot;serverRelativeWebUrl&quot;: &quot;/sites/cdn&quot;,
 			&quot;linksListUrl&quot;: &quot;Lists/NavLinks&quot;,
-      &quot;settingsListUrl&quot;: &quot;Lists/NavSettings&quot;,
+      		&quot;settingsListUrl&quot;: &quot;Lists/NavSettings&quot;,
 			&quot;headersListLookupFieldName&quot;: &quot;PzlNavLinkHeaderLookup&quot;,
 			&quot;urlFieldName&quot;: &quot;PzlNavUrl&quot;,
 			&quot;headersOrderFieldName&quot;: &quot;PzlNavOrder&quot;,

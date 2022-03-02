@@ -19,6 +19,9 @@
         <Field Type="Note" DisplayName="{resource:Field_Description_Title}" NumLines="6" RichText="TRUE" RichTextMode="FullHtml" Group="Puzzlepart" ID="{28b815cc-3613-4118-a1be-694b47e88ecf}" StaticName="PzlContent" Name="PzlContent"></Field>
         <Field Type="Note" DisplayName="{resource:Field_Consequence_Title}" NumLines="6" RichText="FALSE" Group="Puzzlepart" ID="{6f006ea9-73a4-497c-ac2c-39e0a01102d9}" StaticName="PzlConsequences" Name="PzlConsequences"></Field>
         <Field Type="User" DisplayName="{resource:Field_Responsible_Title}" Group="Puzzlepart" ID="{078e1aaf-c463-41d3-80d4-c5239cc0986a}" StaticName="PzlResponsible" Name="PzlResponsible"></Field>
+        <Field Type="Boolean" DisplayName="{resource:Field_ForceAnnouncement_Title}" Description="{resource:Field_ForceAnnouncement_Description}" Group="Puzzlepart" ID="{f30e2a0a-80eb-4ee6-9376-b689b5c9e15c}" StaticName="PzlForceAnnouncement" Name="PzlForceAnnouncement">
+          <Default>0</Default>
+        </Field>
         <Field Type="DateTime" DisplayName="{resource:Field_StartTime_Title}" Group="Puzzlepart" ID="{31cbeda7-3ddc-43c2-9f44-136147558b37}" Name="PzlStartDate" StaticName="PzlStartDate"></Field>
         <Field Type="DateTime" DisplayName="{resource:Field_EndTime_Title}" Group="Puzzlepart" ID="{68ba85c1-53ff-4ada-a682-e4038dcd6506}" Name="PzlEndDate" StaticName="PzlEndDate"></Field>
         <Field Type="Choice" DisplayName="{resource:Field_Severity_Title}" Group="Puzzlepart" ID="{8cfea964-4168-4775-8970-2709d85a04cc}" StaticName="PzlSeverity" Name="PzlSeverity" Format="Dropdown" Description="{resource:Field_Severity_Description}">
@@ -32,10 +35,11 @@
         </Field>
       </pnp:SiteFields>
       <pnp:ContentTypes>
-        <pnp:ContentType ID="0x01001A58CF6ADF6943E89CE71ACB741407FA" Name="{resource:ContentType_ServiceAnnouncement_Title}" Description="" Group="Puzzlepart" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+        <pnp:ContentType ID="0x01001A58CF6ADF6943E89CE71ACB741407FA" Name="{resource:ContentType_ServiceAnnouncement_Title}" Group="Puzzlepart">
           <pnp:FieldRefs>
             <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
             <pnp:FieldRef ID="8cfea964-4168-4775-8970-2709d85a04cc" Name="PzlSeverity" Required="true" />
+            <pnp:FieldRef ID="f30e2a0a-80eb-4ee6-9376-b689b5c9e15c" Name="PzlForceAnnouncement" Required="false" />
             <pnp:FieldRef ID="28b815cc-3613-4118-a1be-694b47e88ecf" Name="PzlContent" Required="true" />
             <pnp:FieldRef ID="31cbeda7-3ddc-43c2-9f44-136147558b37" Name="PzlStartDate" Required="true" />
             <pnp:FieldRef ID="68ba85c1-53ff-4ada-a682-e4038dcd6506" Name="PzlEndDate" Required="true" />
@@ -44,21 +48,21 @@
             <pnp:FieldRef ID="078e1aaf-c463-41d3-80d4-c5239cc0986a" Name="PzlResponsible" Required="false" />
           </pnp:FieldRefs>
         </pnp:ContentType>
-        <pnp:ContentType ID="0x010091D7ED8EC92C244286353A799AC347B2" Name="{resource:ContentType_NavigationHeading_Title}" Description="" Group="Puzzlepart" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+        <pnp:ContentType ID="0x010091D7ED8EC92C244286353A799AC347B2" Name="{resource:ContentType_NavigationHeading_Title}" Group="Puzzlepart">
           <pnp:FieldRefs>
             <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
             <pnp:FieldRef ID="8ef476fa-024f-4d7f-bfc3-3ff17c2ceea1" Name="PzlNavOrder" />
             <pnp:FieldRef ID="f78d08e6-1b5c-4d4c-ab68-181f04242992" Name="PzlNavUrl" />
           </pnp:FieldRefs>
         </pnp:ContentType>
-        <pnp:ContentType ID="0x0100D600AF8E62BD324281FF4FDE3203A67F" Name="{resource:ContentType_NavigationLink_Title}" Description="" Group="Puzzlepart" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+        <pnp:ContentType ID="0x0100D600AF8E62BD324281FF4FDE3203A67F" Name="{resource:ContentType_NavigationLink_Title}" Group="Puzzlepart">
           <pnp:FieldRefs>
             <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
             <pnp:FieldRef ID="8ef476fa-024f-4d7f-bfc3-3ff17c2ceea1" Name="PzlNavOrder" />
             <pnp:FieldRef ID="f78d08e6-1b5c-4d4c-ab68-181f04242992" Name="PzlNavUrl" Required="true" />
           </pnp:FieldRefs>
         </pnp:ContentType>
-        <pnp:ContentType ID="0x0100057E26B06FFA420291746426C18E97EC" Name="{resource:ContentType_NavigationSettings_Title}" Description="" Group="Puzzlepart" NewFormUrl="" EditFormUrl="" DisplayFormUrl="">
+        <pnp:ContentType ID="0x0100057E26B06FFA420291746426C18E97EC" Name="{resource:ContentType_NavigationSettings_Title}" Group="Puzzlepart">
           <pnp:FieldRefs>
             <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
             <pnp:FieldRef ID="e32892ba-cad5-41e5-885d-af222700e829" Name="PzlSettingValue" />
@@ -76,7 +80,7 @@
         </pnp:CurrentNavigation>
       </pnp:Navigation>
       <pnp:Lists>
-        <pnp:ListInstance Title="{resource:Lists_NavigationSettings_Title}" Description="" EnableAttachments="false" TemplateType="100" MinorVersionLimit="0" MaxVersionLimit="0" Url="Lists/NavSettings" NoCrawl="true" EnableFolderCreation="false">
+        <pnp:ListInstance Title="{resource:Lists_NavigationSettings_Title}" EnableAttachments="false" TemplateType="100" MinorVersionLimit="0" MaxVersionLimit="0" Url="Lists/NavSettings" NoCrawl="true" EnableFolderCreation="false">
           <pnp:ContentTypeBindings>
             <pnp:ContentTypeBinding ContentTypeID="0x0100057E26B06FFA420291746426C18E97EC" Default="true" />
           </pnp:ContentTypeBindings>
@@ -211,7 +215,7 @@
             </pnp:DataRow>
           </pnp:DataRows>
         </pnp:ListInstance>
-        <pnp:ListInstance Title="{resource:Lists_NavigationLinks_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/NavLinks" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableAttachments="false" EnableFolderCreation="false">
+        <pnp:ListInstance Title="{resource:Lists_NavigationLinks_Title}" DocumentTemplate="" TemplateType="100" Url="Lists/NavLinks" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableAttachments="false" EnableFolderCreation="false">
           <pnp:ContentTypeBindings>
             <pnp:ContentTypeBinding ContentTypeID="0x0100D600AF8E62BD324281FF4FDE3203A67F" Default="true" />
           </pnp:ContentTypeBindings>
@@ -237,7 +241,7 @@
             <Field Type="Lookup" DisplayName="{resource:Field_Heading_Title}" ID="{c585a246-0c15-4aa4-bcc4-d574588b3d55}" List="{{listid:{resource:Lists_NavigationHeadings_Title}}}" ShowField="Title" StaticName="PzlNavLinkHeaderLookup" Name="PzlNavLinkHeaderLookup" />
           </pnp:Fields>
         </pnp:ListInstance>
-        <pnp:ListInstance Title="{resource:Lists_NavigationHeadings_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/NavHeadings" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableAttachments="false" EnableFolderCreation="false">
+        <pnp:ListInstance Title="{resource:Lists_NavigationHeadings_Title}" DocumentTemplate="" TemplateType="100" Url="Lists/NavHeadings" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableAttachments="false" EnableFolderCreation="false">
           <pnp:ContentTypeBindings>
             <pnp:ContentTypeBinding ContentTypeID="0x010091D7ED8EC92C244286353A799AC347B2" Default="true" />
           </pnp:ContentTypeBindings>
@@ -258,11 +262,11 @@
             </View>
           </pnp:Views>
         </pnp:ListInstance>
-        <pnp:ListInstance Title="{resource:Lists_ServiceAnnouncement_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="Lists/ServiceAnnouncements" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableAttachments="false" EnableFolderCreation="false">
+        <pnp:ListInstance Title="{resource:Lists_ServiceAnnouncement_Title}" TemplateType="100" Url="Lists/ServiceAnnouncements" MinorVersionLimit="0" MaxVersionLimit="0" DraftVersionVisibility="0" TemplateFeatureID="00bfea71-de22-43b2-a848-c05709900100" ContentTypesEnabled="false" RemoveExistingContentTypes="true" EnableAttachments="false" EnableFolderCreation="false">
           <pnp:ContentTypeBindings >
             <pnp:ContentTypeBinding ContentTypeID="0x01001A58CF6ADF6943E89CE71ACB741407FA" Default="true" />
           </pnp:ContentTypeBindings>
-          <pnp:Views RemoveExistingViews="true">
+          <pnp:Views>
             <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:List_DefaultView_Title}" Url="{site}/Lists/ServiceAnnouncements/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
               <Query>
                 <OrderBy>
@@ -272,6 +276,7 @@
               <ViewFields>
                 <FieldRef Name="Title" />
                 <FieldRef Name="PzlSeverity" />
+                <FieldRef Name="PzlForceAnnouncement" />
                 <FieldRef Name="PzlContent" />
                 <FieldRef Name="PzlStartDate" />
                 <FieldRef Name="PzlEndDate" />
@@ -283,6 +288,9 @@
               <JSLink>clienttemplates.js</JSLink>
             </View>
           </pnp:Views>
+          <pnp:FieldRefs>
+            <pnp:FieldRef ID="{f30e2a0a-80eb-4ee6-9376-b689b5c9e15c}" Name="PzlForceAnnouncement" DisplayName="{resource:Field_ForceAnnouncement_Title}" />
+          </pnp:FieldRefs>
         </pnp:ListInstance>
       </pnp:Lists>
     </pnp:ProvisioningTemplate>

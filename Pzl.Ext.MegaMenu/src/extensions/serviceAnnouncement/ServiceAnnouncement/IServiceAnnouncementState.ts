@@ -4,6 +4,7 @@ export interface Announcement {
     id: string;
     title: string;
     severity: string;
+    forceDialog: boolean;
     content: string;
     consequence: string;
     affectedSystems: string;

@@ -138,6 +138,12 @@
   <data name="Field_Responsible_Title" xml:space="preserve">
     <value>Responsible</value>
   </data>
+  <data name="Field_ForceAnnouncement_Title" xml:space="preserve">
+    <value>Force message dialog</value>
+  </data>
+  <data name="Field_ForceAnnouncement_Description" xml:space="preserve">
+    <value>When this option is checked, the announcement is opening as a dialog for all users when they access pages where the announcement feature is active</value>
+  </data>
   <data name="Field_StartTime_Title" xml:space="preserve">
     <value>Active from</value>
   </data>

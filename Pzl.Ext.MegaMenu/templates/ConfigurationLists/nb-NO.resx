@@ -138,6 +138,12 @@
   <data name="Field_Responsible_Title" xml:space="preserve">
     <value>Ansvarlig</value>
   </data>
+  <data name="Field_ForceAnnouncement_Title" xml:space="preserve">
+    <value>Tving åpning</value>
+  </data>
+  <data name="Field_ForceAnnouncement_Description" xml:space="preserve">
+    <value>Når dette er valgt vil meldingen åpnes for alle brukere på alle sider som har denne meldingsfunksjonen aktivert</value>
+  </data>
   <data name="Field_StartTime_Title" xml:space="preserve">
     <value>Starttidspunkt</value>
   </data>
