@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "pzl-yammer-embed-client-side-solution",
+    "id": "fe14334c-f7b2-4b5c-9570-854ef290fa34",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "",
+      "websiteUrl": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "Undefined-1.14.0"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "pzl-yammer-embed description"
+      },
+      "longDescription": {
+        "default": "pzl-yammer-embed description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "pzl-yammer-embed Feature",
+        "description": "The feature that activates elements of the pzl-yammer-embed solution.",
+        "id": "63d1e2f0-b8b0-46d7-ab8c-a6508e7a691f",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/pzl-yammer-embed.sppkg"
+  }
+}

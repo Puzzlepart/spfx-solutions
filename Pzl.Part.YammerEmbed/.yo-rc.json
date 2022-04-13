@@ -1,0 +1,16 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "version": "1.14.0",
+    "libraryName": "pzl-yammer-embed",
+    "libraryId": "fe14334c-f7b2-4b5c-9570-854ef290fa34",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "pzl-yammer-embed",
+    "solutionShortDescription": "pzl-yammer-embed description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}

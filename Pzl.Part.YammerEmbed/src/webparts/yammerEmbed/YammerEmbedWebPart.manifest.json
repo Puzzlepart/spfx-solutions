@@ -1,0 +1,30 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "9c86d3d0-ca12-4e70-9f37-1a8a58087c04",
+  "alias": "YammerEmbedWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
+  "supportsThemeVariants": true,
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "title": {
+        "default": "Yammer"
+      },
+      "description": {
+        "default": "Show Yammer engagement about current page"
+      },
+      "officeFabricIconFontName": "YammerLogo",
+      "properties": {
+        "documentationUrl": "https://github.com/Puzzlepart/spfx-solutions/tree/master/Pzl.Part.YammerEmbed",
+        "embedWidgetUrl": "https://web.yammer.com/embed/widget",
+        "prompt": "Start a discussion"
+      }
+    }
+  ]
+}
