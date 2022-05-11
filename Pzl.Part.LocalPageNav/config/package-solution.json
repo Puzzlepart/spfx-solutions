@@ -3,7 +3,7 @@
   "solution": {
     "name": "Local page navigation by Puzzlepart",
     "id": "e514111f-13b1-4444-93aa-63f82a140107",
-    "version": "1.0.1.0",
+    "version": "1.0.2.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
