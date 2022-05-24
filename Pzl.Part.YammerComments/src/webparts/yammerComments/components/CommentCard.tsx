@@ -5,7 +5,6 @@ import IUser from '../interfaces/IUser';
 import styles from './CommentCard.module.scss';
 import IComment from '../interfaces/IComment';
 import * as strings from 'YammerCommentsWebPartStrings';
-import { IYammerService } from '../services/YammerService';
 
 export interface ICommentCardProps {
     user: IUser;
@@ -16,24 +15,13 @@ export interface ICommentCardProps {
 export const CommentCard: React.FunctionComponent<ICommentCardProps> = (props) => {
 
     const [comment, setComment] = useState<string>('');
-    const [isMultiline, setIsMultiline] = useState<boolean>(false);
     const [isPosting, setIsPosting] = useState<boolean>(false);
 
     const onCommentChange = React.useCallback(
         (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
-            console.log(newValue.match(''));
             setComment(newValue || '');
-            setIsMultiline(newValue && (50 < newValue.length || 0 < newValue.indexOf('\n')));
         },
         [],
-    );
-
-    const onKeyPress = React.useCallback(
-        (event) => {
-            if (event.key === 'Enter') {
-                setIsMultiline(true);
-            }
-        }, []
     );
 
     const postComment = async (): Promise<void> => {
@@ -59,7 +47,7 @@ export const CommentCard: React.FunctionComponent<ICommentCardProps> = (props) =
                 <div className={styles.CommentGap}></div>
                 <div className={styles.CommentArea}>
                     <TextField className={styles.CommentTextField} placeholder='Add a comment. Type @ to mention someone'
-                        onChange={onCommentChange} onKeyPress={onKeyPress} multiline={isMultiline} autoAdjustHeight borderless />
+                        onChange={onCommentChange} multiline={true} autoAdjustHeight borderless />
                 </div>
                 <div className={styles.CommentGap}></div>
                 <div className={styles.CommentButton}>
