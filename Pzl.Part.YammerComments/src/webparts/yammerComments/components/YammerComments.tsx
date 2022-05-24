@@ -21,6 +21,7 @@ export interface IYammerCommentsProps {
 
 export const YammerComments: React.FunctionComponent<IYammerCommentsProps> = (props) => {
 
+  const [timestamp, setTimestamp] = useState<number>(Date.now());
   const [comments, setComments] = useState<IComment[]>();
   const [community, setCommunity] = useState<string>(props.community);
   const [isLoading, setIsLoading] = useState<boolean>(props.community !== null);
@@ -44,10 +45,14 @@ export const YammerComments: React.FunctionComponent<IYammerCommentsProps> = (pr
         const currentUser = await props.yammerService.getCurrentUser();
         setUser(currentUser);
 
-        const webLink = await props.yammerService.getWebLink();
-        if (webLink) {
-          const threadIds: string[] = await props.yammerService.getWebLinkMessages(webLink.id);
+        const result = await props.yammerService.getOpenGraphObjects();
+        if (result && result.ogos) {
 
+          const arrayOfThreadIds: string[][] = await Promise.all(result.ogos.map(async ogo => { return await props.yammerService.getWebLinkMessages(ogo.id); }));
+          let threadIds: string[] = [];
+          arrayOfThreadIds.forEach(nestedArray => {
+            threadIds = threadIds.concat(nestedArray);
+          });
           const messageThreads = await Promise.all(threadIds.map(async threadId => { return await props.yammerService.getMessagesInThread(threadId); }));
 
           const messages: IComment[] = [];
@@ -71,15 +76,15 @@ export const YammerComments: React.FunctionComponent<IYammerCommentsProps> = (pr
     };
 
     fetchData();
-  }, []);
+  }, [timestamp]);
 
   function openPropertyPanel() {
     props.propertyPane.open();
   }
 
   const onNewComment = async (comment: IComment): Promise<void> => {
-    // TODO: Update list of comments
     let newComment = await props.yammerService.postComment(comment);
+    setTimestamp(Date.now());
   };
 
   return (

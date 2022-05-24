@@ -1,10 +1,10 @@
 import { MessageBarBase } from '@microsoft/office-ui-fabric-react-bundle';
-import { AadTokenProvider, AadHttpClient, IHttpClientOptions } from '@microsoft/sp-http';
+import { AadTokenProvider, AadHttpClient } from '@microsoft/sp-http';
 import IComment from '../interfaces/IComment';
 import IUser from '../interfaces/IUser';
 
 export interface IYammerService {
-    getWebLink(): Promise<any>;
+    getOpenGraphObjects(): Promise<any>;
     getWebLinkMessages(id: string): Promise<string[]>;
     getMessagesInThread(id: string): Promise<IComment[]>;
     getCommunities(): Promise<any>;
@@ -18,11 +18,11 @@ export class YammerService implements IYammerService {
 
     private readonly api: string = "https://api.yammer.com/api/v1";
 
-    constructor(private tokenProvider: AadTokenProvider, private httpClient: AadHttpClient) { }
+    constructor(private tokenProvider: AadTokenProvider, private httpClient: AadHttpClient, private site: any) { }
 
-    public async getWebLink(): Promise<any> {
-        let response = await this.httpClient.get(
-            `${this.api}/open_graph_objects?url=${window.location.href}`,
+    public async getOpenGraphObjects(): Promise<any> {
+        let url = `${this.api}/open_graph_objects?url=https://${window.location.host}${window.location.pathname}`;
+        let response = await this.httpClient.get(url,
             AadHttpClient.configurations.v1);
         if (response.ok) {
             return await response.json();
@@ -43,9 +43,9 @@ export class YammerService implements IYammerService {
                     sessionStorage.setItem(`Yammer.User.${id}`, JSON.stringify(user));
                 }
             });
-            return result.messages.map(message => {
+            return result.messages ? result.messages.map(message => {
                 return message.thread_id;
-            });
+            }) : [];
         } else {
             throw Error(response.statusText);
         }
@@ -121,14 +121,14 @@ export class YammerService implements IYammerService {
         headers.append('content-type', 'application/json');
 
         // See https://developer.yammer.com/docs/messages-json-post
+        let url = `https://${window.location.host}${window.location.pathname}`;
         let message = !comment.replyToId ? {
             body: comment.text,
             group_id: comment.groupId,
-            og_url: window.location.href,
+            og_url: url,
             og_title: document.title,
-            og_site_name: window.location.hostname
-            // TODO og_description: Lookup using pageContext.listItem.id
-            // TODO og_image: `https://${pageContext.site.absoluteUrl}/_layouts/15/getpreview.ashx?path=${pageContext.site.serverRequestPath}`
+            og_site_name: window.location.hostname,
+            og_image: `${this.site.absoluteUrl}/_layouts/15/getpreview.ashx?path=${this.site.serverRequestPath}`
         } : {
             body: comment.text,
             replied_to_id: comment.replyToId
@@ -145,7 +145,6 @@ export class YammerService implements IYammerService {
 
         if (response.ok) {
             let result = await response.json();
-            console.log('reponse: ' + result);
             return result;
         } else {
             throw Error(response.statusText);
