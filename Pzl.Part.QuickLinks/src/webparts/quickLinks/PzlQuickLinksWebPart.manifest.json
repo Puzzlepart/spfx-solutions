@@ -1,34 +1,39 @@
 {
-    "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
-    "id": "3131da04-d324-48c9-91a2-8b3861e295fd",
-    "alias": "PzlQuickLinksWebPart",
-    "componentType": "WebPart",
-    "version": "*",
-    "manifestVersion": 2,
-    "requiresCustomScript": false,
-    "supportedHosts": ["SharePointWebPart"],
-    "preconfiguredEntries": [{
-        "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
-        "group": {
-            "default": "Other"
-        },
-        "title": {
-            "default": "Your links",
-            "no-nb": "Dine lenker"
-        },
-        "description": {
-            "default": "Your links",
-            "no-nb": "Dine lenker"
-        },
-        "officeFabricIconFontName": "Globe",
-        "properties": {
-            "title": "Dine lenker",
-            "numberOfItems": 20,
-            "defaultOfficeFabricIcon": "Link",
-            "groupByCategory": false,
-            "maxLinkLength": 130,
-            "lineHeight": 40,
-            "iconOpacity": 100
-        }
-    }]
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "3131da04-d324-48c9-91a2-8b3861e295fd",
+  "alias": "PzlQuickLinksWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "supportsThemeVariants": true,
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+      "group": {
+        "default": "Other"
+      },
+      "title": {
+        "default": "Your links",
+        "no-nb": "Dine lenker"
+      },
+      "description": {
+        "default": "Your links",
+        "no-nb": "Dine lenker"
+      },
+      "officeFabricIconFontName": "Globe",
+      "properties": {
+        "title": "Dine lenker",
+        "numberOfItems": 20,
+        "defaultOfficeFabricIcon": "Link",
+        "groupByCategory": false,
+        "maxLinkLength": 130,
+        "lineHeight": 40,
+        "iconOpacity": 100
+      }
+    }
+  ]
 }

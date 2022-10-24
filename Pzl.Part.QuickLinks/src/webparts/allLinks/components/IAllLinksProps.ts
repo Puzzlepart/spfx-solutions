@@ -1,6 +1,7 @@
 import { IReadonlyTheme } from "@microsoft/sp-component-base";
 
 export interface IAllLinksProps {
+  theme: IReadonlyTheme,
   currentUserId: number;
   currentUserName: string;
   defaultIcon: string;
@@ -14,5 +15,3 @@ export interface IAllLinksProps {
   reccomendedLinksTitle: string;
   myLinksTitle: string;
 }
-
-

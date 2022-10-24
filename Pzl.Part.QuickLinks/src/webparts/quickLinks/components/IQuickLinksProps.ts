@@ -1,4 +1,7 @@
+import { IReadonlyTheme } from "@microsoft/sp-component-base";
+
 export interface IQuickLinksProps {
+  theme: IReadonlyTheme;
   title: string;
   userId: number;
   numberOfLinks: number;

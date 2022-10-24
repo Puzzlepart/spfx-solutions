@@ -1,23 +1,27 @@
 {
-    "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
-    "version": "2.0",
-    "bundles": {
-        "all-links-web-part": {
-            "components": [{
-                "entrypoint": "./lib/webparts/allLinks/AllLinksWebPart.js",
-                "manifest": "./src/webparts/allLinks/AllLinksWebPart.manifest.json"
-            }]
-        },
-        "quick-links-web-part": {
-            "components": [{
-                "entrypoint": "./lib/webparts/quickLinks/PzlQuickLinksWebPart.js",
-                "manifest": "./src/webparts/quickLinks/PzlQuickLinksWebPart.manifest.json"
-            }]
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "all-links-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/allLinks/AllLinksWebPart.js",
+          "manifest": "./src/webparts/allLinks/AllLinksWebPart.manifest.json"
         }
+      ]
     },
-    "externals": {},
-    "localizedResources": {
-        "QuickLinksWebPartStrings": "lib/webparts/quickLinks/loc/{locale}.js",
-        "AllLinksWebPartStrings": "lib/webparts/allLinks/loc/{locale}.js"
+    "quick-links-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/quickLinks/PzlQuickLinksWebPart.js",
+          "manifest": "./src/webparts/quickLinks/PzlQuickLinksWebPart.manifest.json"
+        }
+      ]
     }
+  },
+  "externals": {},
+  "localizedResources": {
+    "QuickLinksWebPartStrings": "lib/webparts/quickLinks/loc/{locale}.js",
+    "AllLinksWebPartStrings": "lib/webparts/allLinks/loc/{locale}.js"
+  }
 }

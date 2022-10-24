@@ -1,13 +1,14 @@
+import "@pnp/polyfill-ie11";
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
+import * as strings from 'QuickLinksWebPartStrings';
+import { sp } from "@pnp/sp";
 import { Version } from '@microsoft/sp-core-library';
 import { BaseClientSideWebPart } from "@microsoft/sp-webpart-base";
+import { ThemeProvider, ThemeChangedEventArgs, IReadonlyTheme } from '@microsoft/sp-component-base';
 import { IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneCheckbox, PropertyPaneTextField } from "@microsoft/sp-property-pane";
-import "@pnp/polyfill-ie11";
-import { sp } from "@pnp/sp";
-import * as strings from 'QuickLinksWebPartStrings';
-import QuickLinks from './components/QuickLinks';
 import { IQuickLinksProps } from './components/IQuickLinksProps';
+import QuickLinks from './components/QuickLinks';
 
 export interface IQuickLinksWebPartProps {
   title: string;
@@ -21,11 +22,14 @@ export interface IQuickLinksWebPartProps {
 }
 
 export default class PzlQuickLinksWebPart extends BaseClientSideWebPart<IQuickLinksWebPartProps> {
-
+  private _themeProvidor: ThemeProvider; // NOTE keeping reference so that we are sure it is not going to be garbage collected
+  private _theme: IReadonlyTheme;
+  
   public render(): void {
     const element: React.ReactElement<IQuickLinksProps> = React.createElement(
       QuickLinks,
       {
+        theme: this._theme,
         title: this.properties.title,
         userId: this.context.pageContext.legacyPageContext.userId,
         numberOfLinks: this.properties.numberOfItems,
@@ -45,6 +49,12 @@ export default class PzlQuickLinksWebPart extends BaseClientSideWebPart<IQuickLi
     sp.setup({
       spfxContext: this.context,
     });
+
+    const themeProvider: ThemeProvider = this.context.serviceScope.consume(ThemeProvider.serviceKey);
+    this._theme = themeProvider.tryGetTheme();
+    themeProvider.themeChangedEvent.add(this, this._handleThemeChange);
+    this._themeProvidor = themeProvider;
+
     try {
       await super.onInit();
       return;
@@ -103,4 +113,9 @@ export default class PzlQuickLinksWebPart extends BaseClientSideWebPart<IQuickLi
       ]
     };
   }
+
+  private _handleThemeChange = (args: ThemeChangedEventArgs): void => {
+    this._theme = args.theme;
+    this.render();
+  };  
 }

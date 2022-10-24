@@ -1,10 +1,7 @@
 @import '~office-ui-fabric-react/dist/sass/References.scss';
 
-[class^="ControlZone--emph"] {
-    background-color: rgba(0, 0, 0, 0) !important;
-}
+$IconSize: 25px;
 
-$IconSize:25px;
 .allLinks {
     .webpartHeading {
         font-weight: 100;
