@@ -1,10 +1,12 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
+import * as packageSolution from '../../../config/package-solution.json';
 import { Version } from '@microsoft/sp-core-library';
 import { BaseClientSideWebPart } from "@microsoft/sp-webpart-base";
-import { IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField } from "@microsoft/sp-property-pane";
+import { IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField, PropertyPaneToggle } from "@microsoft/sp-property-pane";
+import { PropertyPaneWebPartInformation } from '@pnp/spfx-property-controls/lib/PropertyPaneWebPartInformation';
 import * as strings from 'RssFeedWebPartStrings';
-import {RssFeed,IRssFeedProps} from './components/RssFeed';
+import { RssFeed, IRssFeedProps } from './components/RssFeed';
 import { Placeholder } from "@pnp/spfx-controls-react/lib/Placeholder";
 
 export interface IRssFeedWebPartProps {
@@ -15,6 +17,8 @@ export interface IRssFeedWebPartProps {
   cacheDuration: number;
   apiKey: string;
   seeAllUrl: string;
+  showItemDescription: boolean;
+  showItemPubDate: boolean;
 }
 
 export default class RssFeedWebPart extends BaseClientSideWebPart<IRssFeedWebPartProps> {
@@ -80,6 +84,12 @@ export default class RssFeedWebPart extends BaseClientSideWebPart<IRssFeedWebPar
                 PropertyPaneTextField('officeUIFabricIcon', {
                   label: strings.IconLabel
                 }),
+                PropertyPaneToggle('showItemDescription', {
+                  label: strings.ItemDescriptionLabel
+                }),
+                PropertyPaneToggle('showItemPubDate', {
+                  label: strings.ItemPubDateLabel
+                }),
                 PropertyPaneSlider('itemsCount', {
                   label: strings.ItemsCountFieldLabel,
                   min: 1,
@@ -90,6 +100,16 @@ export default class RssFeedWebPart extends BaseClientSideWebPart<IRssFeedWebPar
                   min: 0,
                   max: 1440
                 }),
+              ]
+            },
+            {
+              groupName: strings.WebPartAbout,
+              groupFields: [
+                PropertyPaneWebPartInformation({
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  description: `${strings.Version}: ${(packageSolution as any).solution.version}`,
+                  key: 'version'
+                })
               ]
             }
           ]

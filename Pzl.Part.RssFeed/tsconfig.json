@@ -31,7 +31,6 @@
   },
   "include": [
     "src/**/*.ts",
-    "src/webparts/rssFeed/RssFeedWebPart.tsx",
     "src/**/*.tsx"
   ],
   "exclude": []

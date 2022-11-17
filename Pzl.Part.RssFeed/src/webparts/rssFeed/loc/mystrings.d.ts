@@ -1,10 +1,13 @@
 declare interface IRssFeedWebPartStrings {
   PropertyPaneDescription: string;
   GeneralGroupName: string;
+  WebPartAbout: string;
   HeaderTextFieldLabel: string;
   RssFeedUrlFieldLabel: string;
   ItemsCountFieldLabel: string;
   IconLabel: string;
+  ItemDescriptionLabel: string;
+  ItemPubDateLabel: string;
   CacheExpirationTimeFieldLabel: string;
   CacheExpirationTimeFieldDescription: string;
   Rss2jsonApiKeyFieldLabel: string;
@@ -15,6 +18,7 @@ declare interface IRssFeedWebPartStrings {
   SeeAllUrlFieldLabel: string;
   SeeAllText: string;
   WebPartTitle: string;
+  Version: string;
 }
 
 declare module 'RssFeedWebPartStrings' {
