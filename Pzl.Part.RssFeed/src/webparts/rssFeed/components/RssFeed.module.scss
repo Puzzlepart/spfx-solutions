@@ -1,73 +1,88 @@
 @import '~office-ui-fabric-react/dist/sass/References.scss';
 
 :global {
-    .emphasisBackground-67 {
-        background: transparent;
-    }
-    .ControlZoneEmphasisBackground {
-        background: transparent;
-    }
+  .emphasisBackground-67 {
+    background: transparent;
+  }
+
+  .ControlZoneEmphasisBackground {
+    background: transparent;
+  }
 }
 
 .rssFeed {
-    .container {
-        max-width: auto;
-        margin: 0px auto;
-    }
-    .webpartHeader {
-        padding-bottom: 10px;
-        font-size: 24px;
-        font-weight: 100;
-        .showAll {
-            float: right;
-            > span {
-                text-decoration: none;
-                font-size: 14px;
-                font-weight: 400;
-                cursor: pointer;
-            }
-        }
-    }
-    .itemsList {
-        list-style-type: none;
-        margin: 20px 0 0 0;
-        padding: 0;
-    }
-    @include ms-Grid;
-    .listItem {
-        @include ms-Grid-row;
-        @include ms-fontWeight-regular;
-        @include ms-fontSize-mPlus;
-        padding-bottom: 5px;
-        margin-bottom: 15px;
-        display: list-item;
+  .container {
+    max-width: auto;
+    margin: 0px auto;
+  }
+
+  .webpartHeader {
+    @include ms-font-l;
+    padding-bottom: 10px;
+    font-size: 20px;
+    font-weight: 600;
+
+    .showAll {
+      float: right;
+
+      >span {
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 400;
         cursor: pointer;
-        div {
-            @include ms-Grid-col;
-            @include ms-sm10;
-        }
-        .icon {
-            @include ms-Grid-col;
-            @include ms-sm2;
-            height: 42px;
-            width: 42px;
-            font-size: 25px;
-        }
-        svg {
-            @include ms-Grid-col;
-            @include ms-sm2;
-        }
+      }
     }
-    .listItem:hover {
-        background-color: rgba(0, 0, 0, 0.060);
+  }
+
+  .itemsList {
+    list-style-type: none;
+    margin: 20px 0 0 0;
+    padding: 0;
+  }
+
+  @include ms-Grid;
+
+  .listItem {
+    @include ms-Grid-row;
+    @include ms-fontWeight-regular;
+    @include ms-fontSize-mPlus;
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    display: list-item;
+    cursor: pointer;
+
+    div {
+      @include ms-Grid-col;
+      @include ms-sm10;
     }
-    .listItemTitle {
-        overflow: hidden;
+
+    .icon {
+      @include ms-Grid-col;
+      @include ms-sm2;
+      height: 42px;
+      width: 42px;
+      font-size: 25px;
     }
-    .listItemPubDate {
-        padding-top: 5px;
+
+    svg {
+      @include ms-Grid-col;
+      @include ms-sm2;
     }
-    .listItemDescription {
-        width: 285px;
-    }
+  }
+
+  .listItem:hover {
+    background-color: rgba(0, 0, 0, 0.060);
+  }
+
+  .listItemTitle {
+    overflow: hidden;
+  }
+
+  .listItemPubDate {
+    padding-top: 5px;
+  }
+
+  .listItemDescription {
+    width: 285px;
+  }
 }

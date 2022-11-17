@@ -4,8 +4,7 @@ import { Version } from '@microsoft/sp-core-library';
 import { BaseClientSideWebPart } from "@microsoft/sp-webpart-base";
 import { IPropertyPaneConfiguration, PropertyPaneSlider, PropertyPaneTextField } from "@microsoft/sp-property-pane";
 import * as strings from 'RssFeedWebPartStrings';
-import RssFeed from './components/RssFeed';
-import { IRssFeedProps } from './components/IRssFeedProps';
+import {RssFeed,IRssFeedProps} from './components/RssFeed';
 import { Placeholder } from "@pnp/spfx-controls-react/lib/Placeholder";
 
 export interface IRssFeedWebPartProps {
