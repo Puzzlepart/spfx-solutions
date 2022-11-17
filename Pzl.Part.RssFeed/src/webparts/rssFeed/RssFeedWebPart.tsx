@@ -31,6 +31,8 @@ export default class RssFeedWebPart extends BaseClientSideWebPart<IRssFeedWebPar
         apiKey: this.properties.apiKey,
         itemsCount: this.properties.itemsCount,
         officeUIFabricIcon: this.properties.officeUIFabricIcon,
+        showItemDescription: this.properties.showItemDescription,
+        showItemPubDate: this.properties.showItemPubDate,
         updateProperty: (value: string) => {
           this.properties.title = value;
         },

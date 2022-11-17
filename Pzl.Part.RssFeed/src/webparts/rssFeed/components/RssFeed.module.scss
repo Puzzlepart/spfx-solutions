@@ -51,11 +51,6 @@
     display: list-item;
     cursor: pointer;
 
-    div {
-      @include ms-Grid-col;
-      @include ms-sm10;
-    }
-
     .icon {
       @include ms-Grid-col;
       @include ms-sm2;
@@ -64,9 +59,9 @@
       font-size: 25px;
     }
 
-    svg {
+    .content {
       @include ms-Grid-col;
-      @include ms-sm2;
+      @include ms-sm10;
     }
   }
 
@@ -75,14 +70,17 @@
   }
 
   .listItemTitle {
+    @include ms-font-l;
     overflow: hidden;
   }
 
   .listItemPubDate {
+    @include ms-font-s;
     padding-top: 5px;
   }
 
   .listItemDescription {
-    width: 285px;
+    @include ms-font-m;
+    //width: 285px;
   }
 }

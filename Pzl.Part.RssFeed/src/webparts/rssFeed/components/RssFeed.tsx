@@ -22,6 +22,8 @@ export interface IRssFeedProps {
   apiKey: string;
   itemsCount: number;
   officeUIFabricIcon: string;
+  showItemDescription: boolean;
+  showItemPubDate: boolean;
   displayMode: DisplayMode;
   context: WebPartContext;
   updateProperty: (value: string) => void;
@@ -64,14 +66,15 @@ export const RssFeed: React.FunctionComponent<IRssFeedProps> = (props) => {
           </span>
         </div> : ''}
         <ul className={styles.itemsList}>
-          {(items) ? items.map(({ title, pubDate, link }, index) => (
-            <Text className={styles.listItem} onClick={() => window.open(link.replace(/&amp;/g, '&'), '_blank')} key={`listItem_${index}`} >
+          {(items) ? items.map((item, index) => (
+            <Text className={styles.listItem} onClick={() => window.open(item.link.replace(/&amp;/g, '&'), '_blank')} key={`listItem_${index}`} title={item.link}>
               {props.officeUIFabricIcon ? <Icon iconName={props.officeUIFabricIcon} className={styles.icon} /> : ''}
-              <div>
+              <div className={styles.content}>
                 <div className={`${styles.listItemTitle}`}>
-                  {title}
+                  {item.title}
                 </div>
-                {pubDate ? <div className={`${styles.listItemPubDate} ms-font-xs`}>{strings.View_PublishLabel} {moment(pubDate).format("DD.MM.YYYY")}</div> : null}
+                {item.description && props.showItemDescription ? <div className={`${styles.listItemDescription}`} >{item.description}</div> : ''}
+                {item.pubDate && props.showItemPubDate ? <div className={`${styles.listItemPubDate}`}>{moment(item.pubDate).format("DD.MM.YYYY")}</div> : ''}
               </div>
             </Text>
           )) : null}
