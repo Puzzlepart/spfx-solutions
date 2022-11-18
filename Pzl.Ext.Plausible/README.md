@@ -15,6 +15,7 @@ Choose the scope of your analytics tracking:
 ## Configuration options
 ### Limit page tracking to a SharePoint Hub and all associated sites
 * Specify the id of the hub site using the `hubSiteId` (component) property
+  * Open https://TENANT.sharepoint.com/sites/SITE/_api/site/id/_api/site/id to find the ID
   * Either update 'Properties' in `sharepoint/assets/ClientSideInstances.xml` before build
   * or update 'Component Properties' in `Tenant Wide Extensions` after deployment
 
