@@ -4,23 +4,23 @@
   "https": true,
   "serveConfigurations": {
     "default": {
-      "pageUrl": "https://contoso.sharepoint.com/sites/mySite/SitePages/myPage.aspx",
+      "pageUrl": "https://skodvinhvammen.sharepoint.com",
       "customActions": {
         "d98b227b-1bc5-4a9a-9b84-601f75d2f8ca": {
           "location": "ClientSideExtension.ApplicationCustomizer",
           "properties": {
-            "testMessage": "Test message"
+            "hubSiteId": "9aeaafd7-7715-47e3-a32d-a31e6b722ad0"
           }
         }
       }
     },
     "plausible": {
-      "pageUrl": "https://contoso.sharepoint.com/sites/mySite/SitePages/myPage.aspx",
+      "pageUrl": "https://skodvinhvammen.sharepoint.com",
       "customActions": {
         "d98b227b-1bc5-4a9a-9b84-601f75d2f8ca": {
           "location": "ClientSideExtension.ApplicationCustomizer",
           "properties": {
-            "testMessage": "Test message"
+            "hubSiteId": "9aeaafd7-7715-47e3-a32d-a31e6b722ad0"
           }
         }
       }

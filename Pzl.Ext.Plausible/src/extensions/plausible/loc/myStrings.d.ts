@@ -1,8 +1,8 @@
-declare interface IPlausibleApplicationCustomizerStrings {
-  Title: string;
+declare interface IPlausibleAnalyticsTrackerStrings {
+  
 }
 
-declare module 'PlausibleApplicationCustomizerStrings' {
-  const strings: IPlausibleApplicationCustomizerStrings;
+declare module 'PlausibleAnalyticsTrackerStrings' {
+  const strings: IPlausibleAnalyticsTrackerStrings;
   export = strings;
 }

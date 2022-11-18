@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Elements xmlns="http://schemas.microsoft.com/sharepoint/">
     <ClientSideComponentInstance
-        Title="Plausible"
+        Title="Plausible Analytics Tracker by Puzzlepart"
         Location="ClientSideExtension.ApplicationCustomizer"
         ComponentId="d98b227b-1bc5-4a9a-9b84-601f75d2f8ca"
-        Properties="{&quot;testMessage&quot;:&quot;Test message&quot;}">
+        Properties="{&quot;hubSiteId&quot;:&quot;&quot;}">
     </ClientSideComponentInstance>
 </Elements>

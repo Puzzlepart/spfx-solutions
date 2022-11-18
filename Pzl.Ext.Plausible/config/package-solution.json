@@ -1,25 +1,25 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "pzl-ext-plausible-client-side-solution",
+    "name": "Plausible Analytics Tracker by Puzzlepart",
     "id": "3fb17363-bd44-409f-8c66-aeabeb64c879",
     "version": "1.0.0.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
     "developer": {
-      "name": "",
-      "websiteUrl": "",
+      "name": "Puzzlepart",
+      "websiteUrl": "https://puzzlepart.com",
       "privacyUrl": "",
       "termsOfUseUrl": "",
-      "mpnId": "Undefined-1.16.0"
+      "mpnId": "5128564"
     },
     "metadata": {
       "shortDescription": {
-        "default": "pzl-ext-plausible description"
+        "default": "Plausible Analytics Tracker for SharePoint Online"
       },
       "longDescription": {
-        "default": "pzl-ext-plausible description"
+        "default": "Track SharePoint page views to Pausible Analytics"
       },
       "screenshotPaths": [],
       "videoUrl": "",
@@ -27,7 +27,7 @@
     },
     "features": [
       {
-        "title": "Application Extension - Deployment of custom action",
+        "title": "Plausible Analytics Tracker by Puzzlepart",
         "description": "Deploys a custom action with ClientSideComponentId association",
         "id": "75553d8a-251b-4536-a303-96ec405cd9b9",
         "version": "1.0.0.0",
@@ -41,6 +41,6 @@
     ]
   },
   "paths": {
-    "zippedPackage": "solution/pzl-ext-plausible.sppkg"
+    "zippedPackage": "solution/pzl-ext-plausible-analytics.sppkg"
   }
 }

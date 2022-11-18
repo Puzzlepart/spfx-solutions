@@ -5,14 +5,14 @@
     "plausible-application-customizer": {
       "components": [
         {
-          "entrypoint": "./lib/extensions/plausible/PlausibleApplicationCustomizer.js",
-          "manifest": "./src/extensions/plausible/PlausibleApplicationCustomizer.manifest.json"
+          "entrypoint": "./lib/extensions/plausible/PlausibleAnalyticsTracker.js",
+          "manifest": "./src/extensions/plausible/PlausibleAnalyticsTracker.manifest.json"
         }
       ]
     }
   },
   "externals": {},
   "localizedResources": {
-    "PlausibleApplicationCustomizerStrings": "lib/extensions/plausible/loc/{locale}.js"
+    "PlausibleAnalyticsTrackerStrings": "lib/extensions/plausible/loc/{locale}.js"
   }
 }
