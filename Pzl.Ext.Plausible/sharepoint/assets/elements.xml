@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+    <CustomAction
+        Title="Plausible"
+        Location="ClientSideExtension.ApplicationCustomizer"
+        ClientSideComponentId="d98b227b-1bc5-4a9a-9b84-601f75d2f8ca"
+        ClientSideComponentProperties="{&quot;testMessage&quot;:&quot;Test message&quot;}">
+    </CustomAction>
+</Elements>
