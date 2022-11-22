@@ -9,6 +9,7 @@ import { IQuickLinksState, ILink, ICategory } from './IQuickLinksState';
 import { Icon } from 'office-ui-fabric-react/lib/Icon';
 import { Text } from 'office-ui-fabric-react/lib/Text';
 import { IReadonlyTheme } from "@microsoft/sp-component-base";
+import { stringIsNullOrEmpty } from "@pnp/common";
 
 export default class QuickLinks extends React.Component<IQuickLinksProps, IQuickLinksState> {
   public constructor(props: IQuickLinksProps) {
@@ -58,7 +59,11 @@ export default class QuickLinks extends React.Component<IQuickLinksProps, IQuick
           const linkTarget = link.openInSameTab ? '_self' : '_blank';
           return (
             <div key={`link_${linkIndex}`} className={styles.linkGridColumn} style={{ lineHeight: `${this.props.lineHeight}px` }}>
-              <Text className={styles.linkContainer} onClick={() => window.open(link.url, linkTarget)}>
+              <Text className={styles.linkContainer} onClick={() => {
+                  this.callWebHook(link.url, link.category);
+                  window.open(link.url, linkTarget)
+                }
+              }>
                 {linkIcon}
                 <span style={linkStyle}>{link.displayText}</span>
               </Text>
@@ -73,6 +78,30 @@ export default class QuickLinks extends React.Component<IQuickLinksProps, IQuick
         return <div key={`category_${catIndex}`}>{linkItems}</div>;
       })
     );
+  }
+
+  private async callWebHook(uri: string, category: string): Promise<any> {
+    
+    if( stringIsNullOrEmpty(this.props.linkClickWebHook) ) {
+      return;
+    }
+    
+    const body = {
+      uri: uri,
+      category: category
+    }
+
+    const postRequest = {
+      method: 'POST',
+      body: JSON.stringify(body),
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache'
+      }
+    }
+
+    fetch(this.props.linkClickWebHook, postRequest)
+
   }
 
   private async fetchData() {
