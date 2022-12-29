@@ -1,0 +1,46 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "Plausible Analytics Tracker by Puzzlepart",
+    "id": "3fb17363-bd44-409f-8c66-aeabeb64c879",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "Puzzlepart",
+      "websiteUrl": "https://puzzlepart.com",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "5128564"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "Plausible Analytics Tracker for SharePoint Online"
+      },
+      "longDescription": {
+        "default": "Track SharePoint page views to Pausible Analytics"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "Plausible Analytics Tracker by Puzzlepart",
+        "description": "Deploys a custom action with ClientSideComponentId association",
+        "id": "75553d8a-251b-4536-a303-96ec405cd9b9",
+        "version": "1.0.0.0",
+        "assets": {
+          "elementManifests": [
+            "elements.xml",
+            "ClientSideInstance.xml"
+          ]
+        }
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/pzl-ext-plausible-analytics.sppkg"
+  }
+}
