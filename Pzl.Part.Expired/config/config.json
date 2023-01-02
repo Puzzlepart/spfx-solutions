@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "page-expired-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/pageExpired/PageExpiredWebPart.js",
+          "manifest": "./src/webparts/pageExpired/PageExpiredWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "PageExpiredWebPartStrings": "lib/webparts/pageExpired/loc/{locale}.js"
+  }
+}

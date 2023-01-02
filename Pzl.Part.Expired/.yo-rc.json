@@ -1,0 +1,21 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "16.13.2",
+    "sdksVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2",
+      "@microsoft/teams-js": "2.4.1"
+    },
+    "version": "1.16.0",
+    "libraryName": "pzl-page-expired",
+    "libraryId": "a2f4c54c-485f-4685-b2b6-b335952b1a5e",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "pzl-page-expired",
+    "solutionShortDescription": "pzl-page-expired description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
