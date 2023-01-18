@@ -3,7 +3,7 @@
   "solution": {
     "name": "Page Expired by Puzzlepart",
     "id": "a2f4c54c-485f-4685-b2b6-b335952b1a5e",
-    "version": "1.0.0.0",
+    "version": "1.0.0.1",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,

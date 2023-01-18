@@ -48,9 +48,9 @@ export default class PageExpiredWebPart extends BaseClientSideWebPart<IPageExpir
     await super.onInit();
     this._pageService = new PageService(this.context.serviceScope);
     const page = await this._pageService.getPage();
-    this._modified = new Date(page.Modified);
+    this._modified = page ? new Date(page.Modified) : new Date();
     this._isEditor = (new SPPermission(this.context.pageContext.web.permissions.value)).hasPermission(SPPermission.addListItems)
-    this._isNews = page.PromotedState === 2;
+    this._isNews = page && page.PromotedState === 2;
     return Promise.resolve();
   }
 
