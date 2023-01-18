@@ -3,6 +3,9 @@ declare interface IPageExpiredWebPartStrings {
 
   ExpirationMessage: string;
   ExpireAfterLabel: string;
+  MessageAudienceLabel: string;
+  EditorsOnly: string;
+  EditorsAndReaders: string;
   
   PageWasPublished: string;
 

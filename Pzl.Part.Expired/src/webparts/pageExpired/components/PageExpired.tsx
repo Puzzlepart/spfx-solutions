@@ -7,6 +7,7 @@ import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBa
 export interface IPageExpiredProps {
   modified: Date;
   expireAfter: number;
+  showForReaders: boolean;
   isEditor: boolean;
   verify(ev: unknown): void;
 }
@@ -39,7 +40,7 @@ export const PageExpired: React.FunctionComponent<IPageExpiredProps> = (props) =
   const expiryDate = addDays(props.modified, props.expireAfter);
   const daysSinceModified = ~~((today.getTime() - props.modified.getTime()) / (1000 * 60 * 60 * 24));
 
-  const sessionKey = `Ignore.${window.location.pathname}`;
+  const sessionKey = `PageExpiredWebPart.Ignore.${window.location.pathname}`;
   const [ignored, setIgnored] = useState<boolean>(sessionStorage.getItem(sessionKey) !== null);
 
   const ignore = useCallback((ev) => {
@@ -61,7 +62,7 @@ export const PageExpired: React.FunctionComponent<IPageExpiredProps> = (props) =
         <p>{strings.ExpirationMessage}</p>
       </div>
     </MessageBar>
-  </> : <MessageBar>{strings.PageWasPublished} {format(daysSinceModified)}</MessageBar> : <></>);
+  </> : props.showForReaders ? <MessageBar>{strings.PageWasPublished} {format(daysSinceModified)}</MessageBar> : <></> : <></>);
 };
 
 

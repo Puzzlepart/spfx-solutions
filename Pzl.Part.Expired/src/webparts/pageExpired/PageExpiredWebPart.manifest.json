@@ -14,14 +14,15 @@
     {
       "groupId": "5c03119e-3074-46fd-976b-c60198311f70", 
       "title": {
-        "default": "Page Expired"
+        "default": "Notify when page has expired"
       },
       "description": {
-        "default": "Displays a message to editors, and optionally to viewers, if page is outdated"
+        "default": "Displays a message to editors, and optionally to readers,when content may be outdated"
       },
       "officeFabricIconFontName": "DateTime",
       "properties": {
-        "expireAfter": "365"
+        "expireAfter": "365",
+        "showForReaders": true
       }
     }
   ]

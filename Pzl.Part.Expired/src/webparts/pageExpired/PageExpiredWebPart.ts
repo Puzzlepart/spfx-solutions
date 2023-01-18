@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
-import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane';
+import { IPropertyPaneConfiguration, PropertyPaneTextField, PropertyPaneToggle } from '@microsoft/sp-property-pane';
 import { SPPermission } from "@microsoft/sp-page-context";
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import { IReadonlyTheme } from '@microsoft/sp-component-base';
@@ -12,6 +12,7 @@ import { IPageService, PageService } from './services/PageService';
 
 export interface IPageExpiredWebPartProps {
   expireAfter: number;
+  showForReaders: boolean;
 }
 
 export default class PageExpiredWebPart extends BaseClientSideWebPart<IPageExpiredWebPartProps> {
@@ -33,6 +34,7 @@ export default class PageExpiredWebPart extends BaseClientSideWebPart<IPageExpir
         verify: this.onVerify,
         modified: this._modified,
         expireAfter: Number(this.properties.expireAfter),
+        showForReaders: this.properties.showForReaders,
         isEditor: this._isEditor
       }
     );
@@ -88,6 +90,11 @@ export default class PageExpiredWebPart extends BaseClientSideWebPart<IPageExpir
               groupFields: [
                 PropertyPaneTextField('expireAfter', {
                   label: strings.ExpireAfterLabel
+                }),
+                PropertyPaneToggle('showForReaders', {
+                  label: strings.MessageAudienceLabel,
+                  offText: strings.EditorsOnly,
+                  onText: strings.EditorsAndReaders
                 })
               ]
             }
