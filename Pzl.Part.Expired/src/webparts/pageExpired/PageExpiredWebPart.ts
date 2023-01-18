@@ -21,6 +21,7 @@ export default class PageExpiredWebPart extends BaseClientSideWebPart<IPageExpir
 
   private _modified: Date;
   private _isEditor: boolean;
+  private _isNews: boolean;
 
   public onVerify = async (event: unknown): Promise<void> => {
     await this._pageService.savePage();
@@ -35,7 +36,8 @@ export default class PageExpiredWebPart extends BaseClientSideWebPart<IPageExpir
         modified: this._modified,
         expireAfter: Number(this.properties.expireAfter),
         showForReaders: this.properties.showForReaders,
-        isEditor: this._isEditor
+        isEditor: this._isEditor,
+        isNews: this._isNews
       }
     );
 
@@ -48,6 +50,7 @@ export default class PageExpiredWebPart extends BaseClientSideWebPart<IPageExpir
     const page = await this._pageService.getPage();
     this._modified = new Date(page.Modified);
     this._isEditor = (new SPPermission(this.context.pageContext.web.permissions.value)).hasPermission(SPPermission.addListItems)
+    this._isNews = page.PromotedState === 2;
     return Promise.resolve();
   }
 

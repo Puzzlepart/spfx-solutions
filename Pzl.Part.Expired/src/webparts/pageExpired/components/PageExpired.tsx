@@ -9,6 +9,7 @@ export interface IPageExpiredProps {
   expireAfter: number;
   showForReaders: boolean;
   isEditor: boolean;
+  isNews: boolean;
   verify(ev: unknown): void;
 }
 
@@ -48,7 +49,7 @@ export const PageExpired: React.FunctionComponent<IPageExpiredProps> = (props) =
     setIgnored(true);
   }, []);
 
-  return (!ignored && expiryDate < today ? props.isEditor ? <>
+  return (!ignored && expiryDate < today ? props.isEditor && !props.isNews ? <>
     <MessageBar
       messageBarType={MessageBarType.warning}
       isMultiline={true}
