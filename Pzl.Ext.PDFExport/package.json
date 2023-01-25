@@ -46,7 +46,7 @@
         "@types/chai": "3.4.34",
         "@types/file-saver": "^2.0.0",
         "@types/mocha": "2.2.38",
-        "ajv": "~5.2.2",
+        "ajv": "~6.12.3",
         "gulp": "~3.9.1",
         "webpack-bundle-analyzer": "^3.8.0"
     }
