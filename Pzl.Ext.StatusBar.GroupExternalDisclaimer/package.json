@@ -30,7 +30,7 @@
     "gulp": "~3.9.1",
     "@types/chai": ">=3.4.34 <3.6.0",
     "@types/mocha": ">=2.2.33 <2.6.0",
-    "ajv": "~5.2.2"
+    "ajv": "~6.12.3"
   },
   "resolutions": {
     "@types/react": "16.8.8"
