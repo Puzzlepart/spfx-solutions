@@ -10,6 +10,7 @@ define([], function () {
     "IconLabel": "Ikon",
     "ItemDescriptionLabel": "Vis oppsummering",
     "ItemPubDateLabel": "Vis publiseringsdato",
+    "ItemImageLabel": "Vis bilde",
     "CacheExpirationTimeFieldLabel": "Varighet mellomlagring (minutter)",
     "CacheExpirationTimeFieldDescription": "Hvor mange minutter nettleseren skal mellomlagre treff fra rss-apiet.",
     "View_PublishLabel": "Publisert",

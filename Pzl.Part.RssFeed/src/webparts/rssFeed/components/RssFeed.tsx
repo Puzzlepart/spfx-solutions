@@ -9,12 +9,17 @@ import { Text } from 'office-ui-fabric-react/lib/Text';
 import { DisplayMode } from "@microsoft/sp-core-library";
 import { WebPartContext } from "@microsoft/sp-webpart-base";
 
+export interface IRssFeedEnclosure {
+  link: string;
+}
 export interface IRssFeedItem {
   title: string;
   pubDate: string;
   link: string;
   description: string;
+  enclosure: IRssFeedEnclosure
 }
+
 export interface IRssFeedProps {
   title: string;
   seeAllUrl: string;
@@ -24,6 +29,7 @@ export interface IRssFeedProps {
   officeUIFabricIcon: string;
   showItemDescription: boolean;
   showItemPubDate: boolean;
+  showItemImage: boolean;
   displayMode: DisplayMode;
   context: WebPartContext;
   updateProperty: (value: string) => void;
@@ -56,6 +62,38 @@ export const RssFeed: React.FunctionComponent<IRssFeedProps> = (props) => {
 
   }, []);
 
+  /**
+   * http://stackoverflow.com/a/10997390/11236
+   */
+  const updateURLParameter = (url: string, param: string, paramVal: string) => {
+    let newAdditionalURL = "";
+    let tempArray = url.split("?");
+    const baseURL = tempArray[0];
+    const additionalURL = tempArray[1];
+    let temp = "";
+    if (additionalURL) {
+      tempArray = additionalURL.split("&");
+      for (let i = 0; i < tempArray.length; i++) {
+        if (tempArray[i].split('=')[0] != param) {
+          newAdditionalURL += temp + tempArray[i];
+          temp = "&";
+        }
+      }
+    }
+
+    const rows_txt = temp + "" + param + "=" + paramVal;
+    return baseURL + "?" + newAdditionalURL + rows_txt;
+  }
+
+  const getThumbnail = (item: IRssFeedItem) => {
+    const url = item.enclosure.link.replace(/&amp;/g, '&');
+
+    let updatedUrl = updateURLParameter(url, 'w', '200');
+    updatedUrl = updateURLParameter(updatedUrl, 'h', '140');
+
+    return updatedUrl;
+  }
+
   return (
     <div className={styles.rssFeed}>
       <div className={styles.container}>
@@ -69,12 +107,15 @@ export const RssFeed: React.FunctionComponent<IRssFeedProps> = (props) => {
           {(items) ? items.map((item, index) => (
             <Text className={styles.listItem} onClick={() => window.open(item.link.replace(/&amp;/g, '&'), '_blank')} key={`listItem_${index}`} title={item.link}>
               {props.officeUIFabricIcon ? <Icon iconName={props.officeUIFabricIcon} className={styles.icon} /> : ''}
-              <div className={styles.content}>
-                <div className={`${styles.listItemTitle}`}>
-                  {item.title}
+              <div className={item.enclosure && item.enclosure.link && props.showItemImage ? styles.contentWithImage : styles.contentNoImage}>
+                <div className={styles.containerText}>
+                  <div className={`${styles.listItemTitle}`}>
+                    {item.title}
+                  </div>
+                    {item.pubDate && props.showItemPubDate ? <div className={`${styles.listItemPubDate}`}>{moment(item.pubDate).format("DD.MM.YYYY")}</div> : ''}
+                    {item.description && props.showItemDescription ? <div className={`${styles.listItemDescription}`} dangerouslySetInnerHTML={{ __html: item.description }} /> : ''}
                 </div>
-                {item.description && props.showItemDescription ? <div className={`${styles.listItemDescription}`} >{item.description}</div> : ''}
-                {item.pubDate && props.showItemPubDate ? <div className={`${styles.listItemPubDate}`}>{moment(item.pubDate).format("DD.MM.YYYY")}</div> : ''}
+                  {item.enclosure && item.enclosure.link && props.showItemImage ? <div className={styles.image}><img src={getThumbnail(item)} alt={item.title} /></div> : ''}
               </div>
             </Text>
           )) : null}
@@ -82,5 +123,4 @@ export const RssFeed: React.FunctionComponent<IRssFeedProps> = (props) => {
       </div>
     </div>
   );
-
 };

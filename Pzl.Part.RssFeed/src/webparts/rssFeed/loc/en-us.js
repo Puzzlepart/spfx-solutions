@@ -10,6 +10,7 @@ define([], function () {
     "IconLabel": "Icon",
     "ItemDescriptionLabel": "Show description",
     "ItemPubDateLabel": "Show published date",
+    "ItemImageLabel": "Show image",
     "CacheExpirationTimeFieldLabel": "Cache duration (minutes)",
     "CacheExpirationTimeFieldDescription": 'How many minutes the browser should save (cache) the results from the RSS - API.',
     "View_PublishLabel": "Published",
