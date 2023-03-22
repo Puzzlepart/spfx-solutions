@@ -40,11 +40,12 @@ export default class NavigationElement extends React.PureComponent<INavigationEl
             </div> : null;
 
         let headerMarkup = <span>{this.props.header}</span>;
-        if (this.props.headerLink) {
+        if (this.props.headerLink && !this.isMobile()) {
             const props = { text: this.props.header, url: this.props.headerLink, linkTextColor: this.props.navHeaderTextColor, isHeader:true };
             headerMarkup = <NavigationLink {...props} />;
+        } else if (this.props.headerLink && this.isMobile()) {
+            headerMarkup = <span>{this.props.header}<a className={styles.mobileHeadingLink} href={this.props.headerLink}><Icon iconName='Link' title={`Navigate to ${this.props.headerLink}`}></Icon></a></span>;
         }
-
         return (
             <div className={`${styles.navigationElement} ${this.isMobile() ? 'isMobile' : 'isDesktop'}`}>
                 <div onClick={this._onHeaderClick} className={styles.header} style={headerStyle}>
