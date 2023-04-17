@@ -1,0 +1,101 @@
+Execute in bash
+-----------------------
+npm i -SE @microsoft/sp-core-library@1.17.1 @microsoft/sp-lodash-subset@1.17.1 @microsoft/sp-office-ui-fabric-core@1.17.1 @microsoft/sp-webpart-base@1.17.1 @microsoft/sp-property-pane@1.17.1 @microsoft/sp-adaptive-card-extension-base@1.17.1 react@17.0.1 react-dom@17.0.1 office-ui-fabric-react@7.199.1
+npm i -DE @microsoft/eslint-plugin-spfx@1.17.1 @microsoft/eslint-config-spfx@1.17.1 @microsoft/sp-build-web@1.17.1 @microsoft/sp-module-interfaces@1.17.1 @microsoft/rush-stack-compiler-4.5@0.4.0 @types/react@17.0.45 @types/react-dom@17.0.17
+npm dedupe
+cat > "config/sass.json" << EOF 
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/core-build/sass.schema.json"
+}
+EOF
+
+./.yo-rc.json
+-------------
+Update version in .yo-rc.json:
+{
+  "@microsoft/generator-sharepoint": {
+    "version": "1.17.1"
+  }
+}
+
+Update @microsoft/teams-js SDK version in .yo-rc.json:
+{
+  "@microsoft/generator-sharepoint": {
+    "sdkVersions": {
+      "@microsoft/teams-js": "2.9.1"
+    }
+  }
+}
+
+Update nodeVersion in .yo-rc.json:
+{
+  "@microsoft/generator-sharepoint": {
+    "nodeVersion": "14.17.6"
+  }
+}
+
+Update @microsoft/microsoft-graph-client SDK version in .yo-rc.json:
+{
+  "@microsoft/generator-sharepoint": {
+    "sdkVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2"
+    }
+  }
+}
+
+
+./config/serve.json
+-------------------
+Update serve.json initialPage URL:
+{
+  "initialPage": "https://{tenantDomain}/_layouts/workbench.aspx"
+}
+
+
+.vscode/launch.json
+-------------------
+In the .vscode/launch.json file, update the type property for the hosted workbench launch configuration:
+{
+  "configurations": [
+    {
+      "type": "edge"
+    }
+  ]
+}
+
+In the .vscode/launch.json file, update the url property for the hosted workbench launch configuration:
+{
+  "configurations": [
+    {
+      "url": "https://{tenantDomain}/_layouts/workbench.aspx"
+    }
+  ]
+}
+
+
+./package.json
+--------------
+Update package.json engines.node property:
+{
+  "engines": {
+    "node": ">=16.13.0 <17.0.0"
+  }
+}
+
+
+src/webparts/allLinks/components/AllLinks.module.scss
+-----------------------------------------------------
+Remove scss file import:
+@import '~office-ui-fabric-react/dist/sass/References.scss'
+
+Add scss file import:
+@import '~@fluentui/react/dist/sass/References.scss'
+
+
+src/webparts/quickLinks/components/QuickLinks.module.scss
+---------------------------------------------------------
+Remove scss file import:
+@import '~office-ui-fabric-react/dist/sass/References.scss'
+
+Add scss file import:
+@import '~@fluentui/react/dist/sass/References.scss'

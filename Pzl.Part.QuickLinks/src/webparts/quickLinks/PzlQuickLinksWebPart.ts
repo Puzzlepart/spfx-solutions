@@ -22,7 +22,7 @@ export interface IQuickLinksWebPartProps {
 }
 
 export default class PzlQuickLinksWebPart extends BaseClientSideWebPart<IQuickLinksWebPartProps> {
-  private _themeProvidor: ThemeProvider; // NOTE keeping reference so that we are sure it is not going to be garbage collected
+  private _themeProvidor: ThemeProvider; // NOTE DO NOT REMOVE; we need to keep the reference for it not to (potentially) be garbage collected
   private _theme: IReadonlyTheme;
   
   public render(): void {
