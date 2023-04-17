@@ -1,0 +1,164 @@
+Execute in bash
+-----------------------
+npm un -D @microsoft/sp-tslint-rules
+npm i -SE @microsoft/sp-core-library@1.17.1 @microsoft/sp-lodash-subset@1.17.1 @microsoft/sp-office-ui-fabric-core@1.17.1 @microsoft/sp-webpart-base@1.17.1 @microsoft/sp-property-pane@1.17.1 @microsoft/sp-adaptive-card-extension-base@1.17.1 react@17.0.1 react-dom@17.0.1 office-ui-fabric-react@7.199.1 tslib@2.3.1
+npm i -DE @microsoft/eslint-plugin-spfx@1.17.1 @microsoft/eslint-config-spfx@1.17.1 @microsoft/sp-build-web@1.17.1 @microsoft/sp-module-interfaces@1.17.1 @microsoft/rush-stack-compiler-4.5@0.4.0 eslint@8.7.0 @types/react@17.0.45 @types/react-dom@17.0.17 typescript@4.5.5 ajv@6.12.5 @types/webpack-env@1.15.2 @rushstack/eslint-config@2.5.1 eslint-plugin-react-hooks@4.3.0
+npm dedupe
+cat > "config/sass.json" << EOF 
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/core-build/sass.schema.json"
+}
+EOF
+rm "tslint.json"
+cat > ".eslintrc.js" << EOF 
+require('@rushstack/eslint-config/patch/modern-module-resolution');
+module.exports = {
+  extends: ['@microsoft/eslint-config-spfx/lib/profiles/react'],
+  parserOptions: { tsconfigRootDir: __dirname }
+};
+EOF
+
+./.yo-rc.json
+-------------
+Update version in .yo-rc.json:
+{
+  "@microsoft/generator-sharepoint": {
+    "version": "1.17.1"
+  }
+}
+
+Update @microsoft/teams-js SDK version in .yo-rc.json:
+{
+  "@microsoft/generator-sharepoint": {
+    "sdkVersions": {
+      "@microsoft/teams-js": "2.9.1"
+    }
+  }
+}
+
+Update nodeVersion in .yo-rc.json:
+{
+  "@microsoft/generator-sharepoint": {
+    "nodeVersion": "14.17.6"
+  }
+}
+
+Update @microsoft/microsoft-graph-client SDK version in .yo-rc.json:
+{
+  "@microsoft/generator-sharepoint": {
+    "sdkVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2"
+    }
+  }
+}
+
+
+./config/serve.json
+-------------------
+Update serve.json initialPage URL:
+{
+  "initialPage": "https://{tenantDomain}/_layouts/workbench.aspx"
+}
+
+Update serve.json schema URL:
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/spfx-serve.schema.json"
+}
+
+
+.vscode/launch.json
+-------------------
+In the .vscode/launch.json file, update the type property for the hosted workbench launch configuration:
+{
+  "configurations": [
+    {
+      "type": "edge"
+    }
+  ]
+}
+
+In the .vscode/launch.json file, update the url property for the hosted workbench launch configuration:
+{
+  "configurations": [
+    {
+      "url": "https://{tenantDomain}/_layouts/workbench.aspx"
+    }
+  ]
+}
+
+
+./package.json
+--------------
+Update package.json engines.node property:
+{
+  "engines": {
+    "node": ">=16.13.0 <17.0.0"
+  }
+}
+
+
+src/webparts/localPageNav/components/LocalPageNav.module.scss
+-------------------------------------------------------------
+Remove scss file import:
+@import '~office-ui-fabric-react/dist/sass/References.scss'
+
+Add scss file import:
+@import '~@fluentui/react/dist/sass/References.scss'
+
+
+./tsconfig.json
+---------------
+Add noImplicitAny in tsconfig.json:
+{
+  "compilerOptions": {
+    "noImplicitAny": true
+  }
+}
+
+Update tsconfig.json extends property:
+{
+  "extends": "./node_modules/@microsoft/rush-stack-compiler-4.5/includes/tsconfig-web.json"
+}
+
+
+./.gitignore
+------------
+To .gitignore add the '.heft' folder:
+.heft
+
+
+./config/package-solution.json
+------------------------------
+In package-solution.json add metadata section:
+{
+  "solution": {
+    "metadata": {
+      "shortDescription": {
+        "default": "local-page-nav description"
+      },
+      "longDescription": {
+        "default": "local-page-nav description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    }
+  }
+}
+
+In package-solution.json add features for components:
+{
+  "solution": {
+    "features": [
+      {
+        "title": "local-page-nav LocalPageNavWebPart Feature",
+        "description": "The feature that activates LocalPageNavWebPart from the local-page-nav solution.",
+        "id": "5c1e6e1a-a75e-4847-a672-4721bfd5e346",
+        "version": "1.0.2.0",
+        "componentIds": [
+          "5c1e6e1a-a75e-4847-a672-4721bfd5e346"
+        ]
+      }
+    ]
+  }
+}
