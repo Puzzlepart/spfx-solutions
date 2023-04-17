@@ -1,13 +1,42 @@
 {
-    "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
-    "solution": {
-        "name": "Birthday calendar by Puzzlepart",
-        "id": "6ef20068-fb03-4c92-be15-18c733b51c4e",
-        "version": "1.0.0.0",
-        "includeClientSideAssets": true,
-        "isDomainIsolated": false
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "Birthday calendar by Puzzlepart",
+    "id": "6ef20068-fb03-4c92-be15-18c733b51c4e",
+    "version": "1.0.0.1",
+    "includeClientSideAssets": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "Puzzlepart AS",
+      "websiteUrl": "https://puzzlepart.com",
+      "privacyUrl": "https://privacy.microsoft.com/en-us/privacystatement",
+      "termsOfUseUrl": "https://go.microsoft.com/fwlink/?linkid=2039674",
+      "mpnId": "5128564"
     },
-    "paths": {
-        "zippedPackage": "solution/pzl-part-birthday.sppkg"
-    }
+    "metadata": {
+      "shortDescription": {
+        "default": "pzl-part-birthday description"
+      },
+      "longDescription": {
+        "default": "pzl-part-birthday description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "pzl-part-birthday BirthdayWebPartWebPart Feature",
+        "description": "The feature that activates BirthdayWebPartWebPart from the pzl-part-birthday solution.",
+        "id": "3d2b9c05-1869-4f79-9be3-c54edffb52ab",
+        "version": "1.0.0.0",
+        "componentIds": [
+          "3d2b9c05-1869-4f79-9be3-c54edffb52ab"
+        ]
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/pzl-part-birthday.sppkg"
+  }
 }
