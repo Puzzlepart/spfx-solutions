@@ -1,33 +1,44 @@
 {
-    "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
-    "solution": {
-        "title": "RSS-Feed by Puzzlepart",
-        "name": "pzl-rssfeed-webpart",
-        "id": "9e4eb1e9-89a9-40a3-a486-4a61090f8def",
-        "version": "1.1.1.0",
-        "includeClientSideAssets": true,
-        "skipFeatureDeployment": true,
-        "isDomainIsolated": false,
-        "developer": {
-          "name": "Puzzlepart",
-          "websiteUrl": "https://puzzlepart.com",
-          "mpnId": "",
-          "privacyUrl": "",
-          "termsOfUseUrl": ""
-        },
-        "metadata": {
-          "shortDescription": {
-            "default": "Pzl.Part.RssFeed"
-          },
-          "longDescription": {
-            "default": "RSS-feed by Puzzlepart"
-          },
-          "screenshotPaths": [],
-          "videoUrl": "",
-          "categories": []
-        }
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "title": "RSS-Feed by Puzzlepart",
+    "name": "pzl-rssfeed-webpart",
+    "id": "9e4eb1e9-89a9-40a3-a486-4a61090f8def",
+    "version": "1.1.1.1",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "Puzzlepart AS",
+      "websiteUrl": "https://puzzlepart.com",
+      "privacyUrl": "https://privacy.microsoft.com/en-us/privacystatement",
+      "termsOfUseUrl": "https://go.microsoft.com/fwlink/?linkid=2039674",
+      "mpnId": "5128564"
     },
-    "paths": {
-        "zippedPackage": "solution/pzl-rss-feed.sppkg"
-    }
+    "metadata": {
+      "shortDescription": {
+        "default": "Pzl.Part.RssFeed"
+      },
+      "longDescription": {
+        "default": "RSS-feed by Puzzlepart"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "pzl-rss-feed RssFeedWebPart Feature",
+        "description": "The feature that activates RssFeedWebPart from the pzl-rss-feed solution.",
+        "id": "65315586-9600-4d76-9a87-d0ec4aa8c1e2",
+        "version": "1.1.1.0",
+        "componentIds": [
+          "65315586-9600-4d76-9a87-d0ec4aa8c1e2"
+        ]
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/pzl-rss-feed.sppkg"
+  }
 }
