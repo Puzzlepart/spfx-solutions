@@ -1,0 +1,246 @@
+Execute in bash
+-----------------------
+npm un -S @types/react @types/react-dom @types/webpack-env @types/es6-promise
+npm un -D @microsoft/sp-tslint-rules @microsoft/sp-webpart-workbench @types/chai @types/mocha
+npm i -SE @microsoft/sp-core-library@1.17.1 @microsoft/sp-dialog@1.17.1 @microsoft/sp-listview-extensibility@1.17.1 @microsoft/sp-http@1.17.1 @microsoft/decorators@1.17.1 @microsoft/sp-adaptive-card-extension-base@1.17.1 react@17.0.1 react-dom@17.0.1 office-ui-fabric-react@7.199.1 tslib@2.3.1
+npm i -DE @microsoft/eslint-plugin-spfx@1.17.1 @microsoft/eslint-config-spfx@1.17.1 @microsoft/sp-build-web@1.17.1 @microsoft/sp-module-interfaces@1.17.1 @microsoft/rush-stack-compiler-4.5@0.4.0 eslint@8.7.0 @types/react@17.0.45 @types/react-dom@17.0.17 typescript@4.5.5 ajv@6.12.5 @types/webpack-env@1.15.2 @rushstack/eslint-config@2.5.1 eslint-plugin-react-hooks@4.3.0 gulp@4.0.2 @types/es6-promise@0.0.33
+npm dedupe
+cat > "config/sass.json" << EOF 
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/core-build/sass.schema.json"
+}
+EOF
+rm "tslint.json"
+cat > ".eslintrc.js" << EOF 
+require('@rushstack/eslint-config/patch/modern-module-resolution');
+module.exports = {
+  extends: ['@microsoft/eslint-config-spfx/lib/profiles/react'],
+  parserOptions: { tsconfigRootDir: __dirname }
+};
+EOF
+rm "config/copy-assets.json"
+
+./.yo-rc.json
+-------------
+Update version in .yo-rc.json:
+{
+  "@microsoft/generator-sharepoint": {
+    "version": "1.17.1"
+  }
+}
+
+Update @microsoft/teams-js SDK version in .yo-rc.json:
+{
+  "@microsoft/generator-sharepoint": {
+    "sdkVersions": {
+      "@microsoft/teams-js": "2.9.1"
+    }
+  }
+}
+
+Update nodeVersion in .yo-rc.json:
+{
+  "@microsoft/generator-sharepoint": {
+    "nodeVersion": "14.17.6"
+  }
+}
+
+Update @microsoft/microsoft-graph-client SDK version in .yo-rc.json:
+{
+  "@microsoft/generator-sharepoint": {
+    "sdkVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2"
+    }
+  }
+}
+
+
+./config/serve.json
+-------------------
+Update serve.json initialPage URL:
+{
+  "initialPage": "https://{tenantDomain}/_layouts/workbench.aspx"
+}
+
+Update serve.json schema URL:
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/spfx-serve.schema.json"
+}
+
+
+.vscode/launch.json
+-------------------
+In the .vscode/launch.json file, update the type property for the hosted workbench launch configuration:
+{
+  "configurations": [
+    {
+      "type": "edge"
+    }
+  ]
+}
+
+In the .vscode/launch.json file, update the url property for the hosted workbench launch configuration:
+{
+  "configurations": [
+    {
+      "url": "https://{tenantDomain}/_layouts/workbench.aspx"
+    }
+  ]
+}
+
+In the .vscode/launch.json file, remove the local workbench launch configuration:
+
+
+
+./package.json
+--------------
+Update package.json engines.node property:
+{
+  "engines": {
+    "node": ">=16.13.0 <17.0.0"
+  }
+}
+
+Remove package.json property:
+{
+  "engines": "undefined"
+}
+
+
+./tsconfig.json
+---------------
+Add noImplicitAny in tsconfig.json:
+{
+  "compilerOptions": {
+    "noImplicitAny": true
+  }
+}
+
+Update tsconfig.json extends property:
+{
+  "extends": "./node_modules/@microsoft/rush-stack-compiler-4.5/includes/tsconfig-web.json"
+}
+
+Remove tsconfig.json exclude property:
+{
+  "exclude": []
+}
+
+Add es2015.promise lib in tsconfig.json:
+{
+  "compilerOptions": {
+    "lib": [
+      "es2015.promise"
+    ]
+  }
+}
+
+Remove es6-promise type in tsconfig.json:
+{
+  "compilerOptions": {
+    "types": [
+      "es6-promise"
+    ]
+  }
+}
+
+Add to the tsconfig.json include property:
+{
+  "include": [
+    "src/**/*.tsx"
+  ]
+}
+
+
+./config/package-solution.json
+------------------------------
+In package-solution.json add developer section:
+{
+  "solution": {
+    "developer": {
+      "name": "",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "websiteUrl": "",
+      "mpnId": "Undefined-1.15.0"
+    }
+  }
+}
+
+In package-solution.json add metadata section:
+{
+  "solution": {
+    "metadata": {
+      "shortDescription": {
+        "default": "pzl-ext-pdf-export description"
+      },
+      "longDescription": {
+        "default": "pzl-ext-pdf-export description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    }
+  }
+}
+
+
+./.gitignore
+------------
+To .gitignore add the '.heft' folder:
+.heft
+
+To .gitignore add the 'release' folder:
+release
+
+
+./.npmignore
+------------
+Create the .npmignore file:
+!dist
+config
+
+gulpfile.js
+
+release
+src
+temp
+
+tsconfig.json
+tslint.json
+
+*.log
+
+.yo-rc.json
+.vscode
+
+
+
+./config/deploy-azure-storage.json
+----------------------------------
+Update deploy-azure-storage.json workingDir:
+{
+  "workingDir": "./release/assets/"
+}
+
+
+./gulpfile.js
+-------------
+Before 'build.initialize(require('gulp'));' add the serve task:
+var getTasks = build.rig.getTasks;
+build.rig.getTasks = function () {
+  var result = getTasks.call(build.rig);
+
+  result.set('serve', result.get('serve-deprecated'));
+
+  return result;
+};
+
+
+
+./tslint.json
+-------------
+Update tslint.json extends property:
+{
+  "extends": "./node_modules/@microsoft/sp-tslint-rules/base-tslint.json"
+}

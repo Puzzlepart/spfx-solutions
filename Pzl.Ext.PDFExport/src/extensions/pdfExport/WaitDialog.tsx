@@ -19,9 +19,9 @@ class WaitDialogContent extends React.Component<IWaitDialogContentProps, {}> {
     }
 
     public render(): JSX.Element {
-        let logo = require('./pzl-logo-black-transparent.png');
+        const logo = require('./pzl-logo-black-transparent.png');
 
-        let dialogType = this.props.showClose ? DialogType.close : DialogType.normal;
+        const dialogType = this.props.showClose ? DialogType.close : DialogType.normal;
 
         return (<div style={{ width: "400px" }}>
 
@@ -60,7 +60,7 @@ export default class WaitDialog {
     public showClose: boolean = false;
     public hidden: boolean = true;
 
-    constructor(props) {
+    constructor(_props) {
         this.close = this.close.bind(this);
     }
 
