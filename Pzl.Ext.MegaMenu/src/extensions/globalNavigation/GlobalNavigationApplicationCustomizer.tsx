@@ -19,11 +19,11 @@ import {
 import {fetchGlobalNavigationSettings} from './SettingsHelper/SettingsHelper';
 import * as strings from 'GlobalNavigationApplicationCustomizerStrings';
 import ServiceAnnouncement from '../serviceAnnouncement/ServiceAnnouncement';
+/*import "whatwg-fetch";
 import "core-js/modules/es6.promise";
 import "core-js/modules/es6.array.iterator.js";
 import "core-js/modules/es6.array.from.js";
-import "whatwg-fetch";
-import "es6-map/implement";
+import "es6-map/implement";*/
 
 const LOG_SOURCE: string = 'GlobalNavigationApplicationCustomizer';
 
@@ -47,7 +47,7 @@ export default class GlobalNavigationApplicationCustomizer extends BaseApplicati
 
     Log.info(LOG_SOURCE, 'onInit');
 
-    let storage = new PnPClientStorage();
+    const storage = new PnPClientStorage();
     storage.session.deleteExpired();
     storage.local.deleteExpired();
     if (!DEBUG) {
@@ -67,7 +67,7 @@ export default class GlobalNavigationApplicationCustomizer extends BaseApplicati
 
     this.context.placeholderProvider.changedEvent.add(this, this.hookMenu);
 
-    return Promise.resolve<void>();
+    return Promise.resolve<void>(null);
   }
 
   private async hookMenu() {
@@ -79,7 +79,7 @@ export default class GlobalNavigationApplicationCustomizer extends BaseApplicati
       }
       if (this._topPlaceholder.domElement) {
         Log.info(LOG_SOURCE, 'The expected placeholder (Top) was found. Rendering <NavigationContainer />');
-        let globalNavigationPlaceholderId = "global-navigation-placeholder";
+        const globalNavigationPlaceholderId = "global-navigation-placeholder";
         let globalNavigationPlaceholder = document.getElementById(globalNavigationPlaceholderId);
         if (globalNavigationPlaceholder == null) {
           globalNavigationPlaceholder = document.createElement("DIV");
@@ -99,7 +99,7 @@ export default class GlobalNavigationApplicationCustomizer extends BaseApplicati
           ReactDOM.render(globalNavigation, globalNavigationPlaceholder);
         }
         if (this.properties.serviceAnnouncements) {
-          let serviceAnnouncementPlaceholderId = "service-announcement-placeholder";
+          const serviceAnnouncementPlaceholderId = "service-announcement-placeholder";
           let serviceAnnouncementPlaceholder = document.getElementById(serviceAnnouncementPlaceholderId);
           if (serviceAnnouncementPlaceholder == null) {
             serviceAnnouncementPlaceholder = document.createElement("DIV");
@@ -107,7 +107,7 @@ export default class GlobalNavigationApplicationCustomizer extends BaseApplicati
             this._topPlaceholder.domElement.appendChild(serviceAnnouncementPlaceholder);
           }
           // Relying on SP Onlines device detection
-          let isMobile = document.getElementsByTagName("body")[0].classList.contains("mobile");
+          const isMobile: boolean = document.getElementsByTagName("body")[0].classList.contains("mobile");
           const serviceAnnouncement = (
             <ServiceAnnouncement
               serverRelativeWebUrl={this.properties.serviceAnnouncements.serverRelativeWebUrl}
@@ -120,9 +120,7 @@ export default class GlobalNavigationApplicationCustomizer extends BaseApplicati
           );
           ReactDOM.render(serviceAnnouncement, serviceAnnouncementPlaceholder);
         }
-        this.context.application.navigatedEvent.add(this, () => {
-          this.child.closeDialog();
-        });
+        this.context.application.navigatedEvent.add(this, (): void => this.child.closeDialog());
       }
     }
   }

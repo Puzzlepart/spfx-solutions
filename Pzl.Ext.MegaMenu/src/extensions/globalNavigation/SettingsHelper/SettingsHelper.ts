@@ -43,7 +43,7 @@ interface NavigationSettings {
 async function fetchGlobalNavigationSettings(serverRelativeWebUrl: string, settingsListUrl: string) {
   const webUrl = urljoin(`${document.location.protocol}//${document.location.hostname}`, serverRelativeWebUrl);
   const listUrl = urljoin(serverRelativeWebUrl, settingsListUrl);
-  let navSettings: NavigationSettings = {};
+  const navSettings: NavigationSettings = {};
 
   try {
     const web = new Web(webUrl);
