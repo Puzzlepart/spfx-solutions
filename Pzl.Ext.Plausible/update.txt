@@ -1,0 +1,57 @@
+Execute in bash
+-----------------------
+npm i -SE @microsoft/sp-core-library@1.17.1 @microsoft/sp-dialog@1.17.1 @microsoft/sp-application-base@1.17.1 @microsoft/decorators@1.17.1 @microsoft/sp-adaptive-card-extension-base@1.17.1
+npm i -DE @microsoft/eslint-plugin-spfx@1.17.1 @microsoft/eslint-config-spfx@1.17.1 @microsoft/sp-build-web@1.17.1 @microsoft/sp-module-interfaces@1.17.1 @microsoft/rush-stack-compiler-4.5@0.4.0 eslint@8.7.0
+npm dedupe
+cat > "config/sass.json" << EOF 
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/core-build/sass.schema.json"
+}
+EOF
+
+./.yo-rc.json
+-------------
+Update version in .yo-rc.json:
+{
+  "@microsoft/generator-sharepoint": {
+    "version": "1.17.1"
+  }
+}
+
+Update @microsoft/teams-js SDK version in .yo-rc.json:
+{
+  "@microsoft/generator-sharepoint": {
+    "sdkVersions": {
+      "@microsoft/teams-js": "2.9.1"
+    }
+  }
+}
+
+
+./config/serve.json
+-------------------
+Update serve.json initialPage URL:
+{
+  "initialPage": "https://{tenantDomain}/_layouts/workbench.aspx"
+}
+
+
+.vscode/launch.json
+-------------------
+In the .vscode/launch.json file, update the type property for the hosted workbench launch configuration:
+{
+  "configurations": [
+    {
+      "type": "edge"
+    }
+  ]
+}
+
+In the .vscode/launch.json file, update the url property for the hosted workbench launch configuration:
+{
+  "configurations": [
+    {
+      "url": "https://{tenantDomain}/_layouts/workbench.aspx"
+    }
+  ]
+}

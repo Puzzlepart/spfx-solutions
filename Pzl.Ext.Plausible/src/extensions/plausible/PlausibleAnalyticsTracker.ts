@@ -13,11 +13,9 @@ export interface IPlausibleAnalyticsTrackerProperties {
 }
 
 /** A Custom Action which can be run during execution of a Client Side Application */
-export default class PlausibleAnalyticsTracker
-  extends BaseApplicationCustomizer<IPlausibleAnalyticsTrackerProperties> {
+export default class PlausibleAnalyticsTracker extends BaseApplicationCustomizer<IPlausibleAnalyticsTrackerProperties> {
 
   public onInit(): Promise<void> {
-
     if (this.properties.hubSiteId && this.properties.hubSiteId !== this.context.pageContext.legacyPageContext.hubSiteId) {
       return Promise.resolve();
     }
