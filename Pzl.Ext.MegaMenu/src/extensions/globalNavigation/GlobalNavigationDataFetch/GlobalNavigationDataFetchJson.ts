@@ -23,12 +23,8 @@ export default class GlobalNavigationDataFetchJson extends GlobalNavigationDataF
      */
     @override
     public async fetch() {
-        try {
-            const response = await fetch(this._params.jsonPath, { credentials: "include" });
-            const json = await response.json();
-            return json;
-        } catch (err) {
-            throw err;
-        }
+        const response = await fetch(this._params.jsonPath, { credentials: "include" });
+        const json = await response.json();
+        return json;
     }
 }

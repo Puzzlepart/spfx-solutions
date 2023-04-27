@@ -11,7 +11,6 @@ import styles from './ServiceAnnouncement.module.scss';
 import { Alignment } from '../../TextAlignment';
 
 export default class ServiceAnnouncement extends React.Component<ServiceAnnouncementProps, ServiceAnnouncementState> {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -19,11 +18,13 @@ export default class ServiceAnnouncement extends React.Component<ServiceAnnounce
             modalShouldRender: false
         };
     }
+
     public componentWillMount() {
         this.fetchData();
     }
+
     public render() {
-        let announcementModal = this.state.modalShouldRender && !this.props.isMobile ?
+        const announcementModal = this.state.modalShouldRender && !this.props.isMobile ?
             <Dialog isOpen={this.state.modalShouldRender} title={this.state.modalAnnouncement.title} isBlocking={false} onDismiss={() => this.setState({ modalShouldRender: false })}>
                 <div hidden={!this.state.modalAnnouncement.affectedSystems || this.state.modalAnnouncement.affectedSystems.length === 0}>
                     <h4>{strings.Field_AffectedSystems_Title}</h4>
@@ -66,11 +67,11 @@ export default class ServiceAnnouncement extends React.Component<ServiceAnnounce
             }
 
 
-            let messageBars = this.state.AnnouncementsToBeShown.map((announcement, idx) => {
+            const messageBars = this.state.AnnouncementsToBeShown.map((announcement, idx) => {
                 // Set background with on-demand class as style={{}} doesn't work, and styles={{}} is not available in ouifr until v6
                 const className = `${styles.announcementMessage}-${idx}`;
                 if (announcement.customBgColor && announcement.customBgColor.length > 0) {
-                    let style = `.${className} {background-color: ${announcement.customBgColor};}`;
+                    const style = `.${className} {background-color: ${announcement.customBgColor};}`;
                     loadStyles(style);
                 }
 
@@ -97,19 +98,19 @@ export default class ServiceAnnouncement extends React.Component<ServiceAnnounce
      * Workaround, as of 20.07.2018, there are issues with office ui fabric modal dialogs on mobile. 
      */
     private renderMobileAnnouncementAlert(announcement) {
-        var affectedSystems = this.cleanHtmlFromTextString(announcement.affectedSystems);
-        var content = this.cleanHtmlFromTextString(announcement.content);
-        var consequence = this.cleanHtmlFromTextString(announcement.consequence);
-
-        var alertContent = `${announcement.title}\n\n\n\n${strings.Field_AffectedSystems_Title}\n\n${affectedSystems}\n\n\n\n${strings.Field_Description_Title}\n\n${content}\n\n\n\n${strings.Field_Consequence_Title}\n\n${consequence}`;
+        const affectedSystems = this.cleanHtmlFromTextString(announcement.affectedSystems);
+        const content = this.cleanHtmlFromTextString(announcement.content);
+        const consequence = this.cleanHtmlFromTextString(announcement.consequence);
+        const alertContent = `${announcement.title}\n\n\n\n${strings.Field_AffectedSystems_Title}\n\n${affectedSystems}\n\n\n\n${strings.Field_Description_Title}\n\n${content}\n\n\n\n${strings.Field_Consequence_Title}\n\n${consequence}`;
         window.alert(alertContent);
     }
 
     private cleanHtmlFromTextString(fieldValue) {
-        var htmlCleaningDomElement = document.createElement("span");
+        const htmlCleaningDomElement = document.createElement("span");
         htmlCleaningDomElement.innerHTML = fieldValue && fieldValue.length > 0 ? fieldValue : "";
         return htmlCleaningDomElement.textContent || htmlCleaningDomElement.innerText;
     }
+    
     /**
      * Gets a JSON-object of IDs of seen announcements. Uses session storage if discardForSessionOnly is enabled
      */
@@ -152,10 +153,10 @@ export default class ServiceAnnouncement extends React.Component<ServiceAnnounce
     }
 
     private async fetchData() {
-        let now = new Date();
-        let spWeb = new Web(`${document.location.protocol}//${document.location.hostname}${this.props.serverRelativeWebUrl}`);
+        const now = new Date();
+        const spWeb = new Web(`${document.location.protocol}//${document.location.hostname}${this.props.serverRelativeWebUrl}`);
         const severityFilter = this.props.announcementLevels ? " and (" + this.props.announcementLevels.split(",").map(level => { return "PzlSeverity eq '" + level + "'" }).join(" or ") + ")" : "";
-        let announcements: any[] = await spWeb.getList(`${this.props.serverRelativeWebUrl.replace(/\/$/, "")}/${this.props.serviceAnnouncementListUrl}`)
+        const announcements: any[] = await spWeb.getList(`${this.props.serverRelativeWebUrl.replace(/\/$/, "")}/${this.props.serviceAnnouncementListUrl}`)
             .items.select("ID",
                 "Title",
                 "PzlResponsible/Title",
@@ -170,8 +171,8 @@ export default class ServiceAnnouncement extends React.Component<ServiceAnnounce
             .filter("(PzlStartDate le datetime'" + now.toISOString() + "') and (PzlEndDate ge datetime'" + now.toISOString() + "')" + severityFilter)
             .expand("PzlResponsible").usingCaching().get();
 
-        let seenAnnouncements = JSON.parse(this.getAnnouncementReadStorage());
-        let relevantAnnouncements: Announcement[] = announcements.filter((item) => {
+        const seenAnnouncements = JSON.parse(this.getAnnouncementReadStorage());
+        const relevantAnnouncements: Announcement[] = announcements.filter((item) => {
             let previouslySeen = false;
             if (seenAnnouncements) {
                 previouslySeen = seenAnnouncements[item.ID] ? true : false;
@@ -179,7 +180,7 @@ export default class ServiceAnnouncement extends React.Component<ServiceAnnounce
             return !previouslySeen;
         }).map((item): Announcement => {
             // support having "Warning (#rgb)" for custom colors
-            let colorMatch = item.PzlSeverity.match(/(.*?)\((.*?)\)/);
+            const colorMatch = item.PzlSeverity.match(/(.*?)\((.*?)\)/);
             let bgColor = '';
             if (colorMatch && colorMatch.length === 3) {
                 item.PzlSeverity = colorMatch[1].trim();
