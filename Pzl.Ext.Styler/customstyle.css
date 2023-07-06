@@ -1,0 +1,9 @@
+.bottom{
+    height: 10px;
+}
+@media (min-width:960px) {div[aria-label="SharePoint Site Header"]{
+    display:none}
+}
+@media handheld { .nomobile {div[aria-label="SharePoint Site Header"]{
+    display:none} }
+}

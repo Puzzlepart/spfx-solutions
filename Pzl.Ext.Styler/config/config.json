@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "polcss-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/polcss/PolcssApplicationCustomizer.js",
+          "manifest": "./src/extensions/polcss/PolcssApplicationCustomizer.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "PolcssApplicationCustomizerStrings": "lib/extensions/polcss/loc/{locale}.js"
+  }
+}
