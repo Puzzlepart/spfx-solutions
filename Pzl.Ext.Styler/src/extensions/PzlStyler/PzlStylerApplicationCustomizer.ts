@@ -26,13 +26,8 @@ export default class PzlStylerApplicationCustomizer
     Log.info(LOG_SOURCE, `Initialized ${strings.Title}`);
   
 console.log("PZLSTYLER");
-    // SPComponentLoader.loadCss(`${document.location.protocol}//${document.location.hostname}/sites/CDN/Styling/PzlStyler.css`);
+     SPComponentLoader.loadCss(`${document.location.protocol}//${document.location.hostname}/sites/CDN/Styling/PzlStyler.css`);
 
-    SPComponentLoader.loadCss("{tenantdomain}/sites/CDN/Styling/PzlStyler.css");
-    let message: string = this.properties.testMessage;
-    if (!message) {
-      message = '(No properties were provided.)';
-    }
     return super.onInit();
   }
 }
