@@ -2,17 +2,17 @@
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
   "version": "2.0",
   "bundles": {
-    "polcss-application-customizer": {
+    "PzlStyler-application-customizer": {
       "components": [
         {
-          "entrypoint": "./lib/extensions/polcss/PolcssApplicationCustomizer.js",
-          "manifest": "./src/extensions/polcss/PolcssApplicationCustomizer.manifest.json"
+          "entrypoint": "./lib/extensions/PzlStyler/PzlStylerApplicationCustomizer.js",
+          "manifest": "./src/extensions/PzlStyler/PzlStylerApplicationCustomizer.manifest.json"
         }
       ]
     }
   },
   "externals": {},
   "localizedResources": {
-    "PolcssApplicationCustomizerStrings": "lib/extensions/polcss/loc/{locale}.js"
+    "PzlStylerApplicationCustomizerStrings": "lib/extensions/PzlStyler/loc/{locale}.js"
   }
 }

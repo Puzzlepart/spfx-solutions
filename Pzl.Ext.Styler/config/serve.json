@@ -14,7 +14,7 @@
         }
       }
     },
-    "polcss": {
+    "PzlStyler": {
       "pageUrl": "https://{tenantDomain}/SitePages/myPage.aspx",
       "customActions": {
         "66607c85-0142-4caf-ba34-d4185a4999f1": {

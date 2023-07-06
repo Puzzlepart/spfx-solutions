@@ -1,8 +1,8 @@
-declare interface IPolcssApplicationCustomizerStrings {
+declare interface IPzlStylerApplicationCustomizerStrings {
   Title: string;
 }
 
-declare module 'PolcssApplicationCustomizerStrings' {
-  const strings: IPolcssApplicationCustomizerStrings;
+declare module 'PzlStylerApplicationCustomizerStrings' {
+  const strings: IPzlStylerApplicationCustomizerStrings;
   export = strings;
 }
