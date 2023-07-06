@@ -25,7 +25,7 @@ export default class PzlStylerApplicationCustomizer
   public onInit(): Promise<void> {
     Log.info(LOG_SOURCE, `Initialized ${strings.Title}`);
 
-    SPComponentLoader.loadCss('/sites/CDN/Styling/IntranettStyling.css');
+    SPComponentLoader.loadCss('/sites/CDN/Styling/PzlStyler.css');
 
     return Promise.resolve();
   }
