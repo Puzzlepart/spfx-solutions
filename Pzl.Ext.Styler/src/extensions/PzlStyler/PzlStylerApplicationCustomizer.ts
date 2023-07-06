@@ -24,9 +24,15 @@ export default class PzlStylerApplicationCustomizer
 
   public onInit(): Promise<void> {
     Log.info(LOG_SOURCE, `Initialized ${strings.Title}`);
+  
+console.log("PZLSTYLER");
+    // SPComponentLoader.loadCss(`${document.location.protocol}//${document.location.hostname}/sites/CDN/Styling/PzlStyler.css`);
 
-    SPComponentLoader.loadCss('/sites/CDN/Styling/PzlStyler.css');
-
-    return Promise.resolve();
+    SPComponentLoader.loadCss("https://pzlcloud.sharepoint.com/sites/CDN/Styling/PzlStyler.css");
+    let message: string = this.properties.testMessage;
+    if (!message) {
+      message = '(No properties were provided.)';
+    }
+    return super.onInit();
   }
 }
