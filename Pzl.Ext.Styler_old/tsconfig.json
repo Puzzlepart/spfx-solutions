@@ -12,6 +12,7 @@
     "skipLibCheck": true,
     "outDir": "lib",
     "inlineSources": false,
+    "strictNullChecks": false,
     "noImplicitAny": true,
 
     "typeRoots": [

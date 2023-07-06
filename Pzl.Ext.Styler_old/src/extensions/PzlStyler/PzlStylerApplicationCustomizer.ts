@@ -1,9 +1,6 @@
 import { Log } from '@microsoft/sp-core-library';
-import {
-  BaseApplicationCustomizer
-} from '@microsoft/sp-application-base';
 import { SPComponentLoader } from '@microsoft/sp-loader';
-
+import { BaseApplicationCustomizer } from '@microsoft/sp-application-base';
 import * as strings from 'PzlStylerApplicationCustomizerStrings';
 
 const LOG_SOURCE: string = 'PzlStylerApplicationCustomizer';
@@ -25,9 +22,9 @@ export default class PzlStylerApplicationCustomizer
   public onInit(): Promise<void> {
     Log.info(LOG_SOURCE, `Initialized ${strings.Title}`);
   
-    console.log("PZLSTYLER");
-    SPComponentLoader.loadCss(`${document.location.protocol}//${document.location.hostname}/sites/CDN/Styling/PzlStyler.css`);
+console.log("PZLSTYLER");
+     SPComponentLoader.loadCss(`${document.location.protocol}//${document.location.hostname}/sites/CDN/Styling/PzlStyler.css`);
 
-    return Promise.resolve();
+    return super.onInit();
   }
 }

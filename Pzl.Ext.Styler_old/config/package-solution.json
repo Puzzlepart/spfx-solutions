@@ -1,8 +1,8 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
-    "name": "pzl-ext-styler-client-side-solution",
-    "id": "6eb9fe3b-1257-4e48-b53c-be5075cdc80b",
+    "name": "pzlstyler-application-customizer",
+    "id": "c7b65081-e737-4db4-be1c-97aa3fcd98ca",
     "version": "1.0.0.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
@@ -12,14 +12,14 @@
       "websiteUrl": "",
       "privacyUrl": "",
       "termsOfUseUrl": "",
-      "mpnId": "Undefined-1.17.4"
+      "mpnId": "Undefined-1.17.1"
     },
     "metadata": {
       "shortDescription": {
-        "default": "pzl-ext-styler description"
+        "default": "PzlStyler description"
       },
       "longDescription": {
-        "default": "pzl-ext-styler description"
+        "default": "PzlStyler description"
       },
       "screenshotPaths": [],
       "videoUrl": "",
@@ -29,7 +29,7 @@
       {
         "title": "Application Extension - Deployment of custom action",
         "description": "Deploys a custom action with ClientSideComponentId association",
-        "id": "a997fd9e-d56a-46e3-b36e-68e3ea2b80d4",
+        "id": "a42fe7ac-88f6-4fb4-b0a9-963acb51d5f9",
         "version": "1.0.0.0",
         "assets": {
           "elementManifests": [
@@ -41,6 +41,6 @@
     ]
   },
   "paths": {
-    "zippedPackage": "solution/pzl-ext-styler.sppkg"
+    "zippedPackage": "solution/pzlstyler.sppkg"
   }
 }

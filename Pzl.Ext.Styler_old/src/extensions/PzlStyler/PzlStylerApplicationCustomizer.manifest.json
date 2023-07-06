@@ -1,8 +1,8 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-extension-manifest.schema.json",
 
-  "id": "125d04f8-45a4-4ad9-88f5-f77bd3970903",
-  "alias": "PzlStylerApplicationCustomizer",
+  "id": "66607c85-0142-4caf-ba34-d4185a4999f1",
+  "alias": "PzlStyler",
   "componentType": "Extension",
   "extensionType": "ApplicationCustomizer",
 
