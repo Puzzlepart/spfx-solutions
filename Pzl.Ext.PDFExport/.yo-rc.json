@@ -1,13 +1,18 @@
 {
-    "@microsoft/generator-sharepoint": {
-        "isCreatingSolution": true,
-        "environment": "spo",
-        "version": "1.10.0",
-        "libraryName": "pzl-ext-pdf-export",
-        "libraryId": "06babd6f-e62f-41e8-87c9-6cb516203a2d",
-        "packageManager": "npm",
-        "componentType": "extension",
-        "extensionType": "ListViewCommandSet",
-        "isDomainIsolated": false
+  "@microsoft/generator-sharepoint": {
+    "isCreatingSolution": true,
+    "environment": "spo",
+    "version": "1.17.1",
+    "libraryName": "pzl-ext-pdf-export",
+    "libraryId": "06babd6f-e62f-41e8-87c9-6cb516203a2d",
+    "packageManager": "npm",
+    "componentType": "extension",
+    "extensionType": "ListViewCommandSet",
+    "isDomainIsolated": false,
+    "nodeVersion": "14.17.6",
+    "sdkVersions": {
+      "@microsoft/teams-js": "2.9.1",
+      "@microsoft/microsoft-graph-client": "3.0.2"
     }
+  }
 }
