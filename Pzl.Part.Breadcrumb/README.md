@@ -5,8 +5,7 @@ Breadcrumb navigation web part.
 
 ## Build the code
 
-```bash
-git clone https://ThomasGranheim@bitbucket.org/puzzlepart/pzl-spfx-parts.git
+```
 npm i
 gulp --ship
 gulp package-solution --ship
