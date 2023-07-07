@@ -9,6 +9,7 @@ define([], function () {
     "propertyPane_LineHeightLabel": "Linjehøyde (piksler)",
     "propertyPane_IconOpacityLabel": "Ikon opasitet (prosent)",
     "component_AllLinksLabel": "Se alle",
-    "component_NoCategoryLabel": "Ingen kategori"
+    "component_NoCategoryLabel": "Ingen kategori",
+    "propertyPane_LinkClickWebHookLabel": "Webhook for lenkeklikk",
   }
 });

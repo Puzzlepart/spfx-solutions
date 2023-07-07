@@ -4,7 +4,18 @@ Solution consists of two web parts and two lists.
 
 ## Web parts
 
-### Quick links web part - used typically on the front page to see mandatory and user-selected links
+### Quick links web part
+
+used typically on the front page to see mandatory and user-selected links. Supports adding a webhook which will be called when a link is clicked. The json payload contains the link url and the link category:
+
+```json
+{
+  "url": "https://www.puzzlepart.com",
+  "category": "Mandatory"
+}
+```
+
+Under /Templates you will find a sample webhook implementation in Azure Functions.
 
 ![Quick links web part preview](./preview/quick_links_webpart_06-12-19png.png "Web part")
 ![Quick links property pane preview](./preview/quick_links_property_pane_webpart_06-12-19png.png "Property pane")

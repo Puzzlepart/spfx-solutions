@@ -19,6 +19,7 @@ export interface IQuickLinksWebPartProps {
   maxLinkLength: number;
   lineHeight: number;
   iconOpacity: number;
+  linkClickWebHook: string;
 }
 
 export default class PzlQuickLinksWebPart extends BaseClientSideWebPart<IQuickLinksWebPartProps> {
@@ -39,7 +40,8 @@ export default class PzlQuickLinksWebPart extends BaseClientSideWebPart<IQuickLi
         maxLinkLength: this.properties.maxLinkLength,
         lineHeight: this.properties.lineHeight,
         iconOpacity: this.properties.iconOpacity,
-        webServerRelativeUrl: this.context.pageContext.web.serverRelativeUrl
+        webServerRelativeUrl: this.context.pageContext.web.serverRelativeUrl,
+        linkClickWebHook: this.properties.linkClickWebHook
       }
     );
 
@@ -105,6 +107,9 @@ export default class PzlQuickLinksWebPart extends BaseClientSideWebPart<IQuickLi
                 PropertyPaneCheckbox('groupByCategory', {
                   text: strings.propertyPane_GroupByCategoryLabel,
                   checked: false
+                }),
+                PropertyPaneTextField('linkClickWebHook', {
+                  label: strings.propertyPane_LinkClickWebHookLabel
                 })
               ]
             }

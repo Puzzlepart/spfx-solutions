@@ -1,4 +1,5 @@
 declare interface IQuickLinksWebPartStrings {
+  propertyPane_LinkClickWebHookLabel: string;
   propertyPane_LineHeightLabel: string;
   propertyPane_TitleFieldLabel: string;
   propertyPane_NumberOfItemsLabel: string;
