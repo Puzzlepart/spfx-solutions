@@ -9,7 +9,7 @@
       "name": "Hosted workbench",
       "type": "edge",
       "request": "launch",
-      "url": "https://pzlpart.sharepoint.com/sites/LocalPageNavTest/_layouts/workbench.aspx",
+      "url": "https://enter-your-SharePoint-site/_layouts/workbench.aspx",
       "webRoot": "${workspaceRoot}",
       "sourceMaps": true,
       "sourceMapPathOverrides": {
