@@ -27,9 +27,9 @@ export default class NavigationElement extends React.PureComponent<INavigationEl
     }
 
     public render() {
-        let flexDirection = this.state.isExpanded ? styles.isLarge : styles.isSmall;
-        let headerStyle = this.getHeaderStyle();
-        let links = this.state.isExpanded ?
+        const flexDirection = this.state.isExpanded ? styles.isLarge : styles.isSmall;
+        const headerStyle = this.getHeaderStyle();
+        const links = this.state.isExpanded ?
             <div className={this.isMobile() ? styles.linksMobile : styles.links}>
                 <div className={`${styles.linkrow} ${flexDirection}`}>
                     {this.props.links.map(lnk => {
@@ -40,11 +40,12 @@ export default class NavigationElement extends React.PureComponent<INavigationEl
             </div> : null;
 
         let headerMarkup = <span>{this.props.header}</span>;
-        if (this.props.headerLink) {
+        if (this.props.headerLink && !this.isMobile()) {
             const props = { text: this.props.header, url: this.props.headerLink, linkTextColor: this.props.navHeaderTextColor, isHeader:true };
             headerMarkup = <NavigationLink {...props} />;
+        } else if (this.props.headerLink && this.isMobile()) {
+            headerMarkup = <span>{this.props.header}<a className={styles.mobileHeadingLink} href={this.props.headerLink}><Icon iconName='Link' title={`Navigate to ${this.props.headerLink}`}></Icon></a></span>;
         }
-
         return (
             <div className={`${styles.navigationElement} ${this.isMobile() ? 'isMobile' : 'isDesktop'}`}>
                 <div onClick={this._onHeaderClick} className={styles.header} style={headerStyle}>
@@ -56,18 +57,24 @@ export default class NavigationElement extends React.PureComponent<INavigationEl
             </div >
         );
     }
+
     /**
- * On window resize
- * 
- * @param {boolean} initial True if initial call from constructor()
- */
+     * On window resize
+     * 
+     * @param {boolean} initial True if initial call from constructor()
+     */
     private _onWindowResize(initial = false) {
         const deviceWidthStr = Breakpoints.GetCurrentBreakpoint();
         let isExpanded;
         switch (deviceWidthStr) {
-            case "sm": case "md": case "lg": isExpanded = false;
+            case "sm":
+            case "md":
+            case "lg":
+                isExpanded = false;
                 break;
-            default: isExpanded = true;
+            default:
+                isExpanded = true;
+                break;
         }
         const state = { deviceWidthStr, isExpanded };
         if (initial) {
@@ -80,13 +87,14 @@ export default class NavigationElement extends React.PureComponent<INavigationEl
     private isMobile() {
         return ["sm", "md", "lg"].indexOf(this.state.deviceWidthStr) !== -1;
     }
+
     /**
      * On header click
      */
     private _onHeaderClick(e) {
         e.preventDefault();
         if (this.isMobile()) {
-            this.setState(prevState => ({ isExpanded: !prevState.isExpanded }));
+            this.setState((prevState: Readonly<INavigationElementState>) => ({ isExpanded: !prevState.isExpanded }));
         }
     }
 
@@ -94,9 +102,12 @@ export default class NavigationElement extends React.PureComponent<INavigationEl
      * Get header style
      */
     private getHeaderStyle(): React.CSSProperties {
-        let style: React.CSSProperties = {};
+        const style: React.CSSProperties = {};
         switch (this.state.deviceWidthStr) {
-            case "sm": case "md": case "lg": style.cursor = "pointer";
+            case "sm":
+            case "md":
+            case "lg":
+                style.cursor = "pointer";
                 break;
         }
         style.color = this.props.navHeaderTextColor;

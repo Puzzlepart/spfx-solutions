@@ -59,9 +59,49 @@
       font-size: 25px;
     }
 
-    .content {
+    .contentWithImage, .contentNoImage {
       @include ms-Grid-col;
       @include ms-sm10;
+
+      .containerText {
+        @include ms-font-m;
+        @include ms-Grid-col;
+        padding-left: 0;
+
+        .listItemDescription {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+        }
+      }
+    }
+    
+    .contentWithImage {
+      .containerText {
+        @include ms-sm9;
+      }
+      .image {
+        @include ms-Grid-col;
+        @include ms-sm3;
+      }
+    }
+
+    .contentNoImage {
+      .containerText {
+        @include ms-sm11;
+      }
+    }
+
+    .listItemTitle {
+      @include ms-font-l;
+      overflow: hidden;
+    }
+  
+    .listItemPubDate {
+      @include ms-font-s;
+      padding-top: 5px;
     }
   }
 
@@ -69,18 +109,5 @@
     background-color: rgba(0, 0, 0, 0.060);
   }
 
-  .listItemTitle {
-    @include ms-font-l;
-    overflow: hidden;
-  }
 
-  .listItemPubDate {
-    @include ms-font-s;
-    padding-top: 5px;
-  }
-
-  .listItemDescription {
-    @include ms-font-m;
-    //width: 285px;
-  }
 }

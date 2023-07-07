@@ -1,0 +1,29 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "a45bae09-028d-4355-baa2-c095b916e937",
+  "alias": "PageExpiredWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "supportedHosts": [
+    "SharePointWebPart"
+  ],
+  "supportsThemeVariants": true,
+  "preconfiguredEntries": [
+    {
+      "groupId": "5c03119e-3074-46fd-976b-c60198311f70", 
+      "title": {
+        "default": "Notify when page has expired"
+      },
+      "description": {
+        "default": "Displays a message to editors, and optionally to readers,when content may be outdated"
+      },
+      "officeFabricIconFontName": "DateTime",
+      "properties": {
+        "expireAfter": "365",
+        "showForReaders": true
+      }
+    }
+  ]
+}

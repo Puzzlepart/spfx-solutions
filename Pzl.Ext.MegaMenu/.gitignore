@@ -34,3 +34,7 @@ obj
 # Workspace / user specific
 env.json
 serve.json
+
+# 1.17.1 update
+.heft
+release

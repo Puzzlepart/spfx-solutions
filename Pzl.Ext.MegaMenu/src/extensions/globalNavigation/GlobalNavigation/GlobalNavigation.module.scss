@@ -1,5 +1,5 @@
 @import './node_modules/spfx-uifabric-themes/office.theme';
-@import '~office-ui-fabric-react/dist/sass/References.scss';
+@import '~@fluentui/react/dist/sass/References.scss';
 
 .globalNavigation {
   padding: 0;
@@ -109,7 +109,7 @@
     background-color: $ms-themeDarkAlt;
     padding: 10px;
     display: flex;
-    justify-content: right;
+    justify-content: normal;
     position: relative;
     width: 100%;
   }

@@ -17,14 +17,14 @@ export default class GlobalNavigation extends React.PureComponent<IGlobalNavigat
     this._onWindowResize = this._onWindowResize.bind(this);
   }
 
-  public componentWillUnmount() {
+  public componentWillUnmount(): void {
     window.removeEventListener("resize", _ => this._onWindowResize());
     this._onWindowResize();
   }
 
-  public async componentDidMount() {
+  public async componentDidMount(): Promise<void> {
     try {
-      let data = await this.getData();
+      const data = await this.getData();
       this.setState(data);
       window.addEventListener("resize", _ => this._onWindowResize());
     } catch (error) {
@@ -32,7 +32,7 @@ export default class GlobalNavigation extends React.PureComponent<IGlobalNavigat
     }
   }
 
-  public render() {
+  public render(): JSX.Element {
     if (this.state.error) {
       return (
         <div className={styles.globalNavigation}>
@@ -80,7 +80,7 @@ export default class GlobalNavigation extends React.PureComponent<IGlobalNavigat
    *
    * @memberof GlobalNavigation
    */
-  public closeDialog() {
+  public closeDialog(): void {
     setTimeout(() => {
       this.setState({ isExpanded: false });
     }, 200);
@@ -142,7 +142,7 @@ export default class GlobalNavigation extends React.PureComponent<IGlobalNavigat
     return rows;
   }
 
-  private _onToggle(e, isExpanded?: boolean) {
+  private _onToggle(_, isExpanded?: boolean): void {
     if (typeof isExpanded !== 'undefined') {
       // hide id clicked outside the menu
       this.setState({ isExpanded: false });
@@ -150,19 +150,18 @@ export default class GlobalNavigation extends React.PureComponent<IGlobalNavigat
       this.setState(prevState => ({ isExpanded: !prevState.isExpanded }));
     }
   }
+
   /**
    * On window resize
-   *
-   * @param {boolean} initial True if initial call from constructor()
    */
-  private _onWindowResize() {
-    let isXtraLarge = this.isLargerThanLarge();
+  private _onWindowResize(): void {
+    const isXtraLarge: boolean = this.isLargerThanLarge();
     this.setState({ isXtraLarge: isXtraLarge });
   }
 
   private isLargerThanLarge(): boolean {
-    const deviceWidthStr = Breakpoints.GetCurrentBreakpoint();
-    let isXtraLarge;
+    const deviceWidthStr: string = Breakpoints.GetCurrentBreakpoint();
+    let isXtraLarge: boolean;
     switch (deviceWidthStr) {
       case "sm": case "md": case "lg": isXtraLarge = false;
         break;
@@ -171,7 +170,7 @@ export default class GlobalNavigation extends React.PureComponent<IGlobalNavigat
     return isXtraLarge;
   }
 
-  private renderHomeButton = () => {
+  private renderHomeButton = (): JSX.Element => {
     const settings = this.props.settings ? this.props.settings : {};
     const textColor = settings.homeButtonTextColor ? settings.homeButtonTextColor : '#ffffff';
     const backgroundColor = settings.homeButtonColor ? settings.homeButtonColor : '';
@@ -187,8 +186,8 @@ export default class GlobalNavigation extends React.PureComponent<IGlobalNavigat
     );
   }
 
-  private toggleFocus() {
-    const toggleFocusSelectors = [
+  private toggleFocus(): void {
+    const toggleFocusSelectors: string[] = [
       "div.od-SuiteNav",
       "div.commandBarWrapper",
       "#SuiteNavPlaceHolder",
@@ -196,21 +195,21 @@ export default class GlobalNavigation extends React.PureComponent<IGlobalNavigat
       "div.sp-pageLayout-sideNav div[class^='spNav_']",
       "div.sp-App--hasLeftNav .Files-leftNav"
     ];
-    toggleFocusSelectors.forEach(selector => {
-      this.toggleElement(selector);
-    });
+    toggleFocusSelectors.forEach((selector: string): void => this.toggleElement(selector));
   }
 
-  private toggleElement(selector) {
-    let element = document.querySelector(selector);
-    element ?
-      element.style.display == "none" ?
-        element.style.display = "block" :
-        element.style.display = "none" :
+  private toggleElement(selector): void {
+    const element = document.querySelector(selector);
+    element ? 
+      (
+        element.style.display == "none" ? 
+          element.style.display = "block" : 
+          element.style.display = "none"
+      ) : 
       console.log(`Pzl.Megamenu.FocusOnContent: element ${selector} not found.`);
   }
 
-  private renderFocusButton = () => {
+  private renderFocusButton = (): JSX.Element => {
     const settings = this.props.settings ? this.props.settings : {};
     const textColor = settings.focusButtonTextColor ? settings.focusButtonTextColor : '#ffffff';
     const backgroundColor = settings.focusButtonColor ? settings.focusButtonColor : '';
@@ -227,7 +226,7 @@ export default class GlobalNavigation extends React.PureComponent<IGlobalNavigat
     );
   }
 
-  private renderHelpButton = () => {
+  private renderHelpButton = (): JSX.Element => {
     const settings = this.props.settings ? this.props.settings : {};
     const textColor = settings.helpButtonTextColor ? settings.helpButtonTextColor : '#ffffff';
     const backgroundColor = settings.helpButtonColor ? settings.helpButtonColor : 'ff0000';
@@ -243,7 +242,7 @@ export default class GlobalNavigation extends React.PureComponent<IGlobalNavigat
     );
   }
 
-  private renderSearchBox = () => {
+  private renderSearchBox = (): JSX.Element => {
     const settings = this.props.settings ? this.props.settings : {};
     return (
       <div className={`${styles.searchBoxContainer}`} hidden={settings.searchBarEnabled !== 'true' || !this.state.isXtraLarge}>
@@ -252,7 +251,7 @@ export default class GlobalNavigation extends React.PureComponent<IGlobalNavigat
     );
   }
 
-  private onSearch(searchValue, queryParam?: string) {
+  private onSearch(searchValue, queryParam?: string): void {
     const safeQueryParam = (queryParam && queryParam.length > 0) ? queryParam : 'q';
     const searchUrl = this.props.settings && this.props.settings.searchBarSearchUrl ? this.props.settings.searchBarSearchUrl : `${this.props.currentSiteUrl}/_layouts/15/search.aspx`;
     const searchUrlWithParams = searchUrl.indexOf('?') > -1 ? searchUrl : `${searchUrl}?${safeQueryParam}=`;

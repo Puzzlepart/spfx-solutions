@@ -1,0 +1,29 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/spfx-serve.schema.json",
+  "port": 4321,
+  "https": true,
+  "serveConfigurations": {
+    "default": {
+      "pageUrl": "https://skodvinhvammen.sharepoint.com",
+      "customActions": {
+        "d98b227b-1bc5-4a9a-9b84-601f75d2f8ca": {
+          "location": "ClientSideExtension.ApplicationCustomizer",
+          "properties": {
+            "hubSiteId": "9aeaafd7-7715-47e3-a32d-a31e6b722ad0"
+          }
+        }
+      }
+    },
+    "plausible": {
+      "pageUrl": "https://skodvinhvammen.sharepoint.com",
+      "customActions": {
+        "d98b227b-1bc5-4a9a-9b84-601f75d2f8ca": {
+          "location": "ClientSideExtension.ApplicationCustomizer",
+          "properties": {
+            "hubSiteId": "9aeaafd7-7715-47e3-a32d-a31e6b722ad0"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "Page Expired by Puzzlepart",
+    "id": "a2f4c54c-485f-4685-b2b6-b335952b1a5e",
+    "version": "1.0.0.1",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "Puzzlepart",
+      "websiteUrl": "https://puzzlepart.com",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": "5128564"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "Page Expired by Puzzlepart"
+      },
+      "longDescription": {
+        "default": "Warn editor and user that content may be outdated"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "Page Expired by Puzzlepart",
+        "description": "The feature that activates elements of the pzl-page-expired solution.",
+        "id": "946135bc-700c-4f98-9806-e5d9e4542d11",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/pzl-part-expired.sppkg"
+  }
+}
