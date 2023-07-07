@@ -3,7 +3,7 @@
   "solution": {
     "name": "Local page navigation by Puzzlepart",
     "id": "e514111f-13b1-4444-93aa-63f82a140107",
-    "version": "1.0.2.0",
+    "version": "1.0.2.1",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
@@ -13,7 +13,29 @@
       "privacyUrl": "https://github.com/Puzzlepart/spfx-solutions",
       "termsOfUseUrl": "https://github.com/Puzzlepart/spfx-solutions",
       "mpnId": "5128564"
-    }
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "local-page-nav description"
+      },
+      "longDescription": {
+        "default": "local-page-nav description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "local-page-nav LocalPageNavWebPart Feature",
+        "description": "The feature that activates LocalPageNavWebPart from the local-page-nav solution.",
+        "id": "5c1e6e1a-a75e-4847-a672-4721bfd5e346",
+        "version": "1.0.2.0",
+        "componentIds": [
+          "5c1e6e1a-a75e-4847-a672-4721bfd5e346"
+        ]
+      }
+    ]
   },
   "paths": {
     "zippedPackage": "solution/local-page-nav.sppkg"
