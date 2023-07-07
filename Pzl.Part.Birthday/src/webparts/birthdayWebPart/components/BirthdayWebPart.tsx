@@ -1,4 +1,4 @@
-import { ISearchQueryBuilder, SearchQuery, SearchQueryBuilder, sp } from '@pnp/sp';
+import { ISearchQueryBuilder, SearchQuery, SearchQueryBuilder, SearchResult, SearchResults, sp } from '@pnp/sp';
 import { WebPartTitle } from '@pnp/spfx-controls-react/lib/WebPartTitle';
 import * as strings from 'BirthdayWebPartWebPartStrings';
 import * as moment from 'moment';
@@ -59,15 +59,14 @@ export default class BirthdayWebPart extends React.Component<IBirthdayWebPartPro
       SelectProperties: ['WorkEmail', 'PreferredName', 'Department', 'JobTitle', 'Birthday', 'Birthyear'],
     };
     const builder: ISearchQueryBuilder = SearchQueryBuilder('* Birthday>=1/1/2000', _searchQuerySettings);
-    let result = await sp.search(builder);
-    console.log(result);
+    const result: SearchResults = await sp.search(builder);
     return result.PrimarySearchResults;
   }
 
   private async fetchBirthdayData() {
-    let people = await this.search();
+    const people: SearchResult[] = await this.search();
     if (people && people.length > 0) {
-      const today = moment.utc(new Date).format("YYYY-MM-DD");
+      const today: string = moment.utc(new Date).format("YYYY-MM-DD");
       const thisYear: any = moment(today).format("YYYY");
 
       people.forEach((person: any) => {

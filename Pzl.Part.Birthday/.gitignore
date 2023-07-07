@@ -30,3 +30,7 @@ obj
 
 # Styles Generated Code
 *.scss.ts
+
+# 1.17.1 update
+.heft
+release
