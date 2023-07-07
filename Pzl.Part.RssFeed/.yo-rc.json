@@ -2,11 +2,16 @@
   "@microsoft/generator-sharepoint": {
     "isCreatingSolution": true,
     "environment": "spo",
-    "version": "1.10.0",
+    "version": "1.17.1",
     "libraryName": "pzl-rss-feed",
     "libraryId": "9e4eb1e9-89a9-40a3-a486-4a61090f8def",
     "packageManager": "npm",
     "componentType": "webpart",
-    "isDomainIsolated": false
+    "isDomainIsolated": false,
+    "nodeVersion": "14.17.6",
+    "sdkVersions": {
+      "@microsoft/teams-js": "2.9.1",
+      "@microsoft/microsoft-graph-client": "3.0.2"
+    }
   }
 }

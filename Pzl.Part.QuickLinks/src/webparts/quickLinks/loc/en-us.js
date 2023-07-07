@@ -9,6 +9,7 @@ define([], function () {
     "propertyPane_LineHeightLabel": "Line height (pixels)",
     "propertyPane_IconOpacityLabel": "Icon opacity (percent)",
     "component_AllLinksLabel": "See all",
-    "component_NoCategoryLabel": "No category"
+    "component_NoCategoryLabel": "No category",
+    "propertyPane_LinkClickWebHookLabel": "Webhook for link click",
   }
 });

@@ -3,15 +3,15 @@
   "solution": {
     "name": "Page Expired by Puzzlepart",
     "id": "a2f4c54c-485f-4685-b2b6-b335952b1a5e",
-    "version": "1.0.0.1",
+    "version": "1.0.0.2",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
     "developer": {
-      "name": "Puzzlepart",
+      "name": "Puzzlepart AS",
       "websiteUrl": "https://puzzlepart.com",
-      "privacyUrl": "",
-      "termsOfUseUrl": "",
+      "privacyUrl": "https://privacy.microsoft.com/en-us/privacystatement",
+      "termsOfUseUrl": "https://go.microsoft.com/fwlink/?linkid=2039674",
       "mpnId": "5128564"
     },
     "metadata": {

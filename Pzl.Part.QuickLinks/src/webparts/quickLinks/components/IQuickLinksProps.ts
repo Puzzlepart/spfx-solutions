@@ -12,4 +12,5 @@ export interface IQuickLinksProps {
   lineHeight: number;
   iconOpacity: number;
   webServerRelativeUrl: string;
+  linkClickWebHook: string;
 }

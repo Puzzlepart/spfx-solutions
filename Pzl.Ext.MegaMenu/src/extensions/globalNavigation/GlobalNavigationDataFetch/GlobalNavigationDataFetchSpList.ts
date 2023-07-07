@@ -6,11 +6,11 @@ import { INavigationLinkProps } from "../GlobalNavigation/NavigationElement/Navi
 import { override } from "@microsoft/decorators";
 //http://www.dotnetmafia.com/blogs/dotnettipoftheday/archive/2018/10/01/typeerror-object-doesn-t-support-property-or-method-from-with-pnpjs-and-internet-explorer-11.aspx
 //https://github.com/pnp/pnpjs/issues/237
+/*import "whatwg-fetch";
 import "core-js/modules/es6.promise";
 import "core-js/modules/es6.array.iterator.js";
 import "core-js/modules/es6.array.from.js";
-import "whatwg-fetch";
-import "es6-map/implement";
+import "es6-map/implement";*/
 
 export interface IGlobalNavigationDataFetchSpListParams {
     serverRelativeWebUrl: string;
@@ -36,8 +36,8 @@ export default class GlobalNavigationDataFetchSpList extends GlobalNavigationDat
     constructor(params: IGlobalNavigationDataFetchSpListParams) {
         super();
         this._params = params;
-        var webUrl = urljoin(`${document.location.protocol}//${document.location.hostname}`, this._params.serverRelativeWebUrl);
-        var listUrl = urljoin(this._params.serverRelativeWebUrl, this._params.linksListUrl);
+        const webUrl = urljoin(`${document.location.protocol}//${document.location.hostname}`, this._params.serverRelativeWebUrl);
+        const listUrl = urljoin(this._params.serverRelativeWebUrl, this._params.linksListUrl);
         this._spWeb = new Web(webUrl);
         this._linksList = this._spWeb.getList(listUrl);
     }
@@ -47,7 +47,7 @@ export default class GlobalNavigationDataFetchSpList extends GlobalNavigationDat
      */
     @override
     public async fetch() {
-        let fields: any = ["Title", this._params.urlFieldName, this._params.headersOrderFieldName,
+        const fields: any = ["Title", this._params.urlFieldName, this._params.headersOrderFieldName,
             `${this._params.headersListLookupFieldName}/Title`,
             `${this._params.headersListLookupFieldName}/${this._params.headersOrderFieldName}`];
         if (this._params.hasHeaderNavLinks) {
@@ -68,7 +68,7 @@ export default class GlobalNavigationDataFetchSpList extends GlobalNavigationDat
             if (element) {
                 element.links.push(navLink);
             } else {
-                let headerItem: INavigationElementProps = { header: headerItemLookup.Title, order: headerItemLookup.PzlNavOrder, links: [navLink] };
+                const headerItem: INavigationElementProps = { header: headerItemLookup.Title, order: headerItemLookup.PzlNavOrder, links: [navLink] };
                 if (this._params.hasHeaderNavLinks) {
                     headerItem.headerLink = headerItemLookup[this._params.urlFieldName];
                 }

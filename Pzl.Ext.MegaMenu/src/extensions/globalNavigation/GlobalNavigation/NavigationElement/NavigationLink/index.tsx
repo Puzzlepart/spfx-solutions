@@ -16,7 +16,7 @@ const NavigationLink = ({ text, url, linkTextColor, isHeader }: INavigationLinkP
         return isLinkExternal() ? "_blank" : "_self";
     }
 
-    let className = isHeader ? styles.headerLink : styles.navigationLink;
+    const className = isHeader ? styles.headerLink : styles.navigationLink;
     return (
         <div className={className} >
             <a href={url} target={getTarget()} data-interception={isLinkExternal() ? "off" : "on" } className={styles.anchor} style={{ color: linkTextColor }}>
