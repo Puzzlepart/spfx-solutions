@@ -2,7 +2,7 @@
 
 ## Summary
 
-This Application customizer lets you override any and all CSS on SharePoint pages across the site collection. Place your CSS file named `PzlStyler.css` in a document library called "Styling" placed under /sites/CDN/ 
+This Application customizer lets you override any and all CSS on SharePoint pages across the site collection. Place your CSS file named `PzlStyler.css` in a document library called "Styling" placed under ~/sites/CDN/ 
 Add the Pzl.Ext.Styler app to your SharePoint sites to enjoy the style of the day.
 
 ## Used SharePoint Framework Version
@@ -16,8 +16,8 @@ Add the Pzl.Ext.Styler app to your SharePoint sites to enjoy the style of the da
 
 ## Prerequisites
 
-Access to app catalog and site owners.
-
+SharePoint Administrator for app catalog deployment.
+We recommend that site owners add the extention manually per site.
 
 ## Solution
 
@@ -29,7 +29,7 @@ Access to app catalog and site owners.
 
 | Version | Date             | Comments        |
 | ------- | ---------------- | --------------- |
-| 1.0     | July 01, 2023 | Initial release |
+| 1.0     | August 24, 2023 | Initial release |
 
 ## Disclaimer
 
@@ -42,8 +42,6 @@ Access to app catalog and site owners.
 - Clone this repository
 - Ensure that you are at the solution folder
 - in the command-line run:
-  - **npm install**
-  - **gulp serve**
 
 ```bash
 npm install
@@ -73,6 +71,4 @@ After Pzl.Ext.Styler is installed:
 Here we've added border radius to the weather web part and changed colours and border radius on the Quick Links web part:
 ![Example](images/Weather%20and%20quicklinks.png?raw=true "Example")
 
-
-## References
 
