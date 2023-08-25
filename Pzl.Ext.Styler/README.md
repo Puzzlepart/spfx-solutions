@@ -62,6 +62,14 @@ gulp serve
 ## Features
 
 Extension that enables you to add CSS styling to any SharePoint site.
+Using the sample file, we remove the site header for all news stories in the OOTB News web part.
+
+Before Pzl.Ext.Styler is installed:
+![Before Pzl.Ext.Styler is installed](images/Styler%20off.png?raw=true "Before Pzl.Ext.Styler is installed")
+
+After Pzl.Ext.Styler is installed:
+![After Pzl.Ext.Styler is installed](images/Styler%20on.png?raw=true "After Pzl.Ext.Styler is installed")
+
 
 ## References
 
