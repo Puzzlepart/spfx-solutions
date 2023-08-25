@@ -70,6 +70,9 @@ Before Pzl.Ext.Styler is installed:
 After Pzl.Ext.Styler is installed:
 ![After Pzl.Ext.Styler is installed](images/Styler%20on.png?raw=true "After Pzl.Ext.Styler is installed")
 
+Here we've added border radius to the weather web part and changed colours and border radius on the Quick Links web part:
+![Example](images/Weather%20and%20quicklinks.png?raw=true "Example")
+
 
 ## References
 
