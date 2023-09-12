@@ -192,7 +192,9 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
     this.setState({
       favouriteLinks: newFavourites,
       saveButtonDisabled: false
-    });
+    },
+      (): Promise<void> => this.saveData()
+    );
   }
 
   private generateEditorLinkComponents(links: Array<Link>): JSX.Element[] {
