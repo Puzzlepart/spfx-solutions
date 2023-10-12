@@ -1,4 +1,4 @@
-<pnp:Lists xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+<pnp:Lists xmlns:pnp="http://schemas.dev.office.com/PnP/2020/02/ProvisioningSchema">
     <pnp:ListInstance Title="{resource:QuickLinks_List_Title_EditorLinks}" Url="Lists/EditorLinks" TemplateType="100" EnableAttachments="false" ContentTypesEnabled="false" EnableVersioning="true" RemoveExistingContentTypes="true" EnableFolderCreation="false">
         <pnp:ContentTypeBindings>
             <pnp:ContentTypeBinding ContentTypeID="0x01000632690D108F403A8D7ABE0B3B6328EA"/>
