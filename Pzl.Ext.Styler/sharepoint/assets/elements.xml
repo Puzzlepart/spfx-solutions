@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+    <CustomAction
+        Title="PzlStyler"
+        Location="ClientSideExtension.ApplicationCustomizer"
+        ClientSideComponentId="125d04f8-45a4-4ad9-88f5-f77bd3970903"
+        ClientSideComponentProperties="{&quot;testMessage&quot;:&quot;Test message&quot;}">
+    </CustomAction>
+</Elements>
