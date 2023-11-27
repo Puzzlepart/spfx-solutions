@@ -1,48 +1,48 @@
-<pnp:Lists xmlns:pnp="http://schemas.dev.office.com/PnP/2020/02/ProvisioningSchema">
-    <pnp:ListInstance Title="{resource:QuickLinks_List_Title_EditorLinks}" Url="Lists/EditorLinks" TemplateType="100" EnableAttachments="false" ContentTypesEnabled="false" EnableVersioning="true" RemoveExistingContentTypes="true" EnableFolderCreation="false">
-        <pnp:ContentTypeBindings>
-            <pnp:ContentTypeBinding ContentTypeID="0x01000632690D108F403A8D7ABE0B3B6328EA"/>
-        </pnp:ContentTypeBindings>
-        <pnp:Views>
-            <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="All items" Url="{site}/Lists/EditorLinks/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
-                <Query>
-                    <OrderBy>
-                        <FieldRef Name="ID" />
-                    </OrderBy>
-                </Query>
-                <ViewFields>
-                    <FieldRef Name="Title" />
-                    <FieldRef Name="PzlUrl"/>
-                    <FieldRef Name="PzlLinkCategory"/>
-                    <FieldRef Name="PzlLinkActive"/>
-                    <FieldRef Name="PzlLinkMandatory"/>
-                    <FieldRef Name="PzlLinkPriority"/>
-                    <FieldRef Name="PzlOfficeUIFabricIcon"/>
-                </ViewFields>
-                <RowLimit Paged="TRUE">30</RowLimit>
-                <Aggregations Value="Off" />
-                <JSLink>clienttemplates.js</JSLink>
-            </View>
-        </pnp:Views>
-    </pnp:ListInstance>
-    <pnp:ListInstance Title="{resource:QuickLinks_List_Title_FavouriteLinks}" Url="Lists/FavouriteLinks" TemplateType="100" EnableAttachments="false" ContentTypesEnabled="true" EnableVersioning="true" RemoveExistingContentTypes="true" EnableFolderCreation="false">
-        <pnp:ContentTypeBindings>
-            <pnp:ContentTypeBinding ContentTypeID="0x0100493065B319014E438EFEA9A819FD30E5"/>
-        </pnp:ContentTypeBindings>
-        <pnp:Views>
-            <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="All items" Url="{site}/Lists/FavouriteLinks/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
-                <Query>
-                    <OrderBy>
-                        <FieldRef Name="ID" />
-                    </OrderBy>
-                </Query>
-                <ViewFields>
-                    <FieldRef Name="Title" />
-                </ViewFields>
-                <RowLimit Paged="TRUE">30</RowLimit>
-                <Aggregations Value="Off" />
-                <JSLink>clienttemplates.js</JSLink>
-            </View>
-        </pnp:Views>
-    </pnp:ListInstance>
+<pnp:Lists xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+  <pnp:ListInstance Title="{resource:QuickLinks_List_Title_EditorLinks}" Url="Lists/EditorLinks" TemplateType="100" EnableAttachments="false" ContentTypesEnabled="false" EnableVersioning="true" RemoveExistingContentTypes="true" EnableFolderCreation="false">
+    <pnp:ContentTypeBindings>
+      <pnp:ContentTypeBinding ContentTypeID="0x01000632690D108F403A8D7ABE0B3B6328EA"/>
+    </pnp:ContentTypeBindings>
+    <pnp:Views>
+      <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="All items" Url="{site}/Lists/EditorLinks/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+        <Query>
+          <OrderBy>
+            <FieldRef Name="ID" />
+          </OrderBy>
+        </Query>
+        <ViewFields>
+          <FieldRef Name="Title" />
+          <FieldRef Name="PzlUrl"/>
+          <FieldRef Name="PzlLinkCategory"/>
+          <FieldRef Name="PzlLinkActive"/>
+          <FieldRef Name="PzlLinkMandatory"/>
+          <FieldRef Name="PzlLinkPriority"/>
+          <FieldRef Name="PzlOfficeUIFabricIcon"/>
+        </ViewFields>
+        <RowLimit Paged="TRUE">30</RowLimit>
+        <Aggregations Value="Off" />
+        <JSLink>clienttemplates.js</JSLink>
+      </View>
+    </pnp:Views>
+  </pnp:ListInstance>
+  <pnp:ListInstance Title="{resource:QuickLinks_List_Title_FavouriteLinks}" Url="Lists/FavouriteLinks" TemplateType="100" EnableAttachments="false" ContentTypesEnabled="true" EnableVersioning="true" RemoveExistingContentTypes="true" EnableFolderCreation="false">
+    <pnp:ContentTypeBindings>
+      <pnp:ContentTypeBinding ContentTypeID="0x0100493065B319014E438EFEA9A819FD30E5"/>
+    </pnp:ContentTypeBindings>
+    <pnp:Views>
+      <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="All items" Url="{site}/Lists/FavouriteLinks/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+        <Query>
+          <OrderBy>
+            <FieldRef Name="ID" />
+          </OrderBy>
+        </Query>
+        <ViewFields>
+          <FieldRef Name="Title" />
+        </ViewFields>
+        <RowLimit Paged="TRUE">30</RowLimit>
+        <Aggregations Value="Off" />
+        <JSLink>clienttemplates.js</JSLink>
+      </View>
+    </pnp:Views>
+  </pnp:ListInstance>
 </pnp:Lists>

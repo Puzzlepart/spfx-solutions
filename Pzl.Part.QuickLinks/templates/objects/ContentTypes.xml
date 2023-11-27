@@ -1,18 +1,18 @@
-<pnp:ContentTypes xmlns:pnp="http://schemas.dev.office.com/PnP/2020/02/ProvisioningSchema">
-    <pnp:ContentType ID="0x01000632690D108F403A8D7ABE0B3B6328EA" Name="{resource:QuickLinks_ContentTypes_Name_PromotedLink}"  Group="{parameter:GenericContentTypeGroup}">
-        <pnp:FieldRefs>
-            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
-            <pnp:FieldRef ID="36e514dc-0188-4d07-824d-c76af6c0b0ce" Name="{parameter:GenericFieldsPrefix}Url" Required="true" />
-            <pnp:FieldRef ID="5551c7af-5d4e-4049-bf62-2cef21f5da95" Name="{parameter:GenericFieldsPrefix}LinkCategory" Required="false" />
-            <pnp:FieldRef ID="6c7b7773-94ad-43b3-92d5-1b64c25914d9" Name="{parameter:GenericFieldsPrefix}OfficeUIFabricIcon" Required="false" />
-            <pnp:FieldRef ID="10e8f327-7ce2-4120-9790-e682b1e29bf8" Name="{parameter:GenericFieldsPrefix}LinkMandatory" Required="false" />
-            <pnp:FieldRef ID="048d0d71-58e6-46b6-99b6-2c66ce5dc075" Name="{parameter:GenericFieldsPrefix}LinkPriority" Required="false" />
-            <pnp:FieldRef ID="0ad683ef-15b3-4b08-9277-286e71a59674" Name="{parameter:GenericFieldsPrefix}LinkActive" Required="false" />
-        </pnp:FieldRefs>
-    </pnp:ContentType>
-    <pnp:ContentType ID="0x0100493065B319014E438EFEA9A819FD30E5" Name="{resource:QuickLinks_ContentTypes_Name_PeronalLink}" Group="{parameter:GenericContentTypeGroup}">
-        <pnp:FieldRefs>
-            <pnp:FieldRef ID="1f93262e-daab-408d-9ba0-1343b468e4c3" Name="{parameter:GenericFieldsPrefix}PersonalLinks" />
-        </pnp:FieldRefs>
-    </pnp:ContentType>    
+<pnp:ContentTypes xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+  <pnp:ContentType ID="0x01000632690D108F403A8D7ABE0B3B6328EA" Name="{resource:QuickLinks_ContentTypes_Name_PromotedLink}" Group="{parameter:GenericContentTypeGroup}">
+    <pnp:FieldRefs>
+      <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
+      <pnp:FieldRef ID="36e514dc-0188-4d07-824d-c76af6c0b0ce" Name="{parameter:GenericFieldsPrefix}Url" Required="true" />
+      <pnp:FieldRef ID="5551c7af-5d4e-4049-bf62-2cef21f5da95" Name="{parameter:GenericFieldsPrefix}LinkCategory" Required="false" />
+      <pnp:FieldRef ID="6c7b7773-94ad-43b3-92d5-1b64c25914d9" Name="{parameter:GenericFieldsPrefix}OfficeUIFabricIcon" Required="false" />
+      <pnp:FieldRef ID="10e8f327-7ce2-4120-9790-e682b1e29bf8" Name="{parameter:GenericFieldsPrefix}LinkMandatory" Required="false" />
+      <pnp:FieldRef ID="048d0d71-58e6-46b6-99b6-2c66ce5dc075" Name="{parameter:GenericFieldsPrefix}LinkPriority" Required="false" />
+      <pnp:FieldRef ID="0ad683ef-15b3-4b08-9277-286e71a59674" Name="{parameter:GenericFieldsPrefix}LinkActive" Required="false" />
+    </pnp:FieldRefs>
+  </pnp:ContentType>
+  <pnp:ContentType ID="0x0100493065B319014E438EFEA9A819FD30E5" Name="{resource:QuickLinks_ContentTypes_Name_PeronalLink}" Group="{parameter:GenericContentTypeGroup}">
+    <pnp:FieldRefs>
+      <pnp:FieldRef ID="1f93262e-daab-408d-9ba0-1343b468e4c3" Name="{parameter:GenericFieldsPrefix}PersonalLinks" />
+    </pnp:FieldRefs>
+  </pnp:ContentType>
 </pnp:ContentTypes>
