@@ -27,7 +27,7 @@ export interface IQuickLinksWebPartProps {
   linkClickWebHook: string
 }
 
-export default class PzlQuickLinksWebPart extends BaseClientSideWebPart<IQuickLinksWebPartProps> {
+export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinksWebPartProps> {
   private _themeProvidor: ThemeProvider // NOTE DO NOT REMOVE; we need to keep the reference for it not to (potentially) be garbage collected
   private _theme: IReadonlyTheme
 

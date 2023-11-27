@@ -3,8 +3,6 @@ env:
 parser: "@typescript-eslint/parser"
 extends:
   - "prettier"
-  - "plugin:react/recommended"
-  - "plugin:@typescript-eslint/recommended"
 plugins:
   - "prettier"
   - "unused-imports"

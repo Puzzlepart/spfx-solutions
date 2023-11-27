@@ -458,10 +458,10 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
         }
       })
       const mandatorymappedLinks: Link[] = mappedLinks.filter(
-        (mandatory) => mandatory.mandatory == 1
+        (mandatory) => mandatory.mandatory === 1
       )
       const promotedmappedLinks: Link[] = mappedLinks.filter(
-        (mandatory) => mandatory.mandatory == 0
+        (mandatory) => mandatory.mandatory === 0
       )
       const prunedLinks: Link[] = promotedmappedLinks.filter((link) => {
         return favouriteItemsIds.indexOf(link.id) === -1
@@ -505,7 +505,7 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
           })
           .sort()
         categoryNames = categoryNames.filter((item, index) => {
-          return categoryNames.indexOf(item) == index
+          return categoryNames.indexOf(item) === index
         })
         categories = categoryNames.map((catName) => {
           return {
@@ -582,7 +582,7 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
     }
   }
 
-  private async checkForUpdatedLinks(userFavoriteLinks: any[], allFavoriteLinks: any[]) {
+  private checkForUpdatedLinks(userFavoriteLinks: any[], allFavoriteLinks: any[]) {
     const personalLinks: Link[] = new Array<Link>()
     let shouldUpdate: boolean = false
     userFavoriteLinks.forEach((userLink): void => {

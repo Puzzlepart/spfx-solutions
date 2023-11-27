@@ -86,7 +86,7 @@ export default class QuickLinks extends React.Component<IQuickLinksProps, IQuick
     })
   }
 
-  private async callWebHook(uri: string, category: string): Promise<any> {
+  private callWebHook(uri: string, category: string): Promise<any> {
     if (stringIsNullOrEmpty(this.props.linkClickWebHook)) {
       return
     }
@@ -178,7 +178,7 @@ export default class QuickLinks extends React.Component<IQuickLinksProps, IQuick
         })
         .sort()
       categoryNames = categoryNames.filter((item, index) => {
-        return categoryNames.indexOf(item) == index
+        return categoryNames.indexOf(item) === index
       })
       categories = categoryNames.map((catName) => {
         return {
