@@ -1,17 +1,21 @@
 {
   "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "16.18.0",
+    "sdksVersions": {
+      "@microsoft/microsoft-graph-client": "3.0.2",
+      "@microsoft/teams-js": "2.12.0"
+    },
     "version": "1.18.0",
     "libraryName": "pzl-quick-links",
     "libraryId": "aa433587-aa66-4620-a8d8-7857015aaa96",
     "environment": "spo",
-    "isDomainIsolated": false,
-    "isCreatingSolution": true,
     "packageManager": "npm",
-    "componentType": "webpart",
-    "nodeVersion": "16.18.0",
-    "sdkVersions": {
-      "@microsoft/teams-js": "2.12.0",
-      "@microsoft/microsoft-graph-client": "3.0.2"
-    }
+    "solutionName": "pzl-employees",
+    "solutionShortDescription": "pzl-employees description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
   }
 }
