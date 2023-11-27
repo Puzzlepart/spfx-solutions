@@ -1,6 +1,6 @@
 {
   "@microsoft/generator-sharepoint": {
-    "version": "1.17.1",
+    "version": "1.18.0",
     "libraryName": "pzl-quick-links",
     "libraryId": "aa433587-aa66-4620-a8d8-7857015aaa96",
     "environment": "spo",
@@ -8,9 +8,9 @@
     "isCreatingSolution": true,
     "packageManager": "npm",
     "componentType": "webpart",
-    "nodeVersion": "14.17.6",
+    "nodeVersion": "16.18.0",
     "sdkVersions": {
-      "@microsoft/teams-js": "2.9.1",
+      "@microsoft/teams-js": "2.12.0",
       "@microsoft/microsoft-graph-client": "3.0.2"
     }
   }
