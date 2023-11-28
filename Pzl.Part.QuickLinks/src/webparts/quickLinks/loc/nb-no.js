@@ -1,15 +1,20 @@
 define([], function () {
   return {
-    propertyPane_TitleFieldLabel: "Tittel",
-    propertyPane_NumberOfItemsLabel: "Antall lenker",
-    propertyPane_AllLinksUrlLabel: "Lenke til 'Alle lenker'",
-    propertyPane_DefaultOfficeFabricIconLabel: "Standard ikon",
-    propertyPane_GroupByCategoryLabel: "Grupper etter kategorier",
-    propertyPane_MaxLinkLengthLabel: "Maks bredde på lenkene (piksler)",
-    propertyPane_LineHeightLabel: "Linjehøyde (piksler)",
-    propertyPane_IconOpacityLabel: "Ikon opasitet (prosent)",
-    component_AllLinksLabel: "Se alle",
-    component_NoCategoryLabel: "Ingen kategori",
-    propertyPane_LinkClickWebHookLabel: "Webhook for lenkeklikk",
+    PropertyPane: {
+      AllLinksUrlLabel: 'Lenke til \'Alle lenker\'',
+      DefaultOfficeFabricIconLabel: 'Standard ikon',
+      DescriptionFieldLabel: 'Beskrivelse',
+      GroupByCategoryLabel: 'Grupper etter kategorier',
+      IconOpacityLabel: 'Ikon opasitet (prosent)',
+      LineHeightLabel: 'Linjehøyde (piksler)',
+      LinkClickWebHookLabel: 'Webhook for lenkeklikk',
+      MaxLinkLengthLabel: 'Maks bredde på lenkene (piksler)',
+      NumberOfItemsLabel: 'Antall lenker',
+      TitleFieldLabel: 'Tittel'
+    },
+    AllLinksLabel: 'Se alle',
+    Description: 'Her er en samling av obligatoriske lenker og dine egne lenker nederst.',
+    NoCategoryLabel: 'Ingen kategori',
+    Title: 'Dine lenker'
   }
-});
+})
