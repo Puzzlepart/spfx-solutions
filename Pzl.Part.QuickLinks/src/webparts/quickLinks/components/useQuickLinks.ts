@@ -1,12 +1,11 @@
-import { sp } from "@pnp/sp"
+import { sp } from '@pnp/sp'
 import { IReadonlyTheme } from '@microsoft/sp-component-base'
-import { isEqual } from "lodash"
-import { stringIsNullOrEmpty } from "@pnp/common"
-import { useEffect } from "react"
-import { useQuickLinksState } from "./useQuickLinksState"
-import { ICategory, ILink, IQuickLinksProps } from "./types"
-import strings from "QuickLinksWebPartStrings"
-
+import { isEqual } from 'lodash'
+import { stringIsNullOrEmpty } from '@pnp/common'
+import { useEffect } from 'react'
+import { useQuickLinksState } from './useQuickLinksState'
+import { ICategory, ILink, IQuickLinksProps } from './types'
+import strings from 'QuickLinksWebPartStrings'
 
 /**
  * Component logic hook for `quickLinks`. This hook is responsible for
@@ -85,7 +84,7 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
     }
 
     let categories: Array<ICategory> = [
-      { displayText: strings.component_NoCategoryLabel, links: displayLinks }
+      { displayText: strings.NoCategoryLabel, links: displayLinks }
     ]
     if (props.groupByCategory) {
       let categoryNames: string[] = displayLinks
@@ -117,7 +116,9 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
     const personalLinks: ILink[] = new Array<ILink>()
     let shouldUpdate: boolean = false
     userFavoriteLinks.forEach((userLink: ILink): void => {
-      const linkMatch: ILink = allFavoriteLinks.find((favoriteLink) => favoriteLink.id === userLink.id)
+      const linkMatch: ILink = allFavoriteLinks.find(
+        (favoriteLink) => favoriteLink.id === userLink.id
+      )
       if (
         linkMatch &&
         (!isEqual(linkMatch.url, userLink.url) ||

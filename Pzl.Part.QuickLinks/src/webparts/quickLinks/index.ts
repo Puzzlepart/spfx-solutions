@@ -10,12 +10,14 @@ import {
   IPropertyPaneConfiguration,
   PropertyPaneSlider,
   PropertyPaneCheckbox,
-  PropertyPaneTextField
+  PropertyPaneTextField,
+  PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { IQuickLinksProps, QuickLinks } from './components'
 
 export interface IQuickLinksWebPartProps {
   title: string
+  description: string
   numberOfItems: number
   allLinksUrl: string
   defaultOfficeFabricIcon: string
@@ -24,6 +26,9 @@ export interface IQuickLinksWebPartProps {
   lineHeight: number
   iconOpacity: number
   linkClickWebHook: string
+  hideHeader: boolean
+  hideTitle: boolean
+  hideShowAll: boolean
 }
 
 export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinksWebPartProps> {
@@ -34,6 +39,7 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
     const element: React.ReactElement<IQuickLinksProps> = React.createElement(QuickLinks, {
       theme: this._theme,
       title: this.properties.title,
+      description: this.properties.description,
       userId: this.context.pageContext.legacyPageContext.userId,
       numberOfLinks: this.properties.numberOfItems,
       allLinksUrl: this.properties.allLinksUrl,
@@ -43,7 +49,10 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
       lineHeight: this.properties.lineHeight,
       iconOpacity: this.properties.iconOpacity,
       webServerRelativeUrl: this.context.pageContext.web.serverRelativeUrl,
-      linkClickWebHook: this.properties.linkClickWebHook
+      linkClickWebHook: this.properties.linkClickWebHook,
+      hideHeader: this.properties.hideHeader,
+      hideTitle: this.properties.hideTitle,
+      hideShowAll: this.properties.hideShowAll
     })
 
     ReactDom.render(element, this.domElement)
@@ -73,45 +82,73 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
     return {
       pages: [
         {
+          header: {
+            description: 'Konfigurasjon av webdelen'
+          },
+          displayGroupsAsAccordion: true,
           groups: [
             {
+              groupName: strings.PropertyPane.GeneralGroupName,
               groupFields: [
                 PropertyPaneTextField('title', {
-                  label: strings.propertyPane_TitleFieldLabel
+                  label: strings.PropertyPane.TitleFieldLabel,
+                  description: strings.PropertyPane.TitleFieldDescription
+                }),
+                PropertyPaneTextField('description', {
+                  label: strings.PropertyPane.DescriptionFieldLabel,
+                  description: strings.PropertyPane.DescriptionFieldDescription,
+                  multiline: true
                 }),
                 PropertyPaneSlider('numberOfItems', {
-                  label: strings.propertyPane_NumberOfItemsLabel,
+                  label: strings.PropertyPane.NumberOfItemsLabel,
                   min: 0,
                   max: 500
                 }),
                 PropertyPaneSlider('maxLinkLength', {
-                  label: strings.propertyPane_MaxLinkLengthLabel,
+                  label: strings.PropertyPane.MaxLinkLengthLabel,
                   min: 50,
                   max: 500
                 }),
                 PropertyPaneSlider('lineHeight', {
-                  label: strings.propertyPane_LineHeightLabel,
+                  label: strings.PropertyPane.LineHeightLabel,
                   min: 15,
                   max: 50
                 }),
                 PropertyPaneSlider('iconOpacity', {
-                  label: strings.propertyPane_IconOpacityLabel,
+                  label: strings.PropertyPane.IconOpacityLabel,
                   min: 0,
                   max: 100
                 }),
                 PropertyPaneTextField('allLinksUrl', {
-                  label: strings.propertyPane_AllLinksUrlLabel
+                  label: strings.PropertyPane.AllLinksUrlLabel
                 }),
                 PropertyPaneTextField('defaultOfficeFabricIcon', {
-                  label: strings.propertyPane_DefaultOfficeFabricIconLabel
+                  label: strings.PropertyPane.DefaultOfficeFabricIconLabel
                 }),
                 PropertyPaneCheckbox('groupByCategory', {
-                  text: strings.propertyPane_GroupByCategoryLabel,
+                  text: strings.PropertyPane.GroupByCategoryLabel,
                   checked: false
                 }),
                 PropertyPaneTextField('linkClickWebHook', {
-                  label: strings.propertyPane_LinkClickWebHookLabel
+                  label: strings.PropertyPane.LinkClickWebHookLabel
                 })
+              ]
+            },
+            {
+              groupName: strings.PropertyPane.ShowHideGroupName,
+              isCollapsed: true,
+              groupFields: [
+                PropertyPaneToggle('hideHeader', {
+                  label: strings.PropertyPane.HideHeaderLabel
+                }),
+                !this.properties.hideHeader &&
+                  PropertyPaneToggle('hideTitle', {
+                    label: strings.PropertyPane.HideTitleLabel
+                  }),
+                !this.properties.hideHeader &&
+                  PropertyPaneToggle('hideShowAll', {
+                    label: strings.PropertyPane.HideShowAllLabel
+                  })
               ]
             }
           ]

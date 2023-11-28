@@ -1,38 +1,46 @@
-@import "~@fluentui/react/dist/sass/References.scss";
-
 [class^="ControlZone--emph"] {
   background-color: rgba(0, 0, 0, 0) !important;
 }
 
 .quickLinks {
-  .webpartHeader {
-    padding-bottom: 10px;
-    font-size: 24px;
-    font-weight: 100;
-    .showAll {
-      float: right;
-      > span {
-        cursor: pointer;
-        text-decoration: none;
-        font-size: 14px;
-        font-weight: 400;
+  .header {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    width: auto;
+    height: fit-content;
+    padding-bottom: 6px;
+
+    .title {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      span {
+        font-size: 20px;
+        font-weight: 600;
       }
     }
   }
+
   .linkGrid {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+
     .categorySection {
       display: block;
       width: 100%;
       padding: 20px 10px 10px 0;
     }
+
     .linkCategoryHeading {
-      @include ms-fontSize-xl;
       width: 100%;
       white-space: nowrap;
     }
+
     .linkGridColumn {
       line-height: 40px;
       display: inline-block;
@@ -43,26 +51,28 @@
         display: inline-block;
         margin: 0 30px 0 0;
         margin-bottom: 5px;
-        span,
-        i {
+
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.06);
+        }
+
+        i,
+        span {
           display: inline-block;
           vertical-align: middle;
         }
+
         span {
-          @include ms-fontWeight-regular;
-          @include ms-fontSize-mPlus;
           text-overflow: ellipsis;
           width: 200px;
           white-space: nowrap;
           overflow: hidden;
         }
+
         .icon {
           font-size: 25px;
           margin-right: 10px;
         }
-      }
-      .linkContainer:hover {
-        background-color: rgba(0, 0, 0, 0.06);
       }
     }
   }

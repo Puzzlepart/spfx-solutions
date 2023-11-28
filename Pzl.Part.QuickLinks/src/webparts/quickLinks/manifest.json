@@ -27,6 +27,7 @@
       "officeFabricIconFontName": "Globe",
       "properties": {
         "title": "Dine lenker",
+        "description": "Her er en samling av obligatoriske lenker og dine egne lenker nederst.",
         "numberOfItems": 20,
         "defaultOfficeFabricIcon": "Link",
         "groupByCategory": false,
