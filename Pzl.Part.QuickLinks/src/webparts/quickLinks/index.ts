@@ -12,8 +12,7 @@ import {
   PropertyPaneCheckbox,
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane'
-import { IQuickLinksProps } from './components/IQuickLinksProps'
-import QuickLinks from './components/QuickLinks'
+import { IQuickLinksProps, QuickLinks } from './components'
 
 export interface IQuickLinksWebPartProps {
   title: string
