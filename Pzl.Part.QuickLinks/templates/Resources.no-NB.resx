@@ -64,7 +64,7 @@
   <data name="QuickLinks_ContentTypes_Name_PeronalLink" xml:space="preserve">
     <value>Personlig lenke</value>
   </data>
-  <data name="QuickLinks_ContentTypes_Name_PromotedLink" xml:space="preserve">
+  <data name="QuickLinks_ContentTypes_Name_RecommendedLink" xml:space="preserve">
     <value>Lenke</value>
   </data>
   <data name="QuickLinks_SiteFields_Name_LinkActive" xml:space="preserve">

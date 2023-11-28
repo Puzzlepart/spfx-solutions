@@ -11,7 +11,7 @@ import { Modal } from 'office-ui-fabric-react/lib/Modal'
 import * as strings from 'AllLinksWebPartStrings'
 import '@pnp/polyfill-ie11'
 import { ItemAddResult, sp } from '@pnp/sp'
-import { find, isEqual } from '@microsoft/sp-lodash-subset'
+import { isEqual } from '@microsoft/sp-lodash-subset'
 import { Text } from 'office-ui-fabric-react/lib/Text'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { IReadonlyTheme } from '@microsoft/sp-component-base'
@@ -63,7 +63,6 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
         {strings.component_SaveErrorLabel}
       </MessageBar>
     ) : null
-    //const successMessage: JSX.Element = this.state.showSuccessMessage ? <MessageBar messageBarType={MessageBarType.success} onDismiss={() => this.setState({ showSuccessMessage: false })} >{strings.component_SaveOkLabel}</MessageBar> : null;
     const loadingSpinner: JSX.Element = this.state.showLoadingSpinner ? (
       <Spinner
         style={{ position: 'absolute', right: 10, top: -10 }}
@@ -88,9 +87,9 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
         <div className={styles.editorLinksContainer}>{mandatoryLinks}</div>
         <hr />
         <div className={styles.webpartHeading}>
-          {stringIsNullOrEmpty(this.props.reccomendedLinksTitle)
-            ? strings.component_PromotedLinksLabel
-            : this.props.reccomendedLinksTitle}
+          {stringIsNullOrEmpty(this.props.recommendedLinksTitle)
+            ? strings.component_RecommendedLinksLabel
+            : this.props.recommendedLinksTitle}
         </div>
         <div className={styles.editorLinksContainer}>{editorLinks}</div>
       </div>
@@ -104,7 +103,6 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
         </div>
         <div className={styles.editorLinksContainer}>{favouriteLinks}</div>
         <div className={styles.buttonRow}>
-          {/* <Button onClick={() => this.saveData()} text={strings.component_SaveYourLinksLabel} disabled={this.state.saveButtonDisabled} /> */}
           <Button
             onClick={() => this.openNewItemModal()}
             text={strings.component_NewLinkLabel}
@@ -442,10 +440,14 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
           isFirstUpdate: true
         })
       }
+
+      console.log(this.props)
+
       const editorLinks = await sp.web
         .getList(this.props.webServerRelativeUrl + '/Lists/EditorLinks')
         .items.filter('PzlLinkActive eq 1')
         .get()
+
       const mappedLinks: Link[] = editorLinks.map((link) => {
         return {
           id: link.Id,
@@ -458,14 +460,12 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
         }
       })
       const mandatorymappedLinks: Link[] = mappedLinks.filter(
-        (mandatory) => mandatory.mandatory === 1
-      )
-      const promotedmappedLinks: Link[] = mappedLinks.filter(
-        (mandatory) => mandatory.mandatory === 0
-      )
-      const prunedLinks: Link[] = promotedmappedLinks.filter((link) => {
-        return favouriteItemsIds.indexOf(link.id) === -1
-      })
+        (link) => link.mandatory)
+
+      const recommendedmappedLinks: Link[] = mappedLinks.filter(
+        (link) => !link.mandatory)
+
+      const prunedLinks: Link[] = recommendedmappedLinks.filter((link) => !favouriteItemsIds.includes(link.id))
       if (
         favouriteLinkListItem.length > 0 &&
         favouriteItems !== null &&
@@ -473,7 +473,7 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
       ) {
         const favoriteLinks: Link[] = await this.checkForUpdatedLinks(
           favouriteItems,
-          promotedmappedLinks
+          recommendedmappedLinks
         )
         favouriteItemsIds = favoriteLinks.map((item: Link): number => item.id)
       }
@@ -505,7 +505,7 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
           })
           .sort()
         categoryNames = categoryNames.filter((item, index) => {
-          return categoryNames.indexOf(item) === index
+          return categoryNames.indexOf(item) == index
         })
         categories = categoryNames.map((catName) => {
           return {
@@ -582,11 +582,11 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
     }
   }
 
-  private checkForUpdatedLinks(userFavoriteLinks: any[], allFavoriteLinks: any[]) {
+  private async checkForUpdatedLinks(userFavoriteLinks: any[], allFavoriteLinks: any[]) {
     const personalLinks: Link[] = new Array<Link>()
     let shouldUpdate: boolean = false
     userFavoriteLinks.forEach((userLink): void => {
-      const linkMatch = find(allFavoriteLinks, (favoriteLink) => favoriteLink.id === userLink.id)
+      const linkMatch = allFavoriteLinks.find((favoriteLink) => favoriteLink.id === userLink.id)
       if (
         linkMatch &&
         (!isEqual(linkMatch.url, userLink.url) ||

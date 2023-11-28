@@ -12,6 +12,6 @@ export interface IAllLinksProps {
   maxLinkLength: number
   iconOpacity: number
   mandatoryLinksTitle: string
-  reccomendedLinksTitle: string
+  recommendedLinksTitle: string
   myLinksTitle: string
 }

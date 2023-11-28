@@ -15,7 +15,7 @@ import {
 import AllLinks from './components/AllLinks'
 
 export interface IAllLinksWebPartProps {
-  reccomendedLinksTitle: string
+  recommendedLinksTitle: string
   myLinksTitle: string
   mandatoryLinksTitle: string
   defaultOfficeFabricIcon: string
@@ -39,7 +39,7 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
       listingByCategory: this.properties.listingByCategory,
       listingByCategoryTitle: this.properties.listingByCategoryTitle,
       mandatoryLinksTitle: this.properties.mandatoryLinksTitle,
-      reccomendedLinksTitle: this.properties.reccomendedLinksTitle,
+      recommendedLinksTitle: this.properties.recommendedLinksTitle,
       myLinksTitle: this.properties.myLinksTitle
     } as IAllLinksProps)
 
@@ -93,8 +93,8 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
                 PropertyPaneTextField('mandatoryLinksTitle', {
                   label: strings.propertyPane_MandatoryLinksTitleLabel
                 }),
-                PropertyPaneTextField('reccomendedLinksTitle', {
-                  label: strings.propertyPane_ReccomendedLinksTitleLabel
+                PropertyPaneTextField('recommendedLinksTitle', {
+                  label: strings.propertyPane_RecommendedLinksTitleLabel
                 }),
                 PropertyPaneTextField('myLinksTitle', {
                   label: strings.propertyPane_MyLinksTitleLabel

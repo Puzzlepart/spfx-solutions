@@ -5,7 +5,7 @@
       "name": "Debug",
       "type": "chrome",
       "request": "launch",
-      "url": "https://enter-your-SharePoint-site/_layouts/workbench.aspx",
+      "url": "https://ptil.sharepoint.com/SitePages/Alle-lenker.aspx?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/manifests.js",
       "webRoot": "${workspaceRoot}",
       "sourceMaps": true,
       "sourceMapPathOverrides": {
@@ -22,7 +22,7 @@
       "name": "Debug in incognito mode",
       "type": "chrome",
       "request": "launch",
-      "url": "https://enter-your-SharePoint-site/_layouts/workbench.aspx",
+      "url": "https://ptil.sharepoint.com/SitePages/Alle-lenker.aspx?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/manifests.js",
       "webRoot": "${workspaceRoot}",
       "sourceMaps": true,
       "sourceMapPathOverrides": {

@@ -1,12 +1,12 @@
 declare interface IAllLinksWebPartStrings {
     propertyPane_MandatoryLinksTitleLabel: string;
-    propertyPane_ReccomendedLinksTitleLabel: string;
+    propertyPane_RecommendedLinksTitleLabel: string;
     propertyPane_MyLinksTitleLabel: string;
     propertyPane_defaultOfficeFabricIcon: string;
     propertyPane_myLinksOnTop: string;
     propertyPane_listingByCategory: string;
     propertyPane_CategoryTitleFieldLabel: string;
-    component_PromotedLinksLabel: string;
+    component_RecommendedLinksLabel: string;
     component_MandatoryLinksLabel: string;
     component_YourLinksLabel: string;
     component_SaveYourLinksLabel: string;
