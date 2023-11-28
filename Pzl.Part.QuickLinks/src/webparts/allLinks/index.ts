@@ -77,27 +77,27 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
             {
               groupFields: [
                 PropertyPaneTextField('defaultOfficeFabricIcon', {
-                  label: strings.propertyPane_defaultOfficeFabricIcon
+                  label: strings.PropertyPane.DefaultOfficeFabricIcon
                 }),
                 PropertyPaneCheckbox('mylinksOnTop', {
-                  text: strings.propertyPane_myLinksOnTop,
+                  text: strings.PropertyPane.MyLinksOnTop,
                   checked: false
                 }),
                 PropertyPaneCheckbox('listingByCategory', {
-                  text: strings.propertyPane_listingByCategory,
+                  text: strings.PropertyPane.ListingByCategory,
                   checked: false
                 }),
                 PropertyPaneTextField('listingByCategoryTitle', {
-                  label: strings.propertyPane_CategoryTitleFieldLabel
+                  label: strings.PropertyPane.CategoryTitleFieldLabel
                 }),
                 PropertyPaneTextField('mandatoryLinksTitle', {
-                  label: strings.propertyPane_MandatoryLinksTitleLabel
+                  label: strings.PropertyPane.MandatoryLinksTitleLabel
                 }),
                 PropertyPaneTextField('recommendedLinksTitle', {
-                  label: strings.propertyPane_RecommendedLinksTitleLabel
+                  label: strings.PropertyPane.RecommendedLinksTitleLabel
                 }),
                 PropertyPaneTextField('myLinksTitle', {
-                  label: strings.propertyPane_MyLinksTitleLabel
+                  label: strings.PropertyPane.MyLinksTitleLabel
                 })
               ]
             }

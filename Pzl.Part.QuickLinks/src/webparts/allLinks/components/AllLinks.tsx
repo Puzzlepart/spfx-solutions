@@ -60,7 +60,7 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
         messageBarType={MessageBarType.error}
         onDismiss={() => this.setState({ showErrorMessage: false })}
       >
-        {strings.component_SaveErrorLabel}
+        {strings.SaveErrorLabel}
       </MessageBar>
     ) : null
     const loadingSpinner: JSX.Element = this.state.showLoadingSpinner ? (
@@ -81,14 +81,14 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
       <div>
         <div className={styles.webpartHeading}>
           {stringIsNullOrEmpty(this.props.mandatoryLinksTitle)
-            ? strings.component_MandatoryLinksLabel
+            ? strings.MandatoryLinksLabel
             : this.props.mandatoryLinksTitle}
         </div>
         <div className={styles.editorLinksContainer}>{mandatoryLinks}</div>
         <hr />
         <div className={styles.webpartHeading}>
           {stringIsNullOrEmpty(this.props.recommendedLinksTitle)
-            ? strings.component_RecommendedLinksLabel
+            ? strings.RecommendedLinksLabel
             : this.props.recommendedLinksTitle}
         </div>
         <div className={styles.editorLinksContainer}>{editorLinks}</div>
@@ -98,14 +98,14 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
       <div>
         <div className={styles.webpartHeading}>
           {stringIsNullOrEmpty(this.props.myLinksTitle)
-            ? strings.component_YourLinksLabel
+            ? strings.YourLinksLabel
             : this.props.myLinksTitle}
         </div>
         <div className={styles.editorLinksContainer}>{favouriteLinks}</div>
         <div className={styles.buttonRow}>
           <Button
             onClick={() => this.openNewItemModal()}
-            text={strings.component_NewLinkLabel}
+            text={strings.NewLinkLabel}
             iconProps={{ iconName: 'Add' }}
           />
         </div>
@@ -307,7 +307,7 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
         containerClassName={styles.newLinkModal}
         onDismiss={() => this.setState({ modalData: null, showModal: false })}
       >
-        <div className={styles.modalHeader}>{strings.component_NewLinkLabel}</div>
+        <div className={styles.modalHeader}>{strings.NewLinkLabel}</div>
         <div className={styles.modalBody}>
           <TextField
             label='Url'
@@ -316,13 +316,13 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
             onGetErrorMessage={(value) => this.getUrlErrorMessage(value)}
           />
           <TextField
-            label={strings.component_TitleLabel}
+            label={strings.TitleLabel}
             onChange={(_, newVal: any) => this.onModalValueChanged('displayText', newVal)}
             value={this.state.modalData['displayText']}
           />
-          <DefaultButton text={strings.component_AddLabel} onClick={() => this.addNewLink()} />
+          <DefaultButton text={strings.AddLabel} onClick={() => this.addNewLink()} />
           <Button
-            text={strings.component_CancelLabel}
+            text={strings.CancelLabel}
             onClick={() => {
               this.setState({ modalData: null, showModal: false })
             }}
@@ -356,7 +356,7 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
     if (value.length > 0) {
       const urlRegex: RegExp =
         /(http|ftp|https):\/\/([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:/~+#-]*[\w@?^=%&/~+#-])?/
-      return value.match(urlRegex) === null ? strings.component_UrlValidationLabel : ''
+      return value.match(urlRegex) === null ? strings.UrlValidationLabel : ''
     } else {
       return ''
     }
@@ -390,7 +390,7 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
                 <Icon
                   className={styles.icon}
                   iconName='Lock'
-                  title={strings.component_action_removeMandatory}
+                  title={strings.ActionRemoveMandatory}
                 />
               ) : (
                 <Icon
@@ -459,13 +459,13 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
           linkType: LinkType.editorLink
         }
       })
-      const mandatorymappedLinks: Link[] = mappedLinks.filter(
-        (link) => link.mandatory)
+      const mandatorymappedLinks: Link[] = mappedLinks.filter((link) => link.mandatory)
 
-      const recommendedmappedLinks: Link[] = mappedLinks.filter(
-        (link) => !link.mandatory)
+      const recommendedmappedLinks: Link[] = mappedLinks.filter((link) => !link.mandatory)
 
-      const prunedLinks: Link[] = recommendedmappedLinks.filter((link) => !favouriteItemsIds.includes(link.id))
+      const prunedLinks: Link[] = recommendedmappedLinks.filter(
+        (link) => !favouriteItemsIds.includes(link.id)
+      )
       if (
         favouriteLinkListItem.length > 0 &&
         favouriteItems !== null &&
@@ -496,7 +496,7 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
       })
 
       let categories: Array<ICategory> = [
-        { displayText: strings.component_NoCategoryLabel, links: displayLinks }
+        { displayText: strings.NoCategoryLabel, links: displayLinks }
       ]
       if (this.props.listingByCategory) {
         let categoryNames: string[] = displayLinks

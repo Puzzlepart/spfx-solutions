@@ -52,7 +52,7 @@ This can be done manually by navigating to the app catalog and uploading the spp
 
 ### Pages
 
-* Create a page for the *All links* web part, and add the*ALl links* web part
+* Create a page for the *All links* web part, and add the *All links* web part
 * Add the *Your links* web page to the frontpage, and set the URL for all links in the web part properties to point to the *all links* page
 
 ## Building
@@ -67,11 +67,11 @@ gulp bundle
 ```
 
 ### Testing
+
 You can test by using the workbench
 `gulp serve`
 
-
-```
+```html
 https://<tenant>.sharepoint.com/sites/<site>/_layouts/15/workbench.aspx?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/manifests.js
 ```
 

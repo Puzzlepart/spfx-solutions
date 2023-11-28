@@ -1,23 +1,26 @@
 define([], function () {
-    return {
-        propertyPane_defaultOfficeFabricIcon: "Standard ikon",
-        propertyPane_myLinksOnTop: "Mine lenker øverst",
-        propertyPane_listingByCategory: "Grupper etter kategorier",
-        propertyPane_CategoryTitleFieldLabel: "Overskrift grupperte lenker",
-        propertyPane_MandatoryLinksTitleLabel: "Overskrift for 'Obligatoriske lenker'",
-        propertyPane_RecommendedLinksTitleLabel: "Overskrift for 'Anbefalte lenker'",
-        propertyPane_MyLinksTitleLabel:"Overskrift for 'Dine lenker'",
-        component_RecommendedLinksLabel: "Anbefalte lenker",
-        component_MandatoryLinksLabel: "Obligatoriske lenker",
-        component_YourLinksLabel: "Dine lenker",
-        component_SaveYourLinksLabel: "Lagre dine lenker",
-        component_NewLinkLabel: "Ny lenke",
-        component_TitleLabel: "Tittel",
-        component_AddLabel: "Legg til",
-        component_CancelLabel: "Cancel",
-        component_UrlValidationLabel: "Legg til en URL-verdi.",
-        component_SaveErrorLabel: "Feil: noe gikk galt under lagring av dine lenker.",
-        component_SaveOkLabel: "Dine lenker er lagret.",
-        component_NoCategoryLabel: "Ingen kategori",
-    }
-});
+  return {
+    PropertyPane: {
+      CategoryTitleFieldLabel: 'Overskrift grupperte lenker',
+      DefaultOfficeFabricIcon: 'Standard ikon',
+      ListingByCategory: 'Grupper etter kategorier',
+      MandatoryLinksTitleLabel: 'Overskrift for \'Obligatoriske lenker\'',
+      MyLinksOnTop: 'Mine lenker øverst',
+      MyLinksTitleLabel: 'Overskrift for \'Dine lenker\'',
+      RecommendedLinksTitleLabel: 'Overskrift for \'Anbefalte lenker\''
+    },
+    ActionRemoveMandatory: 'Obligatoriske lenker kan ikke fjernes',
+    AddLabel: 'Legg til',
+    CancelLabel: 'Avbryt',
+    MandatoryLinksLabel: 'Obligatoriske lenker',
+    NewLinkLabel: 'Ny lenke',
+    NoCategoryLabel: 'Ingen kategori',
+    RecommendedLinksLabel: 'Anbefalte lenker',
+    SaveErrorLabel: 'Feil: noe gikk galt under lagring av dine lenker.',
+    SaveOkLabel: 'Dine lenker er lagret.',
+    SaveYourLinksLabel: 'Lagre dine lenker',
+    TitleLabel: 'Tittel',
+    UrlValidationLabel: 'Legg til en URL-verdi.',
+    YourLinksLabel: 'Dine lenker'
+  }
+})
