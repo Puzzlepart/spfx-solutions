@@ -5,16 +5,16 @@
     "all-links-web-part": {
       "components": [
         {
-          "entrypoint": "./lib/webparts/allLinks/AllLinksWebPart.js",
-          "manifest": "./src/webparts/allLinks/AllLinksWebPart.manifest.json"
+          "entrypoint": "./lib/webparts/allLinks/index.js",
+          "manifest": "./src/webparts/allLinks/manifest.json"
         }
       ]
     },
     "quick-links-web-part": {
       "components": [
         {
-          "entrypoint": "./lib/webparts/quickLinks/PzlQuickLinksWebPart.js",
-          "manifest": "./src/webparts/quickLinks/PzlQuickLinksWebPart.manifest.json"
+          "entrypoint": "./lib/webparts/quickLinks/index.js",
+          "manifest": "./src/webparts/quickLinks/manifest.json"
         }
       ]
     }

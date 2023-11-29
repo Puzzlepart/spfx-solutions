@@ -1,18 +1,35 @@
 declare interface IQuickLinksWebPartStrings {
-  propertyPane_LinkClickWebHookLabel: string;
-  propertyPane_LineHeightLabel: string;
-  propertyPane_TitleFieldLabel: string;
-  propertyPane_NumberOfItemsLabel: string;
-  propertyPane_AllLinksUrlLabel: string;
-  propertyPane_DefaultOfficeFabricIconLabel: string;
-  propertyPane_GroupByCategoryLabel: string;
-  propertyPane_MaxLinkLengthLabel: string;
-  propertyPane_IconOpacityLabel: string;
-  component_AllLinksLabel: string;
-  component_NoCategoryLabel: string;
+  PropertyPane: {
+    AdvancedGroupName: string
+    AllLinksUrlLabel: string
+    DefaultOfficeFabricIconLabel: string
+    DescriptionFieldDescription: string
+    DescriptionFieldLabel: string
+    GeneralGroupName: string
+    GroupByCategoryLabel: string
+    HeaderDescription: string
+    HideHeaderLabel: string
+    HideShowAllLabel: string
+    HideTitleLabel: string
+    IconsOnlyLabel: string
+    IconOpacityLabel: string
+    LineHeightLabel: string
+    LinkClickWebHookLabel: string
+    NumberOfItemsLabel: string
+    RenderShadowLabel: string
+    ResponsiveButtonsLabel: string
+    ShowHideGroupName: string
+    StylingGroupName: string
+    TitleFieldDescription: string
+    TitleFieldLabel: string
+  }
+  AllLinksLabel: string
+  Description: string
+  NoCategoryLabel: string
+  Title: string
 }
 
 declare module 'QuickLinksWebPartStrings' {
-  const strings: IQuickLinksWebPartStrings;
-  export = strings;
+  const strings: IQuickLinksWebPartStrings
+  export = strings
 }

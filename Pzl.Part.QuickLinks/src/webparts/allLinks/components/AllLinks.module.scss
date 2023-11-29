@@ -1,164 +1,162 @@
-@import '~@fluentui/react/dist/sass/References.scss';
+@import "~@fluentui/react/dist/sass/References.scss";
 
 $IconSize: 25px;
 
 .allLinks {
-    .webpartHeading {
-        font-weight: 100;
-        font-size: 24px;
-        flex-grow: 1;
-        text-align: left;
-        margin-top: 30px;
-        margin-bottom: 20px;
+  .webpartHeading {
+    font-weight: 100;
+    font-size: 24px;
+    flex-grow: 1;
+    text-align: left;
+    margin-top: 30px;
+    margin-bottom: 20px;
+  }
+  .editorLinksContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .webpartHeader {
+    padding-bottom: 10px;
+    font-size: 24px;
+    font-weight: 100;
+    .showAll {
+      float: right;
+      > span {
+        text-decoration: none;
+        //color: "[theme: themePrimary, default: #2C7399]";
+        cursor: pointer;
+        font-size: 14px;
+      }
     }
-    .editorLinksContainer {
-        display: flex;
-        flex-direction: row;
-        flex-wrap: wrap;
-    }
-    .webpartHeader {
-        padding-bottom: 10px;
-        font-size: 24px;
-        font-weight: 100;
-        .showAll {
-            float: right;
-            > span {
-                text-decoration: none;
-                //color: "[theme: themePrimary, default: #2C7399]";
-                cursor: pointer;
-                font-size: 14px;
-            }
-        }
-    }
-    .linkParent {
-
-        margin-left: 40px;
-        .linkContainer {
-            height: $IconSize;
-            width:170px;
-            overflow:hidden;
-            text-decoration: none;
-            white-space: nowrap;
-            display: inline-block;
-            margin: 5px 5px 0 0;
-            * {
-                display: inline-block;
-                //color: $ms-color-neutralPrimary;
-                vertical-align: middle;
-                cursor: pointer;
-            }
-            span {
-                @include ms-fontWeight-regular;
-                @include ms-fontSize-mPlus;
-                //color: $ms-color-neutralPrimary;
-            }
-            .icon {
-                font-size: $IconSize;
-                margin-right: 10px;
-            }
-        }
-        .linkContainer:hover {
-            //background-color: $ms-color-neutralLighter;
-            cursor: pointer;
-            outline: 1px solid transparent;
-        }
-        .actionIcon {
-            display: inline-block;
-            height: $IconSize;
-            vertical-align: middle;
-            padding-left: 5px;
-            padding-right: 5px;
-        }
-        .actionIcon:hover {
-            //color: #333333;
-            cursor: pointer;
-            outline: 1px solid transparent;
-        }
-    }
-    .linkGrid {
+  }
+  .linkParent {
+    margin-left: 40px;
+    .linkContainer {
+      height: $IconSize;
+      width: 170px;
+      overflow: hidden;
+      text-decoration: none;
+      white-space: nowrap;
+      display: inline-block;
+      margin: 5px 5px 0 0;
+      * {
         display: inline-block;
-
-        justify-content: space-between;
-        flex-wrap: wrap;
-        .categorySection {
-            display: block;
-            width: 100%;
-            padding: 20px 10px 10px 0;
-        }
-        .linkCategoryHeading {
-            @include ms-fontSize-xl;
-            //color: "[theme: themePrimary, default: #2C7399]";
-            width: 75%;
-            white-space: nowrap;
-        }
-        .linkGridColumn {
-            line-height: 40px;
-            display: inline-block;
-            width:245px;
-            padding-right: 10px;
-            cursor: pointer;
-            .linkContainer {
-                text-decoration: none;
-                display: inline-block;
-                margin: 0 30px 0 0;
-                width: 160px;
-                //color: "[theme: themePrimary, default: #2C7399]";
-                span,
-                i {
-                    display: inline-block;
-                    color: $ms-color-neutralPrimary;
-                    vertical-align: middle;
-                }
-                span {
-                    @include ms-fontWeight-regular;
-                    @include ms-fontSize-mPlus;
-                    //color: "[theme: themePrimary, default: #2C7399]";
-                    text-overflow: ellipsis;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    width: 75%;
-
-                }
-                .icon {
-                    font-size: 25px;
-                    margin-right: 10px;
-                }
-            }
-            .actionIcon:hover {
-                //color: #000000;
-                font-weight: 1000;
-                cursor: pointer;
-                outline: 1px solid transparent;
-            }
-        }
+        //color: $ms-color-neutralPrimary;
+        vertical-align: middle;
+        cursor: pointer;
+      }
+      span {
+        @include ms-fontWeight-regular;
+        @include ms-fontSize-mPlus;
+        //color: $ms-color-neutralPrimary;
+      }
+      .icon {
+        font-size: $IconSize;
+        margin-right: 10px;
+      }
     }
+    .linkContainer:hover {
+      //background-color: $ms-color-neutralLighter;
+      cursor: pointer;
+      outline: 1px solid transparent;
+    }
+    .actionIcon {
+      display: inline-block;
+      height: $IconSize;
+      vertical-align: middle;
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+    .actionIcon:hover {
+      //color: #333333;
+      cursor: pointer;
+      outline: 1px solid transparent;
+    }
+  }
+  .linkGrid {
+    display: inline-block;
+
+    justify-content: space-between;
+    flex-wrap: wrap;
+    .categorySection {
+      display: block;
+      width: 100%;
+      padding: 20px 10px 10px 0;
+    }
+    .linkCategoryHeading {
+      @include ms-fontSize-xl;
+      //color: "[theme: themePrimary, default: #2C7399]";
+      width: 75%;
+      white-space: nowrap;
+    }
+    .linkGridColumn {
+      line-height: 40px;
+      display: inline-block;
+      width: 245px;
+      padding-right: 10px;
+      cursor: pointer;
+      .linkContainer {
+        text-decoration: none;
+        display: inline-block;
+        margin: 0 30px 0 0;
+        width: 160px;
+        //color: "[theme: themePrimary, default: #2C7399]";
+        span,
+        i {
+          display: inline-block;
+          color: $ms-color-neutralPrimary;
+          vertical-align: middle;
+        }
+        span {
+          @include ms-fontWeight-regular;
+          @include ms-fontSize-mPlus;
+          //color: "[theme: themePrimary, default: #2C7399]";
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          overflow: hidden;
+          width: 75%;
+        }
+        .icon {
+          font-size: 25px;
+          margin-right: 10px;
+        }
+      }
+      .actionIcon:hover {
+        //color: #000000;
+        font-weight: 1000;
+        cursor: pointer;
+        outline: 1px solid transparent;
+      }
+    }
+  }
 }
 
 .newLinkModal {
-    padding: 30px;
-    .modalHeader {
-        font-weight: 100;
-        font-size: 24px;
-        flex-grow: 1;
-        text-align: left;
+  padding: 30px;
+  .modalHeader {
+    font-weight: 100;
+    font-size: 24px;
+    flex-grow: 1;
+    text-align: left;
+  }
+  .modalBody {
+    button {
+      margin-top: 30px;
+      margin-right: 15px;
     }
-    .modalBody {
-        button {
-            margin-top: 30px;
-            margin-right: 15px;
-        }
-    }
+  }
 }
 
 .buttonRow {
-    margin-top: 30px;
-    button {
-        margin-right: 15px;
-    }
-    .spinner {
-        display: inline-block;
-        line-height: 32px;
-        vertical-align: middle;
-        margin-left: 10px;
-    }
+  margin-top: 30px;
+  button {
+    margin-right: 15px;
+  }
+  .spinner {
+    display: inline-block;
+    line-height: 32px;
+    vertical-align: middle;
+    margin-left: 10px;
+  }
 }

@@ -1,15 +1,28 @@
 {
-  /**
-   * Install Chrome Debugger Extension for Visual Studio Code to debug your components with the
-   * Chrome browser: https://aka.ms/spfx-debugger-extensions
-   */
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Hosted workbench",
-      "type": "edge",
+      "name": "Debug",
+      "type": "chrome",
       "request": "launch",
-      "url": "https://enter-your-SharePoint-site/_layouts/workbench.aspx",
+      "url": "https://ptil.sharepoint.com/SitePages/Alle-lenker.aspx?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/manifests.js",
+      "webRoot": "${workspaceRoot}",
+      "sourceMaps": true,
+      "sourceMapPathOverrides": {
+        "webpack:///.././src/*": "${webRoot}/src/*",
+        "webpack:///../../../src/*": "${webRoot}/src/*",
+        "webpack:///../../../../src/*": "${webRoot}/src/*",
+        "webpack:///../../../../../src/*": "${webRoot}/src/*"
+      },
+      "runtimeArgs": [
+        "--remote-debugging-port=9222"
+      ]
+    },
+    {
+      "name": "Debug in incognito mode",
+      "type": "chrome",
+      "request": "launch",
+      "url": "https://ptil.sharepoint.com/SitePages/Alle-lenker.aspx?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/manifests.js",
       "webRoot": "${workspaceRoot}",
       "sourceMaps": true,
       "sourceMapPathOverrides": {
@@ -20,7 +33,7 @@
       },
       "runtimeArgs": [
         "--remote-debugging-port=9222",
-        "-incognito"
+        "--incognito"
       ]
     }
   ]
