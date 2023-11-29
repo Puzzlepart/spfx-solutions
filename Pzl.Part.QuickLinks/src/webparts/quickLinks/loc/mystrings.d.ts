@@ -17,6 +17,7 @@ declare interface IQuickLinksWebPartStrings {
     LinkClickWebHookLabel: string
     NumberOfItemsLabel: string
     RenderShadowLabel: string
+    ResponsiveButtonsLabel: string
     ShowHideGroupName: string
     StylingGroupName: string
     TitleFieldDescription: string

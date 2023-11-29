@@ -38,7 +38,6 @@
 
     .link {
       justify-content: flex-start !important;
-      width: 100%;
 
       &:hover {
         background-color: rgba(0, 0, 0, 0.06);
@@ -64,12 +63,13 @@
     .categorySection {
       display: block;
       width: 100%;
-      padding: 20px 10px 10px 0;
+      padding: 3px 0;
 
       .heading {
         width: 100%;
         font-weight: 600;
         white-space: nowrap;
+        padding-bottom: 3px;
       }
     }
   }

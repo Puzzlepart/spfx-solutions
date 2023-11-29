@@ -13,6 +13,7 @@ export interface IQuickLinksProps {
   iconsOnly: boolean
   iconOpacity: number
   renderShadow: boolean
+  responsiveButtons: boolean
   webServerRelativeUrl: string
   linkClickWebHook: string
   hideHeader: boolean

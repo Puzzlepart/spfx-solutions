@@ -18,6 +18,7 @@ define([], function () {
       LinkClickWebHookLabel: 'Webhook for lenkeklikk',
       NumberOfItemsLabel: 'Antall lenker',
       RenderShadowLabel: 'Vis skygge',
+      ResponsiveButtonsLabel: 'Responsive knapper (wrapping)',
       ShowHideGroupName: 'Skjul/vis',
       StylingGroupName: 'Stil og utforming',
       TitleFieldDescription: 'Tittel som vises i headeren på webdelen.',

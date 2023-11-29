@@ -29,6 +29,7 @@ export interface IQuickLinksWebPartProps {
   hideTitle: boolean
   hideShowAll: boolean
   renderShadow: boolean
+  responsiveButtons: boolean
 }
 
 export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinksWebPartProps> {
@@ -53,7 +54,8 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
       hideHeader: this.properties.hideHeader,
       hideTitle: this.properties.hideTitle,
       hideShowAll: this.properties.hideShowAll,
-      renderShadow: this.properties.renderShadow
+      renderShadow: this.properties.renderShadow,
+      responsiveButtons: this.properties.responsiveButtons
     })
 
     ReactDom.render(element, this.domElement)
@@ -100,9 +102,6 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
                   description: strings.PropertyPane.DescriptionFieldDescription,
                   multiline: true
                 }),
-                PropertyPaneToggle('iconsOnly', {
-                  label: strings.PropertyPane.IconsOnlyLabel
-                }),
                 PropertyPaneToggle('groupByCategory', {
                   label: strings.PropertyPane.GroupByCategoryLabel
                 }),
@@ -110,18 +109,24 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
                   label: strings.PropertyPane.NumberOfItemsLabel,
                   min: 0,
                   max: 500
-                }),
-                PropertyPaneSlider('lineHeight', {
-                  label: strings.PropertyPane.LineHeightLabel,
-                  min: 15,
-                  max: 50
                 })
               ]
             },
             {
               groupName: strings.PropertyPane.StylingGroupName,
-              isCollapsed: true,
+              isCollapsed: false,
               groupFields: [
+                PropertyPaneSlider('lineHeight', {
+                  label: strings.PropertyPane.LineHeightLabel,
+                  min: 15,
+                  max: 50
+                }),
+                PropertyPaneToggle('iconsOnly', {
+                  label: strings.PropertyPane.IconsOnlyLabel
+                }),
+                PropertyPaneToggle('responsiveButtons', {
+                  label: strings.PropertyPane.ResponsiveButtonsLabel
+                }),
                 PropertyPaneToggle('renderShadow', {
                   label: strings.PropertyPane.RenderShadowLabel
                 }),

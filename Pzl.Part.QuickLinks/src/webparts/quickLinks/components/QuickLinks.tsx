@@ -17,7 +17,8 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
         return (
           <Button
             key={`link_${idx}`}
-            style={{ lineHeight: `${props.lineHeight}px` }}
+            title={link.displayText}
+            style={{ lineHeight: `${props.lineHeight}px`, width: (props.responsiveButtons || props.iconsOnly) ? 'auto' : '100%' }}
             className={styles.link}
             appearance='subtle'
             size='medium'
@@ -33,7 +34,7 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
               window.open(link.url, link.openInSameTab ? '_self' : '_blank')
             }}
           >
-            <span className={styles.label}>{link.displayText}</span>
+            {!props.iconsOnly && <span className={styles.label}>{link.displayText}</span>}
           </Button>
         )
       })
@@ -41,7 +42,7 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
       if (props.groupByCategory) {
         return (
           <div className={styles.categorySection} key={`category_${idx}`}>
-            <div className={styles.heading}>{category.displayText !== undefined ?category.displayText : 'Mine lenker'}</div>
+            <div className={styles.heading}>{category.displayText !== undefined ? category.displayText : 'Mine lenker'}</div>
             {linkItems}
           </div>
         )

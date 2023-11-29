@@ -18,6 +18,7 @@ define([], function () {
       LinkClickWebHookLabel: 'Webhook for link click',
       NumberOfItemsLabel: 'Number of links to show',
       RenderShadowLabel: 'Render shadow',
+      ResponsiveButtonsLabel: 'Responsive buttons (wrapping)',
       ShowHideGroupName: 'Hide/show',
       StylingGroupName: 'Styling',
       TitleFieldDescription: 'Title shown in the header of the web part.',
