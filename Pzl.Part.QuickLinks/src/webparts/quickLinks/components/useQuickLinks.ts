@@ -86,24 +86,22 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
     let categories: Array<ICategory> = [
       { displayText: strings.NoCategoryLabel, links: displayLinks }
     ]
-    if (props.groupByCategory) {
-      let categoryNames: string[] = displayLinks
-        .map((lnk) => {
-          return lnk.category
+    let categoryNames: string[] = displayLinks
+      .map((lnk) => {
+        return lnk.category
+      })
+      .sort()
+    categoryNames = categoryNames.filter((item, index) => {
+      return categoryNames.indexOf(item) == index
+    })
+    categories = categoryNames.map((catName) => {
+      return {
+        displayText: catName,
+        links: displayLinks.filter((lnk) => {
+          return lnk.category === catName
         })
-        .sort()
-      categoryNames = categoryNames.filter((item, index) => {
-        return categoryNames.indexOf(item) == index
-      })
-      categories = categoryNames.map((catName) => {
-        return {
-          displayText: catName,
-          links: displayLinks.filter((lnk) => {
-            return lnk.category === catName
-          })
-        }
-      })
-    }
+      }
+    })
 
     setState({ linkStructure: categories })
   }

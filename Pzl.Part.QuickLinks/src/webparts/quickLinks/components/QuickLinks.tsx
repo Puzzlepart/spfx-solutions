@@ -3,7 +3,6 @@ import * as strings from 'QuickLinksWebPartStrings'
 import styles from './QuickLinks.module.scss'
 import { IQuickLinksProps, ILink, ICategory } from './types'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
-import { Text } from 'office-ui-fabric-react/lib/Text'
 import { useQuickLinks } from './useQuickLinks'
 import { Button, FluentProvider, InfoLabel, Link } from '@fluentui/react-components'
 import { customLightTheme } from '../../../util/theme'
@@ -12,41 +11,42 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
   const { state, callWebHook, backgroundColor } = useQuickLinks(props)
 
   const generateLinks = (categories: Array<ICategory>) => {
-    return categories.map((cat: ICategory, catIndex: number) => {
-      const linkItems = cat.links.map((link: ILink, linkIndex) => {
+
+    return categories.map((category: ICategory, idx) => {
+      const linkItems = category.links.map((link: ILink, idx) => {
         return (
-          <div
-            key={`link_${linkIndex}`}
-            className={styles.linkGridColumn}
+          <Button
+            key={`link_${idx}`}
             style={{ lineHeight: `${props.lineHeight}px` }}
-          >
-            <Text
-              className={styles.linkContainer}
-              onClick={() => {
-                callWebHook(link.url, link.category)
-                window.open(link.url, link.openInSameTab ? '_self' : '_blank')
-              }}
-            >
+            className={styles.link}
+            appearance='subtle'
+            size='medium'
+            icon={
               <Icon
                 className={styles.icon}
                 style={{ opacity: props.iconOpacity / 100 }}
                 iconName={link.icon ? link.icon : props.defaultIcon}
               />
-              <span style={{ width: props.maxLinkLength }}>{link.displayText}</span>
-            </Text>
-          </div>
+            }
+            onClick={() => {
+              callWebHook(link.url, link.category)
+              window.open(link.url, link.openInSameTab ? '_self' : '_blank')
+            }}
+          >
+            <span className={styles.label}>{link.displayText}</span>
+          </Button>
         )
       })
 
       if (props.groupByCategory) {
         return (
-          <div className={styles.categorySection}>
-            <div className={styles.linkCategoryHeading}>{cat.displayText}</div>
+          <div className={styles.categorySection} key={`category_${idx}`}>
+            <div className={styles.heading}>{category.displayText !== undefined ?category.displayText : 'Mine lenker'}</div>
             {linkItems}
           </div>
         )
       }
-      return <div key={`category_${catIndex}`}>{linkItems}</div>
+      return linkItems
     })
   }
 
@@ -54,7 +54,7 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
     <FluentProvider
       theme={customLightTheme}
       className={styles.quickLinks}
-      style={{ backgroundColor }}
+      style={{ backgroundColor, boxShadow: props.renderShadow && 'var(--shadow2)' }}
     >
       <div className={styles.header} style={{ display: props.hideHeader && 'none' }}>
         <InfoLabel
@@ -71,7 +71,7 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
           {strings.AllLinksLabel}
         </Link>
       </div>
-      <div className={styles.linkGrid}>{generateLinks(state.linkStructure)}</div>
+      <div className={styles.links}>{generateLinks(state.linkStructure)}</div>
     </FluentProvider>
   )
 }
@@ -81,6 +81,5 @@ QuickLinks.defaultProps = {
   title: strings.Title,
   description: strings.Description,
   iconOpacity: 100,
-  lineHeight: 40,
-  maxLinkLength: 130
+  lineHeight: 20
 }

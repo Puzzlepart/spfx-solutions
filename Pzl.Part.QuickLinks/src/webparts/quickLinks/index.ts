@@ -9,7 +9,6 @@ import { ThemeProvider, ThemeChangedEventArgs, IReadonlyTheme } from '@microsoft
 import {
   IPropertyPaneConfiguration,
   PropertyPaneSlider,
-  PropertyPaneCheckbox,
   PropertyPaneTextField,
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
@@ -22,13 +21,14 @@ export interface IQuickLinksWebPartProps {
   allLinksUrl: string
   defaultOfficeFabricIcon: string
   groupByCategory: boolean
-  maxLinkLength: number
   lineHeight: number
+  iconsOnly: boolean
   iconOpacity: number
   linkClickWebHook: string
   hideHeader: boolean
   hideTitle: boolean
   hideShowAll: boolean
+  renderShadow: boolean
 }
 
 export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinksWebPartProps> {
@@ -45,14 +45,15 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
       allLinksUrl: this.properties.allLinksUrl,
       defaultIcon: this.properties.defaultOfficeFabricIcon,
       groupByCategory: this.properties.groupByCategory,
-      maxLinkLength: this.properties.maxLinkLength,
       lineHeight: this.properties.lineHeight,
+      iconsOnly: this.properties.iconsOnly,
       iconOpacity: this.properties.iconOpacity,
       webServerRelativeUrl: this.context.pageContext.web.serverRelativeUrl,
       linkClickWebHook: this.properties.linkClickWebHook,
       hideHeader: this.properties.hideHeader,
       hideTitle: this.properties.hideTitle,
-      hideShowAll: this.properties.hideShowAll
+      hideShowAll: this.properties.hideShowAll,
+      renderShadow: this.properties.renderShadow
     })
 
     ReactDom.render(element, this.domElement)
@@ -83,7 +84,7 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
       pages: [
         {
           header: {
-            description: 'Konfigurasjon av webdelen'
+            description: strings.PropertyPane.HeaderDescription
           },
           displayGroupsAsAccordion: true,
           groups: [
@@ -99,39 +100,31 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
                   description: strings.PropertyPane.DescriptionFieldDescription,
                   multiline: true
                 }),
+                PropertyPaneToggle('iconsOnly', {
+                  label: strings.PropertyPane.IconsOnlyLabel
+                }),
+                PropertyPaneToggle('groupByCategory', {
+                  label: strings.PropertyPane.GroupByCategoryLabel
+                }),
                 PropertyPaneSlider('numberOfItems', {
                   label: strings.PropertyPane.NumberOfItemsLabel,
                   min: 0,
-                  max: 500
-                }),
-                PropertyPaneSlider('maxLinkLength', {
-                  label: strings.PropertyPane.MaxLinkLengthLabel,
-                  min: 50,
                   max: 500
                 }),
                 PropertyPaneSlider('lineHeight', {
                   label: strings.PropertyPane.LineHeightLabel,
                   min: 15,
                   max: 50
-                }),
-                PropertyPaneSlider('iconOpacity', {
-                  label: strings.PropertyPane.IconOpacityLabel,
-                  min: 0,
-                  max: 100
-                }),
-                PropertyPaneTextField('allLinksUrl', {
-                  label: strings.PropertyPane.AllLinksUrlLabel
-                }),
-                PropertyPaneTextField('defaultOfficeFabricIcon', {
-                  label: strings.PropertyPane.DefaultOfficeFabricIconLabel
-                }),
-                PropertyPaneCheckbox('groupByCategory', {
-                  text: strings.PropertyPane.GroupByCategoryLabel,
-                  checked: false
-                }),
-                PropertyPaneTextField('linkClickWebHook', {
-                  label: strings.PropertyPane.LinkClickWebHookLabel
                 })
+              ]
+            },
+            {
+              groupName: strings.PropertyPane.StylingGroupName,
+              isCollapsed: true,
+              groupFields: [
+                PropertyPaneToggle('renderShadow', {
+                  label: strings.PropertyPane.RenderShadowLabel
+                }),
               ]
             },
             {
@@ -149,6 +142,26 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
                   PropertyPaneToggle('hideShowAll', {
                     label: strings.PropertyPane.HideShowAllLabel
                   })
+              ]
+            },
+            {
+              groupName: strings.PropertyPane.AdvancedGroupName,
+              isCollapsed: true,
+              groupFields: [
+                PropertyPaneTextField('allLinksUrl', {
+                  label: strings.PropertyPane.AllLinksUrlLabel
+                }),
+                PropertyPaneTextField('defaultOfficeFabricIcon', {
+                  label: strings.PropertyPane.DefaultOfficeFabricIconLabel
+                }),
+                PropertyPaneSlider('iconOpacity', {
+                  label: strings.PropertyPane.IconOpacityLabel,
+                  min: 0,
+                  max: 100
+                }),
+                PropertyPaneTextField('linkClickWebHook', {
+                  label: strings.PropertyPane.LinkClickWebHookLabel
+                })
               ]
             }
           ]

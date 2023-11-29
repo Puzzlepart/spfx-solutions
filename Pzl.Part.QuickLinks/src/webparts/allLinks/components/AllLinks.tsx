@@ -372,7 +372,6 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
               className={styles.icon}
             />
           )
-          const linkStyle = { width: this.props.maxLinkLength }
           const linkTarget: string = link.openInSameTab ? '_self' : '_blank'
           return (
             <div key={`link_cat_sub_${subIndex}`} className={styles.linkGridColumn}>
@@ -384,7 +383,7 @@ export default class AllLinks extends React.Component<IAllLinksProps, IAllLinksS
                 target={linkTarget}
               >
                 {linkIcon}
-                <span style={linkStyle}>{link.displayText}</span>
+                <span>{link.displayText}</span>
               </a>
               {link.mandatory ? (
                 <Icon

@@ -9,7 +9,6 @@ export interface IAllLinksProps {
   mylinksOnTop: boolean
   listingByCategory: boolean
   listingByCategoryTitle: string
-  maxLinkLength: number
   iconOpacity: number
   mandatoryLinksTitle: string
   recommendedLinksTitle: string

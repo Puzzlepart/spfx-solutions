@@ -1,20 +1,24 @@
 declare interface IQuickLinksWebPartStrings {
   PropertyPane: {
+    AdvancedGroupName: string
     AllLinksUrlLabel: string
     DefaultOfficeFabricIconLabel: string
     DescriptionFieldDescription: string
     DescriptionFieldLabel: string
     GeneralGroupName: string
     GroupByCategoryLabel: string
+    HeaderDescription: string
     HideHeaderLabel: string
     HideShowAllLabel: string
     HideTitleLabel: string
+    IconsOnlyLabel: string
     IconOpacityLabel: string
     LineHeightLabel: string
     LinkClickWebHookLabel: string
-    MaxLinkLengthLabel: string
     NumberOfItemsLabel: string
+    RenderShadowLabel: string
     ShowHideGroupName: string
+    StylingGroupName: string
     TitleFieldDescription: string
     TitleFieldLabel: string
   }

@@ -9,9 +9,10 @@ export interface IQuickLinksProps {
   allLinksUrl: string
   defaultIcon: string
   groupByCategory: boolean
-  maxLinkLength: number
   lineHeight: number
+  iconsOnly: boolean
   iconOpacity: number
+  renderShadow: boolean
   webServerRelativeUrl: string
   linkClickWebHook: string
   hideHeader: boolean
