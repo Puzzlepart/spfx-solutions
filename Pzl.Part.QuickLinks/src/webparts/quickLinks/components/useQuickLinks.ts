@@ -31,7 +31,6 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
       .items.filter('(PzlLinkActive eq 1) and (PzlLinkMandatory eq 1)')
       .orderBy('PzlLinkPriority')
       .orderBy('Title')
-      .top(props.numberOfLinks)
       .get()
 
     const newNonMandatoryLinks = await sp.web
@@ -39,7 +38,6 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
       .items.filter('(PzlLinkActive eq 1) and (PzlLinkMandatory eq 0)')
       .orderBy('PzlLinkPriority')
       .orderBy('Title')
-      .top(props.numberOfLinks)
       .get()
 
     const newNonMandatoryLinksObject = newNonMandatoryLinks.map((link) => {

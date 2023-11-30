@@ -27,7 +27,7 @@
       "officeFabricIconFontName": "GlobeFavorite",
       "properties": {
         "title": "Alle lenker",
-        "defaultOfficeFabricIcon": "Link"
+        "defaultIcon": "Link"
       }
     }
   ]

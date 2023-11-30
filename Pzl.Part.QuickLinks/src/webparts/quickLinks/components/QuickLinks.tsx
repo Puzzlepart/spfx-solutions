@@ -11,23 +11,21 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
   const { state, callWebHook, backgroundColor } = useQuickLinks(props)
 
   const generateLinks = (categories: Array<ICategory>) => {
-
     return categories.map((category: ICategory, idx) => {
       const linkItems = category.links.map((link: ILink, idx) => {
         return (
           <Button
             key={`link_${idx}`}
             title={link.displayText}
-            style={{ lineHeight: `${props.lineHeight}px`, width: (props.responsiveButtons || props.iconsOnly) ? 'auto' : '100%' }}
+            style={{
+              lineHeight: `${props.lineHeight}px`,
+              width: props.responsiveButtons || props.iconsOnly ? 'auto' : '100%'
+            }}
             className={styles.link}
             appearance='subtle'
-            size='medium'
+            size={props.iconSize >= 26 ? 'large' : props.iconSize <= 16 ? 'small' : 'medium'}
             icon={
-              <Icon
-                className={styles.icon}
-                style={{ opacity: props.iconOpacity / 100 }}
-                iconName={link.icon ? link.icon : props.defaultIcon}
-              />
+              <Icon className={styles.icon} style={{ fontSize: props.iconSize }} iconName={link.icon ? link.icon : props.defaultIcon} />
             }
             onClick={() => {
               callWebHook(link.url, link.category)
@@ -42,7 +40,9 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
       if (props.groupByCategory) {
         return (
           <div className={styles.categorySection} key={`category_${idx}`}>
-            <div className={styles.heading}>{category.displayText !== undefined ? category.displayText : 'Mine lenker'}</div>
+            <div className={styles.heading}>
+              {category.displayText !== undefined ? category.displayText : 'Mine lenker'}
+            </div>
             {linkItems}
           </div>
         )
@@ -81,6 +81,6 @@ QuickLinks.defaultProps = {
   defaultIcon: 'Link',
   title: strings.Title,
   description: strings.Description,
-  iconOpacity: 100,
-  lineHeight: 20
+  lineHeight: 20,
+  iconSize: 20
 }

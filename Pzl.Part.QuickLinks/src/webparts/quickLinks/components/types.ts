@@ -5,13 +5,12 @@ export interface IQuickLinksProps {
   title: string
   description: string
   userId: number
-  numberOfLinks: number
   allLinksUrl: string
   defaultIcon: string
   groupByCategory: boolean
   lineHeight: number
   iconsOnly: boolean
-  iconOpacity: number
+  iconSize: number
   renderShadow: boolean
   responsiveButtons: boolean
   webServerRelativeUrl: string

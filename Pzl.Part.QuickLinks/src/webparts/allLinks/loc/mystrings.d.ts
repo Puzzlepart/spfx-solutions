@@ -3,7 +3,7 @@ declare interface IAllLinksWebPartStrings {
     MandatoryLinksTitleLabel: string
     RecommendedLinksTitleLabel: string
     MyLinksTitleLabel: string
-    DefaultOfficeFabricIcon: string
+    DefaultIcon: string
     MyLinksOnTop: string
     ListingByCategory: string
     CategoryTitleFieldLabel: string

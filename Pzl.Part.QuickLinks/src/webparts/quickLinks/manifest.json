@@ -28,10 +28,9 @@
       "properties": {
         "title": "Dine lenker",
         "description": "Her er en samling av obligatoriske lenker og dine egne lenker nederst.",
-        "numberOfItems": 20,
-        "defaultOfficeFabricIcon": "Link",
+        "defaultIcon": "Link",
         "lineHeight": 40,
-        "iconOpacity": 100
+        "iconSize": 20
       }
     }
   ]

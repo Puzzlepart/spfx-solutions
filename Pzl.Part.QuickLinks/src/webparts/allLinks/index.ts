@@ -18,7 +18,7 @@ export interface IAllLinksWebPartProps {
   recommendedLinksTitle: string
   myLinksTitle: string
   mandatoryLinksTitle: string
-  defaultOfficeFabricIcon: string
+  defaultIcon: string
   mylinksOnTop: boolean
   listingByCategory: boolean
   listingByCategoryTitle: string
@@ -33,7 +33,7 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
       theme: this._theme,
       currentUserId: this.context.pageContext.legacyPageContext.userId,
       currentUserName: this.context.pageContext.user.displayName,
-      defaultIcon: this.properties.defaultOfficeFabricIcon,
+      defaultIcon: this.properties.defaultIcon,
       webServerRelativeUrl: this.context.pageContext.web.serverRelativeUrl,
       mylinksOnTop: this.properties.mylinksOnTop,
       listingByCategory: this.properties.listingByCategory,
@@ -76,8 +76,8 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
           groups: [
             {
               groupFields: [
-                PropertyPaneTextField('defaultOfficeFabricIcon', {
-                  label: strings.PropertyPane.DefaultOfficeFabricIcon
+                PropertyPaneTextField('defaultIcon', {
+                  label: strings.PropertyPane.DefaultIcon
                 }),
                 PropertyPaneCheckbox('mylinksOnTop', {
                   text: strings.PropertyPane.MyLinksOnTop,

@@ -2,7 +2,7 @@ define([], function () {
   return {
     PropertyPane: {
       CategoryTitleFieldLabel: 'Group by category title',
-      DefaultOfficeFabricIcon: 'Default icon',
+      DefaultIcon: 'Default icon',
       ListingByCategory: 'Group by category',
       MandatoryLinksTitleLabel: 'Title for \'Mandatory links\'',
       MyLinksOnTop: 'My links on top',

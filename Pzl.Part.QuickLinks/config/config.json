@@ -22,6 +22,7 @@
   "externals": {},
   "localizedResources": {
     "QuickLinksWebPartStrings": "lib/webparts/quickLinks/loc/{locale}.js",
-    "AllLinksWebPartStrings": "lib/webparts/allLinks/loc/{locale}.js"
+    "AllLinksWebPartStrings": "lib/webparts/allLinks/loc/{locale}.js",
+    "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js"
   }
 }

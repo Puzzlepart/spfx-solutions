@@ -9,7 +9,6 @@ export interface IAllLinksProps {
   mylinksOnTop: boolean
   listingByCategory: boolean
   listingByCategoryTitle: string
-  iconOpacity: number
   mandatoryLinksTitle: string
   recommendedLinksTitle: string
   myLinksTitle: string

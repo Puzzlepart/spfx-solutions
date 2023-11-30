@@ -2,7 +2,7 @@ define([], function () {
   return {
     PropertyPane: {
       CategoryTitleFieldLabel: 'Overskrift grupperte lenker',
-      DefaultOfficeFabricIcon: 'Standard ikon',
+      DefaultIcon: 'Standard ikon',
       ListingByCategory: 'Grupper etter kategorier',
       MandatoryLinksTitleLabel: 'Overskrift for \'Obligatoriske lenker\'',
       MyLinksOnTop: 'Mine lenker øverst',
