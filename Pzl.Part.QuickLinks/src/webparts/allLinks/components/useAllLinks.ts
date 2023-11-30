@@ -22,7 +22,7 @@ export const useAllLinks = (props: IAllLinksProps) => {
     fetchData()
   }, [])
 
-  const openNewItemModal = (): void => {
+  const openNewLinkDialog = (): void => {
     const emptyLink: Link = {
       id: -1,
       displayText: '',
@@ -34,8 +34,8 @@ export const useAllLinks = (props: IAllLinksProps) => {
     }
 
     setState({
-      showModal: true,
-      modalData: emptyLink
+      showDialog: true,
+      dialogData: emptyLink
     })
   }
 
@@ -108,20 +108,20 @@ export const useAllLinks = (props: IAllLinksProps) => {
 
   const addNewLink = (): void => {
     const newFavourites: Link[] = state.favouriteLinks.slice()
-    newFavourites.push(state.modalData)
+    newFavourites.push(state.dialogData)
     saveData(newFavourites)
     setState({
       favouriteLinks: newFavourites,
-      modalData: null,
-      showModal: false,
+      dialogData: null,
+      showDialog: false,
       saveButtonDisabled: false
     })
   }
 
-  const onModalValueChanged = (field: string, newVal: any): void => {
-    const newModalData: Link = { ...state.modalData }
-    newModalData[field] = newVal
-    setState({ modalData: newModalData })
+  const onDialogValueChanged = (field: string, newVal: any): void => {
+    const newDialogData: Link = { ...state.dialogData }
+    newDialogData[field] = newVal
+    setState({ dialogData: newDialogData })
   }
 
   const validateUrl = (value: any) => {
@@ -253,7 +253,6 @@ export const useAllLinks = (props: IAllLinksProps) => {
 
   const saveData = async (favouriteLinks?: Array<Link>) => {
     setState({
-      loading: true,
       saveButtonDisabled: true
     })
     try {
@@ -307,7 +306,7 @@ export const useAllLinks = (props: IAllLinksProps) => {
     }
   }
 
-  const checkForUpdatedLinks = async (userFavouriteLinks: any[], allFavouriteLinks: any[]) => {
+  const checkForUpdatedLinks = (userFavouriteLinks: any[], allFavouriteLinks: any[]) => {
     const personalLinks: Link[] = new Array<Link>()
     let shouldUpdate: boolean = false
     userFavouriteLinks.forEach((userLink): void => {
@@ -337,12 +336,12 @@ export const useAllLinks = (props: IAllLinksProps) => {
     state,
     setState,
     backgroundColor,
-    openNewItemModal,
+    openNewLinkDialog,
     appendToFavourites,
     removeFromFavourites,
     removeCustomFromFavourites,
     addNewLink,
-    onModalValueChanged,
+    onDialogValueChanged,
     validateUrl
   }
 }

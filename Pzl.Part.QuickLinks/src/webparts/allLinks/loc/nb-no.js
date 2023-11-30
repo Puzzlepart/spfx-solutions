@@ -13,14 +13,16 @@ define([], function () {
     AddLabel: 'Legg til',
     CancelLabel: 'Avbryt',
     MandatoryLinksLabel: 'Obligatoriske lenker',
-    NewLinkLabel: 'Ny lenke',
+    NewLinkLabel: 'Legg til ny lenke',
     NoCategoryLabel: 'Ingen kategori',
     RecommendedLinksLabel: 'Anbefalte lenker',
     SaveErrorLabel: 'Feil: noe gikk galt under lagring av dine lenker.',
     SaveOkLabel: 'Dine lenker er lagret.',
     SaveYourLinksLabel: 'Lagre dine lenker',
     TitleLabel: 'Tittel',
+    TitlePlaceholder: 'Legg til tittel på lenken her...',
     UrlValidationLabel: 'Legg til en URL-verdi.',
+    UrlPlaceholder: 'Legg til URL for lenken her...',
     YourLinksLabel: 'Dine lenker'
   }
 })

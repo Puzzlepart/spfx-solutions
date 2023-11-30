@@ -24,8 +24,8 @@ export interface IAllLinksState {
   validationError?: boolean
   showSuccessMessage?: boolean
   currentUser?: User
-  showModal?: boolean
-  modalData?: Link
+  showDialog?: boolean
+  dialogData?: Link
   isFirstUpdate?: boolean
   saveButtonDisabled?: boolean
 }

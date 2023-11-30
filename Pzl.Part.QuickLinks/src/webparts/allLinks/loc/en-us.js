@@ -13,13 +13,15 @@ define([], function () {
     AddLabel: 'Add',
     CancelLabel: 'Cancel',
     MandatoryLinksLabel: 'Mandatory links',
-    NewLinkLabel: 'New link',
+    NewLinkLabel: 'Add new link',
     NoCategoryLabel: 'No category',
     RecommendedLinksLabel: 'Recommended links',
     SaveErrorLabel: 'Error: something went wrong saving your links.',
     SaveOkLabel: 'Your links was saved succesfully.',
     SaveYourLinksLabel: 'Save your links',
     TitleLabel: 'Title',
+    TitlePlaceholder: 'Add link title here...',
+    UrlPlaceholder: 'Add your link URL here...',
     UrlValidationLabel: 'Please add a proper URL.',
     YourLinksLabel: 'Your links'
   }

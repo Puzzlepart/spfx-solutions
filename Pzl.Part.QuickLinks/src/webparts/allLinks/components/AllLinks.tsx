@@ -17,6 +17,7 @@ import {
   DialogTrigger,
   Field,
   FluentProvider,
+  InfoLabel,
   Input,
   MessageBar,
   Spinner
@@ -34,12 +35,12 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
     state,
     setState,
     backgroundColor,
-    openNewItemModal,
+    openNewLinkDialog,
     appendToFavourites,
     removeFromFavourites,
     removeCustomFromFavourites,
     addNewLink,
-    onModalValueChanged,
+    onDialogValueChanged,
     validateUrl
   } = useAllLinks(props)
 
@@ -66,7 +67,7 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
   const generateMandatoryLinkComponents = (links: Array<Link>): JSX.Element[] => {
     return links.map((link: Link, index: number): JSX.Element => {
       return (
-        <div key={`required_link_${index}`} className={styles.linkParent}>
+        <div key={`mandatory_link_${index}`} className={styles.linkParent}>
           <Text className={styles.linkContainer} onClick={() => window.open(link.url, '_blank')}>
             <Icon iconName={link.icon ? link.icon : props.defaultIcon} className={styles.icon} />
             <span>{link.displayText}</span>
@@ -99,7 +100,7 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
         <div key={`favourite_link_${index}`} className={styles.linkParent}>
           <Text className={styles.linkContainer} onClick={() => window.open(link.url, '_blank')}>
             {linkIcon}
-            <div>{link.displayText}</div>
+            <>{link.displayText}</>
           </Text>
           {removeLinkButton}
         </div>
@@ -168,43 +169,51 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
 
   const links: JSX.Element = props.listingByCategory ? (
     <div className={styles.allLinks}>
-      <div className={styles.webpartHeader}>
+      <div className={styles.header}>
         <span>{props.listingByCategoryTitle}</span>
       </div>
       <div className={styles.linkGrid}>{generateLinks(state.categoryLinks)}</div>
     </div>
   ) : (
-    <div>
-      <div className={styles.webpartHeading}>
-        {stringIsNullOrEmpty(props.mandatoryLinksTitle)
+    <>
+      <InfoLabel
+        className={styles.linksTitle}
+        info={'props.description'}
+      >
+        <span>{stringIsNullOrEmpty(props.mandatoryLinksTitle)
           ? strings.MandatoryLinksLabel
-          : props.mandatoryLinksTitle}
-      </div>
-      <div className={styles.editorLinksContainer}>{mandatoryLinks}</div>
-      <div className={styles.webpartHeading}>
-        {stringIsNullOrEmpty(props.recommendedLinksTitle)
+          : props.mandatoryLinksTitle}</span>
+      </InfoLabel>
+      <div className={styles.linksContainer}>{mandatoryLinks}</div>
+      <InfoLabel
+        className={styles.linksTitle}
+        info={'props.description'}
+      >
+        <span>{stringIsNullOrEmpty(props.recommendedLinksTitle)
           ? strings.RecommendedLinksLabel
-          : props.recommendedLinksTitle}
-      </div>
-      <div className={styles.editorLinksContainer}>{editorLinks}</div>
-    </div>
+          : props.recommendedLinksTitle}</span>
+      </InfoLabel>
+      <div className={styles.linksContainer}>{editorLinks}</div>
+    </>
   )
 
   const yourLinks: JSX.Element = (
-    <div>
-      <div className={styles.webpartHeading}>
-        {stringIsNullOrEmpty(props.yourLinksTitle) ? strings.YourLinksLabel : props.yourLinksTitle}
-      </div>
-      <div className={styles.editorLinksContainer}>{favouriteLinks}</div>
-      <div className={styles.buttonRow}>
+    <>
+      <InfoLabel
+        className={styles.linksTitle}
+        info={'props.description'}
+      >
+        <span>{stringIsNullOrEmpty(props.yourLinksTitle) ? strings.YourLinksLabel : props.yourLinksTitle}</span>
+      </InfoLabel>
+      <div className={styles.linksContainer}>{favouriteLinks}</div>
+      <div className={styles.footer}>
         <Dialog>
           <DialogTrigger disableButtonEnhancement>
             <Button
               title={strings.NewLinkLabel}
               className={styles.button}
-              appearance='subtle'
               icon={<Icons.Add />}
-              onClick={() => openNewItemModal()}
+              onClick={() => openNewLinkDialog()}
             >
               <span className={styles.label}>{strings.NewLinkLabel}</span>
             </Button>
@@ -213,55 +222,56 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
             <DialogBody>
               <DialogTitle>{strings.NewLinkLabel}</DialogTitle>
               <DialogContent>
-                <div className={styles.modalBody}>
-                  <TextField
-                    label={strings.TitleLabel}
-                    onChange={(_, newVal: any) => onModalValueChanged('displayText', newVal)}
-                    value={state.showModal && state.modalData['displayText']}
+                <Field
+                  label={strings.TitleLabel}
+                >
+                  <Input
+                    placeholder={strings.TitlePlaceholder}
+                    onChange={(_, data): void => onDialogValueChanged('displayText', data.value)}
                   />
-                  <div>
-                    <Field
-                      label='Url'
-                      validationState={state.validationError ? 'error' : 'none'}
-                      validationMessage={state.validationError && strings.UrlValidationLabel}
-                    >
-                      <Input
-                        type='url'
-                        placeholder='Angi url her...'
-                        onChange={(_, data): void => {
-                          onModalValueChanged('url', data.value)
-                          validateUrl(data.value)
-                        }}
-                      />
-                    </Field>
-                  </div>
-                </div>
+                </Field>
+                <Field
+                  label='Url'
+                  validationState={state.validationError ? 'error' : 'none'}
+                  validationMessage={state.validationError && strings.UrlValidationLabel}
+                >
+                  <Input
+                    type='url'
+                    placeholder={strings.UrlPlaceholder}
+                    onChange={(_, data): void => {
+                      onDialogValueChanged('url', data.value)
+                      validateUrl(data.value)
+                    }}
+                  />
+                </Field>
               </DialogContent>
               <DialogActions>
                 <DialogTrigger disableButtonEnhancement>
                   <Button
                     title={strings.CancelLabel}
                     className={styles.button}
-                    onClick={() => setState({ modalData: null, showModal: false })}
+                    onClick={() => setState({ dialogData: null, showDialog: false })}
                   >
                     <span className={styles.label}>{strings.CancelLabel}</span>
                   </Button>
                 </DialogTrigger>
-                <Button
-                  title={strings.AddLabel}
-                  className={styles.button}
-                  appearance='primary'
-                  icon={<Icons.Add />}
-                  onClick={() => addNewLink()}
-                >
-                  <span className={styles.label}>{strings.AddLabel}</span>
-                </Button>
+                <DialogTrigger disableButtonEnhancement>
+                  <Button
+                    title={strings.AddLabel}
+                    className={styles.button}
+                    appearance='primary'
+                    icon={<Icons.Add />}
+                    onClick={() => addNewLink()}
+                  >
+                    <span className={styles.label}>{strings.AddLabel}</span>
+                  </Button>
+                </DialogTrigger>
               </DialogActions>
             </DialogBody>
           </DialogSurface>
         </Dialog>
       </div>
-    </div>
+    </>
   )
 
   return (
@@ -276,15 +286,15 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
         <div className={styles.allLinks} style={{ backgroundColor }}>
           {state.error && <MessageBar intent='error'>{strings.SaveErrorLabel}</MessageBar>}
           {props.yourLinksOnTop ? (
-            <div>
+            <>
               {yourLinks}
               {links}
-            </div>
+            </>
           ) : (
-            <div>
+            <>
               {links}
               {yourLinks}
-            </div>
+            </>
           )}
         </div>
       )}
