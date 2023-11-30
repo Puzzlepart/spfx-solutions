@@ -24,7 +24,7 @@
         "default": "All links description",
         "no-nb": "Alle lenker description"
       },
-      "officeFabricIconFontName": "GlobeFavorite",
+      "officeFabricIconFontName": "GlobeFavourite",
       "properties": {
         "title": "Alle lenker",
         "defaultIcon": "Link"

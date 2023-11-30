@@ -2,9 +2,9 @@ declare interface IAllLinksWebPartStrings {
   PropertyPane: {
     MandatoryLinksTitleLabel: string
     RecommendedLinksTitleLabel: string
-    MyLinksTitleLabel: string
+    YourLinksTitleLabel: string
     DefaultIcon: string
-    MyLinksOnTop: string
+    YourLinksOnTop: string
     ListingByCategory: string
     CategoryTitleFieldLabel: string
   }

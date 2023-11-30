@@ -1,12 +1,28 @@
+import { IReadonlyTheme } from '@microsoft/sp-component-base'
+
+export interface IAllLinksProps {
+  theme: IReadonlyTheme
+  currentUserId: number
+  currentUserName: string
+  defaultIcon: string
+  webServerRelativeUrl: string
+  yourLinksOnTop: boolean
+  listingByCategory: boolean
+  listingByCategoryTitle: string
+  mandatoryLinksTitle: string
+  recommendedLinksTitle: string
+  yourLinksTitle: string
+}
+
 export interface IAllLinksState {
   editorLinks?: Array<Link>
   favouriteLinks?: Array<Link>
   mandatoryLinks?: Array<Link>
   categoryLinks?: Array<ICategory>
-  isLoading?: boolean
-  showErrorMessage?: boolean
+  loading?: boolean
+  error?: boolean
+  validationError?: boolean
   showSuccessMessage?: boolean
-  showLoadingSpinner?: boolean
   currentUser?: User
   showModal?: boolean
   modalData?: Link
@@ -50,4 +66,9 @@ export interface ILink {
 export interface ICategory {
   links: Array<ILink>
   displayText: string
+}
+
+export enum CategoryOperation {
+  add,
+  remove
 }

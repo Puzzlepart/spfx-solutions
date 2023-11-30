@@ -150,9 +150,26 @@ $IconSize: 25px;
 
 .buttonRow {
   margin-top: 30px;
-  button {
-    margin-right: 15px;
-  }
+
+  .button {
+      justify-content: flex-start !important;
+
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.06);
+      }
+
+      &:active {
+        background-color: rgba(0, 0, 0, 0.12);
+      }
+
+      .label {
+        font-weight: var(--fontWeightRegular);
+        margin: 0;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+      }
+    }
   .spinner {
     display: inline-block;
     line-height: 32px;

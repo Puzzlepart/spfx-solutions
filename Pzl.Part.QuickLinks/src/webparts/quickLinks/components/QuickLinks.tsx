@@ -25,7 +25,11 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
             appearance='subtle'
             size={props.iconSize >= 26 ? 'large' : props.iconSize <= 16 ? 'small' : 'medium'}
             icon={
-              <Icon className={styles.icon} style={{ fontSize: props.iconSize }} iconName={link.icon ? link.icon : props.defaultIcon} />
+              <Icon
+                className={styles.icon}
+                style={{ fontSize: props.iconSize }}
+                iconName={link.icon ? link.icon : props.defaultIcon}
+              />
             }
             onClick={() => {
               callWebHook(link.url, link.category)

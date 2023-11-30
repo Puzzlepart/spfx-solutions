@@ -1,10 +1,9 @@
-import '@pnp/polyfill-ie11'
 import * as React from 'react'
 import * as ReactDom from 'react-dom'
 import * as strings from 'AllLinksWebPartStrings'
 import { sp } from '@pnp/sp'
 import { Version } from '@microsoft/sp-core-library'
-import { IAllLinksProps } from './components/IAllLinksProps'
+import { IAllLinksProps } from './components/types'
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { ThemeProvider, ThemeChangedEventArgs, IReadonlyTheme } from '@microsoft/sp-component-base'
 import {
@@ -12,20 +11,20 @@ import {
   PropertyPaneCheckbox,
   PropertyPaneTextField
 } from '@microsoft/sp-property-pane'
-import AllLinks from './components/AllLinks'
+import { AllLinks } from './components'
 
 export interface IAllLinksWebPartProps {
   recommendedLinksTitle: string
-  myLinksTitle: string
+  yourLinksTitle: string
   mandatoryLinksTitle: string
   defaultIcon: string
-  mylinksOnTop: boolean
+  yourLinksOnTop: boolean
   listingByCategory: boolean
   listingByCategoryTitle: string
 }
 
 export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebPartProps> {
-  private _themeProvidor: ThemeProvider // NOTE keeping reference so that we are sure it is not going to be garbage collected
+  private _themeProvider: ThemeProvider // NOTE keeping reference so that we are sure it is not going to be garbage collected
   private _theme: IReadonlyTheme
 
   public render(): void {
@@ -35,12 +34,12 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
       currentUserName: this.context.pageContext.user.displayName,
       defaultIcon: this.properties.defaultIcon,
       webServerRelativeUrl: this.context.pageContext.web.serverRelativeUrl,
-      mylinksOnTop: this.properties.mylinksOnTop,
+      yourLinksOnTop: this.properties.yourLinksOnTop,
       listingByCategory: this.properties.listingByCategory,
       listingByCategoryTitle: this.properties.listingByCategoryTitle,
       mandatoryLinksTitle: this.properties.mandatoryLinksTitle,
       recommendedLinksTitle: this.properties.recommendedLinksTitle,
-      myLinksTitle: this.properties.myLinksTitle
+      yourLinksTitle: this.properties.yourLinksTitle
     } as IAllLinksProps)
 
     ReactDom.render(element, this.domElement)
@@ -52,7 +51,7 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
     const themeProvider: ThemeProvider = this.context.serviceScope.consume(ThemeProvider.serviceKey)
     this._theme = themeProvider.tryGetTheme()
     themeProvider.themeChangedEvent.add(this, this._handleThemeChange)
-    this._themeProvidor = themeProvider
+    this._themeProvider = themeProvider
 
     try {
       await super.onInit()
@@ -79,8 +78,8 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
                 PropertyPaneTextField('defaultIcon', {
                   label: strings.PropertyPane.DefaultIcon
                 }),
-                PropertyPaneCheckbox('mylinksOnTop', {
-                  text: strings.PropertyPane.MyLinksOnTop,
+                PropertyPaneCheckbox('yourLinksOnTop', {
+                  text: strings.PropertyPane.YourLinksOnTop,
                   checked: false
                 }),
                 PropertyPaneCheckbox('listingByCategory', {
@@ -96,8 +95,8 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
                 PropertyPaneTextField('recommendedLinksTitle', {
                   label: strings.PropertyPane.RecommendedLinksTitleLabel
                 }),
-                PropertyPaneTextField('myLinksTitle', {
-                  label: strings.PropertyPane.MyLinksTitleLabel
+                PropertyPaneTextField('yourLinksTitle', {
+                  label: strings.PropertyPane.YourLinksTitleLabel
                 })
               ]
             }

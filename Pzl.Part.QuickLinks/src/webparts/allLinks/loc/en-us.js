@@ -5,8 +5,8 @@ define([], function () {
       DefaultIcon: 'Default icon',
       ListingByCategory: 'Group by category',
       MandatoryLinksTitleLabel: 'Title for \'Mandatory links\'',
-      MyLinksOnTop: 'My links on top',
-      MyLinksTitleLabel: 'Title for \'Your links\'',
+      YourLinksOnTop: 'Your links on top',
+      YourLinksTitleLabel: 'Title for \'Your links\'',
       RecommendedLinksTitleLabel: 'Title for \'Recommended links\''
     },
     ActionRemoveMandatory: 'Mandatory links cannot be removed',

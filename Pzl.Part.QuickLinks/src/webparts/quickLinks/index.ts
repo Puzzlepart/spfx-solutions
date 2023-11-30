@@ -1,4 +1,3 @@
-import '@pnp/polyfill-ie11'
 import * as React from 'react'
 import * as ReactDom from 'react-dom'
 import * as strings from 'QuickLinksWebPartStrings'
@@ -33,7 +32,7 @@ export interface IQuickLinksWebPartProps {
 }
 
 export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinksWebPartProps> {
-  private _themeProvidor: ThemeProvider // NOTE DO NOT REMOVE; we need to keep the reference for it not to (potentially) be garbage collected
+  private _themeProvider: ThemeProvider // NOTE DO NOT REMOVE; we need to keep the reference for it not to (potentially) be garbage collected
   private _theme: IReadonlyTheme
 
   public render(): void {
@@ -67,7 +66,7 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
     const themeProvider: ThemeProvider = this.context.serviceScope.consume(ThemeProvider.serviceKey)
     this._theme = themeProvider.tryGetTheme()
     themeProvider.themeChangedEvent.add(this, this._handleThemeChange)
-    this._themeProvidor = themeProvider
+    this._themeProvider = themeProvider
 
     try {
       await super.onInit()

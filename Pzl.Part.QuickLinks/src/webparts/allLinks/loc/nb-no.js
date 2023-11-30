@@ -5,8 +5,8 @@ define([], function () {
       DefaultIcon: 'Standard ikon',
       ListingByCategory: 'Grupper etter kategorier',
       MandatoryLinksTitleLabel: 'Overskrift for \'Obligatoriske lenker\'',
-      MyLinksOnTop: 'Mine lenker øverst',
-      MyLinksTitleLabel: 'Overskrift for \'Dine lenker\'',
+      YourLinksOnTop: 'Dine lenker øverst',
+      YourLinksTitleLabel: 'Overskrift for \'Dine lenker\'',
       RecommendedLinksTitleLabel: 'Overskrift for \'Anbefalte lenker\''
     },
     ActionRemoveMandatory: 'Obligatoriske lenker kan ikke fjernes',
