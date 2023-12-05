@@ -21,7 +21,6 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
   const backgroundColor: string = props.theme?.semanticColors?.bodyBackground ?? '#ffffff'
   const theme = tinycolor(backgroundColor).isDark() ? customDarkTheme : customLightTheme
 
-
   useEffect(() => {
     fetchData()
   }, [])

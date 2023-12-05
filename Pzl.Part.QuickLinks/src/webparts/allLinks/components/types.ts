@@ -8,8 +8,11 @@ export interface IAllLinksProps {
   webServerRelativeUrl: string
   groupByCategory: boolean
   mandatoryLinksTitle: string
+  mandatoryLinksDescription: string
   recommendedLinksTitle: string
+  recommendedLinksDescription: string
   yourLinksTitle: string
+  yourLinksDescription: string
 }
 
 export interface IAllLinksState {

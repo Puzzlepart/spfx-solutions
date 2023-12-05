@@ -1,19 +1,23 @@
 declare interface IAllLinksWebPartStrings {
   PropertyPane: {
-    MandatoryLinksTitleLabel: string
-    RecommendedLinksTitleLabel: string
-    YourLinksTitleLabel: string
-    GroupByCategory: string
-    CategoryTitleFieldLabel: string
-    SelectDefaultIconLabel: string
-    DefaultIconLabel: string
-    GeneralGroupName: string
-    HeaderDescription: string
     AdvancedGroupName: string
+    CategoryTitleFieldLabel: string
+    DefaultIconLabel: string
+    DescriptionPlaceholder: string
+    GeneralGroupName: string
+    GroupByCategoryLabel: string
+    HeaderDescription: string
+    MandatoryLinksLabel: string
+    RecommendedLinksLabel: string
+    SelectDefaultIconLabel: string
+    TitlePlaceholder: string
+    YourLinksLabel: string
   }
   ActionRemoveMandatory: string
   AddLabel: string
   CancelLabel: string
+  IconLabel: string
+  IconButtonLabel: string
   MandatoryLinksLabel: string
   MandatoryLinksDescription: string
   NewLinkLabel: string

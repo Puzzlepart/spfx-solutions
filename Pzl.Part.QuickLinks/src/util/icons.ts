@@ -1,22 +1,21 @@
 import {
-  AddCircleFilled,
-  AddCircleRegular,
-  AddFilled,
-  AddRegular,
+  Add12Filled,
+  Add12Regular,
+  Add20Filled,
+  Add20Regular,
+  Subtract12Filled,
+  Subtract12Regular,
   LockClosedFilled,
   LockClosedRegular,
-  SubtractCircleFilled,
-  SubtractCircleRegular,
   bundleIcon
 } from '@fluentui/react-icons'
 
 /**
  * Icons for AllLinks component
- *
  */
 export const Icons = {
-  Add: bundleIcon(AddFilled, AddRegular),
-  AddCircle: bundleIcon(AddCircleFilled, AddCircleRegular),
-  SubtractCircle: bundleIcon(SubtractCircleFilled, SubtractCircleRegular),
+  Add20: bundleIcon(Add20Filled, Add20Regular),
+  Add: bundleIcon(Add12Filled, Add12Regular),
+  Subtract: bundleIcon(Subtract12Filled, Subtract12Regular),
   Lock: bundleIcon(LockClosedFilled, LockClosedRegular)
 }

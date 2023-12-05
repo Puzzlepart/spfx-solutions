@@ -4,6 +4,7 @@ import { IAllLinksProps, LinkType, ILink, ICategory } from './types'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
 import * as strings from 'AllLinksWebPartStrings'
 import { stringIsNullOrEmpty } from '@pnp/common'
+import { IconPicker } from '@pnp/spfx-controls-react/lib/IconPicker'
 import {
   Button,
   Dialog,
@@ -62,7 +63,7 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
                 title={`Legg til ${link.displayText} i dine lenker`}
                 appearance='transparent'
                 size='small'
-                icon={<Icons.AddCircle />}
+                icon={<Icons.Add />}
               />
             ),
             onClick: () => appendToFavourites(link)
@@ -117,7 +118,7 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
                 title={`Fjern ${link.displayText} fra dine lenker`}
                 appearance='transparent'
                 size='small'
-                icon={<Icons.SubtractCircle />}
+                icon={<Icons.Subtract />}
               />
             ),
             onClick: () => {
@@ -162,7 +163,7 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
                   }
                   appearance='transparent'
                   size='small'
-                  icon={link.mandatory ? <Icons.Lock /> : <Icons.AddCircle />}
+                  icon={link.mandatory ? <Icons.Lock /> : <Icons.Add />}
                   disabled={link.mandatory}
                 />
               ),
@@ -203,7 +204,14 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
     <div className={styles.links}>{generateCategorizedLinks(state.categoryLinks)}</div>
   ) : (
     <>
-      <InfoLabel className={styles.linksTitle} info={strings.MandatoryLinksDescription}>
+      <InfoLabel
+        className={styles.linksTitle}
+        info={
+          stringIsNullOrEmpty(props.mandatoryLinksDescription)
+            ? strings.MandatoryLinksDescription
+            : props.mandatoryLinksDescription
+        }
+      >
         <span>
           {stringIsNullOrEmpty(props.mandatoryLinksTitle)
             ? strings.MandatoryLinksLabel
@@ -213,7 +221,14 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
       {state.mandatoryLinks && (
         <div className={styles.links}>{generateMandatoryLinks(state.mandatoryLinks)}</div>
       )}
-      <InfoLabel className={styles.linksTitle} info={strings.RecommendedLinksDescription}>
+      <InfoLabel
+        className={styles.linksTitle}
+        info={
+          stringIsNullOrEmpty(props.recommendedLinksDescription)
+            ? strings.RecommendedLinksDescription
+            : props.recommendedLinksDescription
+        }
+      >
         <span>
           {stringIsNullOrEmpty(props.recommendedLinksTitle)
             ? strings.RecommendedLinksLabel
@@ -228,7 +243,14 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
 
   const yourLinks = (
     <>
-      <InfoLabel className={styles.linksTitle} info={strings.YourLinksDescription}>
+      <InfoLabel
+        className={styles.linksTitle}
+        info={
+          stringIsNullOrEmpty(props.yourLinksDescription)
+            ? strings.YourLinksDescription
+            : props.yourLinksDescription
+        }
+      >
         <span>
           {stringIsNullOrEmpty(props.yourLinksTitle)
             ? strings.YourLinksLabel
@@ -245,7 +267,7 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
               title={strings.NewLinkLabel}
               appearance='subtle'
               className={styles.footerButton}
-              icon={<Icons.Add />}
+              icon={<Icons.Add20 />}
               onClick={() => openNewLinkDialog()}
             >
               <span className={styles.footerButtonLabel}>{strings.NewLinkLabel}</span>
@@ -254,7 +276,7 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
           <DialogSurface>
             <DialogBody>
               <DialogTitle>{strings.NewLinkLabel}</DialogTitle>
-              <DialogContent>
+              <DialogContent className={styles.dialogContent}>
                 <Field label={strings.TitleLabel}>
                   <Input
                     placeholder={strings.TitlePlaceholder}
@@ -272,6 +294,17 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
                     onChange={(_, data): void => {
                       onDialogValueChanged('url', data.value)
                       validateUrl(data.value)
+                    }}
+                  />
+                </Field>
+                <Field label={strings.IconLabel}>
+                  <IconPicker
+                    buttonLabel={strings.IconButtonLabel}
+                    onChange={(icon: string) => {
+                      onDialogValueChanged('icon', icon)
+                    }}
+                    onSave={(icon: string) => {
+                      onDialogValueChanged('icon', icon)
                     }}
                   />
                 </Field>
@@ -318,4 +351,8 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
       </FluentProvider>
     </IdPrefixProvider>
   )
+}
+
+AllLinks.defaultProps = {
+  defaultIcon: 'Link'
 }

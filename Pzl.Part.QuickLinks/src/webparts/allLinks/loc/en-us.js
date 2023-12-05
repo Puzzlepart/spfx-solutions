@@ -1,20 +1,24 @@
 define([], function () {
   return {
     PropertyPane: {
+      AdvancedGroupName: 'Advanced',
       CategoryTitleFieldLabel: 'Group by category title',
-      GroupByCategory: 'Group by category',
-      MandatoryLinksTitleLabel: 'Title for \'Mandatory links\'',
-      YourLinksTitleLabel: 'Title for \'Your links\'',
-      RecommendedLinksTitleLabel: 'Title for \'Recommended links\'',
       DefaultIconLabel: 'Default icon',
-      SelectDefaultIconLabel: 'Select default icon',
+      DescriptionPlaceholder: 'Add description...',
       GeneralGroupName: 'General',
+      GroupByCategoryLabel: 'Group by category',
       HeaderDescription: 'Configuration of the web part',
-      AdvancedGroupName: 'Advanced'
+      MandatoryLinksLabel: 'Title and description for \'Mandatory links\'',
+      RecommendedLinksLabel: 'Title and description for \'Recommended links\'',
+      SelectDefaultIconLabel: 'Select default icon',
+      TitlePlaceholder: 'Add title...',
+      YourLinksLabel: 'Title and description for \'Your links\''
     },
     ActionRemoveMandatory: 'Mandatory links cannot be removed',
     AddLabel: 'Add',
     CancelLabel: 'Cancel',
+    IconLabel: 'Link icon',
+    IconButtonLabel: 'Select icon',
     MandatoryLinksLabel: 'Mandatory links',
     MandatoryLinksDescription: 'These links are mandatory for everyone, they cannot be removed or changed.',
     NewLinkLabel: 'Add new link',

@@ -1,20 +1,24 @@
 define([], function () {
   return {
     PropertyPane: {
+      AdvancedGroupName: 'Avansert',
       CategoryTitleFieldLabel: 'Overskrift grupperte lenker',
-      GroupByCategory: 'Grupper etter kategorier',
-      MandatoryLinksTitleLabel: 'Overskrift for \'Obligatoriske lenker\'',
-      YourLinksTitleLabel: 'Overskrift for \'Dine lenker\'',
-      RecommendedLinksTitleLabel: 'Overskrift for \'Anbefalte lenker\'',
       DefaultIconLabel: 'Standard ikon',
-      SelectDefaultIconLabel: 'Velg standard ikon',
+      DescriptionPlaceholder: 'Angi beskrivelse...',
       GeneralGroupName: 'Generelt',
+      GroupByCategoryLabel: 'Grupper etter kategorier',
       HeaderDescription:  'Konfigurasjon av webdelen',
-      AdvancedGroupName: 'Avansert'
+      MandatoryLinksLabel: 'Tittel og beskrivelse for \'Obligatoriske lenker\'',
+      RecommendedLinksLabel: 'Tittel og beskrivelse for \'Anbefalte lenker\'',
+      SelectDefaultIconLabel: 'Velg standard ikon',
+      TitlePlaceholder: 'Angi tittel...',
+      YourLinksLabel: 'Tittel og beskrivelse for \'Dine lenker\''
     },
     ActionRemoveMandatory: 'Obligatoriske lenker kan ikke fjernes',
     AddLabel: 'Legg til',
     CancelLabel: 'Avbryt',
+    IconLabel: 'Ikon for lenke',
+    IconButtonLabel: 'Velg ikon',
     MandatoryLinksLabel: 'Obligatoriske lenker',
     MandatoryLinksDescription: 'Her er lenker som er obligatoriske for alle, disse kan ikke fjernes eller endres.',
     NewLinkLabel: 'Legg til ny lenke',
