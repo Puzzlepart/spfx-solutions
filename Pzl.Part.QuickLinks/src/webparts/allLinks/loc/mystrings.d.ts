@@ -3,18 +3,23 @@ declare interface IAllLinksWebPartStrings {
     MandatoryLinksTitleLabel: string
     RecommendedLinksTitleLabel: string
     YourLinksTitleLabel: string
-    DefaultIcon: string
-    YourLinksOnTop: string
-    ListingByCategory: string
+    GroupByCategory: string
     CategoryTitleFieldLabel: string
+    SelectDefaultIconLabel: string
+    DefaultIconLabel: string
+    GeneralGroupName: string
+    HeaderDescription: string
+    AdvancedGroupName: string
   }
   ActionRemoveMandatory: string
   AddLabel: string
   CancelLabel: string
   MandatoryLinksLabel: string
+  MandatoryLinksDescription: string
   NewLinkLabel: string
   NoCategoryLabel: string
   RecommendedLinksLabel: string
+  RecommendedLinksDescription: string
   SaveErrorLabel: string
   SaveOkLabel: string
   SaveYourLinksLabel: string
@@ -23,6 +28,7 @@ declare interface IAllLinksWebPartStrings {
   UrlPlaceholder: string
   UrlValidationLabel: string
   YourLinksLabel: string
+  YourLinksDescription: string
 }
 
 declare module 'AllLinksWebPartStrings' {

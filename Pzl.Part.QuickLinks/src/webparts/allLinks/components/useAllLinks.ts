@@ -1,10 +1,11 @@
 import { sp, ItemAddResult } from '@pnp/sp'
-import { IReadonlyTheme } from '@microsoft/sp-component-base'
 import { useAllLinksState } from './useAllLinksState'
-import { CategoryOperation, IAllLinksProps, ICategory, ILink, Link, LinkType, User } from './types'
+import { CategoryOperation, IAllLinksProps, ICategory, ILink, LinkType, User } from './types'
 import { useEffect } from 'react'
 import strings from 'AllLinksWebPartStrings'
 import { isEqual } from '@microsoft/sp-lodash-subset'
+import tinycolor from 'tinycolor2'
+import { customDarkTheme, customLightTheme } from '../../../util/theme'
 
 /**
  * Component logic hook for `allLinks`. This hook is responsible for
@@ -15,21 +16,21 @@ import { isEqual } from '@microsoft/sp-lodash-subset'
 export const useAllLinks = (props: IAllLinksProps) => {
   const { state, setState } = useAllLinksState()
 
-  const theme: IReadonlyTheme = props.theme
-  const backgroundColor: string = theme?.semanticColors?.bodyBackground ?? '#ffffff'
+  const backgroundColor: string = props.theme?.semanticColors?.bodyBackground ?? '#ffffff'
+  const theme = tinycolor(backgroundColor).isDark() ? customDarkTheme : customLightTheme
 
   useEffect(() => {
     fetchData()
   }, [])
 
   const openNewLinkDialog = (): void => {
-    const emptyLink: Link = {
+    const emptyLink: ILink = {
       id: -1,
       displayText: '',
       url: '',
       icon: props.defaultIcon,
       priority: '1000',
-      mandatory: 0,
+      mandatory: false,
       linkType: LinkType.favouriteLinks
     }
 
@@ -39,11 +40,11 @@ export const useAllLinks = (props: IAllLinksProps) => {
     })
   }
 
-  const appendToFavourites = (link: Link): void => {
-    const newFavourites: Link[] = state.favouriteLinks.slice()
+  const appendToFavourites = (link: ILink): void => {
+    const newFavourites: ILink[] = state.favouriteLinks.slice()
     newFavourites.push(link)
 
-    const newEditorLinks: Link[] = state.editorLinks.slice()
+    const newEditorLinks: ILink[] = state.editorLinks.slice()
     newEditorLinks.splice(newEditorLinks.indexOf(link), 1)
 
     updateCategoryLinks(CategoryOperation.remove, link as ILink, state.categoryLinks)
@@ -55,11 +56,11 @@ export const useAllLinks = (props: IAllLinksProps) => {
     })
   }
 
-  const removeFromFavourites = (link: Link): void => {
-    const newEditorLinks: Link[] = state.editorLinks.slice()
+  const removeFromFavourites = (link: ILink): void => {
+    const newEditorLinks: ILink[] = state.editorLinks.slice()
     newEditorLinks.push(link)
 
-    const newFavourites: Link[] = state.favouriteLinks.slice()
+    const newFavourites: ILink[] = state.favouriteLinks.slice()
     newFavourites.splice(newFavourites.indexOf(link), 1)
 
     const categoryLinks: ICategory[] = updateCategoryLinks(
@@ -81,7 +82,7 @@ export const useAllLinks = (props: IAllLinksProps) => {
     link: ILink,
     categoryLinks: ICategory[]
   ): ICategory[] => {
-    if (props.listingByCategory) {
+    if (props.groupByCategory) {
       categoryLinks = categoryLinks.map((category) => {
         if (category.displayText === link['category']) {
           if (operation === CategoryOperation.remove) {
@@ -96,8 +97,8 @@ export const useAllLinks = (props: IAllLinksProps) => {
     return categoryLinks
   }
 
-  const removeCustomFromFavourites = (link: Link): void => {
-    const newFavourites: Link[] = state.favouriteLinks.slice()
+  const removeCustomFromFavourites = (link: ILink): void => {
+    const newFavourites: ILink[] = state.favouriteLinks.slice()
     newFavourites.splice(newFavourites.indexOf(link), 1)
     saveData(newFavourites)
     setState({
@@ -107,7 +108,7 @@ export const useAllLinks = (props: IAllLinksProps) => {
   }
 
   const addNewLink = (): void => {
-    const newFavourites: Link[] = state.favouriteLinks.slice()
+    const newFavourites: ILink[] = state.favouriteLinks.slice()
     newFavourites.push(state.dialogData)
     saveData(newFavourites)
     setState({
@@ -119,7 +120,7 @@ export const useAllLinks = (props: IAllLinksProps) => {
   }
 
   const onDialogValueChanged = (field: string, newVal: any): void => {
-    const newDialogData: Link = { ...state.dialogData }
+    const newDialogData: ILink = { ...state.dialogData }
     newDialogData[field] = newVal
     setState({ dialogData: newDialogData })
   }
@@ -145,7 +146,7 @@ export const useAllLinks = (props: IAllLinksProps) => {
         .filter(searchString)
         .get()
       let favouriteItemsIds: number[]
-      let favouriteItems: Link[] = []
+      let favouriteItems: ILink[] = []
       if (
         favouriteLinkListItem.length > 0 &&
         favouriteLinkListItem[0]['PzlPersonalLinks'] !== null
@@ -167,7 +168,7 @@ export const useAllLinks = (props: IAllLinksProps) => {
         .items.filter('PzlLinkActive eq 1')
         .get()
 
-      const mappedLinks: Link[] = editorLinks.map((link) => {
+      const mappedLinks: ILink[] = editorLinks.map((link) => {
         return {
           id: link.Id,
           displayText: link.Title,
@@ -178,11 +179,11 @@ export const useAllLinks = (props: IAllLinksProps) => {
           linkType: LinkType.editorLink
         }
       })
-      const mandatorymappedLinks: Link[] = mappedLinks.filter((link) => link.mandatory)
+      const mandatorymappedLinks: ILink[] = mappedLinks.filter((link) => link.mandatory)
 
-      const recommendedmappedLinks: Link[] = mappedLinks.filter((link) => !link.mandatory)
+      const recommendedmappedLinks: ILink[] = mappedLinks.filter((link) => !link.mandatory)
 
-      const prunedLinks: Link[] = recommendedmappedLinks.filter(
+      const prunedLinks: ILink[] = recommendedmappedLinks.filter(
         (link) => !favouriteItemsIds.includes(link.id)
       )
       if (
@@ -190,11 +191,11 @@ export const useAllLinks = (props: IAllLinksProps) => {
         favouriteItems !== null &&
         favouriteItems.length > 0
       ) {
-        const favouriteLinks: Link[] = await checkForUpdatedLinks(
+        const favouriteLinks: ILink[] = await checkForUpdatedLinks(
           favouriteItems,
           recommendedmappedLinks
         )
-        favouriteItemsIds = favouriteLinks.map((item: Link): number => item.id)
+        favouriteItemsIds = favouriteLinks.map((item: ILink): number => item.id)
       }
       const linkFieldId = favouriteLinkListItem.length > 0 ? favouriteLinkListItem[0].Id : null
       const currentUser: User = {
@@ -217,7 +218,7 @@ export const useAllLinks = (props: IAllLinksProps) => {
       let categories: Array<ICategory> = [
         { displayText: strings.NoCategoryLabel, links: displayLinks }
       ]
-      if (props.listingByCategory) {
+      if (props.groupByCategory) {
         let categoryNames: string[] = displayLinks
           .map((lnk) => {
             return lnk.category
@@ -251,7 +252,7 @@ export const useAllLinks = (props: IAllLinksProps) => {
     }
   }
 
-  const saveData = async (favouriteLinks?: Array<Link>) => {
+  const saveData = async (favouriteLinks?: Array<ILink>) => {
     setState({
       saveButtonDisabled: true
     })
@@ -307,7 +308,7 @@ export const useAllLinks = (props: IAllLinksProps) => {
   }
 
   const checkForUpdatedLinks = (userFavouriteLinks: any[], allFavouriteLinks: any[]) => {
-    const personalLinks: Link[] = new Array<Link>()
+    const personalLinks: ILink[] = new Array<ILink>()
     let shouldUpdate: boolean = false
     userFavouriteLinks.forEach((userLink): void => {
       const linkMatch = allFavouriteLinks.find((favouriteLink) => favouriteLink.id === userLink.id)
@@ -342,6 +343,7 @@ export const useAllLinks = (props: IAllLinksProps) => {
     removeCustomFromFavourites,
     addNewLink,
     onDialogValueChanged,
-    validateUrl
+    validateUrl,
+    theme
   }
 }

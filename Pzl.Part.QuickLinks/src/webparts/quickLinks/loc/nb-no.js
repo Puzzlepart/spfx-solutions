@@ -22,7 +22,7 @@ define([], function () {
       ShowHideGroupName: 'Skjul/vis',
       StylingGroupName: 'Stil og utforming',
       TitleFieldDescription: 'Tittel som vises i headeren på webdelen.',
-      TitleFieldLabel: 'Tittel',
+      TitleFieldLabel: 'Tittel'
     },
     AllLinksLabel: 'Se alle',
     Description: 'Her er en samling av obligatoriske lenker og dine egne lenker nederst.',

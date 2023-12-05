@@ -32,7 +32,7 @@ export interface IQuickLinksWebPartProps {
 }
 
 export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinksWebPartProps> {
-  private _themeProvider: ThemeProvider // NOTE DO NOT REMOVE; we need to keep the reference for it not to (potentially) be garbage collected
+  private _themeProvider: ThemeProvider
   private _theme: IReadonlyTheme
 
   public render(): void {

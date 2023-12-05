@@ -1,10 +1,8 @@
 import * as React from 'react'
 import styles from './AllLinks.module.scss'
-import { IAllLinksProps, Link, LinkType, ILink, ICategory } from './types'
+import { IAllLinksProps, LinkType, ILink, ICategory } from './types'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
-import { TextField } from 'office-ui-fabric-react/lib/TextField'
 import * as strings from 'AllLinksWebPartStrings'
-import { Text } from 'office-ui-fabric-react/lib/Text'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import {
   Button,
@@ -17,18 +15,16 @@ import {
   DialogTrigger,
   Field,
   FluentProvider,
+  IdPrefixProvider,
   InfoLabel,
   Input,
   MessageBar,
-  Spinner
+  Spinner,
+  SplitButton,
+  useId
 } from '@fluentui/react-components'
-import { customLightTheme } from '../../../util/theme'
 import { useAllLinks } from './useAllLinks'
-import { AddFilled, AddRegular, bundleIcon } from '@fluentui/react-icons'
-
-const Icons = {
-  Add: bundleIcon(AddFilled, AddRegular)
-}
+import { Icons } from '../../../util/icons'
 
 export const AllLinks: React.FC<IAllLinksProps> = (props) => {
   const {
@@ -41,190 +37,225 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
     removeCustomFromFavourites,
     addNewLink,
     onDialogValueChanged,
-    validateUrl
+    validateUrl,
+    theme
   } = useAllLinks(props)
+  const fluentProviderId = useId('fp-all-links')
 
   console.log({ state, props })
 
-  const generateEditorLinkComponents = (links: Array<Link>): JSX.Element[] => {
-    return links.map((link: Link, index: number): JSX.Element => {
+  const generateEditorLinks = (links: Array<ILink>) => {
+    return links.map((link: ILink, idx: number) => {
       return (
-        <div key={`editor_link_${index}`} className={styles.linkParent}>
-          <Text className={styles.linkContainer} onClick={() => window.open(link.url, '_blank')}>
-            <Icon iconName={link.icon ? link.icon : props.defaultIcon} className={styles.icon} />
-            <span title={link.displayText}>{link.displayText}</span>
-          </Text>
-          <Icon
-            className={styles.actionIcon}
-            iconName='CirclePlus'
-            onClick={() => appendToFavourites(link)}
-          />
-        </div>
+        <SplitButton
+          key={`editor_link_${idx}`}
+          title={link.displayText}
+          className={styles.link}
+          icon={
+            <Icon className={styles.icon} iconName={link.icon ? link.icon : props.defaultIcon} />
+          }
+          menuIcon={null}
+          menuButton={{
+            style: { width: '30px' },
+            children: (
+              <Button
+                title={`Legg til ${link.displayText} i dine lenker`}
+                appearance='transparent'
+                size='small'
+                icon={<Icons.AddCircle />}
+              />
+            ),
+            onClick: () => appendToFavourites(link)
+          }}
+          primaryActionButton={{
+            onClick: () => {
+              window.open(link.url, link.openInSameTab ? '_self' : '_blank')
+            }
+          }}
+        >
+          <span className={styles.label}>{link.displayText}</span>
+        </SplitButton>
       )
     })
   }
 
-  const generateMandatoryLinkComponents = (links: Array<Link>): JSX.Element[] => {
-    return links.map((link: Link, index: number): JSX.Element => {
+  const generateMandatoryLinks = (links: Array<ILink>) => {
+    return links.map((link: ILink, idx: number) => {
       return (
-        <div key={`mandatory_link_${index}`} className={styles.linkParent}>
-          <Text className={styles.linkContainer} onClick={() => window.open(link.url, '_blank')}>
-            <Icon iconName={link.icon ? link.icon : props.defaultIcon} className={styles.icon} />
-            <span>{link.displayText}</span>
-          </Text>
-        </div>
+        <Button
+          key={`mandatory_link_${idx}`}
+          title={link.displayText}
+          className={styles.link}
+          icon={
+            <Icon className={styles.icon} iconName={link.icon ? link.icon : props.defaultIcon} />
+          }
+          onClick={() => {
+            window.open(link.url, link.openInSameTab ? '_self' : '_blank')
+          }}
+        >
+          <span className={styles.label}>{link.displayText}</span>
+        </Button>
       )
     })
   }
 
-  const generateFavouriteLinkComponents = (links: Array<Link>): JSX.Element[] => {
-    return links.map((link: Link, index: number): JSX.Element => {
-      const linkIcon: JSX.Element = (
-        <Icon iconName={link.icon ? link.icon : props.defaultIcon} className={styles.icon} />
-      )
-      const removeLinkButton: JSX.Element =
-        link.linkType === LinkType.editorLink ? (
-          <Icon
-            className={styles.actionIcon}
-            iconName='SkypeCircleMinus'
-            onClick={() => removeFromFavourites(link)}
-          />
-        ) : (
-          <Icon
-            className={styles.actionIcon}
-            iconName='SkypeCircleMinus'
-            onClick={() => removeCustomFromFavourites(link)}
-          />
-        )
+  const generateFavouriteLinks = (links: Array<ILink>) => {
+    return links.map((link: ILink, idx: number) => {
       return (
-        <div key={`favourite_link_${index}`} className={styles.linkParent}>
-          <Text className={styles.linkContainer} onClick={() => window.open(link.url, '_blank')}>
-            {linkIcon}
-            <>{link.displayText}</>
-          </Text>
-          {removeLinkButton}
-        </div>
+        <SplitButton
+          key={`favourite_link_${idx}`}
+          title={link.displayText}
+          className={styles.link}
+          icon={
+            <Icon className={styles.icon} iconName={link.icon ? link.icon : props.defaultIcon} />
+          }
+          menuIcon={null}
+          menuButton={{
+            style: { width: '30px' },
+            children: (
+              <Button
+                title={`Fjern ${link.displayText} fra dine lenker`}
+                appearance='transparent'
+                size='small'
+                icon={<Icons.SubtractCircle />}
+              />
+            ),
+            onClick: () => {
+              link.linkType === LinkType.editorLink
+                ? removeFromFavourites(link)
+                : removeCustomFromFavourites(link)
+            }
+          }}
+          primaryActionButton={{
+            onClick: () => {
+              window.open(link.url, link.openInSameTab ? '_self' : '_blank')
+            }
+          }}
+        >
+          <span className={styles.label}>{link.displayText}</span>
+        </SplitButton>
       )
     })
   }
 
-  const generateLinks = (categories: Array<ICategory>): JSX.Element[] => {
-    return categories.map((cat: ICategory, index: number): JSX.Element => {
-      const linkItems: JSX.Element[] = cat.links.map(
-        (link: ILink, subIndex: number): JSX.Element => {
-          const linkIcon: JSX.Element = (
-            <Icon iconName={link.icon ? link.icon : props.defaultIcon} className={styles.icon} />
-          )
-          const linkTarget: string = link.openInSameTab ? '_self' : '_blank'
-          return (
-            <div key={`link_cat_sub_${subIndex}`} className={styles.linkGridColumn}>
-              <a
-                className={styles.linkContainer}
-                data-interception='off'
-                href={link.url}
-                title={link.displayText}
-                target={linkTarget}
-              >
-                {linkIcon}
-                <span>{link.displayText}</span>
-              </a>
-              {link.mandatory ? (
-                <Icon
-                  className={styles.icon}
-                  iconName='Lock'
-                  title={strings.ActionRemoveMandatory}
-                />
-              ) : (
-                <Icon
-                  className={styles.actionIcon}
-                  iconName='CirclePlus'
-                  onClick={() => appendToFavourites(link)}
-                />
-              )}
-            </div>
-          )
-        }
-      )
-      if (props.listingByCategory) {
+  const generateCategorizedLinks = (categories: Array<ICategory>) => {
+    return categories?.map((category: ICategory, idx: number) => {
+      const linkItems = category.links.map((link: ILink, subIdx: number) => {
         return (
-          <div key={`link_cat_${index}`} className={styles.categorySection}>
-            <div className={styles.linkCategoryHeading}>{cat.displayText}</div>
-            {linkItems}
+          <SplitButton
+            key={`link_${subIdx}`}
+            title={link.displayText}
+            className={styles.link}
+            icon={
+              <Icon className={styles.icon} iconName={link.icon ? link.icon : props.defaultIcon} />
+            }
+            menuIcon={null}
+            menuButton={{
+              style: { width: '30px' },
+              children: (
+                <Button
+                  key={`link_${subIdx}`}
+                  title={
+                    link.mandatory
+                      ? strings.ActionRemoveMandatory
+                      : `Legg til ${link.displayText} i dine lenker`
+                  }
+                  appearance='transparent'
+                  size='small'
+                  icon={link.mandatory ? <Icons.Lock /> : <Icons.AddCircle />}
+                  disabled={link.mandatory}
+                />
+              ),
+              onClick: () => appendToFavourites(link)
+            }}
+            primaryActionButton={{
+              onClick: () => {
+                window.open(link.url, link.openInSameTab ? '_self' : '_blank')
+              }
+            }}
+          >
+            <span className={styles.label}>{link.displayText}</span>
+          </SplitButton>
+        )
+      })
+
+      if (props.groupByCategory) {
+        return (
+          <div className={styles.categorySection} key={`category_${idx}`}>
+            <div className={styles.heading}>
+              {category.displayText !== undefined ? category.displayText : 'Mine lenker'}
+            </div>
+            <div key={`links_${idx}`} className={styles.links}>
+              {linkItems}
+            </div>
           </div>
         )
       }
-      return <div key={`link_no_cat_${index}`}>{linkItems}</div>
+
+      return (
+        <div key={`links_${idx}`} className={styles.links}>
+          {linkItems}
+        </div>
+      )
     })
   }
-
-  const mandatoryLinks: JSX.Element[] = state.mandatoryLinks
-    ? generateMandatoryLinkComponents(state.mandatoryLinks)
-    : null
-  const editorLinks: JSX.Element[] = state.editorLinks
-    ? generateEditorLinkComponents(state.editorLinks)
-    : null
-  const favouriteLinks: JSX.Element[] = state.favouriteLinks
-    ? generateFavouriteLinkComponents(state.favouriteLinks)
-    : null
-
-  const links: JSX.Element = props.listingByCategory ? (
-    <div className={styles.allLinks}>
-      <div className={styles.header}>
-        <span>{props.listingByCategoryTitle}</span>
-      </div>
-      <div className={styles.linkGrid}>{generateLinks(state.categoryLinks)}</div>
-    </div>
+  const links = props.groupByCategory ? (
+    <div className={styles.links}>{generateCategorizedLinks(state.categoryLinks)}</div>
   ) : (
     <>
-      <InfoLabel
-        className={styles.linksTitle}
-        info={'props.description'}
-      >
-        <span>{stringIsNullOrEmpty(props.mandatoryLinksTitle)
-          ? strings.MandatoryLinksLabel
-          : props.mandatoryLinksTitle}</span>
+      <InfoLabel className={styles.linksTitle} info={strings.MandatoryLinksDescription}>
+        <span>
+          {stringIsNullOrEmpty(props.mandatoryLinksTitle)
+            ? strings.MandatoryLinksLabel
+            : props.mandatoryLinksTitle}
+        </span>
       </InfoLabel>
-      <div className={styles.linksContainer}>{mandatoryLinks}</div>
-      <InfoLabel
-        className={styles.linksTitle}
-        info={'props.description'}
-      >
-        <span>{stringIsNullOrEmpty(props.recommendedLinksTitle)
-          ? strings.RecommendedLinksLabel
-          : props.recommendedLinksTitle}</span>
+      {state.mandatoryLinks && (
+        <div className={styles.links}>{generateMandatoryLinks(state.mandatoryLinks)}</div>
+      )}
+      <InfoLabel className={styles.linksTitle} info={strings.RecommendedLinksDescription}>
+        <span>
+          {stringIsNullOrEmpty(props.recommendedLinksTitle)
+            ? strings.RecommendedLinksLabel
+            : props.recommendedLinksTitle}
+        </span>
       </InfoLabel>
-      <div className={styles.linksContainer}>{editorLinks}</div>
+      {state.editorLinks && (
+        <div className={styles.links}>{generateEditorLinks(state.editorLinks)}</div>
+      )}
     </>
   )
 
-  const yourLinks: JSX.Element = (
+  const yourLinks = (
     <>
-      <InfoLabel
-        className={styles.linksTitle}
-        info={'props.description'}
-      >
-        <span>{stringIsNullOrEmpty(props.yourLinksTitle) ? strings.YourLinksLabel : props.yourLinksTitle}</span>
+      <InfoLabel className={styles.linksTitle} info={strings.YourLinksDescription}>
+        <span>
+          {stringIsNullOrEmpty(props.yourLinksTitle)
+            ? strings.YourLinksLabel
+            : props.yourLinksTitle}
+        </span>
       </InfoLabel>
-      <div className={styles.linksContainer}>{favouriteLinks}</div>
+      {state.favouriteLinks && (
+        <div className={styles.links}>{generateFavouriteLinks(state.favouriteLinks)}</div>
+      )}
       <div className={styles.footer}>
         <Dialog>
           <DialogTrigger disableButtonEnhancement>
             <Button
               title={strings.NewLinkLabel}
-              className={styles.button}
+              appearance='subtle'
+              className={styles.footerButton}
               icon={<Icons.Add />}
               onClick={() => openNewLinkDialog()}
             >
-              <span className={styles.label}>{strings.NewLinkLabel}</span>
+              <span className={styles.footerButtonLabel}>{strings.NewLinkLabel}</span>
             </Button>
           </DialogTrigger>
           <DialogSurface>
             <DialogBody>
               <DialogTitle>{strings.NewLinkLabel}</DialogTitle>
               <DialogContent>
-                <Field
-                  label={strings.TitleLabel}
-                >
+                <Field label={strings.TitleLabel}>
                   <Input
                     placeholder={strings.TitlePlaceholder}
                     onChange={(_, data): void => onDialogValueChanged('displayText', data.value)}
@@ -249,7 +280,6 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
                 <DialogTrigger disableButtonEnhancement>
                   <Button
                     title={strings.CancelLabel}
-                    className={styles.button}
                     onClick={() => setState({ dialogData: null, showDialog: false })}
                   >
                     <span className={styles.label}>{strings.CancelLabel}</span>
@@ -258,7 +288,6 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
                 <DialogTrigger disableButtonEnhancement>
                   <Button
                     title={strings.AddLabel}
-                    className={styles.button}
                     appearance='primary'
                     icon={<Icons.Add />}
                     onClick={() => addNewLink()}
@@ -275,29 +304,18 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
   )
 
   return (
-    <FluentProvider
-      theme={customLightTheme}
-      className={styles.allLinks}
-      style={{ backgroundColor }}
-    >
-      {state.loading ? (
-        <Spinner label='Laster inn lenker' />
-      ) : (
-        <div className={styles.allLinks} style={{ backgroundColor }}>
-          {state.error && <MessageBar intent='error'>{strings.SaveErrorLabel}</MessageBar>}
-          {props.yourLinksOnTop ? (
-            <>
-              {yourLinks}
-              {links}
-            </>
-          ) : (
-            <>
-              {links}
-              {yourLinks}
-            </>
-          )}
-        </div>
-      )}
-    </FluentProvider>
+    <IdPrefixProvider value={fluentProviderId}>
+      <FluentProvider theme={theme} className={styles.allLinks} style={{ backgroundColor }}>
+        {state.loading ? (
+          <Spinner label='Laster inn lenker' />
+        ) : (
+          <div className={styles.allLinks}>
+            {state.error && <MessageBar intent='error'>{strings.SaveErrorLabel}</MessageBar>}
+            {yourLinks}
+            {links}
+          </div>
+        )}
+      </FluentProvider>
+    </IdPrefixProvider>
   )
 }

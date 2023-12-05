@@ -4,11 +4,18 @@ import styles from './QuickLinks.module.scss'
 import { IQuickLinksProps, ILink, ICategory } from './types'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
 import { useQuickLinks } from './useQuickLinks'
-import { Button, FluentProvider, InfoLabel, Link } from '@fluentui/react-components'
-import { customLightTheme } from '../../../util/theme'
+import {
+  Button,
+  FluentProvider,
+  IdPrefixProvider,
+  InfoLabel,
+  Link,
+  useId
+} from '@fluentui/react-components'
 
 export const QuickLinks: FC<IQuickLinksProps> = (props) => {
-  const { state, callWebHook, backgroundColor } = useQuickLinks(props)
+  const { state, callWebHook, backgroundColor, theme } = useQuickLinks(props)
+  const fluentProviderId = useId('fp-your-links')
 
   const generateLinks = (categories: Array<ICategory>) => {
     return categories.map((category: ICategory, idx) => {
@@ -56,28 +63,30 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
   }
 
   return (
-    <FluentProvider
-      theme={customLightTheme}
-      className={styles.quickLinks}
-      style={{ backgroundColor, boxShadow: props.renderShadow && 'var(--shadow2)' }}
-    >
-      <div className={styles.header} style={{ display: props.hideHeader && 'none' }}>
-        <InfoLabel
-          className={styles.title}
-          info={props.description}
-          style={{ display: props.hideTitle && 'none' }}
-        >
-          <span>{props.title}</span>
-        </InfoLabel>
-        <Link
-          onClick={() => window.open(props.allLinksUrl, '_blank')}
-          style={{ display: props.hideShowAll && 'none' }}
-        >
-          {strings.AllLinksLabel}
-        </Link>
-      </div>
-      <div className={styles.links}>{generateLinks(state.linkStructure)}</div>
-    </FluentProvider>
+    <IdPrefixProvider value={fluentProviderId}>
+      <FluentProvider
+        theme={theme}
+        className={styles.quickLinks}
+        style={{ backgroundColor, boxShadow: props.renderShadow && 'var(--shadow2)' }}
+      >
+        <div className={styles.header} style={{ display: props.hideHeader && 'none' }}>
+          <InfoLabel
+            className={styles.title}
+            info={props.description}
+            style={{ display: props.hideTitle && 'none' }}
+          >
+            <span>{props.title}</span>
+          </InfoLabel>
+          <Link
+            onClick={() => window.open(props.allLinksUrl, '_blank')}
+            style={{ display: props.hideShowAll && 'none' }}
+          >
+            {strings.AllLinksLabel}
+          </Link>
+        </div>
+        <div className={styles.links}>{generateLinks(state.linkStructure)}</div>
+      </FluentProvider>
+    </IdPrefixProvider>
   )
 }
 

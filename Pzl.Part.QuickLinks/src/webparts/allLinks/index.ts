@@ -18,13 +18,11 @@ export interface IAllLinksWebPartProps {
   yourLinksTitle: string
   mandatoryLinksTitle: string
   defaultIcon: string
-  yourLinksOnTop: boolean
-  listingByCategory: boolean
-  listingByCategoryTitle: string
+  groupByCategory: boolean
 }
 
 export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebPartProps> {
-  private _themeProvider: ThemeProvider // NOTE keeping reference so that we are sure it is not going to be garbage collected
+  private _themeProvider: ThemeProvider
   private _theme: IReadonlyTheme
 
   public render(): void {
@@ -34,9 +32,7 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
       currentUserName: this.context.pageContext.user.displayName,
       defaultIcon: this.properties.defaultIcon,
       webServerRelativeUrl: this.context.pageContext.web.serverRelativeUrl,
-      yourLinksOnTop: this.properties.yourLinksOnTop,
-      listingByCategory: this.properties.listingByCategory,
-      listingByCategoryTitle: this.properties.listingByCategoryTitle,
+      groupByCategory: this.properties.groupByCategory,
       mandatoryLinksTitle: this.properties.mandatoryLinksTitle,
       recommendedLinksTitle: this.properties.recommendedLinksTitle,
       yourLinksTitle: this.properties.yourLinksTitle
@@ -70,24 +66,16 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
       pages: [
         {
           header: {
-            description: ''
+            description: strings.PropertyPane.HeaderDescription
           },
+          displayGroupsAsAccordion: true,
           groups: [
             {
+              groupName: strings.PropertyPane.GeneralGroupName,
               groupFields: [
-                PropertyPaneTextField('defaultIcon', {
-                  label: strings.PropertyPane.DefaultIcon
-                }),
-                PropertyPaneCheckbox('yourLinksOnTop', {
-                  text: strings.PropertyPane.YourLinksOnTop,
+                PropertyPaneCheckbox('groupByCategory', {
+                  text: strings.PropertyPane.GroupByCategory,
                   checked: false
-                }),
-                PropertyPaneCheckbox('listingByCategory', {
-                  text: strings.PropertyPane.ListingByCategory,
-                  checked: false
-                }),
-                PropertyPaneTextField('listingByCategoryTitle', {
-                  label: strings.PropertyPane.CategoryTitleFieldLabel
                 }),
                 PropertyPaneTextField('mandatoryLinksTitle', {
                   label: strings.PropertyPane.MandatoryLinksTitleLabel
@@ -98,6 +86,24 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
                 PropertyPaneTextField('yourLinksTitle', {
                   label: strings.PropertyPane.YourLinksTitleLabel
                 })
+              ]
+            },
+            {
+              groupName: strings.PropertyPane.AdvancedGroupName,
+              isCollapsed: true,
+              groupFields: [
+                // PropertyFieldIconPicker('defaultIcon', {
+                //   currentIcon: this.properties.defaultIcon,
+                //   key: 'defaultIconId',
+                //   onSave: (icon: string) => {
+                //     this.properties.defaultIcon = icon
+                //   },
+                //   buttonLabel: strings.PropertyPane.SelectDefaultIconLabel,
+                //   renderOption: 'panel',
+                //   properties: this.properties,
+                //   onPropertyChange: this.onPropertyPaneFieldChanged.bind(this),
+                //   label: strings.PropertyPane.DefaultIconLabel
+                // }),
               ]
             }
           ]

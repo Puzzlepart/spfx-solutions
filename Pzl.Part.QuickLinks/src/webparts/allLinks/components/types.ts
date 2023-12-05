@@ -6,18 +6,16 @@ export interface IAllLinksProps {
   currentUserName: string
   defaultIcon: string
   webServerRelativeUrl: string
-  yourLinksOnTop: boolean
-  listingByCategory: boolean
-  listingByCategoryTitle: string
+  groupByCategory: boolean
   mandatoryLinksTitle: string
   recommendedLinksTitle: string
   yourLinksTitle: string
 }
 
 export interface IAllLinksState {
-  editorLinks?: Array<Link>
-  favouriteLinks?: Array<Link>
-  mandatoryLinks?: Array<Link>
+  editorLinks?: Array<ILink>
+  favouriteLinks?: Array<ILink>
+  mandatoryLinks?: Array<ILink>
   categoryLinks?: Array<ICategory>
   loading?: boolean
   error?: boolean
@@ -25,20 +23,9 @@ export interface IAllLinksState {
   showSuccessMessage?: boolean
   currentUser?: User
   showDialog?: boolean
-  dialogData?: Link
+  dialogData?: ILink
   isFirstUpdate?: boolean
   saveButtonDisabled?: boolean
-}
-
-export interface Link {
-  id?: number
-  displayText: string
-  url: string
-  icon?: string
-  priority?: string
-  mandatory?: number
-  category?: string
-  linkType: LinkType
 }
 
 export enum LinkType {
@@ -57,10 +44,10 @@ export interface ILink {
   displayText: string
   url: string
   icon: string
-  category: string
-  priority: string
-  mandatory?: number
-  linkType: LinkType
+  category?: string
+  priority?: string
+  mandatory?: boolean
+  linkType?: LinkType
   openInSameTab?: boolean
 }
 export interface ICategory {

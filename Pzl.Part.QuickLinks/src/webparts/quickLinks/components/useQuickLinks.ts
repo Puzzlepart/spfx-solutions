@@ -6,6 +6,8 @@ import { useEffect } from 'react'
 import { useQuickLinksState } from './useQuickLinksState'
 import { ICategory, ILink, IQuickLinksProps } from './types'
 import strings from 'QuickLinksWebPartStrings'
+import tinycolor from 'tinycolor2'
+import { customDarkTheme, customLightTheme } from '../../../util/theme'
 
 /**
  * Component logic hook for `quickLinks`. This hook is responsible for
@@ -16,8 +18,9 @@ import strings from 'QuickLinksWebPartStrings'
 export const useQuickLinks = (props: IQuickLinksProps) => {
   const { state, setState } = useQuickLinksState()
 
-  const theme: IReadonlyTheme = props.theme
-  const backgroundColor: string = theme?.semanticColors?.bodyBackground ?? '#ffffff'
+  const backgroundColor: string = props.theme?.semanticColors?.bodyBackground ?? '#ffffff'
+  const theme = tinycolor(backgroundColor).isDark() ? customDarkTheme : customLightTheme
+
 
   useEffect(() => {
     fetchData()
@@ -171,6 +174,7 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
   return {
     state,
     callWebHook,
-    backgroundColor
+    backgroundColor,
+    theme
   }
 }
