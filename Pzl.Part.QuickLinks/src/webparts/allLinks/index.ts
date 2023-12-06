@@ -1,31 +1,34 @@
-import '@pnp/polyfill-ie11'
 import * as React from 'react'
 import * as ReactDom from 'react-dom'
 import * as strings from 'AllLinksWebPartStrings'
 import { sp } from '@pnp/sp'
 import { Version } from '@microsoft/sp-core-library'
-import { IAllLinksProps } from './components/IAllLinksProps'
+import { IAllLinksProps } from './components/types'
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { ThemeProvider, ThemeChangedEventArgs, IReadonlyTheme } from '@microsoft/sp-component-base'
 import {
   IPropertyPaneConfiguration,
   PropertyPaneCheckbox,
-  PropertyPaneTextField
+  PropertyPaneLabel,
+  PropertyPaneTextField,
+  PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
-import AllLinks from './components/AllLinks'
+import { AllLinks } from './components'
+import { PropertyFieldIconPicker } from '@pnp/spfx-property-controls/lib/PropertyFieldIconPicker'
 
 export interface IAllLinksWebPartProps {
   recommendedLinksTitle: string
-  myLinksTitle: string
+  recommendedLinksDescription: string
+  yourLinksTitle: string
+  yourLinksDescription: string
   mandatoryLinksTitle: string
-  defaultOfficeFabricIcon: string
-  mylinksOnTop: boolean
-  listingByCategory: boolean
-  listingByCategoryTitle: string
+  mandatoryLinksDescription: string
+  defaultIcon: string
+  groupByCategory: boolean
 }
 
 export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebPartProps> {
-  private _themeProvidor: ThemeProvider // NOTE keeping reference so that we are sure it is not going to be garbage collected
+  private _themeProvider: ThemeProvider
   private _theme: IReadonlyTheme
 
   public render(): void {
@@ -33,14 +36,15 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
       theme: this._theme,
       currentUserId: this.context.pageContext.legacyPageContext.userId,
       currentUserName: this.context.pageContext.user.displayName,
-      defaultIcon: this.properties.defaultOfficeFabricIcon,
+      defaultIcon: this.properties.defaultIcon,
       webServerRelativeUrl: this.context.pageContext.web.serverRelativeUrl,
-      mylinksOnTop: this.properties.mylinksOnTop,
-      listingByCategory: this.properties.listingByCategory,
-      listingByCategoryTitle: this.properties.listingByCategoryTitle,
+      groupByCategory: this.properties.groupByCategory,
       mandatoryLinksTitle: this.properties.mandatoryLinksTitle,
+      mandatoryLinksDescription: this.properties.mandatoryLinksDescription,
       recommendedLinksTitle: this.properties.recommendedLinksTitle,
-      myLinksTitle: this.properties.myLinksTitle
+      recommendedLinksDescription: this.properties.recommendedLinksDescription,
+      yourLinksTitle: this.properties.yourLinksTitle,
+      yourLinksDescription: this.properties.yourLinksDescription
     } as IAllLinksProps)
 
     ReactDom.render(element, this.domElement)
@@ -52,7 +56,7 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
     const themeProvider: ThemeProvider = this.context.serviceScope.consume(ThemeProvider.serviceKey)
     this._theme = themeProvider.tryGetTheme()
     themeProvider.themeChangedEvent.add(this, this._handleThemeChange)
-    this._themeProvidor = themeProvider
+    this._themeProvider = themeProvider
 
     try {
       await super.onInit()
@@ -71,33 +75,63 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
       pages: [
         {
           header: {
-            description: ''
+            description: strings.PropertyPane.HeaderDescription
           },
+          displayGroupsAsAccordion: true,
           groups: [
             {
+              groupName: strings.PropertyPane.GeneralGroupName,
               groupFields: [
-                PropertyPaneTextField('defaultOfficeFabricIcon', {
-                  label: strings.PropertyPane.DefaultOfficeFabricIcon
+                PropertyPaneTextField('yourLinksTitle', {
+                  label: strings.PropertyPane.YourLinksLabel,
+                  placeholder: strings.PropertyPane.TitlePlaceholder
                 }),
-                PropertyPaneCheckbox('mylinksOnTop', {
-                  text: strings.PropertyPane.MyLinksOnTop,
-                  checked: false
+                PropertyPaneTextField('yourLinksDescription', {
+                  placeholder: strings.PropertyPane.DescriptionPlaceholder
                 }),
-                PropertyPaneCheckbox('listingByCategory', {
-                  text: strings.PropertyPane.ListingByCategory,
-                  checked: false
-                }),
-                PropertyPaneTextField('listingByCategoryTitle', {
-                  label: strings.PropertyPane.CategoryTitleFieldLabel
+                PropertyPaneLabel('divider', {
+                  text: ' '
                 }),
                 PropertyPaneTextField('mandatoryLinksTitle', {
-                  label: strings.PropertyPane.MandatoryLinksTitleLabel
+                  label: strings.PropertyPane.MandatoryLinksLabel,
+                  placeholder: strings.PropertyPane.TitlePlaceholder
+                }),
+                PropertyPaneTextField('mandatoryLinksDescription', {
+                  placeholder: strings.PropertyPane.DescriptionPlaceholder
+                }),
+                PropertyPaneLabel('divider', {
+                  text: ' '
                 }),
                 PropertyPaneTextField('recommendedLinksTitle', {
-                  label: strings.PropertyPane.RecommendedLinksTitleLabel
+                  label: strings.PropertyPane.RecommendedLinksLabel,
+                  placeholder: strings.PropertyPane.TitlePlaceholder
                 }),
-                PropertyPaneTextField('myLinksTitle', {
-                  label: strings.PropertyPane.MyLinksTitleLabel
+                PropertyPaneTextField('recommendedLinksDescription', {
+                  placeholder: strings.PropertyPane.DescriptionPlaceholder
+                }),
+                PropertyPaneLabel('divider', {
+                  text: ' '
+                }),
+                PropertyPaneToggle('groupByCategory', {
+                  label: strings.PropertyPane.GroupByCategoryLabel
+                })
+              ]
+            },
+            {
+              groupName: strings.PropertyPane.AdvancedGroupName,
+              isCollapsed: true,
+              groupFields: [
+                PropertyFieldIconPicker('defaultIcon', {
+                  currentIcon: this.properties.defaultIcon,
+                  key: 'defaultIconId',
+                  onSave: (icon: string) => {
+                    this.properties.defaultIcon = icon
+                  },
+                  buttonLabel: strings.PropertyPane.SelectDefaultIconLabel,
+                  renderOption: 'panel',
+                  properties: this.properties,
+                  onPropertyChange: this.onPropertyPaneFieldChanged.bind(this),
+                  label: strings.PropertyPane.DefaultIconLabel
                 })
               ]
             }

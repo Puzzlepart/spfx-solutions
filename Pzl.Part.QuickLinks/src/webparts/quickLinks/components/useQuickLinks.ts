@@ -6,6 +6,8 @@ import { useEffect } from 'react'
 import { useQuickLinksState } from './useQuickLinksState'
 import { ICategory, ILink, IQuickLinksProps } from './types'
 import strings from 'QuickLinksWebPartStrings'
+import tinycolor from 'tinycolor2'
+import { customDarkTheme, customLightTheme } from '../../../util/theme'
 
 /**
  * Component logic hook for `quickLinks`. This hook is responsible for
@@ -16,14 +18,14 @@ import strings from 'QuickLinksWebPartStrings'
 export const useQuickLinks = (props: IQuickLinksProps) => {
   const { state, setState } = useQuickLinksState()
 
-  const theme: IReadonlyTheme = props.theme
-  const backgroundColor: string = theme?.semanticColors?.bodyBackground ?? '#ffffff'
+  const backgroundColor: string = props.theme?.semanticColors?.bodyBackground ?? '#ffffff'
+  const theme = tinycolor(backgroundColor).isDark() ? customDarkTheme : customLightTheme
 
   useEffect(() => {
     fetchData()
   }, [])
 
-  const fetchData = async () => {
+  const fetchData = async (): Promise<void> => {
     const searchString: string = `AuthorId eq '${props.userId}'`
 
     const editorLinks = await sp.web
@@ -31,7 +33,6 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
       .items.filter('(PzlLinkActive eq 1) and (PzlLinkMandatory eq 1)')
       .orderBy('PzlLinkPriority')
       .orderBy('Title')
-      .top(props.numberOfLinks)
       .get()
 
     const newNonMandatoryLinks = await sp.web
@@ -39,7 +40,6 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
       .items.filter('(PzlLinkActive eq 1) and (PzlLinkMandatory eq 0)')
       .orderBy('PzlLinkPriority')
       .orderBy('Title')
-      .top(props.numberOfLinks)
       .get()
 
     const newNonMandatoryLinksObject = newNonMandatoryLinks.map((link) => {
@@ -75,12 +75,12 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
     })
 
     if (favouriteLinkStrings.length > 0) {
-      const updatedFavoriteLinksObject = await checkForUpdatedLinks(
+      const updatedFavouriteLinksObject = await checkForUpdatedLinks(
         favouriteLinksObject,
         newNonMandatoryLinksObject,
         favouriteLinkStrings[0].Id
       )
-      displayLinks.push(...updatedFavoriteLinksObject)
+      displayLinks.push(...updatedFavouriteLinksObject)
     }
 
     let categories: Array<ICategory> = [
@@ -107,15 +107,15 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
   }
 
   const checkForUpdatedLinks = async (
-    userFavoriteLinks: ILink[],
-    allFavoriteLinks: ILink[],
+    userFavouriteLinks: ILink[],
+    allFavouriteLinks: ILink[],
     currentItemId: number
   ) => {
     const personalLinks: ILink[] = new Array<ILink>()
     let shouldUpdate: boolean = false
-    userFavoriteLinks.forEach((userLink: ILink): void => {
-      const linkMatch: ILink = allFavoriteLinks.find(
-        (favoriteLink) => favoriteLink.id === userLink.id
+    userFavouriteLinks.forEach((userLink: ILink): void => {
+      const linkMatch: ILink = allFavouriteLinks.find(
+        (favouriteLink) => favouriteLink.id === userLink.id
       )
       if (
         linkMatch &&
@@ -135,13 +135,13 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
     return personalLinks
   }
 
-  const updatePersonalLinks = async (newFavoriteLinks, itemId: number) => {
+  const updatePersonalLinks = async (newFavouriteLinks, itemId: number) => {
     try {
       await sp.web
         .getList(props.webServerRelativeUrl + '/Lists/FavouriteLinks')
         .items.getById(itemId)
         .update({
-          PzlPersonalLinks: JSON.stringify(newFavoriteLinks)
+          PzlPersonalLinks: JSON.stringify(newFavouriteLinks)
         })
     } catch (e) {
       console.log(e)
@@ -173,6 +173,7 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
   return {
     state,
     callWebHook,
-    backgroundColor
+    backgroundColor,
+    theme
   }
 }

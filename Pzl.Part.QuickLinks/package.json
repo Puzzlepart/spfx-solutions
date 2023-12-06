@@ -1,6 +1,6 @@
 {
   "name": "pzl-quick-links",
-  "version": "1.5.0",
+  "version": "2.0.0",
   "private": true,
   "engines": {
     "node": ">=16.13.0 <17.0.0 || >=18.17.1 <19.0.0"
@@ -28,12 +28,14 @@
     "@pnp/common": "1.3.7",
     "@pnp/logging": "1.3.7",
     "@pnp/odata": "1.3.7",
-    "@pnp/polyfill-ie11": "1.0.2",
     "@pnp/sp": "1.3.7",
+    "@pnp/spfx-controls-react": "^3.16.0",
+    "@pnp/spfx-property-controls": "^3.15.0",
     "office-ui-fabric-react": "7.199.1",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "shade-blend-color": "^1.0.0",
+    "tinycolor2": "^1.6.0",
     "tslib": "2.3.1"
   },
   "devDependencies": {
@@ -48,6 +50,7 @@
     "@types/react": "17.0.45",
     "@types/react-dom": "17.0.17",
     "@types/shade-blend-color": "^1.0.3",
+    "@types/tinycolor2": "^1.4.6",
     "@types/webpack-env": "1.17.0",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",
@@ -63,8 +66,5 @@
     "spfx-fast-serve-helpers": "~1.18.0",
     "tslint-microsoft-contrib": "5.0.0",
     "typescript": "4.7.4"
-  },
-  "overrides": {
-    "@types/react": "16.8.8"
   }
 }
