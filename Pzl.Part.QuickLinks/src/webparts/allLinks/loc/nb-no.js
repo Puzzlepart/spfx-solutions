@@ -12,7 +12,11 @@ define([], function () {
       RecommendedLinksLabel: 'Tittel og beskrivelse for \'Anbefalte lenker\'',
       SelectDefaultIconLabel: 'Velg standard ikon',
       TitlePlaceholder: 'Angi tittel...',
-      YourLinksLabel: 'Tittel og beskrivelse for \'Dine lenker\''
+      YourLinksLabel: 'Tittel og beskrivelse for \'Dine lenker\'',
+      ShowHideGroupName: 'Skjul/vis',
+      HideYourLinksLabel: 'Skjul \'Dine lenker\'',
+      HideMandatoryLinksLabel: 'Skjul \'Obligatoriske lenker\'',
+      HideRecommendedLinksLabel: 'Skjul \'Anbefalte lenker\'',
     },
     ActionRemoveMandatory: 'Obligatoriske lenker kan ikke fjernes',
     AddLabel: 'Legg til',

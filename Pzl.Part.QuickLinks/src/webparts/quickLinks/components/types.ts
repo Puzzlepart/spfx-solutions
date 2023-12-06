@@ -18,6 +18,8 @@ export interface IQuickLinksProps {
   hideHeader: boolean
   hideTitle: boolean
   hideShowAll: boolean
+  allLinksText: string
+  buttonAppearance: 'secondary' | 'primary' | 'outline' | 'subtle' | 'transparent'
 }
 
 export interface IQuickLinksState {

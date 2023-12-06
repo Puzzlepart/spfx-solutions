@@ -1,5 +1,4 @@
 import { sp } from '@pnp/sp'
-import { IReadonlyTheme } from '@microsoft/sp-component-base'
 import { isEqual } from 'lodash'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { useEffect } from 'react'

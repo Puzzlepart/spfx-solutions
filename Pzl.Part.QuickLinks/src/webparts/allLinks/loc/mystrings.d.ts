@@ -12,6 +12,10 @@ declare interface IAllLinksWebPartStrings {
     SelectDefaultIconLabel: string
     TitlePlaceholder: string
     YourLinksLabel: string
+    ShowHideGroupName: string
+    HideYourLinksLabel: string
+    HideMandatoryLinksLabel: string
+    HideRecommendedLinksLabel: string
   }
   ActionRemoveMandatory: string
   AddLabel: string

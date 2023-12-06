@@ -8,7 +8,6 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { ThemeProvider, ThemeChangedEventArgs, IReadonlyTheme } from '@microsoft/sp-component-base'
 import {
   IPropertyPaneConfiguration,
-  PropertyPaneCheckbox,
   PropertyPaneLabel,
   PropertyPaneTextField,
   PropertyPaneToggle
@@ -25,6 +24,9 @@ export interface IAllLinksWebPartProps {
   mandatoryLinksDescription: string
   defaultIcon: string
   groupByCategory: boolean
+  hideYourLinks: boolean
+  hideMandatoryLinks: boolean
+  hideRecommendedLinks: boolean
 }
 
 export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebPartProps> {
@@ -44,7 +46,10 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
       recommendedLinksTitle: this.properties.recommendedLinksTitle,
       recommendedLinksDescription: this.properties.recommendedLinksDescription,
       yourLinksTitle: this.properties.yourLinksTitle,
-      yourLinksDescription: this.properties.yourLinksDescription
+      yourLinksDescription: this.properties.yourLinksDescription,
+      hideYourLinks: this.properties.hideYourLinks,
+      hideMandatoryLinks: this.properties.hideMandatoryLinks,
+      hideRecommendedLinks: this.properties.hideRecommendedLinks
     } as IAllLinksProps)
 
     ReactDom.render(element, this.domElement)
@@ -114,6 +119,21 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
                 }),
                 PropertyPaneToggle('groupByCategory', {
                   label: strings.PropertyPane.GroupByCategoryLabel
+                })
+              ]
+            },
+            {
+              groupName: strings.PropertyPane.ShowHideGroupName,
+              isCollapsed: true,
+              groupFields: [
+                PropertyPaneToggle('hideYourLinks', {
+                  label: strings.PropertyPane.HideYourLinksLabel
+                }),
+                PropertyPaneToggle('hideMandatoryLinks', {
+                  label: strings.PropertyPane.HideMandatoryLinksLabel
+                }),
+                PropertyPaneToggle('hideRecommendedLinks', {
+                  label: strings.PropertyPane.HideRecommendedLinksLabel
                 })
               ]
             },

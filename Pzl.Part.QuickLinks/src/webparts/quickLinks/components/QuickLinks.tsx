@@ -3,6 +3,7 @@ import * as strings from 'QuickLinksWebPartStrings'
 import styles from './QuickLinks.module.scss'
 import { IQuickLinksProps, ILink, ICategory } from './types'
 import { Icon } from 'office-ui-fabric-react/lib/Icon'
+import { stringIsNullOrEmpty } from '@pnp/common'
 import { useQuickLinks } from './useQuickLinks'
 import {
   Button,
@@ -29,7 +30,7 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
               width: props.responsiveButtons || props.iconsOnly ? 'auto' : '100%'
             }}
             className={styles.link}
-            appearance='subtle'
+            appearance={props.buttonAppearance}
             size={props.iconSize >= 26 ? 'large' : props.iconSize <= 16 ? 'small' : 'medium'}
             icon={
               <Icon
@@ -81,7 +82,7 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
             onClick={() => window.open(props.allLinksUrl, '_blank')}
             style={{ display: props.hideShowAll && 'none' }}
           >
-            {strings.AllLinksLabel}
+            {stringIsNullOrEmpty(props.allLinksText) ? strings.AllLinksLabel : props.allLinksText}
           </Link>
         </div>
         <div className={styles.links}>{generateLinks(state.linkStructure)}</div>
@@ -95,5 +96,6 @@ QuickLinks.defaultProps = {
   title: strings.Title,
   description: strings.Description,
   lineHeight: 20,
-  iconSize: 20
+  iconSize: 20,
+  buttonAppearance: 'subtle'
 }

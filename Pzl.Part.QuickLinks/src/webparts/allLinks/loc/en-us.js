@@ -12,7 +12,11 @@ define([], function () {
       RecommendedLinksLabel: 'Title and description for \'Recommended links\'',
       SelectDefaultIconLabel: 'Select default icon',
       TitlePlaceholder: 'Add title...',
-      YourLinksLabel: 'Title and description for \'Your links\''
+      YourLinksLabel: 'Title and description for \'Your links\'',
+      ShowHideGroupName: 'Hide/show',
+      HideYourLinksLabel: 'Hide \'Your links\'',
+      HideMandatoryLinksLabel: 'Hide \'Mandatory links\'',
+      HideRecommendedLinksLabel: 'Hide \'Recommended links\'',
     },
     ActionRemoveMandatory: 'Mandatory links cannot be removed',
     AddLabel: 'Add',

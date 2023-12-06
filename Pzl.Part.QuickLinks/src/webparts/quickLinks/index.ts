@@ -7,6 +7,7 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { ThemeProvider, ThemeChangedEventArgs, IReadonlyTheme } from '@microsoft/sp-component-base'
 import {
   IPropertyPaneConfiguration,
+  PropertyPaneDropdown,
   PropertyPaneSlider,
   PropertyPaneTextField,
   PropertyPaneToggle
@@ -29,6 +30,8 @@ export interface IQuickLinksWebPartProps {
   hideShowAll: boolean
   renderShadow: boolean
   responsiveButtons: boolean
+  allLinksText: string
+  buttonAppearance: 'secondary' | 'primary' | 'outline' | 'subtle' | 'transparent'
 }
 
 export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinksWebPartProps> {
@@ -53,7 +56,9 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
       hideTitle: this.properties.hideTitle,
       hideShowAll: this.properties.hideShowAll,
       renderShadow: this.properties.renderShadow,
-      responsiveButtons: this.properties.responsiveButtons
+      responsiveButtons: this.properties.responsiveButtons,
+      buttonAppearance: this.properties.buttonAppearance,
+      allLinksText: this.properties.allLinksText
     })
 
     ReactDom.render(element, this.domElement)
@@ -100,6 +105,10 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
                   description: strings.PropertyPane.DescriptionFieldDescription,
                   multiline: true
                 }),
+                PropertyPaneTextField('allLinksText', {
+                  label: strings.PropertyPane.AllLinksTextFieldLabel,
+                  description: strings.PropertyPane.AllLinksTextFieldDescription
+                }),
                 PropertyPaneToggle('groupByCategory', {
                   label: strings.PropertyPane.GroupByCategoryLabel
                 })
@@ -109,6 +118,17 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
               groupName: strings.PropertyPane.StylingGroupName,
               isCollapsed: false,
               groupFields: [
+                PropertyPaneDropdown('buttonAppearance', {
+                  label: strings.PropertyPane.ButtonAppearanceLabel,
+                  selectedKey: 'subtle',
+                  options: [
+                    { key: 'secondary', text: 'Sekundær' },
+                    { key: 'primary', text: 'Primær' },
+                    { key: 'outline', text: 'Kontur' },
+                    { key: 'subtle', text: 'Subtil' },
+                    { key: 'transparent', text: 'Transparent' }
+                  ]
+                }),
                 PropertyPaneSlider('lineHeight', {
                   label: strings.PropertyPane.LineHeightLabel,
                   step: 2,

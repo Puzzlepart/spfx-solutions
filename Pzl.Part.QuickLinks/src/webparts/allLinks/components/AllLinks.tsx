@@ -43,8 +43,6 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
   } = useAllLinks(props)
   const fluentProviderId = useId('fp-all-links')
 
-  console.log({ state, props })
-
   const generateEditorLinks = (links: Array<ILink>) => {
     return links.map((link: ILink, idx: number) => {
       return (
@@ -204,45 +202,49 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
     <div className={styles.links}>{generateCategorizedLinks(state.categoryLinks)}</div>
   ) : (
     <>
-      <InfoLabel
-        className={styles.linksTitle}
-        info={
-          stringIsNullOrEmpty(props.mandatoryLinksDescription)
-            ? strings.MandatoryLinksDescription
-            : props.mandatoryLinksDescription
-        }
-      >
-        <span>
-          {stringIsNullOrEmpty(props.mandatoryLinksTitle)
-            ? strings.MandatoryLinksLabel
-            : props.mandatoryLinksTitle}
-        </span>
-      </InfoLabel>
-      {state.mandatoryLinks && (
-        <div className={styles.links}>{generateMandatoryLinks(state.mandatoryLinks)}</div>
-      )}
-      <InfoLabel
-        className={styles.linksTitle}
-        info={
-          stringIsNullOrEmpty(props.recommendedLinksDescription)
-            ? strings.RecommendedLinksDescription
-            : props.recommendedLinksDescription
-        }
-      >
-        <span>
-          {stringIsNullOrEmpty(props.recommendedLinksTitle)
-            ? strings.RecommendedLinksLabel
-            : props.recommendedLinksTitle}
-        </span>
-      </InfoLabel>
-      {state.editorLinks && (
-        <div className={styles.links}>{generateEditorLinks(state.editorLinks)}</div>
-      )}
+      <div style={{ display: props.hideMandatoryLinks && 'none' }}>
+        <InfoLabel
+          className={styles.linksTitle}
+          info={
+            stringIsNullOrEmpty(props.mandatoryLinksDescription)
+              ? strings.MandatoryLinksDescription
+              : props.mandatoryLinksDescription
+          }
+        >
+          <span>
+            {stringIsNullOrEmpty(props.mandatoryLinksTitle)
+              ? strings.MandatoryLinksLabel
+              : props.mandatoryLinksTitle}
+          </span>
+        </InfoLabel>
+        {state.mandatoryLinks && (
+          <div className={styles.links}>{generateMandatoryLinks(state.mandatoryLinks)}</div>
+        )}
+      </div>
+      <div style={{ display: props.hideRecommendedLinks && 'none' }}>
+        <InfoLabel
+          className={styles.linksTitle}
+          info={
+            stringIsNullOrEmpty(props.recommendedLinksDescription)
+              ? strings.RecommendedLinksDescription
+              : props.recommendedLinksDescription
+          }
+        >
+          <span>
+            {stringIsNullOrEmpty(props.recommendedLinksTitle)
+              ? strings.RecommendedLinksLabel
+              : props.recommendedLinksTitle}
+          </span>
+        </InfoLabel>
+        {state.editorLinks && (
+          <div className={styles.links}>{generateEditorLinks(state.editorLinks)}</div>
+        )}
+      </div>
     </>
   )
 
   const yourLinks = (
-    <>
+    <div style={{ display: props.hideYourLinks && 'none' }}>
       <InfoLabel
         className={styles.linksTitle}
         info={
@@ -333,7 +335,7 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
           </DialogSurface>
         </Dialog>
       </div>
-    </>
+    </div>
   )
 
   return (

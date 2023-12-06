@@ -13,6 +13,9 @@ export interface IAllLinksProps {
   recommendedLinksDescription: string
   yourLinksTitle: string
   yourLinksDescription: string
+  hideYourLinks: boolean
+  hideMandatoryLinks: boolean
+  hideRecommendedLinks: boolean
 }
 
 export interface IAllLinksState {
