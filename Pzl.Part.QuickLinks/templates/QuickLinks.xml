@@ -13,9 +13,9 @@
   </pnp:Localizations>
   <pnp:Templates ID="CONTAINER-PZL-QUICKLINKS">
     <pnp:ProvisioningTemplate ID="TEMPLATE-PZL-QUICKLINKS" Version="1">
-      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Oobjects/SiteFields.xml" />
-      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Oobjects/ContentTypes.xml" />
-      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Oobjects/Lists.xml" />
+      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/SiteFields.xml" />
+      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/ContentTypes.xml" />
+      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists.xml" />
     </pnp:ProvisioningTemplate>
   </pnp:Templates>
 </pnp:Provisioning>
