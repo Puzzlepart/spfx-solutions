@@ -1,0 +1,359 @@
+<style>
+  .transition, ul .linje accordion:before, ul .linje accordion:after, .message {
+    transition: all 0.25s ease-in-out;
+  }
+
+  .flipIn, ul li, .tittel {
+    animation: flipdown 0.15s ease both;
+  }
+
+  body {
+    min-height: 0;
+    display: inline-block;
+    position: relative;
+    margin: 90px 0;
+    transform: translate(-50%, 0);
+    max-width: 450px;
+    padding: 20px;
+    box-shadow: 0 10px 0 0 {{@root.theme.palette.themePrimary}};
+  }
+
+  @media (max-width: 450px) {
+    body {
+      box-sizing: border-box;
+      transform: translate(0, 0);
+      max-width: 100%;
+      min-height: 100%;
+      margin: 0;
+      left: 0;
+    }
+  }
+
+  .header {
+    min-height: 40px;
+    margin-right: 28px;
+    margin-left: 8px;
+    padding: 3px;
+    display: inline-flex;
+  }
+
+  .tittel {
+    color: black;
+    font-size: 14px;
+    font-weight: 600;
+    display: block;
+    cursor: pointer;
+  }
+
+  .message {
+    color: black;
+    font-size: 14px;
+    margin-left: 13px;
+    margin-right: 13px;
+    line-height: 16px;
+    letter-spacing: 0px;
+    position: relative;
+    overflow: hidden;
+    max-height: 800px;
+    opacity: 1;
+    transform: translate(0, 0);
+    z-index: 2;
+    white-space: pre-line;
+  }
+
+  .dato {
+    float: right;
+    display: inline-block;
+    margin-right: 15px;
+    color: black;
+  }
+
+  .tittel {
+    font-size: 14px;
+    line-height: 20px;
+    display: inline-block;
+    float: left;
+    color: black;
+  }
+
+  ul {
+    list-style: none;
+    perspective: 900;
+    padding: 0;
+    margin: 0;
+  }
+
+  .bakgrunn {
+    display: block;
+    background-color: #d8dfe2;
+    position: relative;
+    padding: 0;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    border-radius: .275rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .bakgrunn:hover {
+    display: block;
+    background-color: #c2d1d8;
+    position: relative;
+    padding: 0;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    border-radius: .275rem;
+  }
+
+  .bakgrunn.informasjon {
+    background-color: rgb(243, 242, 241); /* Grey */
+  }
+
+  .bakgrunn.informasjon:hover {
+    background-color: rgb(248, 247, 246); /* Lighter Grey */
+  }
+
+  .bakgrunn.normal {
+    background-color: rgb(223, 246, 221); /* Green */
+  }
+
+  .bakgrunn.normal:hover {
+    background-color: rgb(233, 251, 232); /* Lighter Green */
+  }
+
+  .bakgrunn.advarsel {
+    background-color: rgb(253, 231, 233); /* Red */
+  }
+
+  .bakgrunn.advarsel:hover {
+    background-color: rgb(255, 237, 239); /* Lighter Red */
+  }
+
+  .bakgrunn.varsel {
+    background-color: rgb(255, 244, 206); /* Yellow */
+  }
+
+  .bakgrunn.varsel:hover {
+    background-color: rgb(255, 249, 219); /* Lighter Yellow */
+  }
+
+  .icon-driftsmeldinger {
+    display: inline-block;
+    float: left;
+    margin: 2px 4px 0 0;
+  }
+
+  .icon-driftsmelding {
+    display: inline-block;
+    -webkit-font-smoothing: antialiased;
+    font-style: normal;
+    font-weight: normal;
+    speak: none;
+    font-family: "Fluent MDL2 Hybrid Icons";
+  }
+
+  .icon-driftsmelding.informasjon {
+    color: rgb(96, 94, 92);
+  }
+
+  .icon-driftsmelding.normal {
+    color: rgb(16, 124, 16);
+  }
+
+  .icon-driftsmelding.advarsel {
+    color: rgb(50, 49, 48);
+  }
+
+  .icon-driftsmelding.varsel {
+    color: rgb(50, 49, 48);
+  }
+
+  .preview-title {
+    display: inline;
+    font-weight: 500;
+  }
+
+  .preview-metadata {
+    margin-left: 15px;
+  }
+
+  .linje {}
+
+  ul li:nth-of-type(1) {
+    animation-delay: 0.5s;
+  }
+
+  ul li:nth-of-type(2) {
+    animation-delay: 0.75s;
+  }
+
+  ul li:nth-of-type(3) {
+    animation-delay: 1s;
+  }
+
+  ul li:last-of-type {
+    padding-bottom: 0;
+  }
+
+  ul .linje .accordion {
+    position: absolute;
+    transform: translate(-24px, 0);
+    margin-top: 10px;
+    right: 0;
+  }
+
+  .accordion:before, .accordion:after {
+    content: "";
+    position: absolute;
+    background-color: black;
+    width: 3px;
+    height: 9px;
+  }
+
+  .accordion:before {
+    transform: translate(-2px, 0) rotate(45deg);
+  }
+
+  .accordion:after {
+    transform: translate(2px, 0) rotate(-45deg);
+  }
+
+  ul .linje input[type=checkbox] {
+    position: absolute;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0;
+  }
+
+  ul .linje input[type=checkbox]:checked ~ .message {
+    margin-top: 0;
+    max-height: 0;
+    opacity: 0;
+    transform: translate(0, 50%);
+  }
+
+  ul .linje input[type=checkbox]:checked ~ .accordion:before {
+    transform: translate(2px, 0) rotate(45deg);
+    background-color: black;
+  }
+
+  ul .linje input[type=checkbox]:checked ~ .accordion:after {
+    transform: translate(-2px, 0) rotate(-45deg);
+    background-color: black;
+  }
+
+  @keyframes flipdown {
+    0% {
+      opacity: 0;
+      transform-origin: top center;
+      transform: rotateX(-90deg);
+    }
+
+    5% {
+      opacity: 1;
+    }
+
+    80% {
+      transform: rotateX(8deg);
+    }
+
+    83% {
+      transform: rotateX(6deg);
+    }
+
+    92% {
+      transform: rotateX(-3deg);
+    }
+
+    100% {
+      transform-origin: top center;
+      transform: rotateX(0deg);
+    }
+  }
+
+  .right {
+    position: absolute;
+    right: 0;
+    max-width: 450px;
+    padding: 5px;
+    border-radius: .275rem;
+    margin-right: 15px;
+    display: block;
+    background-color: #e5f1f3;
+  }
+
+  a:link {
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+  }
+
+  a:visited {
+    text-decoration: none;
+    color: black;
+    font-weight: 600;
+  }
+</style>
+
+  <div class="template">
+      <ul class="template--custom">
+          {{#each data.items as |item|}}
+              <pnp-select>
+                  <template id="content">
+                      {{#> resultTypes item=item}}
+                      <div class="linje">
+                        <div class="{{#if (contains PzlSeverity 'Advarsel')}} advarsel {{else if (contains PzlSeverity 'Varsel')}} varsel {{else if (contains PzlSeverity 'Normal')}} normal {{else if (contains PzlSeverity 'Informasjon')}} informasjon {{else}} Informasjon {{/if}} bakgrunn">
+                            <input id="check" type="checkbox" checked>
+							{{#if (or PzlContentOWSMTXT PZLLenkeTilInfoOWSURLH PzlAffectedSystems PzlConsequences PzlResponsible)}}
+							  <div class="accordion"></div>
+							{{/if}}
+                            <div class="header">
+								<div class="icon-driftsmeldinger">
+									<!-- Include icon based on PzlSeverity -->
+									{{#if (contains PzlSeverity 'Informasjon')}}
+										<i data-icon-name="Info" class="icon-driftsmelding informasjon" role="presentation"></i>
+									{{else if (contains PzlSeverity 'Normal')}}
+										<i data-icon-name="Completed" class="icon-driftsmelding normal" role="presentation"></i>
+									{{else if (contains PzlSeverity 'Advarsel')}}
+										<i data-icon-name="Warning" class="icon-driftsmelding advarsel" role="presentation"></i>
+									{{else if (contains PzlSeverity 'Varsel')}}
+										<i data-icon-name="Info" class="icon-driftsmelding varsel" role="presentation"></i>
+									{{/if}}
+								</div>
+								<div class="tittel">
+									{{getDate PzlStartDateOWSDATE 'DD.MM' 'LL'}}: {{Title}}
+								</div>
+							</div>
+                            <div class="message">
+							   {{#if PzlContentOWSMTXT}}
+									<div class="preview-metadata">{{{PzlContentOWSMTXT}}}</div>
+                               {{/if}}
+							   
+							   {{#if PzlAffectedSystems}}
+									<div class="preview-metadata"><div class="preview-title">Berørte systemer</div>: {{{PzlAffectedSystems}}}</div>
+                               {{/if}}
+							   {{#if PzlConsequences}}
+									<div class="preview-metadata"><div class="preview-title">Eventuelle senkonsekvenser</div>: {{{PzlConsequences}}}</div>
+                               {{/if}}
+							   {{#if PzlResponsible}}
+									<div class="preview-metadata"><div class="preview-title">Ansvarlig</div>: {{{PzlResponsible}}}</div>
+                               {{/if}}
+							   {{#if PZLLenkeTilInfoOWSURLH}}
+									<div class="preview-metadata">
+										<a href="{{getUrlField PZLLenkeTilInfoOWSURLH "URL"}}" target="_blank">Les mer her: {{getUrlField PZLLenkeTilInfoOWSURLH "Title"}}</a>
+									</div>
+                               {{/if}}
+							  </div>
+							  
+                              </div></div></input>
+                          </div>
+                          {{/resultTypes}}
+                  </template>
+              </pnp-select>
+          {{/each}}
+  </div>
+</content>

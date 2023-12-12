@@ -6,6 +6,7 @@ define([], function() {
         "Field_AffectedSystems_Title": "Affected services",
         "Field_Description_Title": "Description/consequence",
         "Field_Consequence_Title": "Consequence after resolution",
+        "Field_InfoLink_Title": "Link to more information",
         "Field_Responsible_Title": "Responsible",
         "Anchor_External_Title": "External link",
         "Dialog_Contact_SecondaryText": "Contact",
