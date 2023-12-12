@@ -33,19 +33,24 @@
             <CHOICE>{resource:Field_Severity_Choice_Positive}</CHOICE>
           </CHOICES>
         </Field>
+        <Field Type="URL" DisplayName="{resource:Field_InfoLink_Title}" Group="Puzzlepart" ID="{75fde8f1-5c13-4f44-9bcc-5e13aa9dcc33}" StaticName="PzlInfoLink" Name="PzlInfoLink">
+          <Format>Hyperlink</Format>
+          <MaxLength>255</MaxLength>
+        </Field>
       </pnp:SiteFields>
       <pnp:ContentTypes>
         <pnp:ContentType ID="0x01001A58CF6ADF6943E89CE71ACB741407FA" Name="{resource:ContentType_ServiceAnnouncement_Title}" Group="Puzzlepart">
           <pnp:FieldRefs>
-            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" />
-            <pnp:FieldRef ID="8cfea964-4168-4775-8970-2709d85a04cc" Name="PzlSeverity" Required="true" />
-            <pnp:FieldRef ID="f30e2a0a-80eb-4ee6-9376-b689b5c9e15c" Name="PzlForceAnnouncement" Required="false" />
-            <pnp:FieldRef ID="28b815cc-3613-4118-a1be-694b47e88ecf" Name="PzlContent" Required="true" />
-            <pnp:FieldRef ID="31cbeda7-3ddc-43c2-9f44-136147558b37" Name="PzlStartDate" Required="true" />
-            <pnp:FieldRef ID="68ba85c1-53ff-4ada-a682-e4038dcd6506" Name="PzlEndDate" Required="true" />
-            <pnp:FieldRef ID="5837187c-85c8-4fa9-87a1-4457f326df54" Name="PzlAffectedSystems" Required="false" />
-            <pnp:FieldRef ID="6f006ea9-73a4-497c-ac2c-39e0a01102d9" Name="PzlConsequences" Required="false" />
-            <pnp:FieldRef ID="078e1aaf-c463-41d3-80d4-c5239cc0986a" Name="PzlResponsible" Required="false" />
+            <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="8cfea964-4168-4775-8970-2709d85a04cc" Name="PzlSeverity" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="f30e2a0a-80eb-4ee6-9376-b689b5c9e15c" Name="PzlForceAnnouncement" Required="false" UpdateChildren="true" />
+            <pnp:FieldRef ID="28b815cc-3613-4118-a1be-694b47e88ecf" Name="PzlContent" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="31cbeda7-3ddc-43c2-9f44-136147558b37" Name="PzlStartDate" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="68ba85c1-53ff-4ada-a682-e4038dcd6506" Name="PzlEndDate" Required="true" UpdateChildren="true" />
+            <pnp:FieldRef ID="5837187c-85c8-4fa9-87a1-4457f326df54" Name="PzlAffectedSystems" Required="false" UpdateChildren="true" />
+            <pnp:FieldRef ID="6f006ea9-73a4-497c-ac2c-39e0a01102d9" Name="PzlConsequences" Required="false" UpdateChildren="true" />
+            <pnp:FieldRef ID="078e1aaf-c463-41d3-80d4-c5239cc0986a" Name="PzlResponsible" Required="false" UpdateChildren="true" />
+            <pnp:FieldRef ID="75fde8f1-5c13-4f44-9bcc-5e13aa9dcc33" Name="PzlInfoLink" Required="false" UpdateChildren="true" />
           </pnp:FieldRefs>
         </pnp:ContentType>
         <pnp:ContentType ID="0x010091D7ED8EC92C244286353A799AC347B2" Name="{resource:ContentType_NavigationHeading_Title}" Group="Puzzlepart">
@@ -283,6 +288,7 @@
                 <FieldRef Name="PzlAffectedSystems" />
                 <FieldRef Name="PzlConsequences" />
                 <FieldRef Name="PzlResponsible" />
+                <FieldRef Name="PzlInfoLink" />
               </ViewFields>
               <RowLimit Paged="TRUE">30</RowLimit>
               <JSLink>clienttemplates.js</JSLink>
@@ -290,6 +296,7 @@
           </pnp:Views>
           <pnp:FieldRefs>
             <pnp:FieldRef ID="{f30e2a0a-80eb-4ee6-9376-b689b5c9e15c}" Name="PzlForceAnnouncement" DisplayName="{resource:Field_ForceAnnouncement_Title}" />
+            <pnp:FieldRef ID="{75fde8f1-5c13-4f44-9bcc-5e13aa9dcc33}" Name="PzlInfoLink" DisplayName="{resource:Field_InfoLink_Title}" />
           </pnp:FieldRefs>
         </pnp:ListInstance>
       </pnp:Lists>

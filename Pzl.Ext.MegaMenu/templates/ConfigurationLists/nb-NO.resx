@@ -168,6 +168,9 @@
   <data name="Field_Severity_Choice_Positive" xml:space="preserve">
     <value>Normal</value>
   </data>
+  <data name="Field_InfoLink_Title" xml:space="preserve">
+    <value>Lenke til mer informasjon</value>
+  </data>
   <data name="ContentType_NavigationLink_Title" xml:space="preserve">
     <value>Navigasjonslenke</value>
   </data>

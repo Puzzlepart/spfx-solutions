@@ -13,6 +13,10 @@ export interface Announcement {
     responsible: string;
     responsibleMail: string;
     customBgColor: string;
+    infolink: {
+        Description: string;
+        Url: string;
+    };
     
     getMessageBarType():MessageBarType;
 }

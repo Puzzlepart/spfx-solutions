@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { MessageBar, MessageBarType } from 'office-ui-fabric-react/lib/MessageBar';
 import { Persona, PersonaSize } from 'office-ui-fabric-react/lib/Persona';
-import { Dialog } from 'office-ui-fabric-react/lib/Dialog';
+import { Dialog, DialogType, IconButton } from 'office-ui-fabric-react';
 import { Web } from '@pnp/sp';
 import { loadStyles } from '@microsoft/load-themed-styles';
 import ServiceAnnouncementProps from './IServiceAnnouncementProps';
@@ -25,7 +25,27 @@ export default class ServiceAnnouncement extends React.Component<ServiceAnnounce
 
     public render() {
         const announcementModal = this.state.modalShouldRender && !this.props.isMobile ?
-            <Dialog isOpen={this.state.modalShouldRender} title={this.state.modalAnnouncement.title} isBlocking={false} onDismiss={() => this.setState({ modalShouldRender: false })}>
+        <Dialog
+                isOpen={this.state.modalShouldRender}
+                title={this.state.modalAnnouncement.title}
+                isBlocking={false}
+                onDismiss={() => this.setState({ modalShouldRender: false })}
+                dialogContentProps={{
+                    type: DialogType.normal,
+                    showCloseButton: false, // Hide the default close button
+                    title: (
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <span>{this.state.modalAnnouncement.title}</span>
+                                <IconButton
+                                    iconProps={{ iconName: 'Cancel' }}
+                                    ariaLabel="Close"
+                                    onClick={() => this.setState({ modalShouldRender: false })}
+                                    styles={{ root: { position: 'absolute', top: 0, right: 0 } }} // Ensure cancel button in top right corner
+                                />
+                            </div>
+                            ),
+                }}
+        >
                 <div hidden={!this.state.modalAnnouncement.affectedSystems || this.state.modalAnnouncement.affectedSystems.length === 0}>
                     <h4>{strings.Field_AffectedSystems_Title}</h4>
                     <p>{this.state.modalAnnouncement.affectedSystems}</p>
@@ -37,6 +57,14 @@ export default class ServiceAnnouncement extends React.Component<ServiceAnnounce
                 <div hidden={!this.state.modalAnnouncement.consequence || this.state.modalAnnouncement.consequence.length === 0}>
                     <h4>{strings.Field_Consequence_Title}</h4>
                     <p>{this.state.modalAnnouncement.consequence}</p>
+                </div>
+                <div hidden={!this.state.modalAnnouncement.infolink || this.state.modalAnnouncement.infolink.Url.length === 0}>
+                    <h4>{strings.Field_InfoLink_Title}</h4>
+                    {this.state.modalAnnouncement.infolink && (
+                        <p>
+                            <a href={this.state.modalAnnouncement.infolink.Url} target="_blank" rel="noopener noreferrer">{this.state.modalAnnouncement.infolink.Description}</a>
+                        </p>
+                    )}
                 </div>
                 <div hidden={!this.state.modalAnnouncement.responsible || this.state.modalAnnouncement.responsible.length === 0}>
                     <h4>{strings.Field_Responsible_Title}</h4>
@@ -167,7 +195,8 @@ export default class ServiceAnnouncement extends React.Component<ServiceAnnounce
                 "PzlAffectedSystems",
                 "PzlForceAnnouncement",
                 "PzlStartDate",
-                "PzlEndDate")
+                "PzlEndDate",
+                "PzlInfoLink")
             .filter("(PzlStartDate le datetime'" + now.toISOString() + "') and (PzlEndDate ge datetime'" + now.toISOString() + "')" + severityFilter)
             .expand("PzlResponsible").usingCaching().get();
 
@@ -199,6 +228,7 @@ export default class ServiceAnnouncement extends React.Component<ServiceAnnounce
                 endDate: item.PzlEndDate,
                 responsible: item.PzlResponsible ? item.PzlResponsible.Title : "",
                 responsibleMail: item.PzlResponsible ? item.PzlResponsible.EMail : "",
+                infolink: item.PzlInfoLink,
                 customBgColor: bgColor,
                 getMessageBarType: function () {
                     switch (this.severity) {
