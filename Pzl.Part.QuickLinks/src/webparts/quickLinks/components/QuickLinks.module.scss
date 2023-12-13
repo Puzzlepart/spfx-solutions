@@ -40,11 +40,11 @@
       justify-content: flex-start !important;
 
       &:hover {
-        background-color: rgba(0, 0, 0, 0.06);
+        filter: brightness(0.9) !important;
       }
 
       &:active {
-        background-color: rgba(0, 0, 0, 0.12);
+        filter: brightness(0.85) !important;
       }
 
       .label {
