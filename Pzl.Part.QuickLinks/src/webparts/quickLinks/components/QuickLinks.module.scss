@@ -39,14 +39,6 @@
     .link {
       justify-content: flex-start !important;
 
-      &:hover {
-        filter: brightness(0.9) !important;
-      }
-
-      &:active {
-        filter: brightness(0.85) !important;
-      }
-
       .label {
         font-weight: var(--fontWeightRegular);
         margin: 0;
