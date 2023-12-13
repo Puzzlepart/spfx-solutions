@@ -23,21 +23,21 @@ Warning: Breaking change. Added the sort order field to the navigation links lis
 ### Setting up a list data source ###
 
 * Add a sitecollection that is called /sites/cdn (this can be configured, see guide below)
-* Install the PnP package "ConfigurationLists.xml" from './templates/ConfigurationLists' with "Apply-PnPProvisioningTemplate"
+* Install the PnP package "ConfigurationLists.xml" from './templates/ConfigurationLists' with "Invoke-PnPSiteTemplate"
 * Start populating the Nav Headings and Nav Links lists in the CDN site.
 
 ### Building the app-package ###
 
 * Ensure npm and gulp is installed globally
 * Navigate to the Pzl.MegaMenu folder and run `npm i`
-* Ensure that the config files is set up correctly:
+* Ensure that the config files is set up correctly (env.json and serve.json if serving locally)
   * `env.json`: Should contain the tenant information as well as the correct tenant and folder in the cdn (see env.sample.json for guide)
   * `serve.json`: Should contain the tenant URL and feature properties for development and debugging (see serve.sample.json for guide)
   * `package-solution.json`: Mark both versions with the correct version number. Increment if you've done noticable changes.
   * `sharepoint/assets/elements.xml`: ClientSideComponentProperties needs to be marked with the correct server relative path to the cdn.
 * Run one of the following
-  * Run the deploy command: `npm run deploy` (automatic install, requires env.json to be filled out)
-  * Run `gulp bundle --ship` and then `gulp package-solution --ship`. Finally upload the .sppkg app package from sharepoint/solution to the App Catalog in SharePoint Online.
+  * Dev and deploy: Run the deploy command: `npm run deploy` (automatic install, requires env.json to be filled out)
+  * Package&Install: Run `gulp bundle --ship` and then `gulp package-solution --ship`. Finally upload the .sppkg app package from sharepoint/solution to the App Catalog in SharePoint Online.
 
 ### Adding the mega menu app ###
 
