@@ -212,4 +212,4 @@ In this example we will demonstrate how you can use PnP Modern Search to display
 
 The result afterwards should look like below.
  
-![Service Announcements displayed using PnP Modern Search](/documentation/PnPSearchResults_Template_Driftsmeldinger.png)
+![Service Announcements displayed using PnP Modern Search](/Pzl.Ext.MegaMenu/documentation/PnPSearchResults_Template_Driftsmeldinger.png)
