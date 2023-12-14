@@ -196,6 +196,7 @@ In this example we will demonstrate how you can use PnP Modern Search to display
 1) Map the following managed properties on Tenant Level (https://tenantname-admin.sharepoint.com/_layouts/15/searchadmin/ta_listmanagedproperties.aspx?level=tenant):
 
 | MANAGED PROPERTY NAME | MAPPED CRAWLED PROPERTIES | ALIASES |
+| --- | ---| --- |
 | RefinableDate10 | OWS_PZLSTARTDATE | PzlStartDate |
 | RefinableDate11 | OWS_PZLENDDATE | PzlEndDate |
 | RefinableString10 | OWS_PZLSEVERITY | PzlSeverity  |
@@ -210,4 +211,5 @@ In this example we will demonstrate how you can use PnP Modern Search to display
 4) Add the PnP Modern Search webpart to your site and configure it to use an external template URL (page 2 of 4 in the configuration of the web part). Set Available layouts (page 2 of 4) to "Custom".
 
 The result afterwards should look like below.
+ 
 ![Service Announcements displayed using PnP Modern Search](/documentation/PnPSearchResults_Template_Driftsmeldinger.png)
