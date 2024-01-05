@@ -1,5 +1,23 @@
 @import '~@fluentui/react/dist/sass/References.scss';
 
 .myOwnedSites {
-  margin: 0;
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+
+    .toFirstPageButton {
+      margin: 0;
+    }
+
+    button {
+      margin-right: 7px;
+    }
+
+    .pageCounter {
+      height: 30px;
+      line-height: 30px;
+      margin-right: 5px;
+    }
+  }
 }
