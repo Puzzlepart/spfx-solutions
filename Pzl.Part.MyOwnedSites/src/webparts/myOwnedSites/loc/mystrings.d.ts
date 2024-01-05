@@ -1,16 +1,8 @@
 declare interface IMyOwnedSitesWebPartStrings {
-  PropertyPaneDescription: string;
-  BasicGroupName: string;
-  DescriptionFieldLabel: string;
-  AppLocalEnvironmentSharePoint: string;
-  AppLocalEnvironmentTeams: string;
-  AppLocalEnvironmentOffice: string;
-  AppLocalEnvironmentOutlook: string;
-  AppSharePointEnvironment: string;
-  AppTeamsTabEnvironment: string;
-  AppOfficeEnvironment: string;
-  AppOutlookEnvironment: string;
-  UnknownEnvironment: string;
+  SiteColumnName: string;
+  DescriptionColumnName: string;
+  CreatedDateColumnName: string;
+  LoadingSpinnerLabel: string;
 }
 
 declare module 'MyOwnedSitesWebPartStrings' {

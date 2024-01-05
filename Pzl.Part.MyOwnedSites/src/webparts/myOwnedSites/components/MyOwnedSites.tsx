@@ -5,6 +5,7 @@ import { getOwnedGroupSites } from '../helpers/data';
 import { DetailsList, IColumn, IconButton, Spinner, SpinnerSize, TooltipHost } from '@fluentui/react';
 import { IGraphSiteResponse, ISite } from '../models/types';
 import { ListColumns } from './ListColumns';
+import * as strings from 'MyOwnedSitesWebPartStrings';
 
 const { useEffect, useState } = React;
 
@@ -45,7 +46,7 @@ const MyOwnedSites: React.FC<IMyOwnedSitesProps> = ({ spfxContext }: IMyOwnedSit
   return (
     <div className={styles.myOwnedSites}>
       <>
-        {loading ? <Spinner size={SpinnerSize.large} label='Loading...' /> :
+        {loading ? <Spinner size={SpinnerSize.large} label={strings.LoadingSpinnerLabel} /> :
           <>
             {ownedGroupSites && page &&
               <>

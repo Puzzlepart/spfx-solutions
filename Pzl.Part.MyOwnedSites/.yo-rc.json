@@ -8,12 +8,12 @@
       "@microsoft/teams-js": "2.12.0"
     },
     "version": "1.18.0",
-    "libraryName": "dashboard-mysites",
+    "libraryName": "myownedsites",
     "libraryId": "060f37c2-a32c-426a-bfef-484a0fb33779",
     "environment": "spo",
     "packageManager": "npm",
-    "solutionName": "dashboard-mysites",
-    "solutionShortDescription": "dashboard-mysites description",
+    "solutionName": "myownedsites",
+    "solutionShortDescription": "myownedsites description",
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
     "componentType": "webpart"

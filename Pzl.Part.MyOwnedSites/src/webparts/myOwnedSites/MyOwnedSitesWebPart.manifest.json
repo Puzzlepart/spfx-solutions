@@ -18,9 +18,9 @@
   "preconfiguredEntries": [{
     "groupId": "5c03119e-3074-46fd-976b-c60198311f70", // Advanced
     "group": { "default": "Advanced" },
-    "title": { "default": "Puzzlepart - My owned sites" },
-    "description": { "default": "List sites owned by the user" },
-    "officeFabricIconFontName": "Page",
+    "title": { "default": "My owned sites", "nb-NO": "Områder jeg eier" },
+    "description": { "default": "List sites owned by the user", "nb-NO": "Utlisting av området hvor brukeren er eier" },
+    "officeFabricIconFontName": "CompactViewList",
     "properties": {
       "description": "List sites owned by the user"
     }

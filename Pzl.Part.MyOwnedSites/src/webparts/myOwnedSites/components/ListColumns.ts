@@ -1,24 +1,25 @@
 import { IColumn } from "@fluentui/react";
+import * as strings from 'MyOwnedSitesWebPartStrings';
 
 export const ListColumns: IColumn[] = [
     {
         key: 'displayName',
-        name: 'Site',
+        name: strings.SiteColumnName,
         minWidth: 200,
         maxWidth: 300,
         isResizable: true
     },
     {
         key: 'description',
-        name: 'Description',
+        name: strings.DescriptionColumnName,
         minWidth: 200,
         maxWidth: 300,
         isResizable: true
     },
     {
         key: 'createdDate',
-        name: 'Created date',
-        minWidth: 70,
+        name: strings.CreatedDateColumnName,
+        minWidth: 100,
         maxWidth: 100,
         isResizable: true
     },
