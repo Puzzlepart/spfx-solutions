@@ -1,16 +1,17 @@
 import * as React from 'react';
 import styles from './MyOwnedSites.module.scss';
 import type { IMyOwnedSitesProps } from './IMyOwnedSitesProps';
-import { getOwnedGroupSites } from '../helpers/data';
+import { getCreatedSites, getOwnedGroupSites } from '../helpers/data';
 import { DetailsList, IColumn, IconButton, Spinner, SpinnerSize, TooltipHost } from '@fluentui/react';
-import { IGraphSiteResponse, ISite } from '../models/types';
+import { ISiteResponse, ISite } from '../models/types';
 import { ListColumns } from './ListColumns';
 import * as strings from 'MyOwnedSitesWebPartStrings';
 
 const { useEffect, useState } = React;
 
-const MyOwnedSites: React.FC<IMyOwnedSitesProps> = ({ spfxContext }: IMyOwnedSitesProps) => {
-  const [ownedGroupSites, setOwnedGroupSites] = useState<IGraphSiteResponse>();
+const MyOwnedSites: React.FC<IMyOwnedSitesProps> = ({ spfxContext, spClient }: IMyOwnedSitesProps) => {
+  const [ownedGroupSites, setOwnedGroupSites] = useState<ISiteResponse>();
+  const [ownedSites, setOwnedSites] = useState<ISiteResponse>();
   const [selectedPage, setSelectedPage] = useState<number>(1);
   const [loadFinished, setLoadFinished] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -20,7 +21,9 @@ const MyOwnedSites: React.FC<IMyOwnedSitesProps> = ({ spfxContext }: IMyOwnedSit
     const nextPage = ownedGroupSites ? ownedGroupSites.nextPage : undefined;
     const groupSites = await getOwnedGroupSites(spfxContext, ownedGroupSites ? ownedGroupSites.pages : [], nextPage);
     if (!groupSites.nextPage) setLoadFinished(true);
-
+    const sites = await getCreatedSites(spClient, spfxContext.pageContext.user.email,ownedSites ? ownedSites.pages : [], (selectedPage - 1) * 10);
+    
+    setOwnedSites(sites);
     setOwnedGroupSites(groupSites);
     setLoading(false);
   };

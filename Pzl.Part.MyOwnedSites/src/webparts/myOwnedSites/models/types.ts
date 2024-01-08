@@ -4,10 +4,10 @@ export interface ISiteListPage {
 }
 
 export interface ISite {
-    displayName: string;
-    description: string;
-    createdDate?: string;
-    url?: string;
+    displayName: string | undefined;
+    description: string | undefined;
+    createdDate?: string | undefined;
+    url?: string | undefined;
 }
 
 export interface IGraphGroup {
@@ -16,9 +16,9 @@ export interface IGraphGroup {
     description: string;
 }
 
-export interface IGraphSiteResponse {
+export interface ISiteResponse {
     pages: ISiteListPage[];
-    nextPage: string;
+    nextPage?: string;
 }
 
 export interface IGraphBatchRequestObject {
