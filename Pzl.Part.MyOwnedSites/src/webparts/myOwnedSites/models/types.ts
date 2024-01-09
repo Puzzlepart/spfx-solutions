@@ -1,3 +1,8 @@
+export enum ResultSource {
+    SharePoint = "SharePoint",
+    Graph = "Graph"
+}
+
 export interface ISiteListPage {
     page: number;
     sites: ISite[];
@@ -19,6 +24,7 @@ export interface IGraphGroup {
 export interface ISiteResponse {
     pages: ISiteListPage[];
     nextPage?: string;
+    totalRows?: number;
 }
 
 export interface IGraphBatchRequestObject {

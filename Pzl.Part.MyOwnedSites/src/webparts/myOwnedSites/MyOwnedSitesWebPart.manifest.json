@@ -22,7 +22,7 @@
     "description": { "default": "List sites owned by the user", "nb-NO": "Utlisting av området hvor brukeren er eier" },
     "officeFabricIconFontName": "CompactViewList",
     "properties": {
-      "description": "List sites owned by the user"
+      "includeSPSites": true
     }
   }]
 }

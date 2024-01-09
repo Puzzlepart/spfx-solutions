@@ -4,11 +4,11 @@ import { Version } from '@microsoft/sp-core-library';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 import MyOwnedSites from './components/MyOwnedSites';
 import { IMyOwnedSitesProps } from './components/IMyOwnedSitesProps';
-import { IPropertyPaneConfiguration, PropertyPaneLabel } from '@microsoft/sp-property-pane';
+import { IPropertyPaneConfiguration, PropertyPaneLabel, PropertyPaneToggle } from '@microsoft/sp-property-pane';
 import { SPFI, spfi, SPFx } from "@pnp/sp";
 
 export interface IMyOwnedSitesWebPartProps {
-  description: string;
+  includeSPSites: boolean;
 }
 
 export default class MyOwnedSitesWebPart extends BaseClientSideWebPart<IMyOwnedSitesWebPartProps> {
@@ -19,7 +19,8 @@ export default class MyOwnedSitesWebPart extends BaseClientSideWebPart<IMyOwnedS
       MyOwnedSites,
       {
         spfxContext: this.context,
-        spClient: this._sp
+        spClient: this._sp,
+        includeSPSites: this.properties.includeSPSites
       }
     );
 
@@ -46,6 +47,10 @@ export default class MyOwnedSitesWebPart extends BaseClientSideWebPart<IMyOwnedS
           groups: [
             {
               groupFields: [
+                PropertyPaneToggle('includeSPSites', {
+                  label: 'Include SharePoint sites',
+                  checked: this.properties.includeSPSites
+                }),
                 PropertyPaneLabel('', {
                   text: `v${this.manifest.version}`
                 })

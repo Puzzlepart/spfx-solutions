@@ -52,7 +52,6 @@ export const getOwnedGroupSites = async (context: WebPartContext, loadedPages: I
 };
 
 export const getCreatedSites = async (client: SPFI, user: string, loadedPages: ISiteListPage[], startRow: number): Promise<ISiteResponse> => {
-    console.log(startRow);
     const previousPage = loadedPages[loadedPages.length - 1]?.page || 0;
     const page: ISiteListPage = { page: previousPage + 1, sites: [] };
 
@@ -72,5 +71,5 @@ export const getCreatedSites = async (client: SPFI, user: string, loadedPages: I
 
     page.sites = sites;
 
-    return { pages: [...loadedPages, page] };
+    return { pages: [...loadedPages, page], totalRows: result.TotalRows };
 };

@@ -3,6 +3,8 @@ declare interface IMyOwnedSitesWebPartStrings {
   DescriptionColumnName: string;
   CreatedDateColumnName: string;
   LoadingSpinnerLabel: string;
+  GroupSitesTab: string;
+  SitesTab: string;
 }
 
 declare module 'MyOwnedSitesWebPartStrings' {

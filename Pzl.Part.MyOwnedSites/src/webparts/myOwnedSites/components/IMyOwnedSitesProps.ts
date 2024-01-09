@@ -4,4 +4,5 @@ import { SPFI } from "@pnp/sp";
 export interface IMyOwnedSitesProps {
   spfxContext: WebPartContext;
   spClient: SPFI;
+  includeSPSites: boolean;
 }

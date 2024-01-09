@@ -3,6 +3,8 @@ define([], function () {
         "SiteColumnName": "Område",
         "DescriptionColumnName": "Beskrivelse",
         "CreatedDateColumnName": "Opprettet dato",
-        "LoadingSpinnerLabel": "Laster..."
+        "LoadingSpinnerLabel": "Laster...",
+        "GroupSitesTab": "Gruppeområder",
+        "SitesTab": "Områder",
     }
 });

@@ -2,34 +2,44 @@ import * as React from 'react';
 import styles from './MyOwnedSites.module.scss';
 import type { IMyOwnedSitesProps } from './IMyOwnedSitesProps';
 import { getCreatedSites, getOwnedGroupSites } from '../helpers/data';
-import { DetailsList, IColumn, IconButton, Spinner, SpinnerSize, TooltipHost } from '@fluentui/react';
-import { ISiteResponse, ISite } from '../models/types';
+import { DetailsList, IColumn, IconButton, Pivot, PivotItem, Spinner, SpinnerSize, TooltipHost } from '@fluentui/react';
+import { ISiteResponse, ISite, ISiteListPage, ResultSource } from '../models/types';
 import { ListColumns } from './ListColumns';
 import * as strings from 'MyOwnedSitesWebPartStrings';
 
 const { useEffect, useState } = React;
 
-const MyOwnedSites: React.FC<IMyOwnedSitesProps> = ({ spfxContext, spClient }: IMyOwnedSitesProps) => {
+const MyOwnedSites: React.FC<IMyOwnedSitesProps> = ({ spfxContext, spClient, includeSPSites }: IMyOwnedSitesProps) => {
   const [ownedGroupSites, setOwnedGroupSites] = useState<ISiteResponse>();
   const [ownedSites, setOwnedSites] = useState<ISiteResponse>();
   const [selectedPage, setSelectedPage] = useState<number>(1);
-  const [loadFinished, setLoadFinished] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [graphLoadFinished, setGraphLoadFinished] = useState<boolean>(false);
+  const [spLoadFinished, setSPLoadFinished] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [selectedTab, setSelectedTab] = useState<string>(strings.GroupSitesTab);
 
   const load = async (): Promise<void> => {
     setLoading(true);
     const nextPage = ownedGroupSites ? ownedGroupSites.nextPage : undefined;
-    const groupSites = await getOwnedGroupSites(spfxContext, ownedGroupSites ? ownedGroupSites.pages : [], nextPage);
-    if (!groupSites.nextPage) setLoadFinished(true);
-    const sites = await getCreatedSites(spClient, spfxContext.pageContext.user.email,ownedSites ? ownedSites.pages : [], (selectedPage - 1) * 10);
-    
-    setOwnedSites(sites);
-    setOwnedGroupSites(groupSites);
+    if (!graphLoadFinished) {
+      const groupSites = await getOwnedGroupSites(spfxContext, ownedGroupSites ? ownedGroupSites.pages : [], nextPage);
+      setOwnedGroupSites(groupSites);
+      if (!groupSites.nextPage) setGraphLoadFinished(true);
+    }
+
+    if (includeSPSites && !spLoadFinished) {
+      const sites = await getCreatedSites(spClient, spfxContext.pageContext.user.email, ownedSites ? ownedSites.pages : [], (selectedPage - 1) * 10);
+      const loadedSitesCount = sites.pages.reduce((acc, curr) => acc + curr.sites.length, 0);
+      setOwnedSites(sites);
+      if (sites.totalRows && !(loadedSitesCount < sites.totalRows)) setSPLoadFinished(true);
+    }
+
     setLoading(false);
   };
 
   useEffect(() => {
-    if (!loadFinished && (!ownedGroupSites || (ownedGroupSites && ownedGroupSites.nextPage && ownedGroupSites.pages.length < selectedPage))) {
+    if ((!graphLoadFinished && (!ownedGroupSites || (ownedGroupSites && ownedGroupSites.nextPage && ownedGroupSites.pages.length < selectedPage)))
+      || (!spLoadFinished && (!ownedSites || (ownedSites && ownedSites.pages.length < selectedPage)))) {
       //eslint-disable-next-line @typescript-eslint/no-floating-promises
       load();
     }
@@ -44,17 +54,26 @@ const MyOwnedSites: React.FC<IMyOwnedSitesProps> = ({ spfxContext, spClient }: I
     );
   };
 
-  const page = ownedGroupSites ? ownedGroupSites.pages.filter(p => p.page === selectedPage)[0] : null;
+  const getCurrentPageContents = (): ISiteListPage | undefined => {
+    if (selectedTab === strings.GroupSitesTab) {
+      return ownedGroupSites ? ownedGroupSites.pages.filter(p => p.page === selectedPage)[0] : undefined;
+    }
+    if (selectedTab === strings.SitesTab) {
+      return ownedSites ? ownedSites.pages.filter(p => p.page === selectedPage)[0] : undefined;
+    }
+  };
 
-  return (
-    <div className={styles.myOwnedSites}>
+  const page = getCurrentPageContents();
+
+  const renderList = (sites: ISiteResponse | undefined, pageContents: ISiteListPage | undefined, source: ResultSource): JSX.Element => {
+    return (
       <>
-        {loading ? <Spinner size={SpinnerSize.large} label={strings.LoadingSpinnerLabel} /> :
+        {loading ? <Spinner className={styles.loadingSpinner} size={SpinnerSize.large} label={strings.LoadingSpinnerLabel} /> :
           <>
-            {ownedGroupSites && page &&
+            {sites && pageContents &&
               <>
                 <DetailsList
-                  items={page.sites}
+                  items={pageContents.sites}
                   columns={ListColumns}
                   onRenderItemColumn={onRenderItemColumn}
                 />
@@ -66,7 +85,7 @@ const MyOwnedSites: React.FC<IMyOwnedSitesProps> = ({ spfxContext, spClient }: I
                     </>
                   }
                   <div className={styles.pageCounter}>{selectedPage}</div>
-                  {ownedGroupSites && ownedGroupSites.nextPage &&
+                  {sites && ((source === ResultSource.Graph && !graphLoadFinished) || (source === ResultSource.SharePoint && !spLoadFinished) || (sites.pages.length > selectedPage)) &&
                     <IconButton iconProps={{ iconName: 'ChevronRight' }} onClick={() => setSelectedPage(selectedPage + 1)} />
                   }
                 </div>
@@ -75,6 +94,30 @@ const MyOwnedSites: React.FC<IMyOwnedSitesProps> = ({ spfxContext, spClient }: I
           </>
         }
       </>
+    );
+  };
+
+  if (includeSPSites) {
+    return (
+      <div className={styles.myOwnedSites}>
+        <>
+          <Pivot onLinkClick={(tab) => {
+            setSelectedTab(tab?.props.headerText || '');
+            setSelectedPage(1);
+          }}>
+            <PivotItem headerText={strings.GroupSitesTab}>
+              {renderList(ownedGroupSites, page || { page: 1, sites: [] }, ResultSource.Graph)}
+            </PivotItem>
+            <PivotItem headerText={strings.SitesTab}>
+              {renderList(ownedSites, page || { page: 1, sites: [] }, ResultSource.SharePoint)}
+            </PivotItem>
+          </Pivot>
+        </>
+      </div>
+    );
+  } else return (
+    <div className={styles.myOwnedSites}>
+      {renderList(ownedGroupSites, page || { page: 1, sites: [] }, ResultSource.Graph)}
     </div>
   );
 }
