@@ -65,7 +65,7 @@
     <value>Personal link</value>
   </data>
   <data name="QuickLinks_ContentTypes_Name_RecommendedLink" xml:space="preserve">
-    <value>Link</value>
+    <value>Recommended Link</value>
   </data>
   <data name="QuickLinks_SiteFields_Name_LinkActive" xml:space="preserve">
     <value>Active</value>
