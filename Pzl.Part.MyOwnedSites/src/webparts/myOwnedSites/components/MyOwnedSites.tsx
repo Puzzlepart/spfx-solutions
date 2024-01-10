@@ -6,6 +6,7 @@ import { DetailsList, IColumn, IconButton, Pivot, PivotItem, Spinner, SpinnerSiz
 import { ISiteResponse, ISite, ISiteListPage, ResultSource } from '../models/types';
 import { ListColumns } from './ListColumns';
 import * as strings from 'MyOwnedSitesWebPartStrings';
+import useLocationHash from './useLocationHash';
 
 const { useEffect, useState } = React;
 
@@ -18,17 +19,27 @@ const MyOwnedSites: React.FC<IMyOwnedSitesProps> = ({ spfxContext, spClient, inc
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedTab, setSelectedTab] = useState<string>(strings.GroupSitesTab);
 
+  const hash = useLocationHash();
+
+  const reset = (): void => {
+    setOwnedGroupSites(undefined);
+    setOwnedSites(undefined);
+    setGraphLoadFinished(false);
+    setSPLoadFinished(false);
+    setSelectedPage(0);
+  };
+
   const load = async (): Promise<void> => {
     setLoading(true);
     const nextPage = ownedGroupSites ? ownedGroupSites.nextPage : undefined;
     if (!graphLoadFinished) {
-      const groupSites = await getOwnedGroupSites(spfxContext, ownedGroupSites ? ownedGroupSites.pages : [], nextPage);
+      const groupSites = await getOwnedGroupSites(spfxContext, ownedGroupSites ? ownedGroupSites.pages : [], nextPage, hash);
       setOwnedGroupSites(groupSites);
       if (!groupSites.nextPage) setGraphLoadFinished(true);
     }
 
     if (includeSPSites && !spLoadFinished) {
-      const sites = await getCreatedSites(spClient, spfxContext.pageContext.user.email, ownedSites ? ownedSites.pages : [], (selectedPage - 1) * 10);
+      const sites = await getCreatedSites(spClient, spfxContext.pageContext.user.email, ownedSites ? ownedSites.pages : [], (selectedPage - 1) * 10, hash);
       const loadedSitesCount = sites.pages.reduce((acc, curr) => acc + curr.sites.length, 0);
       setOwnedSites(sites);
       if (sites.totalRows && !(loadedSitesCount < sites.totalRows)) setSPLoadFinished(true);
@@ -38,12 +49,19 @@ const MyOwnedSites: React.FC<IMyOwnedSitesProps> = ({ spfxContext, spClient, inc
   };
 
   useEffect(() => {
-    if ((!graphLoadFinished && (!ownedGroupSites || (ownedGroupSites && ownedGroupSites.nextPage && ownedGroupSites.pages.length < selectedPage)))
-      || (!spLoadFinished && (!ownedSites || (ownedSites && ownedSites.pages.length < selectedPage)))) {
-      //eslint-disable-next-line @typescript-eslint/no-floating-promises
-      load();
-    }
+    if (selectedPage > 0) {
+      if ((!graphLoadFinished && (!ownedGroupSites || (ownedGroupSites && ownedGroupSites.nextPage && ownedGroupSites.pages.length < selectedPage)))
+        || (!spLoadFinished && (!ownedSites || (ownedSites && ownedSites.pages.length < selectedPage)))) {
+        //eslint-disable-next-line @typescript-eslint/no-floating-promises
+        load();
+      }
+    } else setSelectedPage(1);
+
   }, [selectedPage]);
+
+  useEffect(() => {
+    reset();
+  }, [hash]);
 
   const onRenderItemColumn = (item: ISite, index: number, column: IColumn): JSX.Element => {
     if (column.key === 'displayName') return <a href={item.url} target='_blank' rel='noopener noreferrer'>{item.displayName}</a>;

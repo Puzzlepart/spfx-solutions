@@ -1,42 +1,42 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
-  "solution": {
-    "name": "Puzzlepart - My owned sites",
-    "id": "060f37c2-a32c-426a-bfef-484a0fb33779",
-    "version": "0.1.0.0",
-    "includeClientSideAssets": true,
-    "skipFeatureDeployment": true,
-    "isDomainIsolated": false,
-    "developer": {
-      "name": "Puzzlepart AS",
-      "websiteUrl": "https://puzzlepart.com",
-      "privacyUrl": "https://privacy.microsoft.com/en-us/privacystatement",
-      "termsOfUseUrl": "https://go.microsoft.com/fwlink/?linkid=2039674",
-      "mpnId": "5128564"
+    "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+    "solution": {
+        "name": "Puzzlepart - My owned sites",
+        "id": "060f37c2-a32c-426a-bfef-484a0fb33779",
+        "version": "1.0.0.0",
+        "includeClientSideAssets": true,
+        "skipFeatureDeployment": true,
+        "isDomainIsolated": false,
+        "developer": {
+            "name": "Puzzlepart AS",
+            "websiteUrl": "https://puzzlepart.com",
+            "privacyUrl": "https://privacy.microsoft.com/en-us/privacystatement",
+            "termsOfUseUrl": "https://go.microsoft.com/fwlink/?linkid=2039674",
+            "mpnId": "5128564"
+        },
+        "metadata": {
+            "shortDescription": {
+                "default": "List sites owned by the user",
+                "nb-NO": "Utlisting av området hvor brukeren er eier"
+            },
+            "longDescription": {
+                "default": "List sites owned by the user",
+                "nb-NO": "Utlisting av området hvor brukeren er eier"
+            },
+            "screenshotPaths": [],
+            "videoUrl": "",
+            "categories": []
+        },
+        "features": [
+            {
+                "title": "My owned sites Feature",
+                "description": "The feature that activates elements of the myownedsites solution.",
+                "id": "908dcc6a-fafa-4cc8-a44f-81a154c2bfaa",
+                "version": "1.0.0.0"
+            }
+        ]
     },
-    "metadata": {
-      "shortDescription": {
-        "default": "List sites owned by the user", 
-        "nb-NO": "Utlisting av området hvor brukeren er eier"
-      },
-      "longDescription": {
-        "default": "List sites owned by the user", 
-        "nb-NO": "Utlisting av området hvor brukeren er eier"
-      },
-      "screenshotPaths": [],
-      "videoUrl": "",
-      "categories": []
-    },
-    "features": [
-      {
-        "title": "My owned sites Feature",
-        "description": "The feature that activates elements of the myownedsites solution.",
-        "id": "908dcc6a-fafa-4cc8-a44f-81a154c2bfaa",
-        "version": "1.0.0.0"
-      }
-    ]
-  },
-  "paths": {
-    "zippedPackage": "solution/pzl-part-myownedsites.sppkg"
-  }
+    "paths": {
+        "zippedPackage": "solution/pzl-part-myownedsites.sppkg"
+    }
 }
