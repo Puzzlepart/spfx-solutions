@@ -3,7 +3,7 @@
     "solution": {
         "name": "Puzzlepart - My owned sites",
         "id": "060f37c2-a32c-426a-bfef-484a0fb33779",
-        "version": "1.0.0.0",
+        "version": "1.0.2.0",
         "includeClientSideAssets": true,
         "skipFeatureDeployment": true,
         "isDomainIsolated": false,
@@ -14,6 +14,16 @@
             "termsOfUseUrl": "https://go.microsoft.com/fwlink/?linkid=2039674",
             "mpnId": "5128564"
         },
+        "webApiPermissionRequests": [
+            {
+                "resource": "Microsoft Graph",
+                "scope": "User.Read"
+            },
+            {
+                "resource": "Microsoft Graph",
+                "scope": "Group.Read.All"
+            }
+        ],
         "metadata": {
             "shortDescription": {
                 "default": "List sites owned by the user",
