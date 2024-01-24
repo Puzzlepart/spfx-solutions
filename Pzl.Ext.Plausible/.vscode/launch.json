@@ -5,7 +5,7 @@
       "name": "Hosted workbench",
       "type": "edge",
       "request": "launch",
-      "url": "https://puzzlepart.sharepoint.com/sites/Intranett/_layouts/workbench.aspx",
+      "url": "https://<your tenant>.sharepoint.com/_layouts/workbench.aspx",
       "webRoot": "${workspaceRoot}",
       "sourceMaps": true,
       "sourceMapPathOverrides": {
