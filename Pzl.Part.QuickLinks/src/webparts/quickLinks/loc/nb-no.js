@@ -10,6 +10,8 @@ define([], function () {
       DescriptionFieldDescription: 'Beskrivelse av webdelen, dukker opp ved trykk på info-ikonet ved siden av tittel.',
       DescriptionFieldLabel: 'Beskrivelse',
       GeneralGroupName: 'Generelt',
+      GlobalConfigurationUrlLabel: 'Global konfigurasjon',
+      GlobalConfigurationUrlDescription: 'Her kan du angi en global konfigurasjon. Angi absolutt URL til området du ønsker å hente lenker fra. Dette området må inneholde listene \'Anbefalte lenker\' og \'Personlige lenker\' for at dette skal fungere. Eksempel: https://contoso.sharepoint.com eller https://contoso.sharepoint.com/sites/contoso',
       GroupByCategoryLabel: 'Grupper etter kategorier',
       HeaderDescription: 'Konfigurasjon av webdelen',
       HideHeaderLabel: 'Skjul header',

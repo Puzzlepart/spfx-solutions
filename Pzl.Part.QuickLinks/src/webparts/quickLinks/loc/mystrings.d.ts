@@ -9,6 +9,8 @@ declare interface IQuickLinksWebPartStrings {
     DescriptionFieldDescription: string
     DescriptionFieldLabel: string
     GeneralGroupName: string
+    GlobalConfigurationUrlLabel: string
+    GlobalConfigurationUrlDescription: string
     GroupByCategoryLabel: string
     HeaderDescription: string
     HideHeaderLabel: string

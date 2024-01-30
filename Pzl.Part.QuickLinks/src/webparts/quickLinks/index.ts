@@ -14,6 +14,7 @@ import {
 } from '@microsoft/sp-property-pane'
 import { IQuickLinksProps, QuickLinks } from './components'
 import { PropertyFieldIconPicker } from '@pnp/spfx-property-controls/lib/PropertyFieldIconPicker'
+import { stringIsNullOrEmpty } from '@pnp/common'
 
 export interface IQuickLinksWebPartProps {
   title: string
@@ -32,6 +33,7 @@ export interface IQuickLinksWebPartProps {
   responsiveButtons: boolean
   allLinksText: string
   buttonAppearance: 'secondary' | 'primary' | 'outline' | 'subtle' | 'transparent'
+  globalConfigurationUrl: string
 }
 
 export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinksWebPartProps> {
@@ -58,14 +60,21 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
       renderShadow: this.properties.renderShadow,
       responsiveButtons: this.properties.responsiveButtons,
       buttonAppearance: this.properties.buttonAppearance,
-      allLinksText: this.properties.allLinksText
+      allLinksText: this.properties.allLinksText,
+      globalConfigurationUrl: this.properties.globalConfigurationUrl,
     })
 
     ReactDom.render(element, this.domElement)
   }
+
+
   public async onInit(): Promise<void> {
+
     sp.setup({
-      spfxContext: this.context
+      spfxContext: this.context,
+      sp: !stringIsNullOrEmpty(this.properties.globalConfigurationUrl) && {
+        baseUrl: this.properties.globalConfigurationUrl
+      }
     })
 
     const themeProvider: ThemeProvider = this.context.serviceScope.consume(ThemeProvider.serviceKey)
@@ -80,6 +89,7 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
       return
     }
   }
+
   protected get dataVersion(): Version {
     return Version.parse('1.0')
   }
@@ -174,6 +184,10 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
               groupName: strings.PropertyPane.AdvancedGroupName,
               isCollapsed: true,
               groupFields: [
+                PropertyPaneTextField('globalConfigurationUrl', {
+                  label: strings.PropertyPane.GlobalConfigurationUrlLabel,
+                  description: strings.PropertyPane.GlobalConfigurationUrlDescription
+                }),
                 PropertyPaneTextField('allLinksUrl', {
                   label: strings.PropertyPane.AllLinksUrlLabel
                 }),

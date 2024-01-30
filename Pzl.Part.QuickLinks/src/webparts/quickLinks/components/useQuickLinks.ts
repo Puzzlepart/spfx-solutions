@@ -26,16 +26,29 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
 
   const fetchData = async (): Promise<void> => {
     const searchString: string = `AuthorId eq '${props.userId}'`
+    let webServerRelativeUrl: string = props.webServerRelativeUrl
+
+    if (props.globalConfigurationUrl) {
+      const web = await sp.web.get()
+      const webUrl = web.Url
+      const sitesIndex = webUrl.indexOf('/sites/')
+
+      if (sitesIndex > -1) {
+        webServerRelativeUrl = webUrl.substring(sitesIndex)
+      } else {
+        webServerRelativeUrl = ''
+      }
+    }
 
     const editorLinks = await sp.web
-      .getList(props.webServerRelativeUrl + '/Lists/EditorLinks')
+      .getList(`${webServerRelativeUrl}/Lists/EditorLinks`)
       .items.filter('(PzlLinkActive eq 1) and (PzlLinkMandatory eq 1)')
       .orderBy('PzlLinkPriority')
       .orderBy('Title')
       .get()
 
     const newNonMandatoryLinks = await sp.web
-      .getList(props.webServerRelativeUrl + '/Lists/EditorLinks')
+      .getList(`${webServerRelativeUrl}/Lists/EditorLinks`)
       .items.filter('(PzlLinkActive eq 1) and (PzlLinkMandatory eq 0)')
       .orderBy('PzlLinkPriority')
       .orderBy('Title')
@@ -54,7 +67,7 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
     })
 
     const favouriteLinkStrings = await sp.web
-      .getList(props.webServerRelativeUrl + '/Lists/FavouriteLinks')
+      .getList(`${webServerRelativeUrl}/Lists/FavouriteLinks`)
       .items.select('Id', 'AuthorId', 'PzlPersonalLinks')
       .filter(searchString)
       .get()

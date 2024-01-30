@@ -20,6 +20,7 @@ export interface IQuickLinksProps {
   hideShowAll: boolean
   allLinksText: string
   buttonAppearance: 'secondary' | 'primary' | 'outline' | 'subtle' | 'transparent'
+  globalConfigurationUrl: string
 }
 
 export interface IQuickLinksState {

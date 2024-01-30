@@ -10,6 +10,8 @@ define([], function () {
       DescriptionFieldDescription: 'Description of the web part, shown when clicking the info icon next to the title.',
       DescriptionFieldLabel: 'Description',
       GeneralGroupName: 'General',
+      GlobalConfigurationUrlLabel: 'Global configuration',
+      GlobalConfigurationUrlDescription: 'Here you can add a global configuration. Add the absolute URL to the site you want to fetch links from. This site must contain the lists \'Editor links\' and \'Favourite links\' for this to work. Example: https://contoso.sharepoint.com or https://contoso.sharepoint.com/sites/contoso',
       GroupByCategoryLabel: 'Group by category',
       HeaderDescription: 'Configuration of the web part',
       HideHeaderLabel: 'Hide header',
