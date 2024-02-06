@@ -300,15 +300,31 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
                   />
                 </Field>
                 <Field label={strings.IconLabel}>
-                  <IconPicker
-                    buttonLabel={strings.IconButtonLabel}
-                    onChange={(icon: string) => {
-                      onDialogValueChanged('icon', icon)
-                    }}
-                    onSave={(icon: string) => {
-                      onDialogValueChanged('icon', icon)
-                    }}
-                  />
+                  <div className={styles.iconField}>
+                    <IconPicker
+                      useStartsWithSearch
+                      buttonLabel={strings.IconButtonLabel}
+                      currentIcon={state.dialogData?.icon}
+                      onChange={(icon: string) => {
+                        onDialogValueChanged('icon', icon)
+                      }}
+                      panelClassName='iconPickerPanel'
+                      onSave={(icon: string) => {
+                        onDialogValueChanged('icon', icon)
+                      }}
+                    />
+                    <MessageBar className={styles.iconMessage} intent='info' icon={null}>
+                      <div className={styles.selectedIcon}>
+                        {strings.SelectedIconLabel}
+                        <Icon
+                          iconName={
+                            state.dialogData?.icon ? state.dialogData?.icon : props.defaultIcon
+                          }
+                        />
+                        {`(${state.dialogData?.icon ? state.dialogData?.icon : props.defaultIcon})`}
+                      </div>
+                    </MessageBar>
+                  </div>
                 </Field>
               </DialogContent>
               <DialogActions>

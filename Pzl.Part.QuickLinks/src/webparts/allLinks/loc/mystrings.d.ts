@@ -31,6 +31,7 @@ declare interface IAllLinksWebPartStrings {
   SaveErrorLabel: string
   SaveOkLabel: string
   SaveYourLinksLabel: string
+  SelectedIconLabel: string
   TitleLabel: string
   TitlePlaceholder: string
   UrlPlaceholder: string

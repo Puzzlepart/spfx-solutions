@@ -61,15 +61,13 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
       responsiveButtons: this.properties.responsiveButtons,
       buttonAppearance: this.properties.buttonAppearance,
       allLinksText: this.properties.allLinksText,
-      globalConfigurationUrl: this.properties.globalConfigurationUrl,
+      globalConfigurationUrl: this.properties.globalConfigurationUrl
     })
 
     ReactDom.render(element, this.domElement)
   }
 
-
   public async onInit(): Promise<void> {
-
     sp.setup({
       spfxContext: this.context,
       sp: !stringIsNullOrEmpty(this.properties.globalConfigurationUrl) && {

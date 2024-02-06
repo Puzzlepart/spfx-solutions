@@ -32,6 +32,7 @@ define([], function () {
     SaveErrorLabel: 'Feil: noe gikk galt under lagring av dine lenker.',
     SaveOkLabel: 'Dine lenker er lagret.',
     SaveYourLinksLabel: 'Lagre dine lenker',
+    SelectedIconLabel: 'Valgt ikon: ',
     TitleLabel: 'Tittel',
     TitlePlaceholder: 'Angi tittel for lenken her...',
     UrlValidationLabel: 'Legg til en gyldig URL for lenken, inkludert http(s)://',

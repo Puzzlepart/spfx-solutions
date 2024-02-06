@@ -32,6 +32,7 @@ define([], function () {
     SaveErrorLabel: 'Error: something went wrong saving your links.',
     SaveOkLabel: 'Your links was saved succesfully.',
     SaveYourLinksLabel: 'Save your links',
+    SelectedIconLabel: 'Selected icon: ',
     TitleLabel: 'Title',
     TitlePlaceholder: 'Add link title here...',
     UrlPlaceholder: 'Add your link URL here...',
@@ -39,4 +40,4 @@ define([], function () {
     YourLinksLabel: 'Your links',
     YourLinksDescription: 'Here you can add and manage your own links. To remove a link, clikc the - button.'
   }
-});
+})

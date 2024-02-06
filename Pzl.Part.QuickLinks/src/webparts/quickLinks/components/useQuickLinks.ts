@@ -25,13 +25,15 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
   }, [])
 
   const fetchData = async (): Promise<void> => {
-    const searchString: string = `AuthorId eq '${props.userId}'`
     let webServerRelativeUrl: string = props.webServerRelativeUrl
+    let searchString: string = `AuthorId eq '${props.userId}'`
 
     if (props.globalConfigurationUrl) {
       const web = await sp.web.get()
+      const userId = (await sp.web.currentUser.get()).Id
       const webUrl = web.Url
       const sitesIndex = webUrl.indexOf('/sites/')
+      searchString = `AuthorId eq '${userId}'`
 
       if (sitesIndex > -1) {
         webServerRelativeUrl = webUrl.substring(sitesIndex)
