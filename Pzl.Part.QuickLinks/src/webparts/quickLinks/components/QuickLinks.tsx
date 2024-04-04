@@ -79,6 +79,7 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
             <span>{props.title}</span>
           </InfoLabel>
           <Link
+            className={styles.showAll}
             onClick={() => window.open(props.allLinksUrl, '_blank')}
             style={{ display: props.hideShowAll && 'none' }}
           >

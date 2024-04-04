@@ -26,6 +26,14 @@
         font-weight: 600;
       }
     }
+
+    .showAll {
+      color: var(--colorNeutralForeground2);
+
+      &:hover {
+        color: var(--colorNeutralForeground2Hover);
+      }
+    }
   }
 
   .links {
