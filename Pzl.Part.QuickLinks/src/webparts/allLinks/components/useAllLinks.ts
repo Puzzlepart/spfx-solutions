@@ -225,7 +225,7 @@ export const useAllLinks = (props: IAllLinksProps) => {
           })
           .sort()
         categoryNames = categoryNames.filter((item, index) => {
-          return categoryNames.indexOf(item) == index
+          return categoryNames.indexOf(item) === index
         })
         categories = categoryNames.map((catName) => {
           return {
