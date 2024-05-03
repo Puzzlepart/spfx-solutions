@@ -19,6 +19,7 @@ export interface IRssFeedWebPartProps {
   seeAllUrl: string;
   showItemDescription: boolean;
   showItemPubDate: boolean;
+  showItemSource: boolean;
   showItemImage: boolean;
 }
 
@@ -34,6 +35,7 @@ export default class RssFeedWebPart extends BaseClientSideWebPart<IRssFeedWebPar
         officeUIFabricIcon: this.properties.officeUIFabricIcon,
         showItemDescription: this.properties.showItemDescription,
         showItemPubDate: this.properties.showItemPubDate,
+        showItemSource: this.properties.showItemSource,
         showItemImage: this.properties.showItemImage,
         updateProperty: (value: string) => {
           this.properties.title = value;
@@ -93,6 +95,9 @@ export default class RssFeedWebPart extends BaseClientSideWebPart<IRssFeedWebPar
                 }),
                 PropertyPaneToggle('showItemPubDate', {
                   label: strings.ItemPubDateLabel
+                }),
+                PropertyPaneToggle('showItemSource', {
+                  label: strings.ItemSourceLabel
                 }),
                 PropertyPaneToggle('showItemImage', {
                   label: strings.ItemImageLabel

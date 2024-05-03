@@ -8,6 +8,7 @@ declare interface IRssFeedWebPartStrings {
   IconLabel: string;
   ItemDescriptionLabel: string;
   ItemPubDateLabel: string;
+  ItemSourceLabel: string;
   ItemImageLabel: string;
   CacheExpirationTimeFieldLabel: string;
   CacheExpirationTimeFieldDescription: string;

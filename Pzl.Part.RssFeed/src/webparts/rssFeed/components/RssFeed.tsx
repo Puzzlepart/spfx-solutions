@@ -14,6 +14,7 @@ export interface IRssFeedEnclosure {
 }
 export interface IRssFeedItem {
   title: string;
+  author: string;
   pubDate: string;
   link: string;
   description: string;
@@ -29,6 +30,7 @@ export interface IRssFeedProps {
   officeUIFabricIcon: string;
   showItemDescription: boolean;
   showItemPubDate: boolean;
+  showItemSource: boolean;
   showItemImage: boolean;
   displayMode: DisplayMode;
   context: WebPartContext;
@@ -55,6 +57,7 @@ export const RssFeed: React.FunctionComponent<IRssFeedProps> = (props) => {
         return await response.json();
       }, moment(now).add(props.cacheDuration, 'm').toDate());
 
+      console.log(json.items)
       setItems((json.items) ? json.items.splice(0, props.itemsCount) : []);
     };
 
@@ -112,7 +115,11 @@ export const RssFeed: React.FunctionComponent<IRssFeedProps> = (props) => {
                   <div className={`${styles.listItemTitle}`}>
                     {item.title}
                   </div>
+                  <div className={styles.publish}>
                     {item.pubDate && props.showItemPubDate ? <div className={`${styles.listItemPubDate}`}>{moment(item.pubDate).format("DD.MM.YYYY")}</div> : ''}
+                    {item.author && props.showItemSource ? <div className={`${styles.listItemSource}`}>({item.author})</div> : ''}
+
+                  </div>
                     {item.description && props.showItemDescription ? <div className={`${styles.listItemDescription}`} dangerouslySetInnerHTML={{ __html: item.description }} /> : ''}
                 </div>
                   {item.enclosure && item.enclosure.link && props.showItemImage ? <div className={styles.image}><img src={getThumbnail(item)} alt={item.title} /></div> : ''}

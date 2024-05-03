@@ -1,4 +1,4 @@
-@import '~@fluentui/react/dist/sass/References.scss';
+@import "~@fluentui/react/dist/sass/References.scss";
 
 :global {
   .emphasisBackground-67 {
@@ -25,7 +25,7 @@
     .showAll {
       float: right;
 
-      >span {
+      > span {
         text-decoration: none;
         font-size: 14px;
         font-weight: 400;
@@ -59,7 +59,8 @@
       font-size: 25px;
     }
 
-    .contentWithImage, .contentNoImage {
+    .contentWithImage,
+    .contentNoImage {
       @include ms-Grid-col;
       @include ms-sm10;
 
@@ -77,7 +78,7 @@
         }
       }
     }
-    
+
     .contentWithImage {
       .containerText {
         @include ms-sm9;
@@ -98,16 +99,24 @@
       @include ms-font-l;
       overflow: hidden;
     }
-  
-    .listItemPubDate {
-      @include ms-font-s;
-      padding-top: 5px;
+
+    .publish {
+      display: flex;
+      gap: 4px;
+
+      .listItemPubDate {
+        @include ms-font-s;
+        padding-top: 5px;
+      }
+
+      .listItemSource {
+        @include ms-font-s;
+        padding-top: 5px;
+      }
     }
   }
 
   .listItem:hover {
-    background-color: rgba(0, 0, 0, 0.060);
+    background-color: rgba(0, 0, 0, 0.06);
   }
-
-
 }

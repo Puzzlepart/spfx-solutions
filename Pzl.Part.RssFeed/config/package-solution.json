@@ -4,7 +4,7 @@
     "title": "RSS-Feed by Puzzlepart",
     "name": "pzl-rssfeed-webpart",
     "id": "9e4eb1e9-89a9-40a3-a486-4a61090f8def",
-    "version": "1.1.1.1",
+    "version": "1.2.0.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
@@ -31,7 +31,7 @@
         "title": "pzl-rss-feed RssFeedWebPart Feature",
         "description": "The feature that activates RssFeedWebPart from the pzl-rss-feed solution.",
         "id": "65315586-9600-4d76-9a87-d0ec4aa8c1e2",
-        "version": "1.1.1.0",
+        "version": "1.2.0.0",
         "componentIds": [
           "65315586-9600-4d76-9a87-d0ec4aa8c1e2"
         ]

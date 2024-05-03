@@ -33,3 +33,4 @@ obj
 
 .heft
 release
+*.scss.d.ts
