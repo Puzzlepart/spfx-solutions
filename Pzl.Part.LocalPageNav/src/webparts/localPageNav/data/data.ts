@@ -1,5 +1,4 @@
 import { INavLink, INavLinkGroup } from 'office-ui-fabric-react';
-import { includes } from 'lodash';
 
 /**
  * Gets navigation links from the given heading selector.
@@ -8,21 +7,22 @@ import { includes } from 'lodash';
  * @returns Navigation links grouped by their position on the page.
  */
 export const getNavLinks = (selector: string[]): INavLinkGroup => {
-    let map = {}, links = [];
+    const map: Record<string, number> = {};
+    const links: INavLink[] = [];
 
-    const nodes: any = Array.from<any>(document.querySelectorAll(selector.join(','))).map(node => {
+    const nodes = Array.from<any>(document.querySelectorAll(selector.join(','))).map(node => {
         return {
             name: node.innerText,
             key: `#${node.id}`,
             url: `#${node.id}`,
             links: [],
             isExpanded: true,
-            linkStyle: parseInt(node.localName.substring(1)) // The level
+            linkStyle: parseInt(node.localName.substring(1)), // The level
+            parent: undefined,
         };
     });
 
     for (let i = 0; i < nodes.length; i++) {
-
         map[nodes[i].key] = i; // Initialize the map
 
         if (i === 0 || nodes[i].linkStyle === 1) {
@@ -34,7 +34,7 @@ export const getNavLinks = (selector: string[]): INavLinkGroup => {
         }
         else {
             // Level 2, previous was level 3. Need to traverse back to find parent
-            let p = i - 1;
+            let p: number = i - 1;
             while (nodes[p].linkStyle > nodes[i].linkStyle && 0 < p) {
                 p--;
             }
@@ -43,7 +43,7 @@ export const getNavLinks = (selector: string[]): INavLinkGroup => {
     }
 
     for (let i = 0; i < nodes.length; i++) {
-        let node = nodes[i];
+        const node = nodes[i];
         if (node.parent !== '') {
             // if you have dangling branches check that map[node.parent] exists
             nodes[map[node.parent]].links.push(node);
@@ -51,5 +51,5 @@ export const getNavLinks = (selector: string[]): INavLinkGroup => {
             links.push(node);
         }
     }
-    return { links: links };
+    return { links };
 };
