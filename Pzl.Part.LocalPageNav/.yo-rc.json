@@ -3,7 +3,7 @@
     "plusBeta": false,
     "isCreatingSolution": true,
     "environment": "spo",
-    "version": "1.17.1",
+    "version": "1.18.0",
     "libraryName": "local-page-nav",
     "libraryId": "e514111f-13b1-4444-93aa-63f82a140107",
     "packageManager": "npm",
@@ -11,7 +11,7 @@
     "componentType": "webpart",
     "nodeVersion": "14.17.6",
     "sdkVersions": {
-      "@microsoft/teams-js": "2.9.1",
+      "@microsoft/teams-js": "2.12.0",
       "@microsoft/microsoft-graph-client": "3.0.2"
     }
   }

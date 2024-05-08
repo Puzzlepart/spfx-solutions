@@ -1,16 +1,11 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { Version } from '@microsoft/sp-core-library';
-import {
-  IPropertyPaneConfiguration,
-  PropertyPaneTextField
-} from '@microsoft/sp-property-pane';
+import { IPropertyPaneConfiguration, PropertyPaneTextField } from '@microsoft/sp-property-pane';
 import { PropertyFieldMultiSelect } from '@pnp/spfx-property-controls/lib/PropertyFieldMultiSelect';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
-
 import * as strings from 'LocalPageNavWebPartStrings';
-import LocalPageNav from './components/LocalPageNav';
-import { ILocalPageNavProps } from './components/ILocalPageNavProps';
+import { LocalPageNav, ILocalPageNavProps } from './components/LocalPageNav';
 import { INavLinkGroup } from 'office-ui-fabric-react/lib/Nav';
 import { getNavLinks } from './data/data';
 
@@ -33,7 +28,6 @@ export default class LocalPageNavWebPart extends BaseClientSideWebPart<ILocalPag
 
     ReactDom.render(element, this.domElement);
   }
-
 
   protected onInit(): Promise<void> {
     super.onInit();
