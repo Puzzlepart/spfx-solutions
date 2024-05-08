@@ -10,6 +10,7 @@ export const getNavLinks = (selector: string[]): INavLinkGroup => {
     const map: Record<string, number> = {};
     const links: INavLink[] = [];
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const nodes = Array.from<any>(document.querySelectorAll(selector.join(','))).map(node => {
         return {
             name: node.innerText,
