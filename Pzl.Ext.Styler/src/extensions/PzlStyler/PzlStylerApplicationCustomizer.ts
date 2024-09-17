@@ -24,11 +24,15 @@ export default class PzlStylerApplicationCustomizer
   public onInit(): Promise<void> {
     Log.info(LOG_SOURCE, `Initialized ${strings.Title}`);
     if (this.properties.cssFilePath) {
+      let cssFileToLoad = this.properties.cssFilePath.trim();
       if (this.properties.cssFilePath.indexOf('https://') === -1) {
-        SPComponentLoader.loadCss(`${document.location.protocol}//${document.location.hostname}/${this.properties.cssFilePath}`);
-      } else {
-        SPComponentLoader.loadCss(this.properties.cssFilePath);
-      }      
+        if (this.properties.cssFilePath.indexOf('/') === 0) {
+          cssFileToLoad = `${document.location.protocol}//${document.location.hostname}${this.properties.cssFilePath.trim()}`;          
+        } else {
+          cssFileToLoad = `${document.location.protocol}//${document.location.hostname}/${this.properties.cssFilePath.trim()}`;
+        }
+      }
+      SPComponentLoader.loadCss(cssFileToLoad);
     }
 
     return Promise.resolve();
