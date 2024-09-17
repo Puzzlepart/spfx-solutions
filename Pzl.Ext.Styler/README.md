@@ -2,8 +2,9 @@
 
 ## Summary
 
-This Application customizer lets you override any and all CSS on SharePoint pages across the site collection. Place your CSS file named `PzlStyler.css` in a document library called "Styling" placed under ~/sites/CDN/ 
-Add the Pzl.Ext.Styler app to your SharePoint sites to enjoy the style of the day.
+This Application customizer lets you override any and all CSS on SharePoint pages across the site collection. Place your CSS file named `PzlStyler.css` in SiteAssets placed under /sites/cdn/. The path can also be configured, see further down on this page for examples.
+
+Add the Pzl.Ext.Styler app to your SharePoint sites to enjoy the style of the day for the sites you choose to add it to.
 
 ## Used SharePoint Framework Version
 
@@ -29,6 +30,7 @@ We recommend that site owners add the extention manually per site.
 
 | Version | Date             | Comments        |
 | ------- | ---------------- | --------------- |
+| 1.1     | September 17, 2024 | Flexible CSS path |
 | 1.0     | August 24, 2023 | Initial release |
 
 ## Disclaimer
@@ -63,12 +65,21 @@ Extension that enables you to add CSS styling to any SharePoint site.
 Using the sample file, we remove the site header for all news stories in the OOTB News web part.
 
 Before Pzl.Ext.Styler is installed:
-![Before Pzl.Ext.Styler is installed](images/Styler%20off.png?raw=true "Before Pzl.Ext.Styler is installed")
+
+[<img src="images/Styler%20off.png" width="600"/>](images/Styler%20off.png)
 
 After Pzl.Ext.Styler is installed:
-![After Pzl.Ext.Styler is installed](images/Styler%20on.png?raw=true "After Pzl.Ext.Styler is installed")
+
+[<img src="images/Styler%20on.png" width="600"/>](images/Styler%20on.png)
 
 Here we've added border radius to the weather web part and changed colours and border radius on the Quick Links web part:
-![Example](images/Weather%20and%20quicklinks.png?raw=true "Example")
 
+[<img src="images/Weather%20and%20quicklinks.png" width="600"/>](images/Weather%20and%20quicklinks.png)
 
+## Configuration
+
+The path to the CSS file can be configured per site, making it possible to load different CSS files for different sites. The file is loaded as a ClientSideComponentProperty of the PzlStyler Custom Action.
+
+See example configuration:
+
+[<img src="images/PowerShell_Example_Usage.png" width="600"/>](images/PowerShell_Example_Usage.png)
