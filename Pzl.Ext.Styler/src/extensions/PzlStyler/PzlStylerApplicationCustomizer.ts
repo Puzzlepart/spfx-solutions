@@ -13,9 +13,8 @@ const LOG_SOURCE: string = 'PzlStylerApplicationCustomizer';
  * it will be deserialized into the BaseExtension.properties object.
  * You can define an interface to describe it.
  */
-export interface IPzlStylerApplicationCustomizerProperties {
-  // This is an example; replace with your own property
-  testMessage: string;
+export interface IPzlStylerApplicationCustomizerProperties {  
+  cssFilePath: string;
 }
 
 /** A Custom Action which can be run during execution of a Client Side Application */
@@ -24,9 +23,13 @@ export default class PzlStylerApplicationCustomizer
 
   public onInit(): Promise<void> {
     Log.info(LOG_SOURCE, `Initialized ${strings.Title}`);
-  
-    console.log("PZLSTYLER");
-    SPComponentLoader.loadCss(`${document.location.protocol}//${document.location.hostname}/sites/CDN/Styling/PzlStyler.css`);
+    if (this.properties.cssFilePath) {
+      if (this.properties.cssFilePath.indexOf('https://') === -1) {
+        SPComponentLoader.loadCss(`${document.location.protocol}//${document.location.hostname}/${this.properties.cssFilePath}`);
+      } else {
+        SPComponentLoader.loadCss(this.properties.cssFilePath);
+      }      
+    }
 
     return Promise.resolve();
   }
