@@ -1,0 +1,354 @@
+<SearchConfigurationSettings xmlns:i="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns="http://schemas.datacontract.org/2004/07/Microsoft.Office.Server.Search.Portability">
+    <SearchQueryConfigurationSettings>
+        <SearchQueryConfigurationSettings>
+            <BestBets xmlns:d4p1="http://www.microsoft.com/sharepoint/search/KnownTypes/2008/08" />
+            <DefaultSourceId>00000000-0000-0000-0000-000000000000</DefaultSourceId>
+            <DefaultSourceIdSet>false</DefaultSourceIdSet>
+            <DeployToParent>false</DeployToParent>
+            <DisableInheritanceOnImport>false</DisableInheritanceOnImport>
+            <OverriddenQueryRules
+                xmlns:d4p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+            <QueryRuleGroups
+                xmlns:d4p1="http://www.microsoft.com/sharepoint/search/KnownTypes/2008/08" />
+            <QueryRules xmlns:d4p1="http://www.microsoft.com/sharepoint/search/KnownTypes/2008/08" />
+            <ResultTypes
+                xmlns:d4p1="http://schemas.datacontract.org/2004/07/Microsoft.Office.Server.Search.Administration" />
+            <Sources
+                xmlns:d4p1="http://schemas.datacontract.org/2004/07/Microsoft.Office.Server.Search.Administration.Query" />
+            <UserSegments xmlns:d4p1="http://www.microsoft.com/sharepoint/search/KnownTypes/2008/08" />
+        </SearchQueryConfigurationSettings>
+    </SearchQueryConfigurationSettings>
+    <SearchRankingModelConfigurationSettings>
+        <RankingModels xmlns:d3p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </SearchRankingModelConfigurationSettings>
+    <SearchSchemaConfigurationSettings>
+        <Aliases
+            xmlns:d3p1="http://schemas.datacontract.org/2004/07/Microsoft.Office.Server.Search.Administration">
+            <d3p1:LastItemName>PzlStartDate</d3p1:LastItemName>
+            <d3p1:dictionary xmlns:d4p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                <d4p1:KeyValueOfstringAliasInfoy6h3NzC8>
+                    <d4p1:Key>PzlResponsible</d4p1:Key>
+                    <d4p1:Value>
+                        <d3p1:Name>PzlResponsible</d3p1:Name>
+                        <d3p1:ManagedPid>1000000013</d3p1:ManagedPid>
+                        <d3p1:SchemaId>0</d3p1:SchemaId>
+                    </d4p1:Value>
+                </d4p1:KeyValueOfstringAliasInfoy6h3NzC8>
+                <d4p1:KeyValueOfstringAliasInfoy6h3NzC8>
+                    <d4p1:Key>PzlConsequences</d4p1:Key>
+                    <d4p1:Value>
+                        <d3p1:Name>PzlConsequences</d3p1:Name>
+                        <d3p1:ManagedPid>1000000012</d3p1:ManagedPid>
+                        <d3p1:SchemaId>0</d3p1:SchemaId>
+                    </d4p1:Value>
+                </d4p1:KeyValueOfstringAliasInfoy6h3NzC8>
+                <d4p1:KeyValueOfstringAliasInfoy6h3NzC8>
+                    <d4p1:Key>PzlAffectedSystems</d4p1:Key>
+                    <d4p1:Value>
+                        <d3p1:Name>PzlAffectedSystems</d3p1:Name>
+                        <d3p1:ManagedPid>1000000011</d3p1:ManagedPid>
+                        <d3p1:SchemaId>0</d3p1:SchemaId>
+                    </d4p1:Value>
+                </d4p1:KeyValueOfstringAliasInfoy6h3NzC8>
+                <d4p1:KeyValueOfstringAliasInfoy6h3NzC8>
+                    <d4p1:Key>PzlSeverity</d4p1:Key>
+                    <d4p1:Value>
+                        <d3p1:Name>PzlSeverity</d3p1:Name>
+                        <d3p1:ManagedPid>1000000010</d3p1:ManagedPid>
+                        <d3p1:SchemaId>0</d3p1:SchemaId>
+                    </d4p1:Value>
+                </d4p1:KeyValueOfstringAliasInfoy6h3NzC8>
+                <d4p1:KeyValueOfstringAliasInfoy6h3NzC8>
+                    <d4p1:Key>PzlEndDate</d4p1:Key>
+                    <d4p1:Value>
+                        <d3p1:Name>PzlEndDate</d3p1:Name>
+                        <d3p1:ManagedPid>1000000611</d3p1:ManagedPid>
+                        <d3p1:SchemaId>0</d3p1:SchemaId>
+                    </d4p1:Value>
+                </d4p1:KeyValueOfstringAliasInfoy6h3NzC8>
+                <d4p1:KeyValueOfstringAliasInfoy6h3NzC8>
+                    <d4p1:Key>PzlStartDate</d4p1:Key>
+                    <d4p1:Value>
+                        <d3p1:Name>PzlStartDate</d3p1:Name>
+                        <d3p1:ManagedPid>1000000610</d3p1:ManagedPid>
+                        <d3p1:SchemaId>0</d3p1:SchemaId>
+                    </d4p1:Value>
+                </d4p1:KeyValueOfstringAliasInfoy6h3NzC8>
+            </d3p1:dictionary>
+        </Aliases>
+        <CategoriesAndCrawledProperties
+            xmlns:d3p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+            <d3p1:KeyValueOfguidCrawledPropertyInfoCollectionaSYUqUE_P>
+                <d3p1:Key>00130329-0000-0130-c000-000000131346</d3p1:Key>
+                <d3p1:Value
+                    xmlns:d5p1="http://schemas.datacontract.org/2004/07/Microsoft.Office.Server.Search.Administration">
+                    <d5p1:LastItemName>ows_PzlStartDate</d5p1:LastItemName>
+                    <d5p1:dictionary>
+                        <d3p1:KeyValueOfstringCrawledPropertyInfoy6h3NzC8>
+                            <d3p1:Key>ows_PzlResponsible</d3p1:Key>
+                            <d3p1:Value>
+                                <d5p1:Name>ows_PzlResponsible</d5p1:Name>
+                                <d5p1:CategoryName i:nil="true" />
+                                <d5p1:IsImplicit>false</d5p1:IsImplicit>
+                                <d5p1:IsMappedToContents>true</d5p1:IsMappedToContents>
+                                <d5p1:IsNameEnum>false</d5p1:IsNameEnum>
+                                <d5p1:MappedManagedProperties />
+                                <d5p1:Propset>00000000-0000-0000-0000-000000000000</d5p1:Propset>
+                                <d5p1:Samples i:nil="true" />
+                                <d5p1:SchemaId>1</d5p1:SchemaId>
+                            </d3p1:Value>
+                        </d3p1:KeyValueOfstringCrawledPropertyInfoy6h3NzC8>
+                        <d3p1:KeyValueOfstringCrawledPropertyInfoy6h3NzC8>
+                            <d3p1:Key>ows_PzlConsequences</d3p1:Key>
+                            <d3p1:Value>
+                                <d5p1:Name>ows_PzlConsequences</d5p1:Name>
+                                <d5p1:CategoryName i:nil="true" />
+                                <d5p1:IsImplicit>false</d5p1:IsImplicit>
+                                <d5p1:IsMappedToContents>true</d5p1:IsMappedToContents>
+                                <d5p1:IsNameEnum>false</d5p1:IsNameEnum>
+                                <d5p1:MappedManagedProperties />
+                                <d5p1:Propset>00000000-0000-0000-0000-000000000000</d5p1:Propset>
+                                <d5p1:Samples i:nil="true" />
+                                <d5p1:SchemaId>1</d5p1:SchemaId>
+                            </d3p1:Value>
+                        </d3p1:KeyValueOfstringCrawledPropertyInfoy6h3NzC8>
+                        <d3p1:KeyValueOfstringCrawledPropertyInfoy6h3NzC8>
+                            <d3p1:Key>ows_PzlAffectedSystems</d3p1:Key>
+                            <d3p1:Value>
+                                <d5p1:Name>ows_PzlAffectedSystems</d5p1:Name>
+                                <d5p1:CategoryName i:nil="true" />
+                                <d5p1:IsImplicit>false</d5p1:IsImplicit>
+                                <d5p1:IsMappedToContents>true</d5p1:IsMappedToContents>
+                                <d5p1:IsNameEnum>false</d5p1:IsNameEnum>
+                                <d5p1:MappedManagedProperties />
+                                <d5p1:Propset>00000000-0000-0000-0000-000000000000</d5p1:Propset>
+                                <d5p1:Samples i:nil="true" />
+                                <d5p1:SchemaId>1</d5p1:SchemaId>
+                            </d3p1:Value>
+                        </d3p1:KeyValueOfstringCrawledPropertyInfoy6h3NzC8>
+                        <d3p1:KeyValueOfstringCrawledPropertyInfoy6h3NzC8>
+                            <d3p1:Key>ows_PzlSeverity</d3p1:Key>
+                            <d3p1:Value>
+                                <d5p1:Name>ows_PzlSeverity</d5p1:Name>
+                                <d5p1:CategoryName i:nil="true" />
+                                <d5p1:IsImplicit>false</d5p1:IsImplicit>
+                                <d5p1:IsMappedToContents>true</d5p1:IsMappedToContents>
+                                <d5p1:IsNameEnum>false</d5p1:IsNameEnum>
+                                <d5p1:MappedManagedProperties />
+                                <d5p1:Propset>00000000-0000-0000-0000-000000000000</d5p1:Propset>
+                                <d5p1:Samples i:nil="true" />
+                                <d5p1:SchemaId>1</d5p1:SchemaId>
+                            </d3p1:Value>
+                        </d3p1:KeyValueOfstringCrawledPropertyInfoy6h3NzC8>
+                        <d3p1:KeyValueOfstringCrawledPropertyInfoy6h3NzC8>
+                            <d3p1:Key>ows_PzlEndDate</d3p1:Key>
+                            <d3p1:Value>
+                                <d5p1:Name>ows_PzlEndDate</d5p1:Name>
+                                <d5p1:CategoryName i:nil="true" />
+                                <d5p1:IsImplicit>false</d5p1:IsImplicit>
+                                <d5p1:IsMappedToContents>true</d5p1:IsMappedToContents>
+                                <d5p1:IsNameEnum>false</d5p1:IsNameEnum>
+                                <d5p1:MappedManagedProperties />
+                                <d5p1:Propset>00000000-0000-0000-0000-000000000000</d5p1:Propset>
+                                <d5p1:Samples i:nil="true" />
+                                <d5p1:SchemaId>1</d5p1:SchemaId>
+                            </d3p1:Value>
+                        </d3p1:KeyValueOfstringCrawledPropertyInfoy6h3NzC8>
+                        <d3p1:KeyValueOfstringCrawledPropertyInfoy6h3NzC8>
+                            <d3p1:Key>ows_PzlStartDate</d3p1:Key>
+                            <d3p1:Value>
+                                <d5p1:Name>ows_PzlStartDate</d5p1:Name>
+                                <d5p1:CategoryName i:nil="true" />
+                                <d5p1:IsImplicit>false</d5p1:IsImplicit>
+                                <d5p1:IsMappedToContents>true</d5p1:IsMappedToContents>
+                                <d5p1:IsNameEnum>false</d5p1:IsNameEnum>
+                                <d5p1:MappedManagedProperties />
+                                <d5p1:Propset>00000000-0000-0000-0000-000000000000</d5p1:Propset>
+                                <d5p1:Samples i:nil="true" />
+                                <d5p1:SchemaId>1</d5p1:SchemaId>
+                            </d3p1:Value>
+                        </d3p1:KeyValueOfstringCrawledPropertyInfoy6h3NzC8>
+                    </d5p1:dictionary>
+                </d3p1:Value>
+            </d3p1:KeyValueOfguidCrawledPropertyInfoCollectionaSYUqUE_P>
+        </CategoriesAndCrawledProperties>
+        <CrawledProperties
+            xmlns:d3p1="http://schemas.datacontract.org/2004/07/Microsoft.Office.Server.Search.Administration">
+            <d3p1:LastItemName i:nil="true" />
+            <d3p1:dictionary xmlns:d4p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+        </CrawledProperties>
+        <ManagedProperties
+            xmlns:d3p1="http://schemas.datacontract.org/2004/07/Microsoft.Office.Server.Search.Administration">
+            <d3p1:LastItemName i:nil="true" />
+            <d3p1:dictionary xmlns:d4p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+            <d3p1:TotalCount>0</d3p1:TotalCount>
+        </ManagedProperties>
+        <Mappings
+            xmlns:d3p1="http://schemas.datacontract.org/2004/07/Microsoft.Office.Server.Search.Administration">
+            <d3p1:LastItemName>00130329-0000-0130-c000-000000131346:ows_PzlStartDate-&gt;1000000610</d3p1:LastItemName>
+            <d3p1:dictionary xmlns:d4p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                <d4p1:KeyValueOfstringMappingInfoy6h3NzC8>
+                    <d4p1:Key>00130329-0000-0130-c000-000000131346:ows_PzlResponsible-&gt;1000000013</d4p1:Key>
+                    <d4p1:Value>
+                        <d3p1:Name>
+                            00130329-0000-0130-c000-000000131346:ows_PzlResponsible-&gt;1000000013</d3p1:Name>
+                        <d3p1:CrawledPropertyName>ows_PzlResponsible</d3p1:CrawledPropertyName>
+                        <d3p1:CrawledPropset>00130329-0000-0130-c000-000000131346</d3p1:CrawledPropset>
+                        <d3p1:ManagedPid>1000000013</d3p1:ManagedPid>
+                        <d3p1:MappingOrder>10</d3p1:MappingOrder>
+                        <d3p1:SchemaId>0</d3p1:SchemaId>
+                    </d4p1:Value>
+                </d4p1:KeyValueOfstringMappingInfoy6h3NzC8>
+                <d4p1:KeyValueOfstringMappingInfoy6h3NzC8>
+                    <d4p1:Key>
+                        00130329-0000-0130-c000-000000131346:ows_PzlConsequences-&gt;1000000012</d4p1:Key>
+                    <d4p1:Value>
+                        <d3p1:Name>
+                            00130329-0000-0130-c000-000000131346:ows_PzlConsequences-&gt;1000000012</d3p1:Name>
+                        <d3p1:CrawledPropertyName>ows_PzlConsequences</d3p1:CrawledPropertyName>
+                        <d3p1:CrawledPropset>00130329-0000-0130-c000-000000131346</d3p1:CrawledPropset>
+                        <d3p1:ManagedPid>1000000012</d3p1:ManagedPid>
+                        <d3p1:MappingOrder>10</d3p1:MappingOrder>
+                        <d3p1:SchemaId>0</d3p1:SchemaId>
+                    </d4p1:Value>
+                </d4p1:KeyValueOfstringMappingInfoy6h3NzC8>
+                <d4p1:KeyValueOfstringMappingInfoy6h3NzC8>
+                    <d4p1:Key>
+                        00130329-0000-0130-c000-000000131346:ows_PzlAffectedSystems-&gt;1000000011</d4p1:Key>
+                    <d4p1:Value>
+                        <d3p1:Name>
+                            00130329-0000-0130-c000-000000131346:ows_PzlAffectedSystems-&gt;1000000011</d3p1:Name>
+                        <d3p1:CrawledPropertyName>ows_PzlAffectedSystems</d3p1:CrawledPropertyName>
+                        <d3p1:CrawledPropset>00130329-0000-0130-c000-000000131346</d3p1:CrawledPropset>
+                        <d3p1:ManagedPid>1000000011</d3p1:ManagedPid>
+                        <d3p1:MappingOrder>10</d3p1:MappingOrder>
+                        <d3p1:SchemaId>0</d3p1:SchemaId>
+                    </d4p1:Value>
+                </d4p1:KeyValueOfstringMappingInfoy6h3NzC8>
+                <d4p1:KeyValueOfstringMappingInfoy6h3NzC8>
+                    <d4p1:Key>00130329-0000-0130-c000-000000131346:ows_PzlSeverity-&gt;1000000010</d4p1:Key>
+                    <d4p1:Value>
+                        <d3p1:Name>
+                            00130329-0000-0130-c000-000000131346:ows_PzlSeverity-&gt;1000000010</d3p1:Name>
+                        <d3p1:CrawledPropertyName>ows_PzlSeverity</d3p1:CrawledPropertyName>
+                        <d3p1:CrawledPropset>00130329-0000-0130-c000-000000131346</d3p1:CrawledPropset>
+                        <d3p1:ManagedPid>1000000010</d3p1:ManagedPid>
+                        <d3p1:MappingOrder>10</d3p1:MappingOrder>
+                        <d3p1:SchemaId>0</d3p1:SchemaId>
+                    </d4p1:Value>
+                </d4p1:KeyValueOfstringMappingInfoy6h3NzC8>
+                <d4p1:KeyValueOfstringMappingInfoy6h3NzC8>
+                    <d4p1:Key>00130329-0000-0130-c000-000000131346:ows_PzlEndDate-&gt;1000000611</d4p1:Key>
+                    <d4p1:Value>
+                        <d3p1:Name>
+                            00130329-0000-0130-c000-000000131346:ows_PzlEndDate-&gt;1000000611</d3p1:Name>
+                        <d3p1:CrawledPropertyName>ows_PzlEndDate</d3p1:CrawledPropertyName>
+                        <d3p1:CrawledPropset>00130329-0000-0130-c000-000000131346</d3p1:CrawledPropset>
+                        <d3p1:ManagedPid>1000000611</d3p1:ManagedPid>
+                        <d3p1:MappingOrder>10</d3p1:MappingOrder>
+                        <d3p1:SchemaId>0</d3p1:SchemaId>
+                    </d4p1:Value>
+                </d4p1:KeyValueOfstringMappingInfoy6h3NzC8>
+                <d4p1:KeyValueOfstringMappingInfoy6h3NzC8>
+                    <d4p1:Key>00130329-0000-0130-c000-000000131346:ows_PzlStartDate-&gt;1000000610</d4p1:Key>
+                    <d4p1:Value>
+                        <d3p1:Name>
+                            00130329-0000-0130-c000-000000131346:ows_PzlStartDate-&gt;1000000610</d3p1:Name>
+                        <d3p1:CrawledPropertyName>ows_PzlStartDate</d3p1:CrawledPropertyName>
+                        <d3p1:CrawledPropset>00130329-0000-0130-c000-000000131346</d3p1:CrawledPropset>
+                        <d3p1:ManagedPid>1000000610</d3p1:ManagedPid>
+                        <d3p1:MappingOrder>10</d3p1:MappingOrder>
+                        <d3p1:SchemaId>0</d3p1:SchemaId>
+                    </d4p1:Value>
+                </d4p1:KeyValueOfstringMappingInfoy6h3NzC8>
+            </d3p1:dictionary>
+        </Mappings>
+        <Overrides
+            xmlns:d3p1="http://schemas.datacontract.org/2004/07/Microsoft.Office.Server.Search.Administration">
+            <d3p1:LastItemName>1000000610</d3p1:LastItemName>
+            <d3p1:dictionary xmlns:d4p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+                <d4p1:KeyValueOfstringOverrideInfoy6h3NzC8>
+                    <d4p1:Key>1000000013</d4p1:Key>
+                    <d4p1:Value>
+                        <d3p1:Name>1000000013</d3p1:Name>
+                        <d3p1:AliasesOverridden>true</d3p1:AliasesOverridden>
+                        <d3p1:EntityExtractorBitMap>0</d3p1:EntityExtractorBitMap>
+                        <d3p1:ExtraProperties i:nil="true" />
+                        <d3p1:ManagedPid>1000000013</d3p1:ManagedPid>
+                        <d3p1:MappingsOverridden>true</d3p1:MappingsOverridden>
+                        <d3p1:SchemaId>0</d3p1:SchemaId>
+                        <d3p1:TokenNormalization>true</d3p1:TokenNormalization>
+                    </d4p1:Value>
+                </d4p1:KeyValueOfstringOverrideInfoy6h3NzC8>
+                <d4p1:KeyValueOfstringOverrideInfoy6h3NzC8>
+                    <d4p1:Key>1000000012</d4p1:Key>
+                    <d4p1:Value>
+                        <d3p1:Name>1000000012</d3p1:Name>
+                        <d3p1:AliasesOverridden>true</d3p1:AliasesOverridden>
+                        <d3p1:EntityExtractorBitMap>0</d3p1:EntityExtractorBitMap>
+                        <d3p1:ExtraProperties i:nil="true" />
+                        <d3p1:ManagedPid>1000000012</d3p1:ManagedPid>
+                        <d3p1:MappingsOverridden>true</d3p1:MappingsOverridden>
+                        <d3p1:SchemaId>0</d3p1:SchemaId>
+                        <d3p1:TokenNormalization>true</d3p1:TokenNormalization>
+                    </d4p1:Value>
+                </d4p1:KeyValueOfstringOverrideInfoy6h3NzC8>
+                <d4p1:KeyValueOfstringOverrideInfoy6h3NzC8>
+                    <d4p1:Key>1000000011</d4p1:Key>
+                    <d4p1:Value>
+                        <d3p1:Name>1000000011</d3p1:Name>
+                        <d3p1:AliasesOverridden>true</d3p1:AliasesOverridden>
+                        <d3p1:EntityExtractorBitMap>0</d3p1:EntityExtractorBitMap>
+                        <d3p1:ExtraProperties i:nil="true" />
+                        <d3p1:ManagedPid>1000000011</d3p1:ManagedPid>
+                        <d3p1:MappingsOverridden>true</d3p1:MappingsOverridden>
+                        <d3p1:SchemaId>0</d3p1:SchemaId>
+                        <d3p1:TokenNormalization>true</d3p1:TokenNormalization>
+                    </d4p1:Value>
+                </d4p1:KeyValueOfstringOverrideInfoy6h3NzC8>
+                <d4p1:KeyValueOfstringOverrideInfoy6h3NzC8>
+                    <d4p1:Key>1000000010</d4p1:Key>
+                    <d4p1:Value>
+                        <d3p1:Name>1000000010</d3p1:Name>
+                        <d3p1:AliasesOverridden>true</d3p1:AliasesOverridden>
+                        <d3p1:EntityExtractorBitMap>0</d3p1:EntityExtractorBitMap>
+                        <d3p1:ExtraProperties i:nil="true" />
+                        <d3p1:ManagedPid>1000000010</d3p1:ManagedPid>
+                        <d3p1:MappingsOverridden>true</d3p1:MappingsOverridden>
+                        <d3p1:SchemaId>0</d3p1:SchemaId>
+                        <d3p1:TokenNormalization>true</d3p1:TokenNormalization>
+                    </d4p1:Value>
+                </d4p1:KeyValueOfstringOverrideInfoy6h3NzC8>
+                <d4p1:KeyValueOfstringOverrideInfoy6h3NzC8>
+                    <d4p1:Key>1000000611</d4p1:Key>
+                    <d4p1:Value>
+                        <d3p1:Name>1000000611</d3p1:Name>
+                        <d3p1:AliasesOverridden>true</d3p1:AliasesOverridden>
+                        <d3p1:EntityExtractorBitMap>0</d3p1:EntityExtractorBitMap>
+                        <d3p1:ExtraProperties i:nil="true" />
+                        <d3p1:ManagedPid>1000000611</d3p1:ManagedPid>
+                        <d3p1:MappingsOverridden>true</d3p1:MappingsOverridden>
+                        <d3p1:SchemaId>0</d3p1:SchemaId>
+                        <d3p1:TokenNormalization>true</d3p1:TokenNormalization>
+                    </d4p1:Value>
+                </d4p1:KeyValueOfstringOverrideInfoy6h3NzC8>
+                <d4p1:KeyValueOfstringOverrideInfoy6h3NzC8>
+                    <d4p1:Key>1000000610</d4p1:Key>
+                    <d4p1:Value>
+                        <d3p1:Name>1000000610</d3p1:Name>
+                        <d3p1:AliasesOverridden>true</d3p1:AliasesOverridden>
+                        <d3p1:EntityExtractorBitMap>0</d3p1:EntityExtractorBitMap>
+                        <d3p1:ExtraProperties i:nil="true" />
+                        <d3p1:ManagedPid>1000000610</d3p1:ManagedPid>
+                        <d3p1:MappingsOverridden>true</d3p1:MappingsOverridden>
+                        <d3p1:SchemaId>0</d3p1:SchemaId>
+                        <d3p1:TokenNormalization>true</d3p1:TokenNormalization>
+                    </d4p1:Value>
+                </d4p1:KeyValueOfstringOverrideInfoy6h3NzC8>
+            </d3p1:dictionary>
+        </Overrides>
+    </SearchSchemaConfigurationSettings>
+    <SearchSubscriptionSettingsConfigurationSettings i:nil="true" />
+    <SearchTaxonomyConfigurationSettings i:nil="true" />
+</SearchConfigurationSettings>

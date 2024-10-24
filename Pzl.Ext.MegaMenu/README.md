@@ -193,21 +193,21 @@ Invoke-PnPQuery
 ## Example: Using PnP Modern Search to display Service Announcements
 In this example we will demonstrate how you can use PnP Modern Search to display Service Announcements in the MegaMenu by Puzzlepart. Please follow the steps below.
 
-1) Map the following managed properties on Tenant Level (https://tenantname-admin.sharepoint.com/_layouts/15/searchadmin/ta_listmanagedproperties.aspx?level=tenant):
+1) Map the following managed properties on Tenant Level (https://tenantname-admin.sharepoint.com/_layouts/15/searchadmin/ta_listmanagedproperties.aspx?level=tenant). You can do this manually, or use PnP PowerShell to import the file located in /SearchConfiguration/TenantSearchConfiguration.xml.
 
 | MANAGED PROPERTY NAME | MAPPED CRAWLED PROPERTIES | ALIASES |
 | --- | ---| --- |
 | RefinableDate10 | OWS_PZLSTARTDATE | PzlStartDate |
 | RefinableDate11 | OWS_PZLENDDATE | PzlEndDate |
 | RefinableString10 | OWS_PZLSEVERITY | PzlSeverity  |
-| RefinableString11 | OWS_PZLAFFECTEDSYSTEMS | RPzlAffectedSystems |
+| RefinableString11 | OWS_PZLAFFECTEDSYSTEMS | PzlAffectedSystems |
 | RefinableString12 | OWS_PZLCONSEQUENCES | PzlConsequences |
 | RefinableString13 | OWS_PZLRESPONSIBLE | PzlResponsible |
 
 2) Install PnP Modern Search in your tenant - https://microsoft-search.github.io/pnp-modern-search/installation/
 
-3) Download the file /documentation/PnPSearchResults_Template_Driftsmeldinger.html and upload it to a SharePoint site
-    https://tenantname.sharepoint.com/sites/sitename/Shared%20Documents/PnPSearchTemplates (you have to create the folder PnPSearchTemplates in Shared Documents)
+3) Upload the file /SearchConfiguration/PnPSearchResults_Template_Driftsmeldinger.html to a SharePoint site in your tenant, accessible to all employees, e.g.
+    https://tenantname.sharepoint.com/sites/sitename/Shared%20Documents/PnPSearchTemplates.
 4) Add the PnP Modern Search webpart to your site and configure it to use an external template URL (page 2 of 4 in the configuration of the web part). Set Available layouts (page 2 of 4) to "Custom".
 
 The result afterwards should look like below.
