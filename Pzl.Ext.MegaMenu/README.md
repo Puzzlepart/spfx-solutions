@@ -208,7 +208,8 @@ In this example we will demonstrate how you can use PnP Modern Search to display
 
 3) Upload the file /SearchConfiguration/PnPSearchResults_Template_Driftsmeldinger.html to a SharePoint site in your tenant, accessible to all employees, e.g.
     https://tenantname.sharepoint.com/sites/sitename/Shared%20Documents/PnPSearchTemplates.
-4) Add the PnP Modern Search webpart to your site and configure it to use an external template URL (page 2 of 4 in the configuration of the web part). Set Available layouts (page 2 of 4) to "Custom".
+
+4) Add the PnP Modern Search webpart to your site. Configure the query to be something like ``contentclass:STS_ListItem path: https://tenant.sharepoint.com/sites/intranett-util/Lists/ServiceAnnouncements/* PzlStartDate<{Today} PzlEndDate>{Today}``. Set Available layouts (page 2 of 4) to "Custom". Configure it to use an external template URL (page 2 of 4 in the configuration of the web part).
 
 The result afterwards should look like below.
  
