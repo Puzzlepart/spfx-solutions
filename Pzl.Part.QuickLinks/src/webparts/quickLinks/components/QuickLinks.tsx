@@ -47,7 +47,7 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
                 />
               }
               onClick={() => {
-                callWebHook(link.url, link.category)
+                callWebHook(link.id, link.url, link.category)
                 window.open(link.url, link.openInSameTab ? '_self' : '_blank')
               }}
             >
@@ -89,7 +89,7 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
               />
             }
             onClick={() => {
-              callWebHook(link.url, link.category)
+              callWebHook(link.id, link.url, link.category)
               window.open(link.url, link.openInSameTab ? '_self' : '_blank')
             }}
           >
