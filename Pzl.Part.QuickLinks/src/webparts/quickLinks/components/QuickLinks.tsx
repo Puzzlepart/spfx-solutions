@@ -19,8 +19,57 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
   const fluentProviderId = useId('fp-your-links')
 
   const generateLinks = (categories: Array<ICategory>) => {
-    return categories.map((category: ICategory, idx) => {
-      const linkItems = category.links.map((link: ILink, idx) => {
+    const uncategorizedLinks = categories.filter((category) => category.displayText !== undefined).map((category) => category.links)
+    const favoriteLinks = categories.filter((category) => category.displayText === undefined).map((category) => category.links)
+    const sortedLinks = uncategorizedLinks.reduce((acc, val) => acc.concat(val), []).sort((a, b) => Number(a.priority) - Number(b.priority))
+
+    sortedLinks.push(...favoriteLinks.reduce((acc, val) => acc.concat(val), []))
+
+    if (props.groupByCategory) {
+      return categories.map((category: ICategory, idx) => {
+        const linkItems = category.links.map((link: ILink, idx) => {
+          return (
+            <Button
+              key={`link_${idx}`}
+              title={link.displayText}
+              style={{
+                lineHeight: `${props.lineHeight}px`,
+                width: props.responsiveButtons || props.iconsOnly ? 'auto' : '100%'
+              }}
+              className={styles.link}
+              appearance={props.buttonAppearance}
+              size={props.iconSize >= 26 ? 'large' : props.iconSize <= 16 ? 'small' : 'medium'}
+              icon={
+                <Icon
+                  className={styles.icon}
+                  style={{ fontSize: props.iconSize }}
+                  iconName={link.icon ? link.icon : props.defaultIcon}
+                />
+              }
+              onClick={() => {
+                callWebHook(link.url, link.category)
+                window.open(link.url, link.openInSameTab ? '_self' : '_blank')
+              }}
+            >
+              {!props.iconsOnly && <span className={styles.label}>{link.displayText}</span>}
+            </Button>
+          )
+        })
+
+        if (props.groupByCategory) {
+          return (
+            <div className={styles.categorySection} key={`category_${idx}`}>
+              <div className={styles.heading}>
+                {category.displayText !== undefined ? category.displayText : 'Mine lenker'}
+              </div>
+              {linkItems}
+            </div>
+          )
+        }
+        return linkItems
+      })
+    } else {
+      return sortedLinks.map((link: ILink, idx) => {
         return (
           <Button
             key={`link_${idx}`}
@@ -49,18 +98,9 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
         )
       })
 
-      if (props.groupByCategory) {
-        return (
-          <div className={styles.categorySection} key={`category_${idx}`}>
-            <div className={styles.heading}>
-              {category.displayText !== undefined ? category.displayText : 'Mine lenker'}
-            </div>
-            {linkItems}
-          </div>
-        )
-      }
-      return linkItems
-    })
+    }
+
+
   }
 
   return (

@@ -218,6 +218,7 @@ export const useAllLinks = (props: IAllLinksProps) => {
       let categories: Array<ICategory> = [
         { displayText: strings.NoCategoryLabel, links: displayLinks }
       ]
+
       if (props.groupByCategory) {
         let categoryNames: string[] = displayLinks
           .map((lnk) => {
