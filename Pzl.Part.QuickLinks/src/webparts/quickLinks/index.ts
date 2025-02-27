@@ -16,52 +16,16 @@ import { IQuickLinksProps, QuickLinks } from './components'
 import { PropertyFieldIconPicker } from '@pnp/spfx-property-controls/lib/PropertyFieldIconPicker'
 import { stringIsNullOrEmpty } from '@pnp/common'
 
-export interface IQuickLinksWebPartProps {
-  title: string
-  description: string
-  allLinksUrl: string
-  defaultIcon: string
-  groupByCategory: boolean
-  lineHeight: number
-  iconsOnly: boolean
-  iconSize: number
-  linkClickWebHook: string
-  hideHeader: boolean
-  hideTitle: boolean
-  hideShowAll: boolean
-  renderShadow: boolean
-  responsiveButtons: boolean
-  allLinksText: string
-  buttonAppearance: 'secondary' | 'primary' | 'outline' | 'subtle' | 'transparent'
-  globalConfigurationUrl: string
-}
-
-export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinksWebPartProps> {
+export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinksProps> {
   private _themeProvider: ThemeProvider
   private _theme: IReadonlyTheme
 
   public render(): void {
     const element: React.ReactElement<IQuickLinksProps> = React.createElement(QuickLinks, {
+      ...this.properties,
       theme: this._theme,
-      title: this.properties.title,
-      description: this.properties.description,
       userId: this.context.pageContext.legacyPageContext.userId,
-      allLinksUrl: this.properties.allLinksUrl,
-      defaultIcon: this.properties.defaultIcon,
-      groupByCategory: this.properties.groupByCategory,
-      lineHeight: this.properties.lineHeight,
-      iconsOnly: this.properties.iconsOnly,
-      iconSize: this.properties.iconSize,
       webServerRelativeUrl: this.context.pageContext.web.serverRelativeUrl,
-      linkClickWebHook: this.properties.linkClickWebHook,
-      hideHeader: this.properties.hideHeader,
-      hideTitle: this.properties.hideTitle,
-      hideShowAll: this.properties.hideShowAll,
-      renderShadow: this.properties.renderShadow,
-      responsiveButtons: this.properties.responsiveButtons,
-      buttonAppearance: this.properties.buttonAppearance,
-      allLinksText: this.properties.allLinksText,
-      globalConfigurationUrl: this.properties.globalConfigurationUrl
     })
 
     ReactDom.render(element, this.domElement)
@@ -141,6 +105,12 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
                   label: strings.PropertyPane.LineHeightLabel,
                   step: 2,
                   min: 16,
+                  max: 64
+                }),
+                PropertyPaneSlider('gapSize', {
+                  label: strings.PropertyPane.GapSizeLabel,
+                  step: 1,
+                  min: 2,
                   max: 64
                 }),
                 PropertyPaneToggle('iconsOnly', {

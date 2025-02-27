@@ -9,6 +9,7 @@ export interface IQuickLinksProps {
   defaultIcon: string
   groupByCategory: boolean
   lineHeight: number
+  gapSize: number
   iconsOnly: boolean
   iconSize: number
   renderShadow: boolean

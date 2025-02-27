@@ -20,6 +20,7 @@ define([], function () {
       IconSizeLabel: 'Icon size',
       IconsOnlyLabel: 'Show icons only',
       LineHeightLabel: 'Line height (pixels)',
+      GapSizeLabel: 'Gap size between buttons (pixels)',
       LinkClickWebHookLabel: 'Webhook for link click',
       RenderShadowLabel: 'Render shadow',
       ResponsiveButtonsLabel: 'Responsive buttons (wrapping)',

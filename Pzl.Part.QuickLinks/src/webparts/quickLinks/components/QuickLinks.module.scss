@@ -14,7 +14,7 @@
     align-items: center;
     width: auto;
     height: fit-content;
-    padding-bottom: 6px;
+    padding-bottom: 12px;
 
     .title {
       display: flex;
@@ -24,14 +24,6 @@
       span {
         font-size: 20px;
         font-weight: 600;
-      }
-    }
-
-    .showAll {
-      color: var(--colorNeutralForeground2);
-
-      &:hover {
-        color: var(--colorNeutralForeground2Hover);
       }
     }
   }

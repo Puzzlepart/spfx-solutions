@@ -119,14 +119,13 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
             <span>{props.title}</span>
           </InfoLabel>
           <Link
-            className={styles.showAll}
             onClick={() => window.open(props.allLinksUrl, '_blank')}
             style={{ display: props.hideShowAll && 'none' }}
           >
             {stringIsNullOrEmpty(props.allLinksText) ? strings.AllLinksLabel : props.allLinksText}
           </Link>
         </div>
-        <div className={styles.links}>{generateLinks(state.linkStructure)}</div>
+        <div className={styles.links} style={{ gap: props.gapSize }}>{generateLinks(state.linkStructure)}</div>
       </FluentProvider>
     </IdPrefixProvider>
   )
@@ -137,6 +136,7 @@ QuickLinks.defaultProps = {
   title: strings.Title,
   description: strings.Description,
   lineHeight: 20,
+  gapSize: 8,
   iconSize: 20,
   buttonAppearance: 'subtle'
 }

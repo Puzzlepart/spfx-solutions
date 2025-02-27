@@ -19,6 +19,7 @@ declare interface IQuickLinksWebPartStrings {
     IconSizeLabel: string
     IconsOnlyLabel: string
     LineHeightLabel: string
+    GapSizeLabel: string
     LinkClickWebHookLabel: string
     RenderShadowLabel: string
     ResponsiveButtonsLabel: string
