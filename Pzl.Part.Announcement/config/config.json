@@ -5,14 +5,14 @@
     "announcement-web-part-web-part": {
       "components": [
         {
-          "entrypoint": "./lib/webparts/announcementWebPart/AnnouncementWebPartWebPart.js",
-          "manifest": "./src/webparts/announcementWebPart/AnnouncementWebPartWebPart.manifest.json"
+          "entrypoint": "./lib/Announcement/index.js",
+          "manifest": "./src/Announcement/manifest.json"
         }
       ]
     }
   },
   "externals": {},
   "localizedResources": {
-    "AnnouncementWebPartWebPartStrings": "lib/webparts/announcementWebPart/loc/{locale}.js"
+    "AnnouncementStrings": "lib/Announcement/loc/{locale}.js"
   }
 }

@@ -1,0 +1,5 @@
+src/**/*.d.ts
+src/**/*.scss.ts
+lib
+dist
+gulpfile.js

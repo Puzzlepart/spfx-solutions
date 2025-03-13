@@ -11,7 +11,9 @@
     "clean": "gulp clean",
     "test": "gulp test",
     "package": "gulp clean --ship && gulp default --ship && gulp package-solution --ship",
-    "serve": "fast-serve"
+    "serve": "fast-serve",
+    "lint": "eslint --ext .ts,.tsx ./src --color --fix --config ./.eslintrc.yaml && npm run prettier",
+    "prettier": "prettier '**/*.ts*' --write --log-level silent --config ./.prettierrc.yaml"
   },
   "dependencies": {
     "@fluentui/react": "^8.106.4",
