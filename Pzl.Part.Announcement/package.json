@@ -12,17 +12,23 @@
     "test": "gulp test",
     "package": "gulp clean --ship && gulp default --ship && gulp package-solution --ship",
     "serve": "fast-serve",
+    "watch": "fast-serve",
     "lint": "eslint --ext .ts,.tsx ./src --color --fix --config ./.eslintrc.yaml && npm run prettier",
     "prettier": "prettier '**/*.ts*' --write --log-level silent --config ./.prettierrc.yaml"
   },
   "dependencies": {
     "@fluentui/react": "^8.106.4",
+    "@fluentui/react-components": "^9.60.1",
+    "@fluentui/react-icons": "^2.0.279",
     "@microsoft/sp-component-base": "1.20.0",
     "@microsoft/sp-core-library": "1.20.0",
     "@microsoft/sp-lodash-subset": "1.20.0",
     "@microsoft/sp-office-ui-fabric-core": "1.20.0",
+    "@microsoft/sp-page-context": "^1.20.0",
     "@microsoft/sp-property-pane": "1.20.0",
     "@microsoft/sp-webpart-base": "1.20.0",
+    "@pnp/graph": "^4.10.0",
+    "@pnp/sp": "^4.10.0",
     "react": "17.0.1",
     "react-dom": "17.0.1",
     "tslib": "2.3.1"

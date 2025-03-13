@@ -6,10 +6,6 @@ import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { Announcement, IAnnouncementProps } from './components'
 
 export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnouncementProps> {
-  protected async onInit(): Promise<void> {
-    await super.onInit()
-  }
-
   public render(): void {
     const element: React.ReactElement<IAnnouncementProps> = React.createElement(Announcement, {
       ...this.properties,
@@ -17,6 +13,10 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
     })
 
     ReactDom.render(element, this.domElement)
+  }
+
+  protected async onInit(): Promise<void> {
+    await super.onInit()
   }
 
   protected onDispose(): void {
