@@ -2,6 +2,8 @@
 
 Solution consists of two web parts and two lists.
 
+TODO: Update the documentation
+
 ## Web parts
 
 ### Quick links web part
