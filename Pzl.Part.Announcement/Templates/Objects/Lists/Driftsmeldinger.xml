@@ -1,0 +1,23 @@
+<pnp:ListInstance Title="{resource:Lists_Announcement_Title}" Description="" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_Announcement_Url}" Hidden="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="5000" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false"
+    xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+    <pnp:ContentTypeBindings>
+      <pnp:ContentTypeBinding ContentTypeID="0x01001A58CF6ADF6943E89CE71ACB741407FA" Default="true" />
+    </pnp:ContentTypeBindings>
+    <pnp:Views>
+        <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_Announcement_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+            <ViewFields>
+                <FieldRef Name="LinkTitle" />
+                <FieldRef Name="PzlSeverity" />
+                <FieldRef Name="PzlContent" />
+                <FieldRef Name="PzlStartDate" />
+                <FieldRef Name="PzlEndDate" />
+                <FieldRef Name="PzlAffectedSystems" />
+                <FieldRef Name="PzlConsequences" />
+                <FieldRef Name="PzlResponsible" />
+            </ViewFields>
+            <RowLimit Paged="TRUE">30</RowLimit>
+            <JSLink>clienttemplates.js</JSLink>
+        </View>
+    </pnp:Views>
+  <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/Lists/Security/DefaultSecurity.xml" />
+</pnp:ListInstance>

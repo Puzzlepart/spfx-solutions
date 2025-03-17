@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root"
+    xmlns=""
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SiteFields_Severity_DisplayName" xml:space="preserve">
+    <value>Message level</value>
+  </data>
+  <data name="SiteFields_Severity_Description" xml:space="preserve">
+    <value>Used to set the color of the notification banner (grey, yellow, red)</value>
+  </data>
+  <data name="SiteFields_Severity_Choice_Info" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="SiteFields_Severity_Choice_Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="SiteFields_Severity_Choice_Error" xml:space="preserve">
+    <value>Alert</value>
+  </data>
+  <data name="SiteFields_Severity_Choice_Success" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="SiteFields_Content_DisplayName" xml:space="preserve">
+    <value>Content (Description/consequences)</value>
+  </data>
+  <data name="SiteFields_Content_Description" xml:space="preserve">
+    <value>Content to show in the announcement</value>
+  </data>
+  <data name="SiteFields_StartDate_DisplayName" xml:space="preserve">
+    <value>Startdate</value>
+  </data>
+  <data name="SiteFields_StartDate_Description" xml:space="preserve">
+    <value>Startdate for the announcement (Active from)</value>
+  </data>
+  <data name="SiteFields_EndDate_DisplayName" xml:space="preserve">
+    <value>End date</value>
+  </data>
+  <data name="SiteFields_EndDate_Description" xml:space="preserve">
+    <value>End date for the announcement (Active until)</value>
+  </data>
+  <data name="SiteFields_AffectedSystems_DisplayName" xml:space="preserve">
+    <value>Affected services</value>
+  </data>
+  <data name="SiteFields_AffectedSystems_Description" xml:space="preserve">
+    <value>Define affected systems</value>
+  </data>
+  <data name="SiteFields_Consequences_DisplayName" xml:space="preserve">
+    <value>Consequences after resolution</value>
+  </data>
+  <data name="SiteFields_Consequences_Description" xml:space="preserve">
+    <value>Define consequences that can happen after resolution</value>
+  </data>
+  <data name="SiteFields_Responsible_DisplayName" xml:space="preserve">
+    <value>Responsible</value>
+  </data>
+  <data name="SiteFields_Responsible_Description" xml:space="preserve">
+    <value>Who is responsible?</value>
+  </data>
+  <data name="ContentTypes_Announcement_Name" xml:space="preserve">
+    <value>Announcement</value>
+  </data>
+  <data name="Lists_Announcement_Title" xml:space="preserve">
+    <value>Announcements</value>
+  </data>
+  <data name="Lists_Announcement_Url" xml:space="preserve">
+    <value>Lists/Driftsmeldinger</value>
+  </data>
+  <data name="View_AllItems_DisplayName" xml:space="preserve">
+    <value>All Items</value>
+  </data>
+</root>

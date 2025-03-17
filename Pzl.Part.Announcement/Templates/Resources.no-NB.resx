@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root"
+    xmlns=""
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SiteFields_Severity_DisplayName" xml:space="preserve">
+    <value>Meldingsnivå</value>
+  </data>
+  <data name="SiteFields_Severity_Description" xml:space="preserve">
+    <value>Brukes til å angi fargen på meldingen (grå, gul, rød)</value>
+  </data>
+  <data name="SiteFields_Severity_Choice_Info" xml:space="preserve">
+    <value>Informasjon</value>
+  </data>
+  <data name="SiteFields_Severity_Choice_Warning" xml:space="preserve">
+    <value>Advarsel</value>
+  </data>
+  <data name="SiteFields_Severity_Choice_Error" xml:space="preserve">
+    <value>Varsel</value>
+  </data>
+  <data name="SiteFields_Severity_Choice_Success" xml:space="preserve">
+    <value>Normal</value>
+  </data>
+  <data name="SiteFields_Content_DisplayName" xml:space="preserve">
+    <value>Innhold (Beskrivelse/konsekvenser)</value>
+  </data>
+  <data name="SiteFields_Content_Description" xml:space="preserve">
+    <value>Innholdet som skal vises i driftsmeldingen</value>
+  </data>
+  <data name="SiteFields_StartDate_DisplayName" xml:space="preserve">
+    <value>Startdato</value>
+  </data>
+  <data name="SiteFields_StartDate_Description" xml:space="preserve">
+    <value>Startdato for driftsmelding (når den skal vises fra)</value>
+  </data>
+  <data name="SiteFields_EndDate_DisplayName" xml:space="preserve">
+    <value>Sluttdato</value>
+  </data>
+  <data name="SiteFields_EndDate_Description" xml:space="preserve">
+    <value>Sluttdato for driftsmelding (når den skal fjernes)</value>
+  </data>
+  <data name="SiteFields_AffectedSystems_DisplayName" xml:space="preserve">
+    <value>Systemer berørt</value>
+  </data>
+  <data name="SiteFields_AffectedSystems_Description" xml:space="preserve">
+    <value>Angi systemer som er berørt</value>
+  </data>
+  <data name="SiteFields_Consequences_DisplayName" xml:space="preserve">
+    <value>Eventuelle konsekvenser</value>
+  </data>
+  <data name="SiteFields_Consequences_Description" xml:space="preserve">
+    <value>Angi eventuelle konsekvenser som oppstår etter sluttdato</value>
+  </data>
+  <data name="SiteFields_Responsible_DisplayName" xml:space="preserve">
+    <value>Ansvarlig</value>
+  </data>
+  <data name="SiteFields_Responsible_Description" xml:space="preserve">
+    <value>Hvem er ansvarlig?</value>
+  </data>
+  <data name="ContentTypes_Announcement_Name" xml:space="preserve">
+    <value>Driftsmelding</value>
+  </data>
+  <data name="Lists_Announcement_Title" xml:space="preserve">
+    <value>Driftsmeldinger</value>
+  </data>
+  <data name="Lists_Announcement_Url" xml:space="preserve">
+    <value>Lists/Driftsmeldinger</value>
+  </data>
+  <data name="View_AllItems_DisplayName" xml:space="preserve">
+    <value>Alle elementer</value>
+  </data>
+</root>
