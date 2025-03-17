@@ -2,7 +2,7 @@
 import { useAnnouncementState } from './useAnnouncementState'
 import { IAnnouncementProps } from './types'
 import { useId } from '@fluentui/react-components'
-import { useAnnouncementDataFetch } from './useProjectProvisionDataFetch'
+import { useAnnouncementDataFetch } from './useAnnouncementDataFetch'
 
 /**
  * Component logic hook for `Announcement`. This hook is responsible for
