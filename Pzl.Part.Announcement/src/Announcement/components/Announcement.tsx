@@ -53,7 +53,7 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                     key={announcement.id}
                     title={announcement.title}
                     text={announcement.content}
-                    intent={announcement.intent}
+                    intent={announcement.severity}
                   />
                 ))
               ) : (

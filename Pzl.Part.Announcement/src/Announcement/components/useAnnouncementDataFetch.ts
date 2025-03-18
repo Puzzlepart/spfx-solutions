@@ -1,10 +1,11 @@
 import { useEffect } from 'react'
-import { IAnnouncementProps, IAnnouncementState } from './types'
+import { IAnnouncement, IAnnouncementProps, IAnnouncementState } from './types'
 import { spfi, SPFx } from '@pnp/sp'
 import '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/items'
 import strings from 'AnnouncementStrings'
+import { MessageBarIntent } from '@fluentui/react-components'
 
 /**
  * Component data fetch hook for `Announcement`. This hook is responsible for
@@ -43,11 +44,28 @@ export function useAnnouncementDataFetch(
 
       console.log(spItems)
 
-      return spItems.map((item) => {
+      return spItems.map((item): IAnnouncement => {
+        let severity: MessageBarIntent = 'info'
+
+        switch (item.PzlSeverity) {
+          case strings.Severity.Success:
+            severity = 'success'
+            break
+          case strings.Severity.Warning:
+            severity = 'warning'
+            break
+          case strings.Severity.Error:
+            severity = 'error'
+            break
+          default:
+            severity = 'info'
+            break
+        }
+
         return {
           id: item.ID,
           title: item.Title,
-          severity: item.PzlSeverity,
+          severity,
           content: item.PzlContent,
           startDate: item.PzlStartDate,
           endDate: item.PzlEndDate,

@@ -33,16 +33,16 @@ export interface IAnnouncementState {
 export interface IAnnouncement {
   id: string
   title: string
-  severity: string
+  severity: MessageBarIntent
   content: string
   startDate: string
   endDate: string
   affectedSystems: string
   consequence: string
-  responsible: string
-  responsibleMail: string
-  customBgColor: string
-  intent: MessageBarIntent
+  responsible: {
+    name: string
+    email: string
+  }
 }
 
 export enum Alignment {
