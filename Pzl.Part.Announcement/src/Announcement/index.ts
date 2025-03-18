@@ -50,7 +50,7 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
                 PropertyPaneTextField('description', {
                   label: 'Beskrivelse',
                   description:
-                    'Beskrivelse av webdelen, dukker opp ved trykk på info-ikonet ved siden av tittel.',
+                    'Beskrivelse, dukker opp ved trykk på info-ikonet ved siden av tittel.',
                   multiline: true,
                   rows: 4
                 })
@@ -58,7 +58,6 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
             },
             {
               groupName: 'Skjul/vis',
-              isCollapsed: true,
               groupFields: [
                 PropertyPaneToggle('hideHeader', {
                   label: 'Skjul header',

@@ -16,7 +16,8 @@
     "description": { "default": "Announcement description" },
     "officeFabricIconFontName": "Page",
     "properties": {
-      "description": "Announcement"
+      "title": "Driftsmeldinger",
+      "description": "Her vil driftsmeldinger dukke opp, som for eksempel planlagt vedlikehold eller uforutsette hendelser."
     }
   }]
 }

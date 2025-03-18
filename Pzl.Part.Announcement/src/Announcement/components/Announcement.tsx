@@ -11,7 +11,10 @@ import {
   Text,
   useToastController,
   webLightTheme,
-  InfoLabel
+  InfoLabel,
+  Popover,
+  PopoverSurface,
+  PopoverTrigger
 } from '@fluentui/react-components'
 import styles from './Announcement.module.scss'
 import { IAnnouncementProps } from './types'
@@ -76,12 +79,21 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
             <div className={styles.announcements}>
               {state.announcements.length > 0 ? (
                 state.announcements.map((announcement, idx) => (
-                  <UserMessage
-                    key={announcement.id}
-                    title={announcement.title}
-                    text={announcement.content}
-                    intent={announcement.severity}
-                  />
+                  <Popover key={idx} withArrow closeOnScroll positioning='before'>
+                    <PopoverTrigger>
+                      <div className={styles.message}>
+                        <UserMessage
+                          key={announcement.id}
+                          title={announcement.title}
+                          text={announcement.content}
+                          intent={announcement.severity}
+                        />
+                      </div>
+                    </PopoverTrigger>
+                    <PopoverSurface tabIndex={-1}>
+                      <p>Dette er en test</p>
+                    </PopoverSurface>
+                  </Popover>
                 ))
               ) : (
                 <Text style={{ color: 'var(--colorNeutralForeground4)' }}>
