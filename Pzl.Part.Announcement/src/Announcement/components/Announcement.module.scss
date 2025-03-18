@@ -1,11 +1,27 @@
 .announcement {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
   overflow: hidden;
+
+  .header {
+    display: flex;
+
+    .infoLabel {
+      padding-top: 4px;
+    }
+  }
+
+  div > .infoLabelContent {
+    max-width: 640px;
+  }
 
   .announcements {
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
     justify-content: space-between;
     width: 100%;
-    gap: 1em;
+    gap: 16px
   }
 }

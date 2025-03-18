@@ -1,4 +1,7 @@
 declare interface IAnnouncementStrings {
+  Aria: {
+    HeaderInfoTitle: string
+  },
   AnnouncementsListName: string
   Severity: {
     Info: string

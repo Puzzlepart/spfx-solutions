@@ -23,8 +23,6 @@ export function useAnnouncementDataFetch(
     try {
       const sp = spfi().using(SPFx(props.context))
       const now = new Date()
-      const dateFilter = `(PzlStartDate le datetime'${now.toISOString()}') and (PzlEndDate ge datetime'${now.toISOString()})'`
-
       const announcementList = sp.web.lists.getByTitle(strings.AnnouncementsListName)
       const spItems = await announcementList.items
         .select(
@@ -39,7 +37,9 @@ export function useAnnouncementDataFetch(
           'PzlResponsible/Title',
           'PzlResponsible/EMail'
         )
-        // .filter(dateFilter)
+        .filter(
+          `PzlStartDate le datetime'${now.toISOString()}' and PzlEndDate ge datetime'${now.toISOString()}'`
+        )
         .expand('PzlResponsible')()
 
       console.log(spItems)

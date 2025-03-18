@@ -10,13 +10,16 @@ import {
   ToastTitle,
   Text,
   useToastController,
-  webLightTheme
+  webLightTheme,
+  InfoLabel
 } from '@fluentui/react-components'
 import styles from './Announcement.module.scss'
 import { IAnnouncementProps } from './types'
 import { AnnouncementContext } from './context'
 import { useAnnouncement } from './useAnnouncement'
 import { UserMessage } from './UserMessage'
+import { format } from '@fluentui/react'
+import strings from 'AnnouncementStrings'
 
 export const Announcement: FC<IAnnouncementProps> = (props) => {
   const { state, setState, toasterId, fluentProviderId } = useAnnouncement(props)
@@ -43,9 +46,33 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={webLightTheme}>
           <div className={styles.announcement}>
-            <Text title='Driftsmeldinger' weight='semibold' size={500} block truncate>
-              Driftsmeldinger
-            </Text>
+            {!props.hideHeader && (
+              <div className={styles.header}>
+                {props.description && (
+                  <Text title='Driftsmeldinger' weight='semibold' size={500} block truncate>
+                    {props.title}
+                  </Text>
+                )}
+                {props.description && (
+                  <div
+                    className={styles.infoLabel}
+                    title={format(strings.Aria.HeaderInfoTitle, props.title)}
+                  >
+                    <InfoLabel
+                      size='medium'
+                      info={
+                        <div
+                          className={styles.infoLabelContent}
+                          dangerouslySetInnerHTML={{
+                            __html: props.description
+                          }}
+                        />
+                      }
+                    />
+                  </div>
+                )}
+              </div>
+            )}
             <div className={styles.announcements}>
               {state.announcements.length > 0 ? (
                 state.announcements.map((announcement, idx) => (
