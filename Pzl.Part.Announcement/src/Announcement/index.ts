@@ -9,6 +9,7 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
   public render(): void {
     const element: React.ReactElement<IAnnouncementProps> = React.createElement(Announcement, {
       ...this.properties,
+      context: this.context,
       hasTeamsContext: !!this.context.sdks.microsoftTeams
     })
 

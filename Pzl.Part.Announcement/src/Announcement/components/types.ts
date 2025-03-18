@@ -1,4 +1,4 @@
-import { MessageBarType } from '@fluentui/react'
+import { MessageBarIntent } from '@fluentui/react-components'
 import { SPUser } from '@microsoft/sp-page-context'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 
@@ -13,7 +13,6 @@ export interface IAnnouncementProps {
   isMobile: boolean
   textAlignment: Alignment
   boldText: boolean
-  announcementLevels: string
 
   // WebPart
   hasTeamsContext: boolean
@@ -43,7 +42,7 @@ export interface IAnnouncement {
   responsible: string
   responsibleMail: string
   customBgColor: string
-  getMessageBarType(): MessageBarType
+  intent: MessageBarIntent
 }
 
 export enum Alignment {

@@ -1,5 +1,11 @@
 .announcement {
   overflow: hidden;
-  padding: 1em;
-  color: var(--bodyText);
+
+  .announcements {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    gap: 1em;
+  }
 }

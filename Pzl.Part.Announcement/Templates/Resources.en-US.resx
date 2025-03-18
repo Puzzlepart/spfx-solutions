@@ -119,7 +119,7 @@
     <value>Announcement</value>
   </data>
   <data name="Lists_Announcement_Title" xml:space="preserve">
-    <value>Announcements</value>
+    <value>Driftsmeldinger</value>
   </data>
   <data name="Lists_Announcement_Url" xml:space="preserve">
     <value>Lists/Driftsmeldinger</value>

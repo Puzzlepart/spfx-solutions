@@ -14,11 +14,13 @@ export const useAnnouncement = (props: IAnnouncementProps) => {
   const { state, setState } = useAnnouncementState()
   useAnnouncementDataFetch(props, setState)
 
+  const toasterId = useId('toaster-announcement')
   const fluentProviderId = useId('fp-announcement')
 
   return {
     state,
     setState,
+    toasterId,
     fluentProviderId
   }
 }

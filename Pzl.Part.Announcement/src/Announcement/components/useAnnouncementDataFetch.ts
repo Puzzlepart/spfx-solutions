@@ -4,6 +4,7 @@ import { spfi, SPFx } from '@pnp/sp'
 import '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/items'
+import strings from 'AnnouncementStrings'
 
 /**
  * Component data fetch hook for `Announcement`. This hook is responsible for
@@ -20,20 +21,43 @@ export function useAnnouncementDataFetch(
   const getAnnouncements = async (): Promise<any[]> => {
     try {
       const sp = spfi().using(SPFx(props.context))
+      const now = new Date()
+      const dateFilter = `(PzlStartDate le datetime'${now.toISOString()}') and (PzlEndDate ge datetime'${now.toISOString()})'`
 
-      const announcementList = sp.web.lists.getByTitle('Announcement')
-      const spItems = await announcementList.items.select('Title', 'Description')()
+      const announcementList = sp.web.lists.getByTitle(strings.AnnouncementsListName)
+      const spItems = await announcementList.items
+        .select(
+          'ID',
+          'Title',
+          'PzlSeverity',
+          'PzlContent',
+          'PzlStartDate',
+          'PzlEndDate',
+          'PzlAffectedSystems',
+          'PzlConsequences',
+          'PzlResponsible/Title',
+          'PzlResponsible/EMail'
+        )
+        // .filter(dateFilter)
+        .expand('PzlResponsible')()
 
       console.log(spItems)
 
       return spItems.map((item) => {
         return {
+          id: item.ID,
           title: item.Title,
-          description: item.Description
+          severity: item.PzlSeverity,
+          content: item.PzlContent,
+          startDate: item.PzlStartDate,
+          endDate: item.PzlEndDate,
+          affectedSystems: item.PzlAffectedSystems,
+          consequence: item.PzlConsequences,
+          responsible: { name: item.PzlResponsible?.Title, email: item.PzlResponsible?.EMail }
         }
       })
     } catch (error) {
-      throw new Error('Kunne ikke hente meldinger...')
+      throw new Error('Kunne ikke hente driftsmeldinger...')
     }
   }
 
