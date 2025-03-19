@@ -4,17 +4,14 @@ import {
   IdPrefixProvider,
   Skeleton,
   SkeletonItem,
-  Toast,
-  ToastBody,
-  Toaster,
-  ToastTitle,
   Text,
-  useToastController,
   webLightTheme,
   InfoLabel,
   Popover,
   PopoverSurface,
-  PopoverTrigger
+  PopoverTrigger,
+  Label,
+  Avatar
 } from '@fluentui/react-components'
 import styles from './Announcement.module.scss'
 import { IAnnouncementProps } from './types'
@@ -23,18 +20,12 @@ import { useAnnouncement } from './useAnnouncement'
 import { UserMessage } from './UserMessage'
 import { format } from '@fluentui/react'
 import strings from 'AnnouncementStrings'
+import { formatDate } from '../util/formatDate'
+import ReactMarkdown from 'react-markdown'
+import rehypeRaw from 'rehype-raw'
 
 export const Announcement: FC<IAnnouncementProps> = (props) => {
-  const { state, setState, toasterId, fluentProviderId } = useAnnouncement(props)
-  const { dispatchToast } = useToastController(toasterId)
-
-  // dispatchToast(
-  //   <Toast appearance='inverted'>
-  //     <ToastTitle>Test</ToastTitle>
-  //     <ToastBody>Testytest</ToastBody>
-  //   </Toast>,
-  //   { intent: 'success' }
-  // )
+  const { state, setState, fluentProviderId } = useAnnouncement(props)
 
   if (state.loading) {
     return (
@@ -91,7 +82,48 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                       </div>
                     </PopoverTrigger>
                     <PopoverSurface tabIndex={-1}>
-                      <p>Dette er en test</p>
+                      <div className={styles.popover}>
+                        <Text title='Driftsmeldinger' weight='semibold' size={500} block truncate>
+                          {announcement.title}
+                        </Text>
+                        <div className={styles.content}>
+                          <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+                            {announcement.content}
+                          </ReactMarkdown>
+                        </div>
+                        <div className={styles.content}>
+                          <Label weight='semibold'>Tjenester berørt</Label>
+                          <span>{announcement.affectedSystems}</span>
+                        </div>
+                        <div className={styles.content}>
+                          <Label weight='semibold'>Beskrivelse/konsekvens</Label>
+                          <span>{announcement.consequence}</span>
+                        </div>
+                        <div className={styles.content}>
+                          <Label weight='semibold'>Ansvarlig</Label>
+                          <span>
+                            <Avatar
+                              title={announcement.responsible.name}
+                              name={announcement.responsible.name}
+                              image={{
+                                src: `/_layouts/15/userphoto.aspx?size=L&accountname=${announcement.responsible.email}`
+                              }}
+                              size={28}
+                              color='colorful'
+                              style={{ marginRight: 4 }}
+                            />
+                            <span>{announcement.responsible.name}</span>
+                          </span>
+                        </div>
+                        <div className={styles.content}>
+                          <Label weight='semibold'>Fra dato</Label>
+                          <span>{formatDate(announcement.startDate.toString(), true)}</span>
+                        </div>
+                        <div className={styles.content}>
+                          <Label weight='semibold'>Fra dato</Label>
+                          <span>{formatDate(announcement.endDate.toString(), true)}</span>
+                        </div>
+                      </div>
                     </PopoverSurface>
                   </Popover>
                 ))
@@ -101,10 +133,13 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                 </Text>
               )}
             </div>
-            {/* <Toaster toasterId={toasterId} /> */}
           </div>
         </FluentProvider>
       </IdPrefixProvider>
     </AnnouncementContext.Provider>
   )
+}
+
+Announcement.defaultProps = {
+  targetAudience: false
 }

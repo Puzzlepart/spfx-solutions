@@ -53,6 +53,11 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
                     'Beskrivelse, dukker opp ved trykk på info-ikonet ved siden av tittel.',
                   multiline: true,
                   rows: 4
+                }),
+                PropertyPaneToggle('targetAudience', {
+                  label: 'Aktiver målgruppeangivelse',
+                  onText: 'På',
+                  offText: 'Av'
                 })
               ]
             },

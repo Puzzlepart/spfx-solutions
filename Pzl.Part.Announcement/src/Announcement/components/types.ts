@@ -6,9 +6,10 @@ export interface IAnnouncementProps {
   // General
   title: string
   description: string
-  serverRelativeWebUrl: string
-  serviceAnnouncementListUrl: string
-  discardForSessionOnly: boolean
+  targetAudience: boolean
+  // serverRelativeWebUrl: string
+  // serviceAnnouncementListUrl: string
+  // discardForSessionOnly: boolean
 
   // Hide/show
   hideHeader: boolean
@@ -34,6 +35,7 @@ export interface IAnnouncement {
   affectedSystems: string
   consequence: string
   responsible: User
+  hasAccess?: boolean
 }
 
 export interface User {
