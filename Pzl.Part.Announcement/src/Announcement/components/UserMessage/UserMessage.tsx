@@ -20,7 +20,7 @@ import styles from './UserMessage.module.scss'
  * @category UserMessage
  */
 export const UserMessage: FC<IUserMessageProps> = (props: IUserMessageProps) => {
-  const fluentProviderId = useId('fp-user-message')
+  const fluentProviderId = useId('fp-announcement-user-message')
   const messageProps = useUserMessage(props)
 
   return (

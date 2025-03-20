@@ -43,7 +43,7 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
             {!props.hideHeader && (
               <div className={styles.header}>
                 {props.description && (
-                  <Text title='Driftsmeldinger' weight='semibold' size={500} block truncate>
+                  <Text title={props.title} weight='semibold' size={500} block truncate>
                     {props.title}
                   </Text>
                 )}
@@ -83,7 +83,13 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                     </PopoverTrigger>
                     <PopoverSurface tabIndex={-1}>
                       <div className={styles.popover}>
-                        <Text title='Driftsmeldinger' weight='semibold' size={500} block truncate>
+                        <Text
+                          title={announcement.title}
+                          weight='semibold'
+                          size={500}
+                          block
+                          truncate
+                        >
                           {announcement.title}
                         </Text>
                         <div className={styles.content}>
@@ -92,15 +98,15 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                           </ReactMarkdown>
                         </div>
                         <div className={styles.content}>
-                          <Label weight='semibold'>Tjenester berørt</Label>
+                          <Label weight='semibold'>{strings.AffectedSystemsLabel}</Label>
                           <span>{announcement.affectedSystems}</span>
                         </div>
                         <div className={styles.content}>
-                          <Label weight='semibold'>Beskrivelse/konsekvens</Label>
+                          <Label weight='semibold'>{strings.ConsequenceLabel}</Label>
                           <span>{announcement.consequence}</span>
                         </div>
                         <div className={styles.content}>
-                          <Label weight='semibold'>Ansvarlig</Label>
+                          <Label weight='semibold'>{strings.ResponsibleLabel}</Label>
                           <span>
                             <Avatar
                               title={announcement.responsible.name}
@@ -116,11 +122,11 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                           </span>
                         </div>
                         <div className={styles.content}>
-                          <Label weight='semibold'>Fra dato</Label>
+                          <Label weight='semibold'>{strings.StartDateLabel}</Label>
                           <span>{formatDate(announcement.startDate.toString(), true)}</span>
                         </div>
                         <div className={styles.content}>
-                          <Label weight='semibold'>Fra dato</Label>
+                          <Label weight='semibold'>{strings.EndDateLabel}</Label>
                           <span>{formatDate(announcement.endDate.toString(), true)}</span>
                         </div>
                       </div>
@@ -129,7 +135,7 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                 ))
               ) : (
                 <Text style={{ color: 'var(--colorNeutralForeground4)' }}>
-                  Ingen driftsmeldinger for øyeblikket.
+                  {strings.NoAnnouncementsText}
                 </Text>
               )}
             </div>

@@ -13,6 +13,7 @@ import '@pnp/sp/webs'
 import '@pnp/sp/site-users/web'
 import strings from 'AnnouncementStrings'
 import { MessageBarIntent } from '@fluentui/react-components'
+
 /**
  * Component data fetch hook for `Announcement`. This hook is responsible for
  * fetching data and setting state.
@@ -101,8 +102,8 @@ export function useAnnouncementDataFetch(
         })
       )
       return announcements.filter((announcement) => announcement.hasAccess)
-    } catch (error) {
-      throw new Error('Kunne ikke hente driftsmeldinger...')
+    } catch {
+      throw new Error(strings.AnnouncementFetchErrorText)
     }
   }
 
@@ -110,7 +111,6 @@ export function useAnnouncementDataFetch(
     const fetchData = async () => {
       try {
         const announcements = await getAnnouncements()
-        console.log(announcements)
         setState({ announcements, loading: false })
       } catch (error) {
         setState({ error, loading: false })
