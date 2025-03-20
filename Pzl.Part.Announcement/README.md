@@ -1,73 +1,55 @@
-# announcement-web-part
+# Announcement (Driftsmeldinger)
+
+[![version](https://img.shields.io/badge/version-1.0.0-orange.svg)](https://semver.org)
 
 ## Summary
 
-Short summary on functionality and used technologies.
+This is a web part that displays announcements from a SharePoint list. The announcements are displayed based on startdate and enddate. The web part support Target Audience for the announcements added to the list.
 
 [picture of the solution in action, if possible]
 
-## Used SharePoint Framework Version
+## Lists
 
-![version](https://img.shields.io/badge/version-1.20.0-green.svg)
+* Driftsmeldinger (Announcement)
+  * Entries for announcements.
+  * Target Audience is activated for the list and can be used if needed.
 
-## Applies to
+## Installation
 
-- [SharePoint Framework](https://aka.ms/spfx)
-- [Microsoft 365 tenant](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/set-up-your-developer-tenant)
+### Create the needed lists on the site where you want to host the quick links solutions
 
-> Get your own free development tenant by subscribing to [Microsoft 365 developer program](http://aka.ms/o365devprogram)
+Clone the project or download all artefacts. The template `Announcement.xml` is located in the Templates-folder. Use PnP.PowerShell 1.12 or later to install, see example:
 
-## Prerequisites
+```powershell
+Connect-PnPOnline -Url "https://<tenant>.sharepoint.com/sites/<site>" -Interactive -ClientId "<clientid>" 
+Invoke-PnPSiteTemplate -Path ".\Templates\Announcement.xml"
+```
 
-> Any special pre-requisites?
+### Upload the web part package to a site collection app catalog
 
-## Solution
+This can be done manually by navigating to the app catalog and uploading the .sppkg package from the build.
 
-| Solution    | Author(s)                                               |
-| ----------- | ------------------------------------------------------- |
-| folder name | Author details (name, company, twitter alias with link) |
+## Building
 
-## Version history
+### Building the code
 
-| Version | Date             | Comments        |
-| ------- | ---------------- | --------------- |
-| 1.1     | March 10, 2021   | Update comment  |
-| 1.0     | January 29, 2021 | Initial release |
+```bash
+git clone the repo
+npm i
+npm run build
+```
 
-## Disclaimer
+### Testing
 
-**THIS CODE IS PROVIDED _AS IS_ WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.**
+You can test/debug using
+`npm run serve`
 
----
+```html
+https://<tenant>.sharepoint.com/sites/<site>?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/manifests.js
+```
 
-## Minimal Path to Awesome
+### Building the code for production
 
-- Clone this repository
-- Ensure that you are at the solution folder
-- in the command-line run:
-  - **npm install**
-  - **gulp serve**
-
-> Include any additional steps as needed.
-
-## Features
-
-Description of the extension that expands upon high-level summary above.
-
-This extension illustrates the following concepts:
-
-- topic 1
-- topic 2
-- topic 3
-
-> Notice that better pictures and documentation will increase the sample usage and the value you are providing for others. Thanks for your submissions advance.
-
-> Share your web part with others through Microsoft 365 Patterns and Practices program to get visibility and exposure. More details on the community, open-source projects and other activities from http://aka.ms/m365pnp.
-
-## References
-
-- [Getting started with SharePoint Framework](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/set-up-your-developer-tenant)
-- [Building for Microsoft teams](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/build-for-teams-overview)
-- [Use Microsoft Graph in your solution](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/web-parts/get-started/using-microsoft-graph-apis)
-- [Publish SharePoint Framework applications to the Marketplace](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/publish-to-marketplace-overview)
-- [Microsoft 365 Patterns and Practices](https://aka.ms/m365pnp) - Guidance, tooling, samples and open-source controls for your Microsoft 365 development
+```bash
+npm run package
+```
