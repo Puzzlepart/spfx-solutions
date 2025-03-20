@@ -6,7 +6,9 @@
 
 This is a web part that displays announcements from a SharePoint list. The announcements are displayed based on startdate and enddate. The web part support Target Audience for the announcements added to the list.
 
-[picture of the solution in action, if possible]
+![image](https://github.com/user-attachments/assets/c8de6cc6-c843-4d54-957b-4d7e55b9e363)
+![image](https://github.com/user-attachments/assets/413b3a74-d682-4e88-b136-797c6fcbec7c)
+![image](https://github.com/user-attachments/assets/c934d56e-1590-4880-8877-8a545acb9cf6)
 
 ## Lists
 
