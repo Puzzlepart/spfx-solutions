@@ -70,7 +70,7 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
             <div className={styles.announcements}>
               {state.announcements.length > 0 ? (
                 state.announcements.map((announcement, idx) => (
-                  <Popover key={idx} withArrow closeOnScroll positioning='before'>
+                  <Popover key={idx} withArrow closeOnScroll>
                     <PopoverTrigger>
                       <div className={styles.message}>
                         <UserMessage
