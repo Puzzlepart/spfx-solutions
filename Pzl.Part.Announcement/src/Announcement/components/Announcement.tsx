@@ -38,7 +38,7 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
   return (
     <AnnouncementContext.Provider value={{ props, state, setState }}>
       <IdPrefixProvider value={fluentProviderId}>
-        <FluentProvider theme={webLightTheme}>
+        <FluentProvider theme={webLightTheme} style={{ backgroundColor: 'transparent' }}>
           <div className={styles.announcement}>
             {!props.hideHeader && (
               <div className={styles.header}>
@@ -92,43 +92,55 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                         >
                           {announcement.title}
                         </Text>
-                        <div className={styles.content}>
-                          <ReactMarkdown rehypePlugins={[rehypeRaw]}>
-                            {announcement.content}
-                          </ReactMarkdown>
-                        </div>
-                        <div className={styles.content}>
-                          <Label weight='semibold'>{strings.AffectedSystemsLabel}</Label>
-                          <span>{announcement.affectedSystems}</span>
-                        </div>
-                        <div className={styles.content}>
-                          <Label weight='semibold'>{strings.ConsequenceLabel}</Label>
-                          <span>{announcement.consequence}</span>
-                        </div>
-                        <div className={styles.content}>
-                          <Label weight='semibold'>{strings.ResponsibleLabel}</Label>
-                          <span>
-                            <Avatar
-                              title={announcement.responsible.name}
-                              name={announcement.responsible.name}
-                              image={{
-                                src: `/_layouts/15/userphoto.aspx?size=L&accountname=${announcement.responsible.email}`
-                              }}
-                              size={28}
-                              color='colorful'
-                              style={{ marginRight: 4 }}
-                            />
-                            <span>{announcement.responsible.name}</span>
-                          </span>
-                        </div>
-                        <div className={styles.content}>
-                          <Label weight='semibold'>{strings.StartDateLabel}</Label>
-                          <span>{formatDate(announcement.startDate.toString(), true)}</span>
-                        </div>
-                        <div className={styles.content}>
-                          <Label weight='semibold'>{strings.EndDateLabel}</Label>
-                          <span>{formatDate(announcement.endDate.toString(), true)}</span>
-                        </div>
+                        {announcement.content && (
+                          <div className={styles.content}>
+                            <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+                              {announcement.content}
+                            </ReactMarkdown>
+                          </div>
+                        )}
+                        {announcement.affectedSystems && (
+                          <div className={styles.content}>
+                            <Label weight='semibold'>{strings.AffectedSystemsLabel}</Label>
+                            <span>{announcement.affectedSystems}</span>
+                          </div>
+                        )}
+                        {announcement.consequence && (
+                          <div className={styles.content}>
+                            <Label weight='semibold'>{strings.ConsequenceLabel}</Label>
+                            <span>{announcement.consequence}</span>
+                          </div>
+                        )}
+                        {announcement.responsible.name && (
+                          <div className={styles.content}>
+                            <Label weight='semibold'>{strings.ResponsibleLabel}</Label>
+                            <span>
+                              <Avatar
+                                title={announcement.responsible.name}
+                                name={announcement.responsible.name}
+                                image={{
+                                  src: `/_layouts/15/userphoto.aspx?size=L&accountname=${announcement.responsible.email}`
+                                }}
+                                size={28}
+                                color='colorful'
+                                style={{ marginRight: 4 }}
+                              />
+                              <span>{announcement.responsible.name}</span>
+                            </span>
+                          </div>
+                        )}
+                        {announcement.startDate && (
+                          <div className={styles.content}>
+                            <Label weight='semibold'>{strings.StartDateLabel}</Label>
+                            <span>{formatDate(announcement.startDate.toString(), true)}</span>
+                          </div>
+                        )}
+                        {announcement.endDate && (
+                          <div className={styles.content}>
+                            <Label weight='semibold'>{strings.EndDateLabel}</Label>
+                            <span>{formatDate(announcement.endDate.toString(), true)}</span>
+                          </div>
+                        )}
                       </div>
                     </PopoverSurface>
                   </Popover>
