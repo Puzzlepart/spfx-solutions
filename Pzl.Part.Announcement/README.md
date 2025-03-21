@@ -16,7 +16,7 @@ This is a web part that displays announcements from a SharePoint list. The annou
 
 * Driftsmeldinger (Announcement)
   * Entries for announcements.
-  * Target Audience is activated for the list and can be used if needed.
+  * Target Audience needs to be activated for the list and can be used if needed.
 
 ## Installation
 
