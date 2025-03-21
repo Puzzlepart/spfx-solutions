@@ -1,0 +1,23 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json",
+  "id": "ddfa2478-1872-408c-8f8f-a1c704f93d66",
+  "alias": "AnnouncementWebPart",
+  "componentType": "WebPart",
+  "version": "*",
+  "manifestVersion": 2,
+  "requiresCustomScript": false,
+  "supportedHosts": ["SharePointWebPart", "TeamsPersonalApp", "TeamsTab", "SharePointFullPage"],
+  "supportsThemeVariants": true,
+
+  "preconfiguredEntries": [{
+    "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
+    "group": { "default": "Advanced" },
+    "title": { "default": "Announcement" },
+    "description": { "default": "Announcement description" },
+    "officeFabricIconFontName": "Page",
+    "properties": {
+      "title": "Driftsmeldinger",
+      "description": "Her vil driftsmeldinger dukke opp, som for eksempel planlagt vedlikehold eller uforutsette hendelser."
+    }
+  }]
+}

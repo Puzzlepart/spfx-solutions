@@ -1,0 +1,40 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "Announcements by Puzzlepart",
+    "id": "a65ac2f2-48d4-41ad-81b2-4c89e28c3481",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "Puzzlepart AS",
+      "websiteUrl": "https://puzzlepart.com",
+      "privacyUrl": "https://privacy.microsoft.com/en-us/privacystatement",
+      "termsOfUseUrl": "https://go.microsoft.com/fwlink/?linkid=2039674",
+      "mpnId": "5128564"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "announcement description"
+      },
+      "longDescription": {
+        "default": "announcement description"
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "announcement Feature",
+        "description": "The feature that activates elements of the announcementsolution.",
+        "id": "2db0bc78-5fba-4740-a35a-3971f718f070",
+        "version": "1.0.0.0"
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/pzl-announcement.sppkg"
+  }
+}

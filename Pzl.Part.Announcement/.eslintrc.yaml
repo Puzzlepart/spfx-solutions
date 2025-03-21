@@ -1,0 +1,48 @@
+env:
+  browser: true
+parser: "@typescript-eslint/parser"
+extends:
+  - "prettier"
+  - "plugin:react/recommended"
+  - "plugin:@typescript-eslint/recommended"
+plugins:
+  - "prettier"
+  - "unused-imports"
+parserOptions:
+  ecmaVersion: 2018
+  sourceType: module
+  ecmaFeatures:
+    jsx: true
+rules:
+  "@typescript-eslint/interface-name-prefix": 0
+  "@typescript-eslint/no-explicit-any": 0
+  "@typescript-eslint/no-unused-vars": 1
+  "@typescript-eslint/member-delimiter-style": 0
+  "@typescript-eslint/explicit-function-return-type": 0
+  "@typescript-eslint/explicit-module-boundary-types": 0
+  "@typescript-eslint/no-inferrable-types": 0
+  "react/prop-types": 0
+  "no-inferrable-types": 0
+  "react/display-name": 0
+  "no-compare-neg-zero": 1
+  "no-unused-vars": 1
+  "no-console": 1
+  "default-case": 0
+  "eqeqeq": 1
+  "max-classes-per-file": 1
+  "jsx-quotes":
+    - 0
+    - "prefer-single"
+  quotes:
+    - "error"
+    - "single"
+  yoda: 2
+  "require-await": 1
+  semi:
+    - "error"
+    - "never"
+    - {}
+  "unused-imports/no-unused-imports": 0
+settings:
+  react:
+    version: "detect"

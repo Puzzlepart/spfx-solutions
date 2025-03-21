@@ -1,0 +1,51 @@
+.announcement {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .header {
+    display: flex;
+
+    .infoLabel {
+      padding-top: 4px;
+    }
+  }
+
+  div > .infoLabelContent {
+    max-width: 640px;
+  }
+
+  .announcements {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    gap: 16px;
+
+    .message {
+      width: 100%;
+      cursor: pointer;
+      transition: 0.2s ease-in-out;
+
+      &:hover {
+        transform: scale(1.03);
+      }
+    }
+  }
+}
+
+.popover {
+  display: flex;
+  flex-direction: column;
+  padding: 12px;
+  gap: 12px;
+
+  .content {
+    display: flex;
+    gap: 4px;
+    flex-direction: column;
+    max-width: 320px;
+    flex-wrap: wrap;
+  }
+}

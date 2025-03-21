@@ -1,0 +1,17 @@
+<pnp:SiteFields xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+  <Field Type="Choice" DisplayName="{resource:SiteFields_Severity_DisplayName}" Description="{resource:SiteFields_Severity_Description}" Group="Puzzlepart" ID="{8cfea964-4168-4775-8970-2709d85a04cc}" StaticName="PzlSeverity" Name="PzlSeverity" Format="Dropdown">
+    <Default>{resource:SiteFields_Severity_Choice_Warning}</Default>
+    <CHOICES>
+      <CHOICE>{resource:SiteFields_Severity_Choice_Success}</CHOICE>
+      <CHOICE>{resource:SiteFields_Severity_Choice_Warning}</CHOICE>
+      <CHOICE>{resource:SiteFields_Severity_Choice_Info}</CHOICE>
+      <CHOICE>{resource:SiteFields_Severity_Choice_Error}</CHOICE>
+    </CHOICES>
+  </Field>
+  <Field Type="Note" DisplayName="{resource:SiteFields_Content_DisplayName}" Description="{resource:SiteFields_Content_Description}" NumLines="6" RichText="TRUE" RichTextMode="FullHtml" Group="Puzzlepart" ID="{28b815cc-3613-4118-a1be-694b47e88ecf}" StaticName="PzlContent" Name="PzlContent" />
+  <Field Type="DateTime" DisplayName="{resource:SiteFields_StartDate_DisplayName}" Description="{resource:SiteFields_StartDate_Description}" Group="Puzzlepart" ID="{31cbeda7-3ddc-43c2-9f44-136147558b37}" Name="PzlStartDate" StaticName="PzlStartDate" />
+  <Field Type="DateTime" DisplayName="{resource:SiteFields_EndDate_DisplayName}" Description="{resource:SiteFields_EndDate_Description}" Group="Puzzlepart" ID="{68ba85c1-53ff-4ada-a682-e4038dcd6506}" Name="PzlEndDate" StaticName="PzlEndDate" />
+  <Field Type="Text" DisplayName="{resource:SiteFields_AffectedSystems_DisplayName}" Description="{resource:SiteFields_AffectedSystems_Description}" MaxLength="255" Group="Puzzlepart" ID="{5837187c-85c8-4fa9-87a1-4457f326df54}" StaticName="PzlAffectedSystems" Name="PzlAffectedSystems" />
+  <Field Type="Note" DisplayName="{resource:SiteFields_Consequences_DisplayName}" Description="{resource:SiteFields_Consequences_Description}" NumLines="6" RichText="FALSE" Group="Puzzlepart" ID="{6f006ea9-73a4-497c-ac2c-39e0a01102d9}" StaticName="PzlConsequences" Name="PzlConsequences" />
+  <Field Type="User" DisplayName="{resource:SiteFields_Responsible_DisplayName}" Description="{resource:SiteFields_Responsible_Description}" Group="Puzzlepart" ID="{078e1aaf-c463-41d3-80d4-c5239cc0986a}" StaticName="PzlResponsible" Name="PzlResponsible" />
+</pnp:SiteFields>

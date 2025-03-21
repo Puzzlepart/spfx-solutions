@@ -1,0 +1,13 @@
+<pnp:ContentType ID="0x01001A58CF6ADF6943E89CE71ACB741407FA" Name="{resource:ContentTypes_Announcement_Name}" Description="" UpdateChildren="true"
+  xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+  <pnp:FieldRefs>
+    <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
+    <pnp:FieldRef ID="8cfea964-4168-4775-8970-2709d85a04cc" Name="PzlSeverity" Required="true" UpdateChildren="true" />
+    <pnp:FieldRef ID="28b815cc-3613-4118-a1be-694b47e88ecf" Name="PzlContent" Required="true" UpdateChildren="true" />
+    <pnp:FieldRef ID="31cbeda7-3ddc-43c2-9f44-136147558b37" Name="PzlStartDate" Required="true" UpdateChildren="true" />
+    <pnp:FieldRef ID="68ba85c1-53ff-4ada-a682-e4038dcd6506" Name="PzlEndDate" Required="true" UpdateChildren="true" />
+    <pnp:FieldRef ID="5837187c-85c8-4fa9-87a1-4457f326df54" Name="PzlAffectedSystems" UpdateChildren="true" />
+    <pnp:FieldRef ID="6f006ea9-73a4-497c-ac2c-39e0a01102d9" Name="PzlConsequences" UpdateChildren="true" />
+    <pnp:FieldRef ID="078e1aaf-c463-41d3-80d4-c5239cc0986a" Name="PzlResponsible" UpdateChildren="true" />
+  </pnp:FieldRefs>
+</pnp:ContentType>
