@@ -83,3 +83,16 @@ The path to the CSS file can be configured per site, making it possible to load 
 See example configuration:
 
 [<img src="images/PowerShell_Example_Usage.png" width="600"/>](images/PowerShell_Example_Usage.png)
+
+```powershell
+
+Get-PnPCustomAction | select Id,Title
+$styler = Get-PnPCustomAction -Identity "PzlStyler"
+$props = ConvertFrom-Json $styler.ClientSideComponentProperties
+$props.cssFilePath = ".../SiteAssets/PzlStyler.css"
+$styler.ClientSideComponentProperties = ConvertTo-Json $props -Compress
+$styler.Update()
+$styler.Context.ExecuteQuery()
+
+
+```
