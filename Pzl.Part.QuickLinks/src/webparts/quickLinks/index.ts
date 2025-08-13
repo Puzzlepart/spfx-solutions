@@ -1,7 +1,6 @@
 import * as React from 'react'
 import * as ReactDom from 'react-dom'
 import * as strings from 'QuickLinksWebPartStrings'
-import { sp } from '@pnp/sp'
 import { Version } from '@microsoft/sp-core-library'
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { ThemeProvider, ThemeChangedEventArgs, IReadonlyTheme } from '@microsoft/sp-component-base'
@@ -14,7 +13,7 @@ import {
 } from '@microsoft/sp-property-pane'
 import { IQuickLinksProps, QuickLinks } from './components'
 import { PropertyFieldIconPicker } from '@pnp/spfx-property-controls/lib/PropertyFieldIconPicker'
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { getSP } from '../pnpjsConfig'
 
 export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinksProps> {
   private _themeProvider: ThemeProvider
@@ -26,18 +25,14 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
       theme: this._theme,
       userId: this.context.pageContext.legacyPageContext.userId,
       webServerRelativeUrl: this.context.pageContext.web.serverRelativeUrl,
+      context: this.context
     })
 
     ReactDom.render(element, this.domElement)
   }
 
   public async onInit(): Promise<void> {
-    sp.setup({
-      spfxContext: this.context,
-      sp: !stringIsNullOrEmpty(this.properties.globalConfigurationUrl) && {
-        baseUrl: this.properties.globalConfigurationUrl
-      }
-    })
+    getSP(this.context)
 
     const themeProvider: ThemeProvider = this.context.serviceScope.consume(ThemeProvider.serviceKey)
     this._theme = themeProvider.tryGetTheme()

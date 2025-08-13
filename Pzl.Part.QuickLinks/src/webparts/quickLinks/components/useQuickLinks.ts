@@ -1,4 +1,4 @@
-import { sp } from '@pnp/sp'
+import { getSP } from '../../pnpjsConfig'
 import { isEqual } from 'lodash'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { useEffect } from 'react'
@@ -16,21 +16,24 @@ import { customDarkTheme, customLightTheme } from '../../../util/theme'
  */
 export const useQuickLinks = (props: IQuickLinksProps) => {
   const { state, setState } = useQuickLinksState()
+  const sp = getSP(props.context)
 
   const backgroundColor: string = props.theme?.semanticColors?.bodyBackground ?? '#ffffff'
   const theme = tinycolor(backgroundColor).isDark() ? customDarkTheme : customLightTheme
 
   useEffect(() => {
+    if (!sp) return
     fetchData()
-  }, [])
+  }, [sp])
 
   const fetchData = async (): Promise<void> => {
     let webServerRelativeUrl: string = props.webServerRelativeUrl
     let searchString: string = `AuthorId eq '${props.userId}'`
 
     if (props.globalConfigurationUrl) {
-      const web = await sp.web.get()
-      const userId = (await sp.web.currentUser.get()).Id
+      const web = await sp.web()
+      const user = await sp.web.currentUser()
+      const userId = user.Id
       const webUrl = web.Url
       const sitesIndex = webUrl.indexOf('/sites/')
       searchString = `AuthorId eq '${userId}'`
@@ -46,15 +49,12 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
       .getList(`${webServerRelativeUrl}/Lists/EditorLinks`)
       .items.filter('(PzlLinkActive eq 1) and (PzlLinkMandatory eq 1)')
       .orderBy('PzlLinkPriority')
-      .orderBy('Title')
-      .get()
-
+      .orderBy('Title')()
     const newNonMandatoryLinks = await sp.web
       .getList(`${webServerRelativeUrl}/Lists/EditorLinks`)
       .items.filter('(PzlLinkActive eq 1) and (PzlLinkMandatory eq 0)')
       .orderBy('PzlLinkPriority')
-      .orderBy('Title')
-      .get()
+      .orderBy('Title')()
 
     const newNonMandatoryLinksObject = newNonMandatoryLinks.map((link) => {
       return {
@@ -71,8 +71,7 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
     const favouriteLinkStrings = await sp.web
       .getList(`${webServerRelativeUrl}/Lists/FavouriteLinks`)
       .items.select('Id', 'AuthorId', 'PzlPersonalLinks')
-      .filter(searchString)
-      .get()
+      .filter(searchString)()
 
     const favouriteLinksObject: ILink[] =
       favouriteLinkStrings.length > 0 ? JSON.parse(favouriteLinkStrings[0].PzlPersonalLinks) : []

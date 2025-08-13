@@ -3,7 +3,7 @@
   "solution": {
     "name": "Quick Links by Puzzlepart",
     "id": "aa433587-aa66-4620-a8d8-7857015aaa96",
-    "version": "2.2.1.0",
+    "version": "2.2.2.0",
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
     "developer": {
@@ -29,7 +29,7 @@
         "title": "pzl-quick-links Feature",
         "description": "The feature that activates elements of the pzl-quick-links solution.",
         "id": "2a27a4a5-04f8-4e13-8d45-6e9262f6a741",
-        "version": "2.2.1.0"
+        "version": "2.2.2.0"
       }
     ]
   },

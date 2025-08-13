@@ -1,4 +1,4 @@
-import { sp, ItemAddResult } from '@pnp/sp'
+import { getSP } from '../../pnpjsConfig'
 import { useAllLinksState } from './useAllLinksState'
 import { CategoryOperation, IAllLinksProps, ICategory, ILink, LinkType, User } from './types'
 import { useEffect } from 'react'
@@ -6,6 +6,7 @@ import strings from 'AllLinksWebPartStrings'
 import { isEqual } from '@microsoft/sp-lodash-subset'
 import tinycolor from 'tinycolor2'
 import { customDarkTheme, customLightTheme } from '../../../util/theme'
+import { WebPartContext } from '@microsoft/sp-webpart-base'
 
 /**
  * Component logic hook for `allLinks`. This hook is responsible for
@@ -15,13 +16,15 @@ import { customDarkTheme, customLightTheme } from '../../../util/theme'
  */
 export const useAllLinks = (props: IAllLinksProps) => {
   const { state, setState } = useAllLinksState()
+  const sp = getSP(props.context)
 
   const backgroundColor: string = props.theme?.semanticColors?.bodyBackground ?? '#ffffff'
   const theme = tinycolor(backgroundColor).isDark() ? customDarkTheme : customLightTheme
 
   useEffect(() => {
+    if (!sp) return
     fetchData()
-  }, [])
+  }, [sp])
 
   const openNewLinkDialog = (): void => {
     const emptyLink: ILink = {
@@ -143,8 +146,7 @@ export const useAllLinks = (props: IAllLinksProps) => {
       const favouriteLinkListItem = await sp.web
         .getList(props.webServerRelativeUrl + '/Lists/FavouriteLinks')
         .items.select('Id', 'AuthorId', 'PzlPersonalLinks')
-        .filter(searchString)
-        .get()
+        .filter(searchString)()
       let favouriteItemsIds: number[]
       let favouriteItems: ILink[] = []
       if (
@@ -165,8 +167,7 @@ export const useAllLinks = (props: IAllLinksProps) => {
 
       const editorLinks = await sp.web
         .getList(props.webServerRelativeUrl + '/Lists/EditorLinks')
-        .items.filter('PzlLinkActive eq 1')
-        .get()
+        .items.filter('PzlLinkActive eq 1')()
 
       const mappedLinks: ILink[] = editorLinks.map((link) => {
         return {
@@ -260,7 +261,7 @@ export const useAllLinks = (props: IAllLinksProps) => {
     try {
       const linksAsString: string = JSON.stringify(favouriteLinks)
       if (state.isFirstUpdate) {
-        const result: ItemAddResult = await sp.web
+        const result = await sp.web
           .getList(props.webServerRelativeUrl + '/Lists/FavouriteLinks')
           .items.add({
             PzlPersonalLinks: linksAsString,
