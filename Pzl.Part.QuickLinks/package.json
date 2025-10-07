@@ -11,8 +11,8 @@
     "clean": "gulp clean",
     "test": "gulp test",
     "package": "gulp clean --ship && gulp default --ship && gulp package-solution --ship",
-    "serve": "gulp bundle --custom-serve --max_old_space_size=4096 && fast-serve",
-    "watch": "gulp bundle --custom-serve --max_old_space_size=4096 && fast-serve",
+    "serve": "fast-serve",
+    "watch": "fast-serve",
     "lint": "eslint --ext .ts,.tsx ./src --color --fix --config ./.eslintrc.yaml && npm run prettier",
     "prettier": "prettier '**/*.ts*' --write --log-level silent --config ./.prettierrc.yaml"
   },

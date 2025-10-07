@@ -62,7 +62,9 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
               <div className={styles.heading}>
                 {category.displayText !== undefined ? category.displayText : 'Mine lenker'}
               </div>
-              {linkItems}
+              <div className={styles.links} style={{ gap: props.groupByCategory && props.gapSize }}>
+                {linkItems}
+              </div>
             </div>
           )
         }
@@ -125,7 +127,7 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
             {stringIsNullOrEmpty(props.allLinksText) ? strings.AllLinksLabel : props.allLinksText}
           </Link>
         </div>
-        <div className={styles.links} style={{ gap: props.gapSize }}>{generateLinks(state.linkStructure)}</div>
+        <div className={styles.links} style={{ gap: !props.groupByCategory && props.gapSize }}>{generateLinks(state.linkStructure)}</div>
       </FluentProvider>
     </IdPrefixProvider>
   )
