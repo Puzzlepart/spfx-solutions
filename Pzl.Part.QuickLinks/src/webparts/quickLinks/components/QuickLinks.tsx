@@ -19,9 +19,15 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
   const fluentProviderId = useId('fp-your-links')
 
   const generateLinks = (categories: Array<ICategory>) => {
-    const uncategorizedLinks = categories.filter((category) => category.displayText !== undefined).map((category) => category.links)
-    const favoriteLinks = categories.filter((category) => category.displayText === undefined).map((category) => category.links)
-    const sortedLinks = uncategorizedLinks.reduce((acc, val) => acc.concat(val), []).sort((a, b) => Number(a.priority) - Number(b.priority))
+    const uncategorizedLinks = categories
+      .filter((category) => category.displayText !== undefined)
+      .map((category) => category.links)
+    const favoriteLinks = categories
+      .filter((category) => category.displayText === undefined)
+      .map((category) => category.links)
+    const sortedLinks = uncategorizedLinks
+      .reduce((acc, val) => acc.concat(val), [])
+      .sort((a, b) => Number(a.priority) - Number(b.priority))
 
     sortedLinks.push(...favoriteLinks.reduce((acc, val) => acc.concat(val), []))
 
@@ -99,10 +105,7 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
           </Button>
         )
       })
-
     }
-
-
   }
 
   return (
@@ -127,7 +130,9 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
             {stringIsNullOrEmpty(props.allLinksText) ? strings.AllLinksLabel : props.allLinksText}
           </Link>
         </div>
-        <div className={styles.links} style={{ gap: !props.groupByCategory && props.gapSize }}>{generateLinks(state.linkStructure)}</div>
+        <div className={styles.links} style={{ gap: !props.groupByCategory && props.gapSize }}>
+          {generateLinks(state.linkStructure)}
+        </div>
       </FluentProvider>
     </IdPrefixProvider>
   )

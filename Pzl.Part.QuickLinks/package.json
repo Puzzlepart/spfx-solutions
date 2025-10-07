@@ -54,8 +54,12 @@
     "@types/webpack-env": "~1.15.2",
     "ajv": "^6.12.5",
     "eslint": "8.57.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-react-hooks": "4.3.0",
+    "eslint-plugin-unused-imports": "^4.2.0",
     "gulp": "4.0.2",
+    "prettier": "^3.6.2",
     "spfx-fast-serve-helpers": "1.21.1",
     "typescript": "~5.3.3"
   }

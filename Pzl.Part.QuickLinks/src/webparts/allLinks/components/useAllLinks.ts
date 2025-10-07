@@ -6,7 +6,6 @@ import strings from 'AllLinksWebPartStrings'
 import { isEqual } from '@microsoft/sp-lodash-subset'
 import tinycolor from 'tinycolor2'
 import { customDarkTheme, customLightTheme } from '../../../util/theme'
-import { WebPartContext } from '@microsoft/sp-webpart-base'
 
 /**
  * Component logic hook for `allLinks`. This hook is responsible for
