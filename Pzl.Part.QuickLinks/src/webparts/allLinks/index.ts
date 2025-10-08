@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as ReactDom from 'react-dom'
 import * as strings from 'AllLinksWebPartStrings'
-import { getSP } from '../pnpjsConfig'
+import { getSP } from '../../util/spContext'
 import { Version } from '@microsoft/sp-core-library'
 import { IAllLinksProps } from './components/types'
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'

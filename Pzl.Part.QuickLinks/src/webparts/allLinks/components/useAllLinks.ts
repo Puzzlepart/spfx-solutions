@@ -1,4 +1,4 @@
-import { getSP } from '../../pnpjsConfig'
+import { getSP } from '../../../util/spContext'
 import { useAllLinksState } from './useAllLinksState'
 import { CategoryOperation, IAllLinksProps, ICategory, ILink, LinkType, User } from './types'
 import { useEffect } from 'react'

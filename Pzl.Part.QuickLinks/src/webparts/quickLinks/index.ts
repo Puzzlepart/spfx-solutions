@@ -13,7 +13,7 @@ import {
 } from '@microsoft/sp-property-pane'
 import { IQuickLinksProps, QuickLinks } from './components'
 import { PropertyFieldIconPicker } from '@pnp/spfx-property-controls/lib/PropertyFieldIconPicker'
-import { getSP } from '../pnpjsConfig'
+import { getSP } from '../../util/spContext'
 
 export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinksProps> {
   private _themeProvider: ThemeProvider
@@ -32,7 +32,7 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
   }
 
   public async onInit(): Promise<void> {
-    getSP(this.context)
+    getSP(this.context, this.properties.globalConfigurationUrl)
 
     const themeProvider: ThemeProvider = this.context.serviceScope.consume(ThemeProvider.serviceKey)
     this._theme = themeProvider.tryGetTheme()

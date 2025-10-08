@@ -1,4 +1,4 @@
-import { getSP } from '../../pnpjsConfig'
+import { getSP } from '../../../util/spContext'
 import { isEqual } from 'lodash'
 import { stringIsNullOrEmpty } from '@pnp/common'
 import { useEffect } from 'react'
@@ -16,7 +16,7 @@ import { customDarkTheme, customLightTheme } from '../../../util/theme'
  */
 export const useQuickLinks = (props: IQuickLinksProps) => {
   const { state, setState } = useQuickLinksState()
-  const sp = getSP(props.context)
+  const sp = getSP(props.context, props.globalConfigurationUrl)
 
   const backgroundColor: string = props.theme?.semanticColors?.bodyBackground ?? '#ffffff'
   const theme = tinycolor(backgroundColor).isDark() ? customDarkTheme : customLightTheme
