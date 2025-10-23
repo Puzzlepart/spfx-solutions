@@ -4,6 +4,6 @@
         Title="PzlStyler"
         Location="ClientSideExtension.ApplicationCustomizer"
         ComponentId="125d04f8-45a4-4ad9-88f5-f77bd3970903"
-        Properties="{&quot;cssFilePath&quot;:&quot;/sites/cdn/SiteAssets/PzlStyler.css&quot;}">
+        Properties="{&quot;cssFilePath&quot;:&quot;/sites/SIAIntranett/SiteAssets/sia-intranet.css&quot;}">
     </ClientSideComponentInstance>
 </Elements>

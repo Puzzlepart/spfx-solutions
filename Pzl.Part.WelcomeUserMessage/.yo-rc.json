@@ -1,0 +1,18 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "22.15.0",
+    "sdksVersions": {},
+    "version": "1.21.1",
+    "libraryName": "pzl-part-welcome-user-message",
+    "libraryId": "e9d6d51a-a39f-4f79-bf0e-2271fab447f8",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "pzl-part-welcome-user-message",
+    "solutionShortDescription": "pzl-part-welcome-user-message description",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "webpart"
+  }
+}
