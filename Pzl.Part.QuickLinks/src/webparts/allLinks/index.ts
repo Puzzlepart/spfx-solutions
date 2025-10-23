@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as ReactDom from 'react-dom'
 import * as strings from 'AllLinksWebPartStrings'
-import { sp } from '@pnp/sp'
+import { getSP } from '../../util/spContext'
 import { Version } from '@microsoft/sp-core-library'
 import { IAllLinksProps } from './components/types'
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
@@ -36,6 +36,7 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
   public render(): void {
     const element: React.ReactElement<IAllLinksProps> = React.createElement(AllLinks, {
       theme: this._theme,
+      context: this.context,
       currentUserId: this.context.pageContext.legacyPageContext.userId,
       currentUserName: this.context.pageContext.user.displayName,
       defaultIcon: this.properties.defaultIcon,
@@ -56,7 +57,7 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
   }
 
   public async onInit(): Promise<void> {
-    sp.setup({ spfxContext: this.context })
+    getSP(this.context)
 
     const themeProvider: ThemeProvider = this.context.serviceScope.consume(ThemeProvider.serviceKey)
     this._theme = themeProvider.tryGetTheme()

@@ -22,6 +22,7 @@ export interface IQuickLinksProps {
   allLinksText: string
   buttonAppearance: 'secondary' | 'primary' | 'outline' | 'subtle' | 'transparent'
   globalConfigurationUrl: string
+  context: any
 }
 
 export interface IQuickLinksState {

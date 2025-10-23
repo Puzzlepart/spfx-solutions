@@ -16,6 +16,7 @@ export interface IAllLinksProps {
   hideYourLinks: boolean
   hideMandatoryLinks: boolean
   hideRecommendedLinks: boolean
+  context: any
 }
 
 export interface IAllLinksState {
