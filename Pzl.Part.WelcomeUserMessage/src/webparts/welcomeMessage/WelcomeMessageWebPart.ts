@@ -2,13 +2,15 @@ import { Version } from '@microsoft/sp-core-library';
 import { 
   BaseClientSideWebPart,
   IPropertyPaneConfiguration,
-  PropertyPaneToggle
+  PropertyPaneToggle,
+  PropertyPaneTextField
 } from '@microsoft/sp-webpart-base';
 import * as strings from 'WelcomeMessageWebPartStrings';
 
 import styles from './WelcomeMessageWebPart.module.scss';
 
 export interface IWelcomeMessageWebPartProps {
+  welcomeText: string;
   removeWebPartMarginPadding: boolean;
 }
 
@@ -18,7 +20,14 @@ export default class WelcomeMessageWebPart extends BaseClientSideWebPart<IWelcom
     if (userDisplayName.indexOf(',') !== -1) {
       userDisplayName = userDisplayName.split(',')[1].trim();
     }
-    this.domElement.innerHTML = `<div id="pzl-welcomeMessage" class="${ styles.welcomeMessage }"><h2>Welcome ${userDisplayName}!</h2></div>`;
+    
+    // Use the configurable welcome text (default value is set in manifest)
+    const welcomeText = this.properties.welcomeText;
+    
+    // Replace the {user} token with the actual user name
+    const finalWelcomeText = welcomeText.replace('{user}', userDisplayName);
+    
+    this.domElement.innerHTML = `<div id="pzl-welcomeMessage" class="${ styles.welcomeMessage }"><h2>${finalWelcomeText}</h2></div>`
     
     // Apply or remove margin/padding styles based on property
     this._applyMarginPaddingStyles();
@@ -67,6 +76,13 @@ export default class WelcomeMessageWebPart extends BaseClientSideWebPart<IWelcom
     return Version.parse('1.0');
   }
 
+  protected onPropertyPaneFieldChanged(propertyPath: string, oldValue: string | boolean, newValue: string | boolean): void {
+    if (propertyPath === 'welcomeText') {
+      this.render();
+    }
+    super.onPropertyPaneFieldChanged(propertyPath, oldValue, newValue);
+  }
+
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
@@ -78,6 +94,11 @@ export default class WelcomeMessageWebPart extends BaseClientSideWebPart<IWelcom
             {
               groupName: strings.BasicGroupName,
               groupFields: [
+                PropertyPaneTextField('welcomeText', {
+                  label: strings.WelcomeTextFieldLabel,
+                  placeholder: strings.WelcomeTextPlaceholder,
+                  multiline: false
+                }),
                 PropertyPaneToggle('removeWebPartMarginPadding', {
                   label: strings.RemoveWebPartMarginPaddingFieldLabel,
                   onText: strings.On,

@@ -22,6 +22,8 @@
     "description": { "default": "Displays a personalized welcome message with the current user's name" },
     "officeFabricIconFontName": "Page",
     "properties": {
+      "welcomeText": "Welcome {user}",
+      "removeWebPartMarginPadding": false,
       "description": "Displays a personalized welcome message with the current user's name"
     }
   }]

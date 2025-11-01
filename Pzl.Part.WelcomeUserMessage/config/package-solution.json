@@ -3,7 +3,7 @@
   "solution": {
     "name": "Welcome message by Puzzlepart",
     "id": "e9d6d51a-a39f-4f79-bf0e-2271fab447f8",
-    "version": "1.0.0.1",
+    "version": "1.0.0.2",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": false,
     "isDomainIsolated": false,
@@ -30,7 +30,7 @@
         "title": "pzl-part-welcome-user-message Feature",
         "description": "The feature that activates elements of the pzl-part-welcome-user-message solution.",
         "id": "39458e92-78ff-47c6-8d67-d1eeae735209",
-        "version": "1.0.0.1"
+        "version": "1.0.0.2"
       }
     ]
   },
