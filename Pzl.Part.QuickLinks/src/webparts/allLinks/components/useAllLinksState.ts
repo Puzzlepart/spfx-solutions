@@ -9,6 +9,7 @@ export const useAllLinksState = () => {
     mandatoryLinks: undefined,
     editorLinks: undefined,
     categoryLinks: undefined,
+    categoryOptions: [],
     favouriteLinks: [],
     saveButtonDisabled: true,
     loading: true

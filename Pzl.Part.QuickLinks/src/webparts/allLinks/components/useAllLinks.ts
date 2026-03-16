@@ -6,6 +6,8 @@ import strings from 'AllLinksWebPartStrings'
 import { isEqual } from '@microsoft/sp-lodash-subset'
 import tinycolor from 'tinycolor2'
 import { customDarkTheme, customLightTheme } from '../../../util/theme'
+import { PermissionKind } from '@pnp/sp/security'
+import '@pnp/sp/security'
 
 /**
  * Component logic hook for `allLinks`. This hook is responsible for
@@ -17,6 +19,56 @@ export const useAllLinks = (props: IAllLinksProps) => {
   const { state, setState } = useAllLinksState()
   const sp = getSP(props.context)
 
+  const getErrorMessage = (error: unknown): string => {
+    if (error instanceof Error && error.message) {
+      return error.message
+    }
+
+    if (typeof error === 'object' && error !== null) {
+      const message = Reflect.get(error, 'message')
+      if (typeof message === 'string' && message) {
+        return message
+      }
+
+      const data = Reflect.get(error, 'data')
+      if (typeof data === 'object' && data !== null) {
+        const dataMessage = Reflect.get(data, 'message')
+        if (typeof dataMessage === 'string' && dataMessage) {
+          return dataMessage
+        }
+      }
+    }
+
+    return strings.SaveErrorLabel
+  }
+
+  const getAddedItemId = async (result: {
+    Id?: number
+    ID?: number
+    data?: { Id?: number; ID?: number }
+    item?: { select?: (fields: string) => () => Promise<{ Id?: number; ID?: number }>; (): Promise<{ Id?: number; ID?: number }> }
+  }): Promise<number> => {
+    const idFromResult = result?.Id ?? result?.ID
+    if (typeof idFromResult === 'number') {
+      return idFromResult
+    }
+
+    const idFromData = result?.data?.Id ?? result?.data?.ID
+    if (typeof idFromData === 'number') {
+      return idFromData
+    }
+
+    if (result?.item) {
+      const addedItem = typeof result.item.select === 'function' ? await result.item.select('Id')() : await result.item()
+      const idFromItem = addedItem?.Id ?? addedItem?.ID
+      if (typeof idFromItem === 'number') {
+        return idFromItem
+      }
+    }
+
+    throw new Error('Could not resolve created list item ID.')
+  }
+
   const backgroundColor: string = props.theme?.semanticColors?.bodyBackground ?? '#ffffff'
   const theme = tinycolor(backgroundColor).isDark() ? customDarkTheme : customLightTheme
 
@@ -27,7 +79,7 @@ export const useAllLinks = (props: IAllLinksProps) => {
 
   const openNewLinkDialog = (): void => {
     const emptyLink: ILink = {
-      id: -1,
+      localKey: `personal-${Date.now()}`,
       displayText: '',
       url: '',
       icon: props.defaultIcon,
@@ -109,9 +161,14 @@ export const useAllLinks = (props: IAllLinksProps) => {
     })
   }
 
-  const addNewLink = (): void => {
+  const addNewLink = (): ILink => {
+    const createdLink: ILink = {
+      ...state.dialogData,
+      localKey: state.dialogData?.localKey || `personal-${Date.now()}`,
+      linkType: LinkType.favouriteLinks
+    }
     const newFavourites: ILink[] = state.favouriteLinks.slice()
-    newFavourites.push(state.dialogData)
+    newFavourites.push(createdLink)
     saveData(newFavourites)
     setState({
       favouriteLinks: newFavourites,
@@ -119,6 +176,109 @@ export const useAllLinks = (props: IAllLinksProps) => {
       showDialog: false,
       saveButtonDisabled: false
     })
+
+    return createdLink
+  }
+
+  const addEditorLink = async (link: ILink): Promise<ILink | null> => {
+    try {
+      const normalizedCategory = link.category?.trim() || ''
+      const normalizedIcon = link.icon || props.defaultIcon
+      const normalizedPriority = link.priority?.trim() || '1000'
+      const normalizedLink: ILink = {
+        ...link,
+        category: normalizedCategory,
+        icon: normalizedIcon,
+        priority: normalizedPriority,
+        active: link.active ?? true,
+        mandatory: !!link.mandatory,
+        linkType: LinkType.editorLink
+      }
+
+      const result = await sp.web
+        .getList(props.webServerRelativeUrl + '/Lists/EditorLinks')
+        .items.add({
+          Title: normalizedLink.displayText,
+          PzlUrl: normalizedLink.url,
+          PzlOfficeUIFabricIcon: normalizedLink.icon,
+          PzlLinkCategory: normalizedLink.category,
+          PzlLinkPriority: Number(normalizedLink.priority),
+          PzlLinkMandatory: normalizedLink.mandatory,
+          PzlLinkActive: normalizedLink.active
+        })
+      const createdItemId = await getAddedItemId(result)
+
+      const createdLink: ILink = {
+        ...normalizedLink,
+        id: createdItemId
+      }
+
+      const nextEditorLinks = createdLink.mandatory
+        ? state.editorLinks ?? []
+        : [...(state.editorLinks ?? []), createdLink]
+
+      const nextMandatoryLinks = createdLink.mandatory
+        ? [...(state.mandatoryLinks ?? []), createdLink]
+        : state.mandatoryLinks ?? []
+
+      const nextCategoryLinks = props.groupByCategory
+        ? (() => {
+            const categoryName = createdLink.category?.trim() || strings.NoCategoryLabel
+            const existingCategory = (state.categoryLinks ?? []).find(
+              (category) => category.displayText === categoryName
+            )
+
+            if (existingCategory) {
+              return (state.categoryLinks ?? []).map((category) => {
+                if (category.displayText !== categoryName) {
+                  return category
+                }
+
+                return {
+                  ...category,
+                  links: [...category.links, createdLink]
+                }
+              })
+            }
+
+            return [
+              ...(state.categoryLinks ?? []),
+              {
+                displayText: categoryName,
+                links: [createdLink]
+              }
+            ]
+          })()
+        : state.categoryLinks
+
+      const nextCategoryOptions = createdLink.category?.trim()
+        ? Array.from(new Set([...(state.categoryOptions ?? []), createdLink.category.trim()])).sort(
+            (left, right) => left.localeCompare(right)
+          )
+        : state.categoryOptions ?? []
+
+      setState({
+        editorLinks: nextEditorLinks,
+        mandatoryLinks: nextMandatoryLinks,
+        categoryLinks: nextCategoryLinks,
+        categoryOptions: nextCategoryOptions,
+        error: false,
+        errorMessage: ''
+      })
+
+      return createdLink
+    } catch (error) {
+      const errorMessage = getErrorMessage(error)
+      console.error('AllLinks addEditorLink failed', error)
+
+      setState({
+        error: true,
+        errorMessage
+      })
+
+      setTimeout((): void => setState({ error: false, errorMessage: '' }), 10000)
+      return null
+    }
   }
 
   const onDialogValueChanged = (field: string, newVal: any): void => {
@@ -141,6 +301,11 @@ export const useAllLinks = (props: IAllLinksProps) => {
 
   const fetchData = async (): Promise<void> => {
     try {
+      const editorLinksList = sp.web.getList(props.webServerRelativeUrl + '/Lists/EditorLinks')
+      const canManageEditorLinks = await editorLinksList.currentUserHasPermissions(
+        PermissionKind.AddListItems
+      )
+
       const searchString: string = `AuthorId eq '${props.currentUserId}'`
       const favouriteLinkListItem = await sp.web
         .getList(props.webServerRelativeUrl + '/Lists/FavouriteLinks')
@@ -164,9 +329,16 @@ export const useAllLinks = (props: IAllLinksProps) => {
         })
       }
 
-      const editorLinks = await sp.web
-        .getList(props.webServerRelativeUrl + '/Lists/EditorLinks')
-        .items.filter('PzlLinkActive eq 1')()
+      const editorLinks = await editorLinksList.items.filter('PzlLinkActive eq 1')()
+      const allEditorLinkCategories = await editorLinksList.items.select('PzlLinkCategory').top(5000)()
+
+      const categoryOptions = Array.from(
+        new Set(
+          allEditorLinkCategories
+            .map((link) => String(link.PzlLinkCategory || '').trim())
+            .filter((category) => !!category)
+        )
+      ).sort((left, right) => left.localeCompare(right))
 
       const mappedLinks: ILink[] = editorLinks.map((link) => {
         return {
@@ -176,6 +348,8 @@ export const useAllLinks = (props: IAllLinksProps) => {
           icon: link.PzlOfficeUIFabricIcon,
           priority: link.PzlPriority,
           mandatory: link.PzlLinkMandatory,
+          active: link.PzlLinkActive,
+          category: link.PzlLinkCategory || '',
           linkType: LinkType.editorLink
         }
       })
@@ -205,12 +379,14 @@ export const useAllLinks = (props: IAllLinksProps) => {
 
       const displayLinks = editorLinks.map((link) => {
         return {
+          id: link.Id,
           displayText: link.Title,
           url: link.PzlUrl,
           icon: link.PzlOfficeUIFabricIcon || 'Link',
           priority: link.PzlLinkPriority || '0',
-          category: link.PzlLinkCategory || 'Ingen kategori',
+          category: link.PzlLinkCategory || strings.NoCategoryLabel,
           mandatory: link.PzlLinkMandatory,
+          active: link.PzlLinkActive,
           linkType: LinkType.editorLink
         }
       })
@@ -240,13 +416,19 @@ export const useAllLinks = (props: IAllLinksProps) => {
 
       setState({
         currentUser: currentUser,
+        canManageEditorLinks,
+        categoryOptions,
         editorLinks: prunedLinks,
         mandatoryLinks: mandatorymappedLinks,
         categoryLinks: categories,
+        errorMessage: '',
         loading: false
       })
-    } catch {
+    } catch (error) {
+      console.error('AllLinks fetchData failed', error)
       setState({
+        error: true,
+        errorMessage: getErrorMessage(error),
         loading: false
       })
     }
@@ -265,16 +447,19 @@ export const useAllLinks = (props: IAllLinksProps) => {
             PzlPersonalLinks: linksAsString,
             Title: props.currentUserName
           })
+        const createdItemId = await getAddedItemId(result)
 
         const currentUser: User = {
           id: state.currentUser.id,
-          linkFieldId: result.data.Id
+          linkFieldId: String(createdItemId)
         }
 
         setState({
           isFirstUpdate: false,
           saveButtonDisabled: true,
           currentUser: currentUser,
+          error: false,
+          errorMessage: '',
           showSuccessMessage: true,
           loading: false
         })
@@ -290,20 +475,26 @@ export const useAllLinks = (props: IAllLinksProps) => {
 
         setState({
           saveButtonDisabled: true,
+          error: false,
+          errorMessage: '',
           showSuccessMessage: true,
           loading: false
         })
 
         setTimeout((): void => setState({ showSuccessMessage: false }), 5000)
       }
-    } catch {
+    } catch (error) {
+      const errorMessage = getErrorMessage(error)
+      console.error('AllLinks saveData failed', error)
+
       setState({
         error: true,
+        errorMessage,
         loading: false,
         saveButtonDisabled: false
       })
 
-      setTimeout((): void => setState({ error: false }), 5000)
+      setTimeout((): void => setState({ error: false, errorMessage: '' }), 10000)
     }
   }
 
@@ -342,6 +533,7 @@ export const useAllLinks = (props: IAllLinksProps) => {
     removeFromFavourites,
     removeCustomFromFavourites,
     addNewLink,
+    addEditorLink,
     onDialogValueChanged,
     validateUrl,
     theme

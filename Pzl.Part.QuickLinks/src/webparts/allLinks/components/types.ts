@@ -24,8 +24,11 @@ export interface IAllLinksState {
   favouriteLinks?: Array<ILink>
   mandatoryLinks?: Array<ILink>
   categoryLinks?: Array<ICategory>
+  categoryOptions?: Array<string>
+  canManageEditorLinks?: boolean
   loading?: boolean
   error?: boolean
+  errorMessage?: string
   validationError?: boolean
   showSuccessMessage?: boolean
   currentUser?: User
@@ -48,11 +51,13 @@ export interface User {
 
 export interface ILink {
   id?: number
+  localKey?: string
   displayText: string
   url: string
   icon: string
   category?: string
   priority?: string
+  active?: boolean
   mandatory?: boolean
   linkType?: LinkType
   openInSameTab?: boolean

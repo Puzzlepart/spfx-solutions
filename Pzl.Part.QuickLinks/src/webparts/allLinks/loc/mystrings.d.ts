@@ -20,17 +20,29 @@ declare interface IAllLinksWebPartStrings {
   ActionRemoveMandatory: string
   AddToYourLinksLabel: string
   AddLabel: string
+  ActiveLabel: string
   CancelLabel: string
+  CategoryLabel: string
+  CategoryPlaceholder: string
+  CreateSharedLinkLabel: string
+  EditorSectionDescription: string
+  EditorSectionLabel: string
+  EditorValidationLabel: string
   IconLabel: string
   IconButtonLabel: string
   IconSearchLabel: string
+  MandatoryOptionLabel: string
   IconSearchPlaceholder: string
   LoadingLabel: string
   MandatoryLinksLabel: string
   MandatoryLinksDescription: string
   NewLinkLabel: string
+  NewSharedLinkLabel: string
   NoIconsFoundLabel: string
   NoCategoryLabel: string
+  PersonalLinkNoticeLabel: string
+  PriorityLabel: string
+  PriorityPlaceholder: string
   RemoveFromYourLinksLabel: string
   RecommendedLinksLabel: string
   RecommendedLinksDescription: string
