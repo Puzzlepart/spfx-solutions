@@ -21,13 +21,16 @@ declare interface IQuickLinksWebPartStrings {
     HideHeaderLabel: string
     HideShowAllLabel: string
     HideTitleLabel: string
+    IconSearchPlaceholder: string
     IconSizeLabel: string
     IconsOnlyLabel: string
     LineHeightLabel: string
     GapSizeLabel: string
     LinkClickWebHookLabel: string
+    NoIconsFoundLabel: string
     RenderShadowLabel: string
     ResponsiveButtonsLabel: string
+    SelectedIconLabel: string
     SelectDefaultIconLabel: string
     ShowHideGroupName: string
     StylingGroupName: string

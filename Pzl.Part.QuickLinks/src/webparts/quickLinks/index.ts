@@ -12,8 +12,8 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { IQuickLinksProps, QuickLinks } from './components'
-import { PropertyFieldIconPicker } from '@pnp/spfx-property-controls/lib/PropertyFieldIconPicker'
 import { getSP } from '../../util/spContext'
+import { PropertyPaneFluentIconPicker } from '../../propertyPane/PropertyPaneFluentIconPicker'
 
 export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinksProps> {
   private _themeProvider: ThemeProvider
@@ -160,17 +160,20 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
                 PropertyPaneTextField('allLinksUrl', {
                   label: strings.PropertyPane.AllLinksUrlLabel
                 }),
-                PropertyFieldIconPicker('defaultIcon', {
-                  currentIcon: this.properties.defaultIcon,
+                PropertyPaneFluentIconPicker({
+                  targetProperty: 'defaultIcon',
+                  currentIcon: this.properties.defaultIcon || 'Link',
                   key: 'defaultIconId',
-                  onSave: (icon: string) => {
+                  label: strings.PropertyPane.DefaultIconLabel,
+                  searchPlaceholder: strings.PropertyPane.IconSearchPlaceholder,
+                  selectedIconLabel: strings.PropertyPane.SelectedIconLabel,
+                  noIconsFoundLabel: strings.PropertyPane.NoIconsFoundLabel,
+                  onChange: (icon: string) => {
+                    const oldValue = this.properties.defaultIcon
                     this.properties.defaultIcon = icon
-                  },
-                  buttonLabel: strings.PropertyPane.SelectDefaultIconLabel,
-                  renderOption: 'panel',
-                  properties: this.properties,
-                  onPropertyChange: this.onPropertyPaneFieldChanged.bind(this),
-                  label: strings.PropertyPane.DefaultIconLabel
+                    this.onPropertyPaneFieldChanged('defaultIcon', oldValue, icon)
+                    this.render()
+                  }
                 }),
                 PropertyPaneTextField('linkClickWebHook', {
                   label: strings.PropertyPane.LinkClickWebHookLabel

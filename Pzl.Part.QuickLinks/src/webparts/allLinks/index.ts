@@ -13,7 +13,7 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { AllLinks } from './components'
-import { PropertyFieldIconPicker } from '@pnp/spfx-property-controls/lib/PropertyFieldIconPicker'
+import { PropertyPaneFluentIconPicker } from '../../propertyPane/PropertyPaneFluentIconPicker'
 
 export interface IAllLinksWebPartProps {
   recommendedLinksTitle: string
@@ -142,17 +142,20 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
               groupName: strings.PropertyPane.AdvancedGroupName,
               isCollapsed: true,
               groupFields: [
-                PropertyFieldIconPicker('defaultIcon', {
-                  currentIcon: this.properties.defaultIcon,
+                PropertyPaneFluentIconPicker({
+                  targetProperty: 'defaultIcon',
+                  currentIcon: this.properties.defaultIcon || 'Link',
                   key: 'defaultIconId',
-                  onSave: (icon: string) => {
+                  label: strings.PropertyPane.DefaultIconLabel,
+                  searchPlaceholder: strings.IconSearchPlaceholder,
+                  selectedIconLabel: strings.SelectedIconLabel,
+                  noIconsFoundLabel: strings.NoIconsFoundLabel,
+                  onChange: (icon: string) => {
+                    const oldValue = this.properties.defaultIcon
                     this.properties.defaultIcon = icon
-                  },
-                  buttonLabel: strings.PropertyPane.SelectDefaultIconLabel,
-                  renderOption: 'panel',
-                  properties: this.properties,
-                  onPropertyChange: this.onPropertyPaneFieldChanged.bind(this),
-                  label: strings.PropertyPane.DefaultIconLabel
+                    this.onPropertyPaneFieldChanged('defaultIcon', oldValue, icon)
+                    this.render()
+                  }
                 })
               ]
             }

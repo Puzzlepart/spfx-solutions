@@ -1,0 +1,70 @@
+.iconPickerField {
+  padding: 8px 0 0;
+}
+
+.pickerLabel {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.searchField {
+  margin-bottom: 12px;
+}
+
+.iconGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(48px, 1fr));
+  gap: 8px;
+  max-height: 240px;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.iconOption {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+  background: transparent;
+  justify-content: center;
+
+  &:hover,
+  &:active {
+    background: transparent;
+  }
+
+  &:global([aria-pressed='true']) {
+    .iconOptionGlyph {
+      background: rgba(0, 120, 212, 0.14);
+      color: #005a9e;
+    }
+  }
+}
+
+.iconOptionGlyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: transparent;
+  font-size: 18px;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.iconOption:hover .iconOptionGlyph {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.selectedIcon {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  font-size: 12px;
+}
