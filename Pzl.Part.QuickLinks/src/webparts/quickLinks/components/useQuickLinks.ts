@@ -27,96 +27,99 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
   }, [sp])
 
   const fetchData = async (): Promise<void> => {
-    let webServerRelativeUrl: string = props.webServerRelativeUrl
-    let searchString: string = `AuthorId eq '${props.userId}'`
-
-    if (props.globalConfigurationUrl) {
-      const web = await sp.web()
+    try {
+      let webServerRelativeUrl: string = props.webServerRelativeUrl
       const user = await sp.web.currentUser()
-      const userId = user.Id
-      const webUrl = web.Url
-      const sitesIndex = webUrl.indexOf('/sites/')
-      searchString = `AuthorId eq '${userId}'`
+      let searchString: string = `AuthorId eq '${user.Id}'`
 
-      if (sitesIndex > -1) {
-        webServerRelativeUrl = webUrl.substring(sitesIndex)
-      } else {
-        webServerRelativeUrl = ''
+      if (props.globalConfigurationUrl) {
+        const web = await sp.web()
+        const webUrl = web.Url
+        const sitesIndex = webUrl.indexOf('/sites/')
+
+        if (sitesIndex > -1) {
+          webServerRelativeUrl = webUrl.substring(sitesIndex)
+        } else {
+          webServerRelativeUrl = ''
+        }
       }
-    }
 
-    const editorLinks = await sp.web
-      .getList(`${webServerRelativeUrl}/Lists/EditorLinks`)
-      .items.filter('(PzlLinkActive eq 1) and (PzlLinkMandatory eq 1)')
-      .orderBy('PzlLinkPriority')
-      .orderBy('Title')()
-    const newNonMandatoryLinks = await sp.web
-      .getList(`${webServerRelativeUrl}/Lists/EditorLinks`)
-      .items.filter('(PzlLinkActive eq 1) and (PzlLinkMandatory eq 0)')
-      .orderBy('PzlLinkPriority')
-      .orderBy('Title')()
+      const editorLinks = await sp.web
+        .getList(`${webServerRelativeUrl}/Lists/EditorLinks`)
+        .items.filter('(PzlLinkActive eq 1) and (PzlLinkMandatory eq 1)')
+        .orderBy('PzlLinkPriority')
+        .orderBy('Title')()
+      const newNonMandatoryLinks = await sp.web
+        .getList(`${webServerRelativeUrl}/Lists/EditorLinks`)
+        .items.filter('(PzlLinkActive eq 1) and (PzlLinkMandatory eq 0)')
+        .orderBy('PzlLinkPriority')
+        .orderBy('Title')()
 
-    const newNonMandatoryLinksObject = newNonMandatoryLinks.map((link) => {
-      return {
-        id: link.Id,
-        displayText: link.Title,
-        url: link.PzlUrl,
-        icon: link.PzlOfficeUIFabricIcon,
-        priority: link.PzlLinkPriority,
-        category: link.PzlLinkCategory || 'Ingen kategori',
-        openInSameTab: link.PzlOpenInSameTab
-      }
-    })
-
-    const favouriteLinkStrings = await sp.web
-      .getList(`${webServerRelativeUrl}/Lists/FavouriteLinks`)
-      .items.select('Id', 'AuthorId', 'PzlPersonalLinks')
-      .filter(searchString)()
-
-    const favouriteLinksObject: ILink[] =
-      favouriteLinkStrings.length > 0 ? JSON.parse(favouriteLinkStrings[0].PzlPersonalLinks) : []
-
-    const displayLinks = editorLinks.map((link) => {
-      return {
-        displayText: link.Title,
-        url: link.PzlUrl,
-        icon: link.PzlOfficeUIFabricIcon || 'Link',
-        priority: link.PzlLinkPriority || '0',
-        category: link.PzlLinkCategory || 'Ingen kategori',
-        openInSameTab: link.PzlOpenInSameTab
-      }
-    })
-
-    if (favouriteLinkStrings.length > 0) {
-      const updatedFavouriteLinksObject = await checkForUpdatedLinks(
-        favouriteLinksObject,
-        newNonMandatoryLinksObject,
-        favouriteLinkStrings[0].Id
-      )
-      displayLinks.push(...updatedFavouriteLinksObject)
-    }
-
-    let categories: Array<ICategory> = [
-      { displayText: strings.NoCategoryLabel, links: displayLinks }
-    ]
-    let categoryNames: string[] = displayLinks
-      .map((lnk) => {
-        return lnk.category
+      const newNonMandatoryLinksObject = newNonMandatoryLinks.map((link) => {
+        return {
+          id: link.Id,
+          displayText: link.Title,
+          url: link.PzlUrl,
+          icon: link.PzlOfficeUIFabricIcon,
+          priority: link.PzlLinkPriority,
+          category: link.PzlLinkCategory || 'Ingen kategori',
+          openInSameTab: link.PzlOpenInSameTab
+        }
       })
-      .sort()
-    categoryNames = categoryNames.filter((item, index) => {
-      return categoryNames.indexOf(item) === index
-    })
-    categories = categoryNames.map((catName) => {
-      return {
-        displayText: catName,
-        links: displayLinks.filter((lnk) => {
-          return lnk.category === catName
-        })
-      }
-    })
 
-    setState({ linkStructure: categories })
+      const favouriteLinkStrings = await sp.web
+        .getList(`${webServerRelativeUrl}/Lists/FavouriteLinks`)
+        .items.select('Id', 'AuthorId', 'PzlPersonalLinks')
+        .filter(searchString)()
+
+      const favouriteLinksObject: ILink[] =
+        favouriteLinkStrings.length > 0 ? JSON.parse(favouriteLinkStrings[0].PzlPersonalLinks) : []
+
+      const displayLinks = editorLinks.map((link) => {
+        return {
+          displayText: link.Title,
+          url: link.PzlUrl,
+          icon: link.PzlOfficeUIFabricIcon || 'Link',
+          priority: link.PzlLinkPriority || '0',
+          category: link.PzlLinkCategory || strings.NoCategoryLabel,
+          openInSameTab: link.PzlOpenInSameTab
+        }
+      })
+
+      if (favouriteLinkStrings.length > 0) {
+        const updatedFavouriteLinksObject = await checkForUpdatedLinks(
+          favouriteLinksObject,
+          newNonMandatoryLinksObject,
+          favouriteLinkStrings[0].Id
+        )
+        displayLinks.push(...updatedFavouriteLinksObject)
+      }
+
+      let categories: Array<ICategory> = [
+        { displayText: strings.NoCategoryLabel, links: displayLinks }
+      ]
+      let categoryNames: string[] = displayLinks
+        .map((lnk) => {
+          return lnk.category
+        })
+        .sort()
+      categoryNames = categoryNames.filter((item, index) => {
+        return categoryNames.indexOf(item) === index
+      })
+      categories = categoryNames.map((catName) => {
+        return {
+          displayText: catName,
+          links: displayLinks.filter((lnk) => {
+            return lnk.category === catName
+          })
+        }
+      })
+
+      setState({ linkStructure: categories })
+    } catch (error) {
+      console.error('QuickLinks fetchData failed', error)
+      setState({ linkStructure: [] })
+    }
   }
 
   const checkForUpdatedLinks = async (

@@ -4,7 +4,6 @@ export interface IQuickLinksProps {
   theme: IReadonlyTheme
   title: string
   description: string
-  userId: number
   allLinksUrl: string
   defaultIcon: string
   groupByCategory: boolean

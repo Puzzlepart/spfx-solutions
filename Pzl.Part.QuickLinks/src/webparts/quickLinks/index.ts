@@ -26,7 +26,6 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
       description: this.properties.description || strings.Description,
       allLinksText: this.properties.allLinksText || strings.AllLinksLabel,
       theme: this._theme,
-      userId: this.context.pageContext.legacyPageContext.userId,
       webServerRelativeUrl: this.context.pageContext.web.serverRelativeUrl,
       context: this.context
     })
