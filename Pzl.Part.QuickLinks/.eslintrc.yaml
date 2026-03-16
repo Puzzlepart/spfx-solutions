@@ -5,9 +5,6 @@ extends:
   - "prettier"
   - "plugin:react/recommended"
   - "plugin:@typescript-eslint/recommended"
-plugins:
-  - "prettier"
-  - "unused-imports"
 parserOptions:
   ecmaVersion: 2018
   sourceType: module
@@ -43,7 +40,6 @@ rules:
     - "error"
     - "never"
     - {}
-  "unused-imports/no-unused-imports": 0
 settings:
   react:
     version: "detect"

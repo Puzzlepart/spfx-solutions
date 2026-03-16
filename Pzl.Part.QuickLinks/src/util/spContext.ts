@@ -1,6 +1,6 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import { spfi, SPFI, SPFx } from '@pnp/sp'
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { isNullOrEmpty } from './string'
 import '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/items'
@@ -12,10 +12,10 @@ let _currentBaseUrl: string = null
 
 export const getSP = (context?: WebPartContext, globalConfigurationUrl?: string): SPFI => {
   if (context) {
-    const baseUrl = !stringIsNullOrEmpty(globalConfigurationUrl) ? globalConfigurationUrl : null
+    const baseUrl = !isNullOrEmpty(globalConfigurationUrl) ? globalConfigurationUrl : null
 
     if (_sp === null || _currentBaseUrl !== baseUrl) {
-      if (!stringIsNullOrEmpty(globalConfigurationUrl)) {
+      if (!isNullOrEmpty(globalConfigurationUrl)) {
         _sp = spfi(globalConfigurationUrl).using(SPFx(context))
       } else {
         _sp = spfi().using(SPFx(context))

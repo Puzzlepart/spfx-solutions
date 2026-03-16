@@ -67,7 +67,7 @@ export default class AllLinksWebPart extends BaseClientSideWebPart<IAllLinksWebP
     try {
       await super.onInit()
       return
-    } catch (err) {
+    } catch {
       return
     }
   }

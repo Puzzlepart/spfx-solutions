@@ -2,8 +2,8 @@ import React, { FC } from 'react'
 import * as strings from 'QuickLinksWebPartStrings'
 import styles from './QuickLinks.module.scss'
 import { IQuickLinksProps, ILink, ICategory } from './types'
-import { Icon } from 'office-ui-fabric-react/lib/Icon'
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { Icon } from '@fluentui/react/lib/Icon'
+import { isNullOrEmpty } from '../../../util/string'
 import { useQuickLinks } from './useQuickLinks'
 import {
   Button,
@@ -127,7 +127,7 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
             onClick={() => window.open(props.allLinksUrl, '_blank')}
             style={{ display: props.hideShowAll && 'none' }}
           >
-            {stringIsNullOrEmpty(props.allLinksText) ? strings.AllLinksLabel : props.allLinksText}
+            {isNullOrEmpty(props.allLinksText) ? strings.AllLinksLabel : props.allLinksText}
           </Link>
         </div>
         <div className={styles.links} style={{ gap: !props.groupByCategory && props.gapSize }}>

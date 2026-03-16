@@ -1,9 +1,9 @@
 import * as React from 'react'
 import styles from './AllLinks.module.scss'
 import { IAllLinksProps, LinkType, ILink, ICategory } from './types'
-import { Icon } from 'office-ui-fabric-react/lib/Icon'
+import { Icon } from '@fluentui/react/lib/Icon'
 import * as strings from 'AllLinksWebPartStrings'
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { isNullOrEmpty } from '../../../util/string'
 import { IconPicker } from '@pnp/spfx-controls-react/lib/IconPicker'
 import {
   Button,
@@ -206,13 +206,13 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
         <InfoLabel
           className={styles.linksTitle}
           info={
-            stringIsNullOrEmpty(props.mandatoryLinksDescription)
+            isNullOrEmpty(props.mandatoryLinksDescription)
               ? strings.MandatoryLinksDescription
               : props.mandatoryLinksDescription
           }
         >
           <span>
-            {stringIsNullOrEmpty(props.mandatoryLinksTitle)
+            {isNullOrEmpty(props.mandatoryLinksTitle)
               ? strings.MandatoryLinksLabel
               : props.mandatoryLinksTitle}
           </span>
@@ -225,13 +225,13 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
         <InfoLabel
           className={styles.linksTitle}
           info={
-            stringIsNullOrEmpty(props.recommendedLinksDescription)
+            isNullOrEmpty(props.recommendedLinksDescription)
               ? strings.RecommendedLinksDescription
               : props.recommendedLinksDescription
           }
         >
           <span>
-            {stringIsNullOrEmpty(props.recommendedLinksTitle)
+            {isNullOrEmpty(props.recommendedLinksTitle)
               ? strings.RecommendedLinksLabel
               : props.recommendedLinksTitle}
           </span>
@@ -248,15 +248,13 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
       <InfoLabel
         className={styles.linksTitle}
         info={
-          stringIsNullOrEmpty(props.yourLinksDescription)
+          isNullOrEmpty(props.yourLinksDescription)
             ? strings.YourLinksDescription
             : props.yourLinksDescription
         }
       >
         <span>
-          {stringIsNullOrEmpty(props.yourLinksTitle)
-            ? strings.YourLinksLabel
-            : props.yourLinksTitle}
+          {isNullOrEmpty(props.yourLinksTitle) ? strings.YourLinksLabel : props.yourLinksTitle}
         </span>
       </InfoLabel>
       {state.favouriteLinks && (

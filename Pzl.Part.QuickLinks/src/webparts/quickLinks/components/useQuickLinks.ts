@@ -1,6 +1,6 @@
 import { getSP } from '../../../util/spContext'
-import { isEqual } from 'lodash'
-import { stringIsNullOrEmpty } from '@pnp/common'
+import { isEqual } from '@microsoft/sp-lodash-subset'
+import { isNullOrEmpty } from '../../../util/string'
 import { useEffect } from 'react'
 import { useQuickLinksState } from './useQuickLinksState'
 import { ICategory, ILink, IQuickLinksProps } from './types'
@@ -105,7 +105,7 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
       })
       .sort()
     categoryNames = categoryNames.filter((item, index) => {
-      return categoryNames.indexOf(item) == index
+      return categoryNames.indexOf(item) === index
     })
     categories = categoryNames.map((catName) => {
       return {
@@ -156,13 +156,13 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
         .update({
           PzlPersonalLinks: JSON.stringify(newFavouriteLinks)
         })
-    } catch (e) {
-      console.log(e)
+    } catch {
+      return
     }
   }
 
   const callWebHook = (id: number, uri: string, category: string): Promise<any> => {
-    if (stringIsNullOrEmpty(props.linkClickWebHook)) {
+    if (isNullOrEmpty(props.linkClickWebHook)) {
       return
     }
 

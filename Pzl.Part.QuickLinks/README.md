@@ -61,25 +61,25 @@ This can be done manually by navigating to the app catalog and uploading the spp
 
 ### Building the code
 
+Use Node `22.14.x`.
+
 ```bash
 git clone the repo
 npm i
-npm i -g gulp
-gulp bundle
+npm run build
 ```
 
 ### Testing
 
 You can test by using the workbench
-`gulp serve`
+`npm run serve`
 
 ```html
-https://<tenant>.sharepoint.com/sites/<site>/_layouts/15/workbench.aspx?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/manifests.js
+https://<tenant>.sharepoint.com/sites/<site>/_layouts/15/workbench.aspx?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/build/manifests.js
 ```
 
 ### Building the code for production
 
 ```bash
-gulp bundle --ship
-gulp package-solution --ship
+npm run package
 ```

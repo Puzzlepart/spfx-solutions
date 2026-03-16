@@ -245,8 +245,7 @@ export const useAllLinks = (props: IAllLinksProps) => {
         categoryLinks: categories,
         loading: false
       })
-    } catch (err) {
-      console.log(err)
+    } catch {
       setState({
         loading: false
       })
@@ -297,7 +296,7 @@ export const useAllLinks = (props: IAllLinksProps) => {
 
         setTimeout((): void => setState({ showSuccessMessage: false }), 5000)
       }
-    } catch (err) {
+    } catch {
       setState({
         error: true,
         loading: false,

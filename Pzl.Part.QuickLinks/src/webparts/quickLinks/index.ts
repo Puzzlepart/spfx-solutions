@@ -42,7 +42,7 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
     try {
       await super.onInit()
       return
-    } catch (err) {
+    } catch {
       return
     }
   }
