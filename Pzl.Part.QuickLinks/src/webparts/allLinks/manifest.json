@@ -14,19 +14,20 @@
     {
       "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
       "group": {
-        "default": "Other"
+        "default": "Other",
+        "nb-no": "Annet"
       },
       "title": {
         "default": "All links",
-        "no-nb": "Alle lenker"
+        "nb-no": "Alle lenker"
       },
       "description": {
-        "default": "All links description",
-        "no-nb": "Alle lenker description"
+        "default": "Browse and manage all links",
+        "nb-no": "Se og administrer alle lenker"
       },
-      "officeFabricIconFontName": "GlobeFavourite",
+      "officeFabricIconFontName": "Globe",
       "properties": {
-        "title": "Alle lenker",
+        "title": "",
         "defaultIcon": "Link"
       }
     }

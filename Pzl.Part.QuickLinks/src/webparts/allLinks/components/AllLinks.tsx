@@ -4,7 +4,6 @@ import { IAllLinksProps, LinkType, ILink, ICategory } from './types'
 import { Icon } from '@fluentui/react/lib/Icon'
 import * as strings from 'AllLinksWebPartStrings'
 import { isNullOrEmpty } from '../../../util/string'
-import { IconPicker } from '@pnp/spfx-controls-react/lib/IconPicker'
 import {
   Button,
   Dialog,
@@ -26,8 +25,10 @@ import {
 } from '@fluentui/react-components'
 import { useAllLinks } from './useAllLinks'
 import { Icons } from '../../../util/icons'
+import { fluentIconNames } from '../../../util/fluentIconNames'
 
 export const AllLinks: React.FC<IAllLinksProps> = (props) => {
+  const [iconSearch, setIconSearch] = React.useState('')
   const {
     state,
     setState,
@@ -42,6 +43,24 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
     theme
   } = useAllLinks(props)
   const fluentProviderId = useId('fp-all-links')
+  const formatLabel = (template: string, value: string) => template.replace('{0}', value)
+  const selectedIconName = state.dialogData?.icon || props.defaultIcon
+  const iconSearchValue = iconSearch.trim().toLowerCase()
+  const filteredIconNames = fluentIconNames
+    .filter((iconName) => {
+      if (!iconSearchValue) return true
+      return iconName.toLowerCase().includes(iconSearchValue)
+    })
+    .sort((left, right) => {
+      const leftStartsWith = left.toLowerCase().startsWith(iconSearchValue)
+      const rightStartsWith = right.toLowerCase().startsWith(iconSearchValue)
+
+      if (leftStartsWith === rightStartsWith) {
+        return left.localeCompare(right)
+      }
+
+      return leftStartsWith ? -1 : 1
+    })
 
   const generateEditorLinks = (links: Array<ILink>) => {
     return links.map((link: ILink, idx: number) => {
@@ -58,7 +77,7 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
             style: { width: '30px' },
             children: (
               <Button
-                title={`Legg til ${link.displayText} i dine lenker`}
+                title={formatLabel(strings.AddToYourLinksLabel, link.displayText)}
                 appearance='transparent'
                 size='small'
                 icon={<Icons.Add />}
@@ -113,7 +132,7 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
             style: { width: '30px' },
             children: (
               <Button
-                title={`Fjern ${link.displayText} fra dine lenker`}
+                title={formatLabel(strings.RemoveFromYourLinksLabel, link.displayText)}
                 appearance='transparent'
                 size='small'
                 icon={<Icons.Subtract />}
@@ -157,7 +176,7 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
                   title={
                     link.mandatory
                       ? strings.ActionRemoveMandatory
-                      : `Legg til ${link.displayText} i dine lenker`
+                      : formatLabel(strings.AddToYourLinksLabel, link.displayText)
                   }
                   appearance='transparent'
                   size='small'
@@ -182,7 +201,7 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
         return (
           <div className={styles.categorySection} key={`category_${idx}`}>
             <div className={styles.heading}>
-              {category.displayText !== undefined ? category.displayText : 'Mine lenker'}
+              {category.displayText !== undefined ? category.displayText : strings.YourLinksLabel}
             </div>
             <div key={`links_${idx}`} className={styles.links}>
               {linkItems}
@@ -268,7 +287,10 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
               appearance='subtle'
               className={styles.footerButton}
               icon={<Icons.Add20 />}
-              onClick={() => openNewLinkDialog()}
+              onClick={() => {
+                setIconSearch('')
+                openNewLinkDialog()
+              }}
             >
               <span className={styles.footerButtonLabel}>{strings.NewLinkLabel}</span>
             </Button>
@@ -284,7 +306,7 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
                   />
                 </Field>
                 <Field
-                  label='Url'
+                  label={strings.UrlLabel}
                   validationState={state.validationError ? 'error' : 'none'}
                   validationMessage={state.validationError && strings.UrlValidationLabel}
                 >
@@ -299,27 +321,48 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
                 </Field>
                 <Field label={strings.IconLabel}>
                   <div className={styles.iconField}>
-                    <IconPicker
-                      useStartsWithSearch
-                      buttonLabel={strings.IconButtonLabel}
-                      currentIcon={state.dialogData?.icon}
-                      onChange={(icon: string) => {
-                        onDialogValueChanged('icon', icon)
-                      }}
-                      panelClassName='iconPickerPanel'
-                      onSave={(icon: string) => {
-                        onDialogValueChanged('icon', icon)
-                      }}
-                    />
+                    <Field label={strings.IconSearchLabel}>
+                      <Input
+                        value={iconSearch}
+                        placeholder={strings.IconSearchPlaceholder}
+                        onChange={(_, data) => setIconSearch(data.value)}
+                      />
+                    </Field>
+                    <div className={styles.iconPickerActions}>
+                      <Button
+                        appearance={
+                          selectedIconName === props.defaultIcon ? 'primary' : 'secondary'
+                        }
+                        onClick={() => onDialogValueChanged('icon', props.defaultIcon)}
+                      >
+                        <span>{strings.UseDefaultIconLabel}</span>
+                      </Button>
+                    </div>
+                    <div className={styles.iconGrid}>
+                      {filteredIconNames.map((iconName) => (
+                        <Button
+                          key={iconName}
+                          className={styles.iconOption}
+                          appearance='transparent'
+                          onClick={() => onDialogValueChanged('icon', iconName)}
+                          title={iconName}
+                          aria-label={iconName}
+                          aria-pressed={selectedIconName === iconName}
+                        >
+                          <span className={styles.iconOptionGlyph}>
+                            <Icon iconName={iconName} />
+                          </span>
+                        </Button>
+                      ))}
+                    </div>
+                    {filteredIconNames.length === 0 && (
+                      <MessageBar intent='warning'>{strings.NoIconsFoundLabel}</MessageBar>
+                    )}
                     <MessageBar className={styles.iconMessage} intent='info' icon={null}>
                       <div className={styles.selectedIcon}>
                         {strings.SelectedIconLabel}
-                        <Icon
-                          iconName={
-                            state.dialogData?.icon ? state.dialogData?.icon : props.defaultIcon
-                          }
-                        />
-                        {`(${state.dialogData?.icon ? state.dialogData?.icon : props.defaultIcon})`}
+                        <Icon iconName={selectedIconName} />
+                        {`(${selectedIconName})`}
                       </div>
                     </MessageBar>
                   </div>
@@ -356,7 +399,7 @@ export const AllLinks: React.FC<IAllLinksProps> = (props) => {
     <IdPrefixProvider value={fluentProviderId}>
       <FluentProvider theme={theme} className={styles.allLinks} style={{ backgroundColor }}>
         {state.loading ? (
-          <Spinner label='Laster inn lenker' />
+          <Spinner label={strings.LoadingLabel} />
         ) : (
           <div className={styles.allLinks}>
             {state.error && <MessageBar intent='error'>{strings.SaveErrorLabel}</MessageBar>}

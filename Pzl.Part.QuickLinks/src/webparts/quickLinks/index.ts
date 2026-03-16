@@ -22,6 +22,9 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
   public render(): void {
     const element: React.ReactElement<IQuickLinksProps> = React.createElement(QuickLinks, {
       ...this.properties,
+      title: this.properties.title || strings.Title,
+      description: this.properties.description || strings.Description,
+      allLinksText: this.properties.allLinksText || strings.AllLinksLabel,
       theme: this._theme,
       userId: this.context.pageContext.legacyPageContext.userId,
       webServerRelativeUrl: this.context.pageContext.web.serverRelativeUrl,
@@ -89,11 +92,14 @@ export default class QuickLinksWebPart extends BaseClientSideWebPart<IQuickLinks
                   label: strings.PropertyPane.ButtonAppearanceLabel,
                   selectedKey: 'subtle',
                   options: [
-                    { key: 'secondary', text: 'Sekundær' },
-                    { key: 'primary', text: 'Primær' },
-                    { key: 'outline', text: 'Kontur' },
-                    { key: 'subtle', text: 'Subtil' },
-                    { key: 'transparent', text: 'Transparent' }
+                    { key: 'secondary', text: strings.PropertyPane.ButtonAppearanceSecondaryLabel },
+                    { key: 'primary', text: strings.PropertyPane.ButtonAppearancePrimaryLabel },
+                    { key: 'outline', text: strings.PropertyPane.ButtonAppearanceOutlineLabel },
+                    { key: 'subtle', text: strings.PropertyPane.ButtonAppearanceSubtleLabel },
+                    {
+                      key: 'transparent',
+                      text: strings.PropertyPane.ButtonAppearanceTransparentLabel
+                    }
                   ]
                 }),
                 PropertyPaneSlider('lineHeight', {

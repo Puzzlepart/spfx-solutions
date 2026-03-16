@@ -52,6 +52,16 @@ Invoke-PnPSiteTemplate -Path ".\templates\QuickLinks.xml"
 
 This can be done manually by navigating to the app catalog and uploading the sppkg package from the build.
 
+### Existing sites and the icon field customizer
+
+For existing sites where the `EditorLinks` list and the `PzlOfficeUIFabricIcon` field already exist, you may need to associate the field customizer manually once after deployment.
+
+CLI for Microsoft 365 script:
+
+```powershell
+.\scripts\set-editorlinks-icon-field-customizer.m365.ps1 -WebUrl "https://tenantnamehere.sharepoint.com/sites/intranet"
+```
+
 ### Pages
 
 * Create a page for the *All links* web part, and add the *All links* web part

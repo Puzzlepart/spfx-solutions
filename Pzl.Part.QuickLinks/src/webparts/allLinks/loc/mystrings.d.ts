@@ -18,14 +18,20 @@ declare interface IAllLinksWebPartStrings {
     HideRecommendedLinksLabel: string
   }
   ActionRemoveMandatory: string
+  AddToYourLinksLabel: string
   AddLabel: string
   CancelLabel: string
   IconLabel: string
   IconButtonLabel: string
+  IconSearchLabel: string
+  IconSearchPlaceholder: string
+  LoadingLabel: string
   MandatoryLinksLabel: string
   MandatoryLinksDescription: string
   NewLinkLabel: string
+  NoIconsFoundLabel: string
   NoCategoryLabel: string
+  RemoveFromYourLinksLabel: string
   RecommendedLinksLabel: string
   RecommendedLinksDescription: string
   SaveErrorLabel: string
@@ -34,6 +40,8 @@ declare interface IAllLinksWebPartStrings {
   SelectedIconLabel: string
   TitleLabel: string
   TitlePlaceholder: string
+  UseDefaultIconLabel: string
+  UrlLabel: string
   UrlPlaceholder: string
   UrlValidationLabel: string
   YourLinksLabel: string

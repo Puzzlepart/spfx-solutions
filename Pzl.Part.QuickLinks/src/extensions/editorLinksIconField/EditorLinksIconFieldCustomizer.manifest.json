@@ -1,0 +1,9 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-extension-manifest.schema.json",
+  "id": "8b14c246-5920-4cf2-bc89-2514d59b74f9",
+  "alias": "EditorLinksIconFieldCustomizer",
+  "componentType": "Extension",
+  "extensionType": "FieldCustomizer",
+  "version": "*",
+  "manifestVersion": 2
+}

@@ -24,6 +24,8 @@
     "@fluentui/react-icons": "^2.0.321",
     "@microsoft/sp-component-base": "1.22.2",
     "@microsoft/sp-core-library": "1.22.2",
+    "@microsoft/sp-http": "1.22.2",
+    "@microsoft/sp-listview-extensibility": "1.22.2",
     "@microsoft/sp-lodash-subset": "1.22.2",
     "@microsoft/sp-property-pane": "1.22.2",
     "@microsoft/sp-webpart-base": "1.22.2",

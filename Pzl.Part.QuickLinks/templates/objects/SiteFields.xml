@@ -7,8 +7,7 @@
   <Field ID="{0ad683ef-15b3-4b08-9277-286e71a59674}" Name="{parameter:GenericFieldsPrefix}LinkActive" StaticName="{parameter:GenericFieldsPrefix}LinkActive" DisplayName="{resource:QuickLinks_SiteFields_Name_LinkActive}" Type="Boolean" Group="{parameter:GenericColumnGroup}">
     <Default>1</Default>
   </Field>
-  <Field ID="{6c7b7773-94ad-43b3-92d5-1b64c25914d9}" Name="{parameter:GenericFieldsPrefix}OfficeUIFabricIcon" StaticName="{parameter:GenericFieldsPrefix}OfficeUIFabricIcon" DisplayName="{resource:QuickLinks_SiteFields_Name_OfficeUIFabricIcon}" Type="Text" Group="{parameter:GenericColumnGroup}" Description="Navnet på et ikon fra https://developer.microsoft.com/en-us/fabric#/styles/web/icons"/>
+  <Field ID="{6c7b7773-94ad-43b3-92d5-1b64c25914d9}" Name="{parameter:GenericFieldsPrefix}OfficeUIFabricIcon" StaticName="{parameter:GenericFieldsPrefix}OfficeUIFabricIcon" DisplayName="{resource:QuickLinks_SiteFields_Name_OfficeUIFabricIcon}" Type="Text" Group="{parameter:GenericColumnGroup}" Description="Name of a Fluent UI icon." ClientSideComponentId="8b14c246-5920-4cf2-bc89-2514d59b74f9" ShowInNewForm="FALSE" ShowInEditForm="FALSE" ShowInDisplayForm="FALSE"/>
   <Field ID="{1f93262e-daab-408d-9ba0-1343b468e4c3}" Name="{parameter:GenericFieldsPrefix}PersonalLinks" StaticName="{parameter:GenericFieldsPrefix}PersonalLinks" DisplayName="{resource:QuickLinks_SiteFields_Name_PersonalLinks}" Type="Note" AppendOnly="false" Group="{parameter:GenericColumnGroup}" />
   <Field ID="{5551c7af-5d4e-4049-bf62-2cef21f5da95}" Name="{parameter:GenericFieldsPrefix}LinkCategory" StaticName="{parameter:GenericFieldsPrefix}LinkCategory" DisplayName="{resource:QuickLinks_SiteFields_Name_LinkCategory}" Type="Text" Group="{parameter:GenericColumnGroup}" Description="Lenkene kan kategoriseres etter kategori"/>
 </pnp:SiteFields>
-

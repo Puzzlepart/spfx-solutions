@@ -14,20 +14,21 @@
     {
       "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
       "group": {
-        "default": "Other"
+        "default": "Other",
+        "nb-no": "Annet"
       },
       "title": {
         "default": "Your links",
-        "no-nb": "Dine lenker"
+        "nb-no": "Dine lenker"
       },
       "description": {
-        "default": "Your links",
-        "no-nb": "Dine lenker"
+        "default": "Quick access to your links",
+        "nb-no": "Rask tilgang til dine lenker"
       },
       "officeFabricIconFontName": "Globe",
       "properties": {
-        "title": "Dine lenker",
-        "description": "Her er en samling av obligatoriske lenker og dine egne lenker nederst.",
+        "title": "",
+        "description": "",
         "defaultIcon": "Link",
         "lineHeight": 40,
         "iconSize": 20

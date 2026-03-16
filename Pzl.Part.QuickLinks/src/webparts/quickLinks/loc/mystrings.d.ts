@@ -5,6 +5,11 @@ declare interface IQuickLinksWebPartStrings {
     AllLinksTextFieldLabel: string
     AllLinksUrlLabel: string
     ButtonAppearanceLabel: string
+    ButtonAppearanceSecondaryLabel: string
+    ButtonAppearancePrimaryLabel: string
+    ButtonAppearanceOutlineLabel: string
+    ButtonAppearanceSubtleLabel: string
+    ButtonAppearanceTransparentLabel: string
     DefaultIconLabel: string
     DescriptionFieldDescription: string
     DescriptionFieldLabel: string
@@ -30,6 +35,7 @@ declare interface IQuickLinksWebPartStrings {
     TitleFieldLabel: string
   }
   AllLinksLabel: string
+  CategoryFallbackLabel: string
   Description: string
   NoCategoryLabel: string
   Title: string

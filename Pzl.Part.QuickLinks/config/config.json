@@ -10,6 +10,14 @@
         }
       ]
     },
+    "editor-links-icon-field-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/editorLinksIconField/EditorLinksIconFieldCustomizer.js",
+          "manifest": "./src/extensions/editorLinksIconField/EditorLinksIconFieldCustomizer.manifest.json"
+        }
+      ]
+    },
     "quick-links-web-part": {
       "components": [
         {
@@ -23,6 +31,7 @@
   "localizedResources": {
     "QuickLinksWebPartStrings": "lib/webparts/quickLinks/loc/{locale}.js",
     "AllLinksWebPartStrings": "lib/webparts/allLinks/loc/{locale}.js",
+    "EditorLinksIconFieldCustomizerStrings": "lib/extensions/editorLinksIconField/loc/{locale}.js",
     "PropertyControlStrings": "node_modules/@pnp/spfx-property-controls/lib/loc/{locale}.js",
     "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js"
   }

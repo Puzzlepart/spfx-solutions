@@ -66,7 +66,9 @@ export const QuickLinks: FC<IQuickLinksProps> = (props) => {
           return (
             <div className={styles.categorySection} key={`category_${idx}`}>
               <div className={styles.heading}>
-                {category.displayText !== undefined ? category.displayText : 'Mine lenker'}
+                {category.displayText !== undefined
+                  ? category.displayText
+                  : strings.CategoryFallbackLabel}
               </div>
               <div className={styles.links} style={{ gap: props.groupByCategory && props.gapSize }}>
                 {linkItems}
