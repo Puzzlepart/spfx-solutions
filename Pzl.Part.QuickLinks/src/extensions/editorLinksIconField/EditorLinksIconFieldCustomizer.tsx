@@ -17,8 +17,10 @@ import {
   DialogTitle,
   Field,
   FluentProvider,
+  IdPrefixProvider,
   Input,
   MessageBar,
+  useId,
   webLightTheme
 } from '@fluentui/react-components'
 import * as strings from 'EditorLinksIconFieldCustomizerStrings'
@@ -42,6 +44,7 @@ const IconFieldCell: React.FC<IIconFieldCellProps> = ({
   webUrl,
   value
 }) => {
+  const fluentProviderId = useId(`fp-editor-links-icon-${itemId}`)
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const [iconSearch, setIconSearch] = React.useState('')
   const [selectedIcon, setSelectedIcon] = React.useState(value || '')
@@ -115,76 +118,78 @@ const IconFieldCell: React.FC<IIconFieldCellProps> = ({
   const displayedIcon = currentIcon || 'Link'
 
   return (
-    <FluentProvider theme={webLightTheme} className={styles.editorLinksIconField}>
-      <Button
-        className={styles.trigger}
-        appearance='transparent'
-        title={currentIcon || strings.SelectIconLabel}
-        aria-label={currentIcon || strings.SelectIconLabel}
-        onClick={openDialog}
-      >
-        <span className={styles.triggerGlyph}>
-          <Icon iconName={displayedIcon} />
-        </span>
-      </Button>
-      <Dialog open={dialogOpen} onOpenChange={(_, data) => !data.open && closeDialog()}>
-        <DialogSurface>
-          <DialogBody>
-            <DialogTitle>{strings.DialogTitle}</DialogTitle>
-            <DialogContent className={styles.dialogContent}>
-              <Field label={strings.IconSearchLabel}>
-                <Input
-                  value={iconSearch}
-                  placeholder={strings.IconSearchPlaceholder}
-                  onChange={(_, data) => setIconSearch(data.value)}
-                />
-              </Field>
-              <div className={styles.pickerActions}>
-                <Button appearance='secondary' onClick={() => setSelectedIcon('')}>
-                  <span>{strings.ClearIconLabel}</span>
-                </Button>
-              </div>
-              <div className={styles.iconGrid}>
-                {filteredIconNames.map((iconName) => (
-                  <Button
-                    key={iconName}
-                    className={styles.iconOption}
-                    appearance='transparent'
-                    aria-label={iconName}
-                    aria-pressed={selectedIcon === iconName}
-                    title={iconName}
-                    onClick={() => setSelectedIcon(iconName)}
-                  >
-                    <span className={styles.iconOptionGlyph}>
-                      <Icon iconName={iconName} />
-                    </span>
+    <IdPrefixProvider value={fluentProviderId}>
+      <FluentProvider theme={webLightTheme} className={styles.editorLinksIconField}>
+        <Button
+          className={styles.trigger}
+          appearance='transparent'
+          title={currentIcon || strings.SelectIconLabel}
+          aria-label={currentIcon || strings.SelectIconLabel}
+          onClick={openDialog}
+        >
+          <span className={styles.triggerGlyph}>
+            <Icon iconName={displayedIcon} />
+          </span>
+        </Button>
+        <Dialog open={dialogOpen} onOpenChange={(_, data) => !data.open && closeDialog()}>
+          <DialogSurface className={styles.dialogSurface}>
+            <DialogBody>
+              <DialogTitle>{strings.DialogTitle}</DialogTitle>
+              <DialogContent className={styles.dialogContent}>
+                <Field label={strings.IconSearchLabel}>
+                  <Input
+                    value={iconSearch}
+                    placeholder={strings.IconSearchPlaceholder}
+                    onChange={(_, data) => setIconSearch(data.value)}
+                  />
+                </Field>
+                <div className={styles.pickerActions}>
+                  <Button appearance='secondary' onClick={() => setSelectedIcon('')}>
+                    <span>{strings.ClearIconLabel}</span>
                   </Button>
-                ))}
-              </div>
-              {filteredIconNames.length === 0 && (
-                <MessageBar intent='warning'>{strings.NoIconsFoundLabel}</MessageBar>
-              )}
-              <MessageBar icon={null}>
-                <div className={styles.selectedIcon}>
-                  {strings.SelectedIconLabel}
-                  <Icon iconName={selectedIcon || 'Link'} />
-                  {selectedIcon || 'Link'}
                 </div>
-              </MessageBar>
-              {errorMessage && <div className={styles.error}>{errorMessage}</div>}
-            </DialogContent>
-            <DialogActions>
-              <Button appearance='secondary' onClick={closeDialog} disabled={isSaving}>
-                <span>{strings.CancelLabel}</span>
-              </Button>
-              <Button appearance='primary' onClick={saveIcon} disabled={isSaving}>
-                <span>{isSaving ? strings.LoadingLabel : strings.SaveLabel}</span>
-              </Button>
-            </DialogActions>
-          </DialogBody>
-        </DialogSurface>
-      </Dialog>
-    </FluentProvider>
+                <div className={styles.iconGrid}>
+                  {filteredIconNames.map((iconName) => (
+                    <Button
+                      key={iconName}
+                      className={styles.iconOption}
+                      appearance='transparent'
+                      aria-label={iconName}
+                      aria-pressed={selectedIcon === iconName}
+                      title={iconName}
+                      onClick={() => setSelectedIcon(iconName)}
+                    >
+                      <span className={styles.iconOptionGlyph}>
+                        <Icon iconName={iconName} />
+                      </span>
+                    </Button>
+                  ))}
+                </div>
+                {filteredIconNames.length === 0 && (
+                  <MessageBar intent='warning'>{strings.NoIconsFoundLabel}</MessageBar>
+                )}
+                <MessageBar icon={null}>
+                  <div className={styles.selectedIcon}>
+                    {strings.SelectedIconLabel}
+                    <Icon iconName={selectedIcon || 'Link'} />
+                    {selectedIcon || 'Link'}
+                  </div>
+                </MessageBar>
+                {errorMessage && <div className={styles.error}>{errorMessage}</div>}
+              </DialogContent>
+              <DialogActions>
+                <Button appearance='secondary' onClick={closeDialog} disabled={isSaving}>
+                  <span>{strings.CancelLabel}</span>
+                </Button>
+                <Button appearance='primary' onClick={saveIcon} disabled={isSaving}>
+                  <span>{isSaving ? strings.LoadingLabel : strings.SaveLabel}</span>
+                </Button>
+              </DialogActions>
+            </DialogBody>
+          </DialogSurface>
+        </Dialog>
+      </FluentProvider>
+    </IdPrefixProvider>
   )
 }
 
