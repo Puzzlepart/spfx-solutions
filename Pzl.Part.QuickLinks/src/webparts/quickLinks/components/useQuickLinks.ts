@@ -30,7 +30,7 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
     try {
       let webServerRelativeUrl: string = props.webServerRelativeUrl
       const user = await sp.web.currentUser()
-      let searchString: string = `AuthorId eq '${user.Id}'`
+      const searchString: string = `AuthorId eq '${user.Id}'`
 
       if (props.globalConfigurationUrl) {
         const web = await sp.web()
@@ -48,12 +48,14 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
         .getList(`${webServerRelativeUrl}/Lists/EditorLinks`)
         .items.filter('(PzlLinkActive eq 1) and (PzlLinkMandatory eq 1)')
         .orderBy('PzlLinkPriority')
-        .orderBy('Title')()
+        .orderBy('Title')
+        .top(5000)()
       const newNonMandatoryLinks = await sp.web
         .getList(`${webServerRelativeUrl}/Lists/EditorLinks`)
         .items.filter('(PzlLinkActive eq 1) and (PzlLinkMandatory eq 0)')
         .orderBy('PzlLinkPriority')
-        .orderBy('Title')()
+        .orderBy('Title')
+        .top(5000)()
 
       const newNonMandatoryLinksObject = newNonMandatoryLinks.map((link) => {
         return {
@@ -72,8 +74,14 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
         .items.select('Id', 'AuthorId', 'PzlPersonalLinks')
         .filter(searchString)()
 
-      const favouriteLinksObject: ILink[] =
-        favouriteLinkStrings.length > 0 ? JSON.parse(favouriteLinkStrings[0].PzlPersonalLinks) : []
+      let favouriteLinksObject: ILink[] = []
+      if (favouriteLinkStrings.length > 0 && favouriteLinkStrings[0].PzlPersonalLinks) {
+        try {
+          favouriteLinksObject = JSON.parse(favouriteLinkStrings[0].PzlPersonalLinks) ?? []
+        } catch {
+          favouriteLinksObject = []
+        }
+      }
 
       const displayLinks = editorLinks.map((link) => {
         return {
@@ -86,11 +94,12 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
         }
       })
 
-      if (favouriteLinkStrings.length > 0) {
+      if (favouriteLinksObject.length > 0) {
         const updatedFavouriteLinksObject = await checkForUpdatedLinks(
           favouriteLinksObject,
           newNonMandatoryLinksObject,
-          favouriteLinkStrings[0].Id
+          favouriteLinkStrings[0].Id,
+          webServerRelativeUrl
         )
         displayLinks.push(...updatedFavouriteLinksObject)
       }
@@ -125,7 +134,8 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
   const checkForUpdatedLinks = async (
     userFavouriteLinks: ILink[],
     allFavouriteLinks: ILink[],
-    currentItemId: number
+    currentItemId: number,
+    webServerRelativeUrl: string
   ) => {
     const personalLinks: ILink[] = new Array<ILink>()
     let shouldUpdate: boolean = false
@@ -146,15 +156,22 @@ export const useQuickLinks = (props: IQuickLinksProps) => {
       }
     })
     if (shouldUpdate) {
-      await updatePersonalLinks(personalLinks, currentItemId)
+      await updatePersonalLinks(personalLinks, currentItemId, webServerRelativeUrl)
     }
     return personalLinks
   }
 
-  const updatePersonalLinks = async (newFavouriteLinks, itemId: number) => {
+  // The item ID comes from the FavouriteLinks list the links were read from, which is
+  // the global configuration site when `globalConfigurationUrl` is set — the update
+  // must target that same list, not the current web's.
+  const updatePersonalLinks = async (
+    newFavouriteLinks: ILink[],
+    itemId: number,
+    webServerRelativeUrl: string
+  ) => {
     try {
       await sp.web
-        .getList(props.webServerRelativeUrl + '/Lists/FavouriteLinks')
+        .getList(webServerRelativeUrl + '/Lists/FavouriteLinks')
         .items.getById(itemId)
         .update({
           PzlPersonalLinks: JSON.stringify(newFavouriteLinks)

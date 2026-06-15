@@ -329,7 +329,7 @@ export const useAllLinks = (props: IAllLinksProps) => {
         })
       }
 
-      const editorLinks = await editorLinksList.items.filter('PzlLinkActive eq 1')()
+      const editorLinks = await editorLinksList.items.filter('PzlLinkActive eq 1').top(5000)()
       const allEditorLinkCategories = await editorLinksList.items.select('PzlLinkCategory').top(5000)()
 
       const categoryOptions = Array.from(
@@ -346,7 +346,7 @@ export const useAllLinks = (props: IAllLinksProps) => {
           displayText: link.Title,
           url: link.PzlUrl,
           icon: link.PzlOfficeUIFabricIcon,
-          priority: link.PzlPriority,
+          priority: link.PzlLinkPriority,
           mandatory: link.PzlLinkMandatory,
           active: link.PzlLinkActive,
           category: link.PzlLinkCategory || '',

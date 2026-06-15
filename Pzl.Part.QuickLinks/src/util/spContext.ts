@@ -7,26 +7,21 @@ import '@pnp/sp/items'
 import '@pnp/sp/batching'
 import '@pnp/sp/site-users/web'
 
-let _sp: SPFI = null
-let _currentBaseUrl: string = null
+// One SPFI instance per base URL. A single shared instance breaks when web parts
+// with different base URLs render on the same page: each render would recreate the
+// instance, and `useEffect([sp])` in the consuming hooks would refetch forever.
+const _spInstances = new Map<string, SPFI>()
 
 export const getSP = (context?: WebPartContext, globalConfigurationUrl?: string): SPFI => {
-  if (context) {
-    const baseUrl = !isNullOrEmpty(globalConfigurationUrl) ? globalConfigurationUrl : null
+  const baseUrl = !isNullOrEmpty(globalConfigurationUrl) ? globalConfigurationUrl : ''
 
-    if (_sp === null || _currentBaseUrl !== baseUrl) {
-      if (!isNullOrEmpty(globalConfigurationUrl)) {
-        _sp = spfi(globalConfigurationUrl).using(SPFx(context))
-      } else {
-        _sp = spfi().using(SPFx(context))
-      }
-      _currentBaseUrl = baseUrl
-    }
+  if (context && !_spInstances.has(baseUrl)) {
+    const sp = baseUrl ? spfi(baseUrl).using(SPFx(context)) : spfi().using(SPFx(context))
+    _spInstances.set(baseUrl, sp)
   }
-  return _sp
+  return _spInstances.get(baseUrl) ?? null
 }
 
 export const resetSP = (): void => {
-  _sp = null
-  _currentBaseUrl = null
+  _spInstances.clear()
 }
