@@ -1,6 +1,6 @@
 {
   "name": "pzl-quick-links",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "private": true,
   "engines": {
     "node": ">=22.14.0 <23.0.0"
@@ -54,5 +54,8 @@
     "eslint-plugin-react": "^7.37.5",
     "prettier": "^3.6.2",
     "typescript": "~5.8.3"
+  },
+  "overrides": {
+    "tabster": "8.8.0"
   }
 }
