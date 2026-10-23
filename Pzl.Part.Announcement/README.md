@@ -1,6 +1,6 @@
 # Announcement (Driftsmeldinger)
 
-[![version](https://img.shields.io/badge/version-1.0.0-orange.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.1.0-orange.svg)](https://semver.org)
 
 ## Summary
 
@@ -17,6 +17,21 @@ This is a web part that displays announcements from a SharePoint list. The annou
 * Driftsmeldinger (Announcement)
   * Entries for announcements.
   * Target Audience needs to be activated for the list and can be used if needed.
+  * Columns added in 1.1.0 (Teams notification):
+    * `PzlPinned` (Yes/No): pinned announcements are sorted first and shown with a pin icon.
+    * `PzlNotifyTeams` (Yes/No, default No): ask the notification service to send a Teams activity notification for levels other than "Varsel". Not read by the web part.
+    * `PzlNotifiedAt` (Date/Time, hidden in forms): set by the notification service when the notification has been sent. Shown in the popover as "Varslet i Teams dd.mm. kl. hh:mm".
+
+## Teams notifications and deep links
+
+The web part itself does not send notifications. A separate service (for example an Azure Function) reads the list, sends Teams activity notifications and writes `PzlNotifiedAt`. See the customer-specific setup for details.
+
+To open a specific announcement when the page loads, the web part reads an announcement ID from one of these sources (in this order) and opens its popover:
+
+1. Teams deep link: `subEntityId`/`subPageId` set to `driftsmelding:<id>` (read via `context.sdks.microsoftTeams`).
+2. Query string: `?driftsmelding=<id>` on the page URL.
+
+Lists provisioned with the 1.0.x template still work: the web part falls back to the original fields if `PzlPinned`/`PzlNotifiedAt` are missing. Re-run `Invoke-PnPSiteTemplate` to add the new columns.
 
 ## Installation
 
@@ -57,3 +72,16 @@ https://<tenant>.sharepoint.com/sites/<site>?debug=true&noredir=true&debugManife
 ```bash
 npm run package
 ```
+
+## Changelog
+
+### 1.1.0
+
+* Pinned announcements (`PzlPinned`) are sorted first and shown with a pin icon.
+* Opens the popover for an announcement given by a Teams deep link (`driftsmelding:<id>`) or `?driftsmelding=<id>`.
+* Shows when the announcement was notified in Teams (`PzlNotifiedAt`).
+* Template: new columns `PzlPinned`, `PzlNotifyTeams` and `PzlNotifiedAt`.
+
+### 1.0.0
+
+* Initial release.

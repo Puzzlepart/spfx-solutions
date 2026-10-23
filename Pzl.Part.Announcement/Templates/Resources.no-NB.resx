@@ -127,4 +127,22 @@
   <data name="View_AllItems_DisplayName" xml:space="preserve">
     <value>Alle elementer</value>
   </data>
+  <data name="SiteFields_NotifyTeams_DisplayName" xml:space="preserve">
+    <value>Varsle i Teams</value>
+  </data>
+  <data name="SiteFields_NotifyTeams_Description" xml:space="preserve">
+    <value>Send varsel i Teams til mottakerne når meldingen blir aktiv. Meldinger med nivået «Varsel» varsles alltid.</value>
+  </data>
+  <data name="SiteFields_Pinned_DisplayName" xml:space="preserve">
+    <value>Fest til toppen</value>
+  </data>
+  <data name="SiteFields_Pinned_Description" xml:space="preserve">
+    <value>Festede meldinger vises øverst i webdelen</value>
+  </data>
+  <data name="SiteFields_NotifiedAt_DisplayName" xml:space="preserve">
+    <value>Varslet i Teams</value>
+  </data>
+  <data name="SiteFields_NotifiedAt_Description" xml:space="preserve">
+    <value>Settes automatisk av varslingstjenesten når varselet er sendt</value>
+  </data>
 </root>

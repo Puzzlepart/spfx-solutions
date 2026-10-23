@@ -48,4 +48,11 @@
     max-width: 320px;
     flex-wrap: wrap;
   }
+
+  .notified {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--colorNeutralForeground3);
+  }
 }

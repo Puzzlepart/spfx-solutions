@@ -14,4 +14,12 @@
   <Field Type="Text" DisplayName="{resource:SiteFields_AffectedSystems_DisplayName}" Description="{resource:SiteFields_AffectedSystems_Description}" MaxLength="255" Group="Puzzlepart" ID="{5837187c-85c8-4fa9-87a1-4457f326df54}" StaticName="PzlAffectedSystems" Name="PzlAffectedSystems" />
   <Field Type="Note" DisplayName="{resource:SiteFields_Consequences_DisplayName}" Description="{resource:SiteFields_Consequences_Description}" NumLines="6" RichText="FALSE" Group="Puzzlepart" ID="{6f006ea9-73a4-497c-ac2c-39e0a01102d9}" StaticName="PzlConsequences" Name="PzlConsequences" />
   <Field Type="User" DisplayName="{resource:SiteFields_Responsible_DisplayName}" Description="{resource:SiteFields_Responsible_Description}" Group="Puzzlepart" ID="{078e1aaf-c463-41d3-80d4-c5239cc0986a}" StaticName="PzlResponsible" Name="PzlResponsible" />
+  <!-- Teams notification (v1.1.0) -->
+  <Field Type="Boolean" DisplayName="{resource:SiteFields_NotifyTeams_DisplayName}" Description="{resource:SiteFields_NotifyTeams_Description}" Group="Puzzlepart" ID="{3e65d1ee-5948-4a41-b295-317184aaa28f}" StaticName="PzlNotifyTeams" Name="PzlNotifyTeams">
+    <Default>0</Default>
+  </Field>
+  <Field Type="Boolean" DisplayName="{resource:SiteFields_Pinned_DisplayName}" Description="{resource:SiteFields_Pinned_Description}" Group="Puzzlepart" ID="{7e89dd82-1342-4ac7-a257-18176dc17266}" StaticName="PzlPinned" Name="PzlPinned">
+    <Default>0</Default>
+  </Field>
+  <Field Type="DateTime" DisplayName="{resource:SiteFields_NotifiedAt_DisplayName}" Description="{resource:SiteFields_NotifiedAt_Description}" Format="DateTime" ShowInNewForm="FALSE" ShowInEditForm="FALSE" Group="Puzzlepart" ID="{8f0539a0-f520-42a2-b2fb-56a56ce33d1d}" StaticName="PzlNotifiedAt" Name="PzlNotifiedAt" />
 </pnp:SiteFields>
