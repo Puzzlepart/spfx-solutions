@@ -1,4 +1,4 @@
-<pnp:SiteFields xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+<pnp:SiteFields xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
   <Field Type="Choice" DisplayName="{resource:SiteFields_Severity_DisplayName}" Description="{resource:SiteFields_Severity_Description}" Group="Puzzlepart" ID="{8cfea964-4168-4775-8970-2709d85a04cc}" StaticName="PzlSeverity" Name="PzlSeverity" Format="Dropdown">
     <Default>{resource:SiteFields_Severity_Choice_Warning}</Default>
     <CHOICES>

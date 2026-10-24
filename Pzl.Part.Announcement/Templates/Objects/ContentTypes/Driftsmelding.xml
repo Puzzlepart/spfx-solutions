@@ -1,5 +1,5 @@
 <pnp:ContentType ID="0x01001A58CF6ADF6943E89CE71ACB741407FA" Name="{resource:ContentTypes_Announcement_Name}" Description="" UpdateChildren="true"
-  xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+  xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
   <pnp:FieldRefs>
     <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
     <pnp:FieldRef ID="8cfea964-4168-4775-8970-2709d85a04cc" Name="PzlSeverity" Required="true" UpdateChildren="true" />

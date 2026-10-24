@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
   <pnp:Localizations>
     <pnp:Localization LCID="1044" Name="Norwegian" ResourceFile="Resources.no-NB.resx" />
     <pnp:Localization LCID="1033" Name="English (US)" ResourceFile="Resources.en-US.resx" />
