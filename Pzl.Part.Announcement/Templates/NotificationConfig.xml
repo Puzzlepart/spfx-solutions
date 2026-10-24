@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+  Optional: configuration list for the Teams notification service (see notification/README.md).
+  Apply to the site that hosts the configuration (typically the root/hub site):
+    Invoke-PnPSiteTemplate -Path .\Templates\NotificationConfig.xml
+  The announcement list and web part work without this template.
+-->
+<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+  <pnp:Localizations>
+    <pnp:Localization LCID="1044" Name="Norwegian" ResourceFile="Resources.no-NB.resx" />
+    <pnp:Localization LCID="1033" Name="English (US)" ResourceFile="Resources.en-US.resx" />
+  </pnp:Localizations>
+  <pnp:Templates ID="CONTAINER-TEMPLATE-NOTIFICATIONCONFIG">
+    <pnp:ProvisioningTemplate ID="TEMPLATE-NOTIFICATIONCONFIG" Version="1" Scope="RootSite">
+      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/NotificationConfig/SiteFields.xml" />
+      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/NotificationConfig/ContentTypes.xml" />
+      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/NotificationConfig/Lists.xml" />
+    </pnp:ProvisioningTemplate>
+  </pnp:Templates>
+</pnp:Provisioning>

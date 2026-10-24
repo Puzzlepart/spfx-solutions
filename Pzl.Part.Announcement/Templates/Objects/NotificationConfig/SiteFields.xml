@@ -1,0 +1,14 @@
+<pnp:SiteFields xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+  <Field Type="Text" DisplayName="{resource:SiteFields_NotifySiteUrl_DisplayName}" Description="{resource:SiteFields_NotifySiteUrl_Description}" MaxLength="255" Group="Puzzlepart" ID="{eb54b1a3-8880-4000-bc30-1d16eafa8602}" StaticName="PzlSiteUrl" Name="PzlSiteUrl" />
+  <Field Type="Boolean" DisplayName="{resource:SiteFields_NotifyNews_DisplayName}" Description="{resource:SiteFields_NotifyNews_Description}" Group="Puzzlepart" ID="{d2b03c61-2e52-4e42-8246-4dd56794bce1}" StaticName="PzlNotifyNews" Name="PzlNotifyNews">
+    <Default>1</Default>
+  </Field>
+  <Field Type="Boolean" DisplayName="{resource:SiteFields_NotifyAnnouncements_DisplayName}" Description="{resource:SiteFields_NotifyAnnouncements_Description}" Group="Puzzlepart" ID="{d9faa27e-4f07-43dd-909c-4c23981d02f4}" StaticName="PzlNotifyAnnouncements" Name="PzlNotifyAnnouncements">
+    <Default>1</Default>
+  </Field>
+  <Field Type="Note" DisplayName="{resource:SiteFields_NotifyDefaultGroupIds_DisplayName}" Description="{resource:SiteFields_NotifyDefaultGroupIds_Description}" NumLines="3" RichText="FALSE" Group="Puzzlepart" ID="{96a8b4eb-3a78-4a62-949a-1b966b3ff029}" StaticName="PzlDefaultGroupIds" Name="PzlDefaultGroupIds" />
+  <Field Type="Text" DisplayName="{resource:SiteFields_NotifyAnnouncementListTitle_DisplayName}" Description="{resource:SiteFields_NotifyAnnouncementListTitle_Description}" MaxLength="255" Group="Puzzlepart" ID="{3e46be51-4470-45dd-959c-f298c931ff6b}" StaticName="PzlAnnouncementListTitle" Name="PzlAnnouncementListTitle" />
+  <Field Type="Boolean" DisplayName="{resource:SiteFields_NotifyActive_DisplayName}" Description="{resource:SiteFields_NotifyActive_Description}" Group="Puzzlepart" ID="{ef5492ea-5995-4345-9ae1-52a097121499}" StaticName="PzlActive" Name="PzlActive">
+    <Default>1</Default>
+  </Field>
+</pnp:SiteFields>

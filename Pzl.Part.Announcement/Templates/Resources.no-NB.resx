@@ -145,4 +145,52 @@
   <data name="SiteFields_NotifiedAt_Description" xml:space="preserve">
     <value>Settes automatisk av varslingstjenesten når varselet er sendt</value>
   </data>
+  <data name="ContentTypes_NotificationConfig_Name" xml:space="preserve">
+    <value>Varslingskonfigurasjon</value>
+  </data>
+  <data name="Lists_NotificationConfig_Title" xml:space="preserve">
+    <value>Varslingskonfigurasjon</value>
+  </data>
+  <data name="Lists_NotificationConfig_Description" xml:space="preserve">
+    <value>Konfigurasjon for Teams-varsling av nyheter og driftsmeldinger. Én rad per område.</value>
+  </data>
+  <data name="Lists_NotificationConfig_Url" xml:space="preserve">
+    <value>Lists/Varslingskonfigurasjon</value>
+  </data>
+  <data name="SiteFields_NotifySiteUrl_DisplayName" xml:space="preserve">
+    <value>Områdeadresse</value>
+  </data>
+  <data name="SiteFields_NotifySiteUrl_Description" xml:space="preserve">
+    <value>Full URL til området som skal overvåkes, f.eks. https://tenant.sharepoint.com/sites/intranett</value>
+  </data>
+  <data name="SiteFields_NotifyNews_DisplayName" xml:space="preserve">
+    <value>Varsle nyheter</value>
+  </data>
+  <data name="SiteFields_NotifyNews_Description" xml:space="preserve">
+    <value>Send Teams-varsel når en nyhetsside publiseres på området</value>
+  </data>
+  <data name="SiteFields_NotifyAnnouncements_DisplayName" xml:space="preserve">
+    <value>Varsle driftsmeldinger</value>
+  </data>
+  <data name="SiteFields_NotifyAnnouncements_Description" xml:space="preserve">
+    <value>Send Teams-varsel for driftsmeldinger på området (nivået «Varsel» alltid, ellers når «Varsle i Teams» er satt)</value>
+  </data>
+  <data name="SiteFields_NotifyDefaultGroupIds_DisplayName" xml:space="preserve">
+    <value>Standard mottakergrupper</value>
+  </data>
+  <data name="SiteFields_NotifyDefaultGroupIds_Description" xml:space="preserve">
+    <value>Objekt-ID (GUID) for Entra-grupper som skal varsles når elementet ikke har målgruppe. Én per linje.</value>
+  </data>
+  <data name="SiteFields_NotifyAnnouncementListTitle_DisplayName" xml:space="preserve">
+    <value>Driftsmeldingsliste</value>
+  </data>
+  <data name="SiteFields_NotifyAnnouncementListTitle_Description" xml:space="preserve">
+    <value>Tittel på driftsmeldingslista på området. Tom betyr standard (Driftsmeldinger).</value>
+  </data>
+  <data name="SiteFields_NotifyActive_DisplayName" xml:space="preserve">
+    <value>Aktiv</value>
+  </data>
+  <data name="SiteFields_NotifyActive_Description" xml:space="preserve">
+    <value>Slå av for å stoppe varsling for området uten å slette raden</value>
+  </data>
 </root>

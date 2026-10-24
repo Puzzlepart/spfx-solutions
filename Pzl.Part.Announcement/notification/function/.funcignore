@@ -1,0 +1,10 @@
+*.js.map
+*.ts
+.git*
+.vscode
+local.settings.json
+local.settings.json.example
+test
+tsconfig.json
+src
+README.md
