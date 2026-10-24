@@ -58,8 +58,7 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                 {props.description && (
                   <div
                     className={styles.infoLabel}
-                    title={format(strings.Aria.HeaderInfoTitle, props.title)}
-                  >
+                    title={format(strings.Aria.HeaderInfoTitle, props.title)}>
                     <InfoLabel
                       size='medium'
                       info={
@@ -85,14 +84,12 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                     open={openAnnouncementId === announcement.id}
                     onOpenChange={(_, data) =>
                       setOpenAnnouncementId(data.open ? announcement.id : null)
-                    }
-                  >
+                    }>
                     <PopoverTrigger>
                       <div
                         className={styles.message}
                         ref={setAnnouncementRef(announcement.id)}
-                        data-announcement-id={announcement.id}
-                      >
+                        data-announcement-id={announcement.id}>
                         <UserMessage
                           title={announcement.title}
                           text={announcement.content}
@@ -109,8 +106,7 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                           weight='semibold'
                           size={500}
                           block
-                          truncate
-                        >
+                          truncate>
                           {announcement.title}
                         </Text>
                         {announcement.content && (

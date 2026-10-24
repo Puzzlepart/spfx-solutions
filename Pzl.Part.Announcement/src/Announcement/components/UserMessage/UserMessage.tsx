@@ -31,8 +31,7 @@ export const UserMessage: FC<IUserMessageProps> = (props: IUserMessageProps) => 
         className={[props.className, styles.userMessage].filter(Boolean).join(' ')}
         style={props.containerStyle}
         hidden={props.hidden}
-        onClick={props.onClick}
-      >
+        onClick={props.onClick}>
         <MessageBar {...messageProps} className={styles.message} intent={props.intent}>
           <MessageBarBody>
             {props.title && (

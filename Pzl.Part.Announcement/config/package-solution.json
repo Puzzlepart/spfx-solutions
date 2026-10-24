@@ -3,7 +3,7 @@
   "solution": {
     "name": "Announcements by Puzzlepart",
     "id": "a65ac2f2-48d4-41ad-81b2-4c89e28c3481",
-    "version": "1.1.0.0",
+    "version": "1.2.0.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,

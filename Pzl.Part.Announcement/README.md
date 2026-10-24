@@ -1,6 +1,6 @@
 # Announcement (Driftsmeldinger)
 
-[![version](https://img.shields.io/badge/version-1.1.0-orange.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.2.0-orange.svg)](https://semver.org)
 
 ## Summary
 
@@ -52,6 +52,8 @@ This can be done manually by navigating to the app catalog and uploading the .sp
 
 ## Building
 
+Requires Node 22 (`>=22.14.0 <23`). The project uses SPFx 1.23 with the Heft toolchain (no gulp).
+
 ### Building the code
 
 ```bash
@@ -62,11 +64,16 @@ npm run build
 
 ### Testing
 
-You can test/debug using
-`npm run serve`
+You can test/debug using `npm run serve` (runs `heft start`), then open
 
 ```html
-https://<tenant>.sharepoint.com/sites/<site>?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/manifests.js
+https://<tenant>.sharepoint.com/sites/<site>?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/build/manifests.js
+```
+
+### Linting
+
+```bash
+npm run lint
 ```
 
 ### Building the code for production
@@ -75,7 +82,15 @@ https://<tenant>.sharepoint.com/sites/<site>?debug=true&noredir=true&debugManife
 npm run package
 ```
 
+The package is written to `sharepoint/solution/pzl-announcement.sppkg`.
+
 ## Changelog
+
+### 1.2.0
+
+* Upgraded to SPFx 1.23.2 (Heft toolchain, TypeScript 5.8, Node 22). gulp, `gulpfile.js` and `.eslintrc.yaml` are replaced by Heft and `eslint.config.js`.
+* Updated Fluent UI, PnPjs, ESLint and Prettier to latest stable.
+* Pinned `tabster` to 8.8.0 to match the version SharePoint ships (avoids a crash in SharePoint's own Fluent UI v9 components on first load).
 
 ### 1.1.0
 

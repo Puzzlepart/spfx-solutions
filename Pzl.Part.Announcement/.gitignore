@@ -9,11 +9,15 @@ node_modules
 # Build generated files
 dist
 lib
+lib-commonjs
+lib-esm
+lib-dts
 release
 solution
 temp
 *.sppkg
 .heft
+jest-output
 
 # Coverage directory used by tools like istanbul
 coverage
