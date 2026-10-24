@@ -141,7 +141,10 @@ export function useAnnouncementDataFetch(
         const announcements = await getAnnouncements()
         setState({ announcements, loading: false })
       } catch (error) {
-        setState({ error, loading: false })
+        setState({
+          error: error instanceof Error ? error : new Error(String(error)),
+          loading: false
+        })
       }
     }
 

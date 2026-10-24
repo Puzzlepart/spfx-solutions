@@ -1,4 +1,4 @@
-define([], function() {
+define([], function () {
   return {
     Aria: {
       HeaderInfoTitle: 'Informasjon om {0}',
@@ -17,7 +17,7 @@ define([], function() {
       Info: 'Informasjon',
       Warning: 'Advarsel',
       Error: 'Varsel',
-      Success: 'Normal',
+      Success: 'Normal'
     }
   }
 })

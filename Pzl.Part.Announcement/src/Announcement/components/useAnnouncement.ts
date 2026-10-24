@@ -1,4 +1,3 @@
-/* eslint-disable prefer-spread */
 import { useEffect, useRef, useState } from 'react'
 import { useAnnouncementState } from './useAnnouncementState'
 import { IAnnouncementProps } from './types'
