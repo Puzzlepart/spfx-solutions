@@ -2,22 +2,36 @@ declare interface IAnnouncementStrings {
   Aria: {
     HeaderInfoTitle: string
     PinnedTitle: string
+    OpenDetails: string
+    CloseDialog: string
   }
   AnnouncementsListName: string
-  AffectedSystemsLabel: string
-  ConsequenceLabel: string
-  ResponsibleLabel: string
-  StartDateLabel: string
-  EndDateLabel: string
   NotifiedAtText: string
   NoAnnouncementsText: string
   AnnouncementFetchErrorText: string
+  YesText: string
+  NoText: string
+  CreateButtonText: string
+  CreateDialogTitle: string
+  SaveButtonText: string
+  CancelButtonText: string
+  RequiredFieldText: string
+  CreateSuccessText: string
+  CreateErrorText: string
+  ChoicePlaceholder: string
+  PeoplePickerPlaceholder: string
+  PeoplePickerSearchingText: string
+  PeoplePickerNoResultsText: string
   Severity: {
     Info: string
     Warning: string
     Error: string
     Success: string
   }
+  /**
+   * Display names of the template fields, used when the list schema cannot be read
+   */
+  FieldTitles: Record<string, string>
 }
 
 declare module 'AnnouncementStrings' {

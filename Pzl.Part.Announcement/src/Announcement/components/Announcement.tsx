@@ -10,30 +10,53 @@ import {
   Popover,
   PopoverSurface,
   PopoverTrigger,
-  Label,
-  Avatar
+  Button,
+  Toaster,
+  Toast,
+  ToastTitle,
+  useToastController
 } from '@fluentui/react-components'
-import { Alert16Regular } from '@fluentui/react-icons'
+import { Add16Regular } from '@fluentui/react-icons'
 import styles from './Announcement.module.scss'
 import { IAnnouncementProps } from './types'
 import { AnnouncementContext } from './context'
 import { useAnnouncement } from './useAnnouncement'
 import { UserMessage } from './UserMessage'
+import { AnnouncementDetails } from './AnnouncementDetails'
+import { CreateAnnouncementDialog } from './CreateAnnouncementDialog'
 import { format } from '@fluentui/react'
 import strings from 'AnnouncementStrings'
-import { formatDate, formatShortDateTime } from '../util/formatDate'
-import ReactMarkdown from 'react-markdown'
-import rehypeRaw from 'rehype-raw'
 
 export const Announcement: FC<IAnnouncementProps> = (props) => {
   const {
     state,
     setState,
+    refresh,
     fluentProviderId,
+    toasterId,
     openAnnouncementId,
     setOpenAnnouncementId,
-    setAnnouncementRef
+    setAnnouncementRef,
+    toggleAnnouncement,
+    popoverFields,
+    showCreateButton,
+    createDialogOpen,
+    setCreateDialogOpen
   } = useAnnouncement(props)
+  const { dispatchToast } = useToastController(toasterId)
+
+  const onCreated = () => {
+    setCreateDialogOpen(false)
+    dispatchToast(
+      <Toast>
+        <ToastTitle>{strings.CreateSuccessText}</ToastTitle>
+      </Toast>,
+      { intent: 'success' }
+    )
+    refresh().catch(() => {
+      // Ignore, the list is shown as it was
+    })
+  }
 
   if (state.loading) {
     return (
@@ -48,14 +71,14 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
       <IdPrefixProvider value={fluentProviderId}>
         <FluentProvider theme={webLightTheme} style={{ backgroundColor: 'transparent' }}>
           <div className={styles.announcement}>
-            {!props.hideHeader && (
+            {(!props.hideHeader || showCreateButton) && (
               <div className={styles.header}>
-                {props.description && (
+                {!props.hideHeader && props.title && (
                   <Text title={props.title} weight='semibold' size={500} block truncate>
                     {props.title}
                   </Text>
                 )}
-                {props.description && (
+                {!props.hideHeader && props.description && (
                   <div
                     className={styles.infoLabel}
                     title={format(strings.Aria.HeaderInfoTitle, props.title)}>
@@ -72,6 +95,15 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                     />
                   </div>
                 )}
+                {showCreateButton && (
+                  <Button
+                    className={styles.createButton}
+                    appearance='outline'
+                    icon={<Add16Regular />}
+                    onClick={() => setCreateDialogOpen(true)}>
+                    {strings.CreateButtonText}
+                  </Button>
+                )}
               </div>
             )}
             <div className={styles.announcements}>
@@ -81,6 +113,8 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                     key={announcement.id}
                     withArrow
                     closeOnScroll
+                    trapFocus
+                    positioning='below-start'
                     open={openAnnouncementId === announcement.id}
                     onOpenChange={(_, data) =>
                       setOpenAnnouncementId(data.open ? announcement.id : null)
@@ -89,7 +123,17 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                       <div
                         className={styles.message}
                         ref={setAnnouncementRef(announcement.id)}
-                        data-announcement-id={announcement.id}>
+                        data-announcement-id={announcement.id}
+                        role='button'
+                        tabIndex={0}
+                        aria-haspopup='dialog'
+                        aria-label={format(strings.Aria.OpenDetails, announcement.title)}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter' || event.key === ' ') {
+                            event.preventDefault()
+                            toggleAnnouncement(announcement.id)
+                          }
+                        }}>
                         <UserMessage
                           title={announcement.title}
                           text={announcement.content}
@@ -100,76 +144,7 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                       </div>
                     </PopoverTrigger>
                     <PopoverSurface tabIndex={-1}>
-                      <div className={styles.popover}>
-                        <Text
-                          title={announcement.title}
-                          weight='semibold'
-                          size={500}
-                          block
-                          truncate>
-                          {announcement.title}
-                        </Text>
-                        {announcement.content && (
-                          <div className={styles.content}>
-                            <ReactMarkdown rehypePlugins={[rehypeRaw]}>
-                              {announcement.content}
-                            </ReactMarkdown>
-                          </div>
-                        )}
-                        {announcement.affectedSystems && (
-                          <div className={styles.content}>
-                            <Label weight='semibold'>{strings.AffectedSystemsLabel}</Label>
-                            <span>{announcement.affectedSystems}</span>
-                          </div>
-                        )}
-                        {announcement.consequence && (
-                          <div className={styles.content}>
-                            <Label weight='semibold'>{strings.ConsequenceLabel}</Label>
-                            <span>{announcement.consequence}</span>
-                          </div>
-                        )}
-                        {announcement.responsible.name && (
-                          <div className={styles.content}>
-                            <Label weight='semibold'>{strings.ResponsibleLabel}</Label>
-                            <span>
-                              <Avatar
-                                title={announcement.responsible.name}
-                                name={announcement.responsible.name}
-                                image={{
-                                  src: `/_layouts/15/userphoto.aspx?size=L&accountname=${announcement.responsible.email}`
-                                }}
-                                size={28}
-                                color='colorful'
-                                style={{ marginRight: 4 }}
-                              />
-                              <span>{announcement.responsible.name}</span>
-                            </span>
-                          </div>
-                        )}
-                        {announcement.startDate && (
-                          <div className={styles.content}>
-                            <Label weight='semibold'>{strings.StartDateLabel}</Label>
-                            <span>{formatDate(announcement.startDate.toString(), true)}</span>
-                          </div>
-                        )}
-                        {announcement.endDate && (
-                          <div className={styles.content}>
-                            <Label weight='semibold'>{strings.EndDateLabel}</Label>
-                            <span>{formatDate(announcement.endDate.toString(), true)}</span>
-                          </div>
-                        )}
-                        {announcement.notifiedAt && (
-                          <div className={styles.notified}>
-                            <Alert16Regular />
-                            <Text size={200}>
-                              {format(
-                                strings.NotifiedAtText,
-                                formatShortDateTime(announcement.notifiedAt)
-                              )}
-                            </Text>
-                          </div>
-                        )}
-                      </div>
+                      <AnnouncementDetails announcement={announcement} fields={popoverFields} />
                     </PopoverSurface>
                   </Popover>
                 ))
@@ -180,6 +155,16 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
               )}
             </div>
           </div>
+          {showCreateButton && (
+            <CreateAnnouncementDialog
+              open={createDialogOpen}
+              fields={state.fields}
+              service={props.service}
+              onOpenChange={setCreateDialogOpen}
+              onCreated={onCreated}
+            />
+          )}
+          <Toaster toasterId={toasterId} position='bottom-end' />
         </FluentProvider>
       </IdPrefixProvider>
     </AnnouncementContext.Provider>
@@ -187,5 +172,6 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
 }
 
 Announcement.defaultProps = {
-  targetAudience: false
+  targetAudience: false,
+  hideCreateButton: false
 }

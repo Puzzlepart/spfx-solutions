@@ -1,75 +1,91 @@
 import { useEffect } from 'react'
-import { IAnnouncement, IAnnouncementProps, IAnnouncementState } from './types'
+import { IAnnouncement, IAnnouncementProps, IAnnouncementState, IListField } from './types'
 import { graphfi, SPFx as graphSPFx } from '@pnp/graph'
 import '@pnp/graph/users'
 import '@pnp/graph/groups'
 import '@pnp/graph/members'
-import { spfi, SPFx } from '@pnp/sp'
 import '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/items'
-import '@pnp/sp/site-groups/web'
-import '@pnp/sp/webs'
 import '@pnp/sp/site-users/web'
 import strings from 'AnnouncementStrings'
 import { MessageBarIntent } from '@fluentui/react-components'
+import { NOTIFICATION_FIELDS } from '../constants'
 
 /**
- * Fields added in v1.1.0 (Teams notification). Lists provisioned with an older
- * template do not have them, so the query is retried without them on failure.
+ * Builds the `$select`/`$expand` for the list query from the list fields.
+ * User and lookup fields are expanded to get title (and e-mail).
  */
-const NOTIFICATION_FIELDS = ['PzlPinned', 'PzlNotifiedAt']
+function buildQuery(fields: IListField[], targetAudience: boolean) {
+  const select = ['ID']
+  const expand: string[] = []
+  fields.forEach((field) => {
+    const name = field.entityPropertyName
+    switch (field.type) {
+      case 'User':
+      case 'UserMulti':
+        select.push(`${name}/Id`, `${name}/Title`, `${name}/EMail`)
+        expand.push(name)
+        break
+      case 'Lookup':
+      case 'LookupMulti':
+        select.push(`${name}/Id`, `${name}/Title`)
+        expand.push(name)
+        break
+      default:
+        select.push(name)
+    }
+  })
+  if (targetAudience && !select.includes('OData__ModernAudienceTargetUserFieldId')) {
+    select.push('OData__ModernAudienceTargetUserFieldId')
+  }
+  return { select, expand }
+}
 
 /**
  * Component data fetch hook for `Announcement`. This hook is responsible for
- * fetching data and setting state.
+ * fetching the list schema, the current user's permissions and the active
+ * announcements, and setting state.
  *
  * @param props Props
  * @param setState Set state callback
+ *
+ * @returns `refresh` to fetch the announcements again (e.g. after creating one)
  */
 export function useAnnouncementDataFetch(
   props: IAnnouncementProps,
   setState: (newState: Partial<IAnnouncementState>) => void
 ) {
-  const sp = spfi().using(SPFx(props.context))
+  const { service } = props
+  const sp = service.sp
 
   /**
    * Fetches active items from the announcement list.
    *
-   * @param includeNotificationFields Include the fields added in v1.1.0
+   * @param fields Fields to select
    */
-  const fetchItems = (includeNotificationFields: boolean): Promise<any[]> => {
+  const fetchItems = (fields: IListField[]): Promise<any[]> => {
     const now = new Date().toISOString()
-    const announcementList = sp.web.lists.getByTitle(strings.AnnouncementsListName)
-    return announcementList.items
-      .select(
-        'ID',
-        'Title',
-        'PzlSeverity',
-        'PzlContent',
-        'PzlStartDate',
-        'PzlEndDate',
-        'PzlAffectedSystems',
-        'PzlConsequences',
-        'PzlResponsible/Title',
-        'PzlResponsible/EMail',
-        ...(includeNotificationFields ? NOTIFICATION_FIELDS : []),
-        props.targetAudience ? 'OData__ModernAudienceTargetUserFieldId' : '*'
-      )
+    const { select, expand } = buildQuery(fields, props.targetAudience)
+    let query = service.list.items
+      .select(...select)
       .filter(`PzlStartDate le datetime'${now}' and PzlEndDate ge datetime'${now}'`)
-      .expand('PzlResponsible')()
+    if (expand.length > 0) query = query.expand(...expand)
+    return query()
   }
 
-  const getAnnouncements = async (): Promise<IAnnouncement[]> => {
+  const getAnnouncements = async (fields: IListField[]): Promise<IAnnouncement[]> => {
     try {
       const graph = graphfi().using(graphSPFx(props.context))
 
       let spItems: any[]
       try {
-        spItems = await fetchItems(true)
+        spItems = await fetchItems(fields)
       } catch {
         // List not updated with the v1.1.0 template, fall back to the original fields
-        spItems = await fetchItems(false)
+        spItems = await fetchItems(
+          fields.filter((field) => !NOTIFICATION_FIELDS.includes(field.internalName))
+        )
       }
 
       const memberOfGroups = props.targetAudience && (await graph.me.getMemberGroups())
@@ -113,14 +129,10 @@ export function useAnnouncementDataFetch(
             title: item.Title,
             severity,
             content: item.PzlContent,
-            startDate: item.PzlStartDate,
-            endDate: item.PzlEndDate,
-            affectedSystems: item.PzlAffectedSystems,
-            consequence: item.PzlConsequences,
-            responsible: { name: item.PzlResponsible?.Title, email: item.PzlResponsible?.EMail },
             hasAccess,
             pinned: item.PzlPinned === true,
-            notifiedAt: item.PzlNotifiedAt ?? null
+            notifiedAt: item.PzlNotifiedAt ?? null,
+            values: item
           }
         })
       )
@@ -135,19 +147,27 @@ export function useAnnouncementDataFetch(
     }
   }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const announcements = await getAnnouncements()
-        setState({ announcements, loading: false })
-      } catch (error) {
-        setState({
-          error: error instanceof Error ? error : new Error(String(error)),
-          loading: false
-        })
-      }
+  /**
+   * Fetches schema, permissions and announcements. Schema and permissions
+   * never throw (they fall back to the template fields / `false`).
+   */
+  const fetchData = async () => {
+    const [fields, canCreate] = await Promise.all([service.getFields(), service.canCreateItems()])
+    setState({ fields, canCreate })
+    try {
+      const announcements = await getAnnouncements(fields)
+      setState({ announcements, loading: false })
+    } catch (error) {
+      setState({
+        error: error instanceof Error ? error : new Error(String(error)),
+        loading: false
+      })
     }
+  }
 
+  useEffect(() => {
     fetchData()
   }, [])
+
+  return { refresh: fetchData }
 }
