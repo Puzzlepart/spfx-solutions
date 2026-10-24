@@ -15,7 +15,7 @@ Lista og webdelen fungerer uten dette tillegget. Kolonnene `PzlNotifyTeams`, `Pz
 |---|---|
 | `function/` | Azure Function (TypeScript, Node 20+, Functions v4). Kjører hvert minutt. |
 | `teams-app/` | Manifest-mal og ikoner for Teams-appen som eier varslene. |
-| `scripts/` | `Grant-NotificationPermissions.ps1`: tildeler app-rettigheter til tjenesteidentiteten. |
+| `scripts/` | `Deploy-NotificationInfrastructure.ps1` (Azure-ressurser), `Grant-NotificationPermissions.ps1` (app-rettigheter) og `Publish-NotificationFunction.ps1` (bygg og deploy). |
 | `../Templates/NotificationConfig.xml` | PnP-mal for konfigurasjonslista `Varslingskonfigurasjon`. |
 
 ## Slik virker det
@@ -45,44 +45,22 @@ Timer (1 min)
 
 ## Steg 1: Azure-ressurser
 
-Alle navn og regioner kan tilpasses. Eksempelet bruker Flex Consumption-plan og en user-assigned managed identity.
+`scripts/Deploy-NotificationInfrastructure.ps1` oppretter alt som trengs, idempotent (kan kjøres på nytt): ressursgruppe, user-assigned managed identity, lagringskonto, Application Insights, rolletildelinger for identiteten på lagringskontoen, Function-app på Flex Consumption (Node 22) med identitetsbasert tilgang til lagring, og app-innstillingene fra steg 5. Krever Azure CLI 2.70+ innlogget med rettigheter til å opprette ressurser og rolletildelinger.
 
-```bash
-RG=rg-intranet-notification
-LOC=norwayeast
-STORAGE=stintranetnotify$RANDOM
-FUNC=func-intranet-notification
-MI=mi-intranet-notification
-
-az group create -n $RG -l $LOC
-az storage account create -n $STORAGE -g $RG -l $LOC --sku Standard_LRS --allow-blob-public-access false
-az identity create -n $MI -g $RG -l $LOC
-az monitor app-insights component create --app ai-intranet-notification -g $RG -l $LOC --kind web
-
-az functionapp create -n $FUNC -g $RG --storage-account $STORAGE \
-  --flexconsumption-location $LOC --runtime node --runtime-version 22 \
-  --assign-identity $(az identity show -n $MI -g $RG --query id -o tsv) \
-  --app-insights ai-intranet-notification
+```powershell
+az login --tenant <tenant-id>
+.\scripts\Deploy-NotificationInfrastructure.ps1 `
+  -SubscriptionId <abonnement> `
+  -ResourceGroupName rg-intranet-notification `
+  -Location westeurope `
+  -FunctionAppName func-intranet-notification `
+  -StorageAccountName stintranetnotify01 `
+  -ConfigSiteUrl https://<tenant>.sharepoint.com
 ```
 
-Gi identiteten tilgang til lagringskontoen (Functions-runtime og state-tabellen bruker identitet, ikke nøkler):
+Regionen må støtte Flex Consumption (`az functionapp list-flexconsumption-locations`). Norway East gjør det ikke per oktober 2026, West Europe gjør det. Valgfrie parametere: `-TeamsDeepLinkAppId`, `-TeamsDeepLinkEntityId`, `-ConfigListTitle`, `-AnnouncementListTitle`, `-AlwaysNotifySeverities`, `-DryRun` (standard `$true`).
 
-```bash
-MI_PRINCIPAL=$(az identity show -n $MI -g $RG --query principalId -o tsv)
-MI_CLIENT=$(az identity show -n $MI -g $RG --query clientId -o tsv)
-STORAGE_ID=$(az storage account show -n $STORAGE -g $RG --query id -o tsv)
-for ROLE in "Storage Blob Data Owner" "Storage Queue Data Contributor" "Storage Table Data Contributor"; do
-  az role assignment create --assignee-object-id $MI_PRINCIPAL --assignee-principal-type ServicePrincipal --role "$ROLE" --scope $STORAGE_ID
-done
-az functionapp config appsettings set -n $FUNC -g $RG --settings \
-  AzureWebJobsStorage__accountName=$STORAGE \
-  AzureWebJobsStorage__clientId=$MI_CLIENT \
-  AzureWebJobsStorage__credential=managedidentity \
-  AZURE_CLIENT_ID=$MI_CLIENT
-az functionapp config appsettings delete -n $FUNC -g $RG --setting-names AzureWebJobsStorage
-```
-
-Noter `MI_CLIENT` (client ID) og `MI_PRINCIPAL` (object ID). De brukes i de neste stegene.
+Scriptet skriver ut **client ID** og **principal ID** for identiteten til slutt. De brukes i de neste stegene.
 
 ## Steg 2: Rettigheter i Entra
 
@@ -157,21 +135,16 @@ Aktivitetsvarsler må sendes fra en Teams-app der `webApplicationInfo.id` er cli
 
 ## Steg 5: Deploy Function-appen
 
-```bash
-cd notification/function
-npm install
-npm run build
-func azure functionapp publish $FUNC
+`scripts/Publish-NotificationFunction.ps1` bygger prosjektet, pakker det og deployer med Azure CLI zip-deploy og remote build. Azure Functions Core Tools trengs ikke.
+
+```powershell
+.\scripts\Publish-NotificationFunction.ps1 -ResourceGroupName rg-intranet-notification -FunctionAppName func-intranet-notification
 ```
 
-Sett app-innstillingene:
+App-innstillingene ble satt i steg 1. Endre dem senere med `az functionapp config appsettings set`, for eksempel når Teams-app-ID-ene fra steg 4 er klare:
 
 ```bash
-az functionapp config appsettings set -n $FUNC -g $RG --settings \
-  CONFIG_SITE_URL=https://<tenant>.sharepoint.com \
-  TEAMS_DEEPLINK_APP_ID=<intranett-appens id> \
-  TEAMS_DEEPLINK_ENTITY_ID=<fanens entityId> \
-  DRY_RUN=true
+az functionapp config appsettings set -n func-intranet-notification -g rg-intranet-notification --settings   TEAMS_DEEPLINK_APP_ID=<intranett-appens id>   TEAMS_DEEPLINK_ENTITY_ID=<fanens entityId>
 ```
 
 | Innstilling | Standard | Beskrivelse |
