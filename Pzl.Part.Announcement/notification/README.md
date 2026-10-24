@@ -204,6 +204,10 @@ Start med `DRY_RUN=true` og se i loggen (Application Insights eller `func azure 
 
 Kopier `function/local.settings.json.example` til `local.settings.json`. Lokalt brukes `DefaultAzureCredential`, så enten `az login` med en bruker som har tilgangene (ikke anbefalt for app-roller) eller en app-registrering med `AZURE_TENANT_ID`, `AZURE_CLIENT_ID` og `AZURE_CLIENT_SECRET` som har fått de samme rollene som i steg 2. Sett `STATE_STORAGE_ACCOUNT_NAME` til en ekte lagringskonto, Azurite støtter ikke identitetsbasert tilgang. Kjør `npm start`.
 
+## Kjente funn fra `npm audit`
+
+`@azure/identity` (siste 4.x) avhenger av `@azure/msal-node` 6.x, som har et høyt funn (GHSA-xcx6-jx8p-x3h5, rettet i msal-node 7.1.0). Sårbarheten ligger i authorization code-flyten for interaktiv pålogging, som tjenesten ikke bruker: i Azure autentiserer den med managed identity, lokalt med client credentials. Ingen utgave av `@azure/identity` bruker msal-node 7 ennå, og å tvinge det inn via `overrides` er en ustøttet kombinasjon. Kjør `npm audit` før deploy og oppdater `@azure/identity` når en versjon med msal-node 7 finnes.
+
 ## Feilsøking
 
 | Symptom | Sjekk |
