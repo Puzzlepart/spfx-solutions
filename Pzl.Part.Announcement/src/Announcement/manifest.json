@@ -10,11 +10,14 @@
   "supportsThemeVariants": true,
 
   "preconfiguredEntries": [{
-    "groupId": "5c03119e-3074-46fd-976b-c60198311f70",
-    "group": { "default": "Advanced" },
-    "title": { "default": "Announcement" },
-    "description": { "default": "Announcement description" },
-    "officeFabricIconFontName": "Page",
+    "groupId": "b7c1f2a4-6e3d-4c8a-9f10-2d5e7a9b3c61",
+    "group": { "default": "Puzzlepart", "nb-no": "Puzzlepart" },
+    "title": { "default": "Announcements", "nb-no": "Driftsmeldinger" },
+    "description": {
+      "default": "Shows active announcements from the Driftsmeldinger list, with details on click. Supports audience targeting, pinning and Teams notifications.",
+      "nb-no": "Viser aktive driftsmeldinger fra lista Driftsmeldinger, med detaljer ved klikk. Støtter målgruppestyring, festing og Teams-varsling."
+    },
+    "officeFabricIconFontName": "Megaphone",
     "properties": {
       "title": "Driftsmeldinger",
       "description": "Her vil driftsmeldinger dukke opp, som for eksempel planlagt vedlikehold eller uforutsette hendelser."

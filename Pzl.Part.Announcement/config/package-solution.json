@@ -16,10 +16,10 @@
     },
     "metadata": {
       "shortDescription": {
-        "default": "announcement description"
+        "default": "Announcements (Driftsmeldinger) web part by Puzzlepart"
       },
       "longDescription": {
-        "default": "announcement description"
+        "default": "Shows active announcements from a SharePoint list based on start and end date, with details on click. Supports audience targeting, pinning and optional Teams notifications."
       },
       "screenshotPaths": [],
       "videoUrl": "",
@@ -27,8 +27,8 @@
     },
     "features": [
       {
-        "title": "announcement Feature",
-        "description": "The feature that activates elements of the announcementsolution.",
+        "title": "Announcements by Puzzlepart",
+        "description": "Activates the Announcements (Driftsmeldinger) web part.",
         "id": "2db0bc78-5fba-4740-a35a-3971f718f070",
         "version": "1.0.0.0"
       }
