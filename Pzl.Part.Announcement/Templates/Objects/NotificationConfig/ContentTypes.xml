@@ -1,4 +1,4 @@
-<pnp:ContentTypes xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+<pnp:ContentTypes xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
   <pnp:ContentType ID="0x01004E7C2D9B6A1F4C8E9D3B5A7F1E2C4D6B" Name="{resource:ContentTypes_NotificationConfig_Name}" Description="" UpdateChildren="true">
     <pnp:FieldRefs>
       <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
