@@ -3,14 +3,14 @@ import { IAnnouncementState } from './types'
 
 /**
  * Component state hook for `Announcement`.
- *
- * @param props Props
  */
 export function useAnnouncementState() {
   const [state, $setState] = useState<IAnnouncementState>({
     announcements: [],
     loading: true,
-    error: null
+    error: null,
+    fields: [],
+    canCreate: false
   })
 
   /**

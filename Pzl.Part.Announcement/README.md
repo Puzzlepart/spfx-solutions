@@ -1,10 +1,10 @@
 # Announcement (Driftsmeldinger)
 
-[![version](https://img.shields.io/badge/version-1.2.0-orange.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.3.0-orange.svg)](https://semver.org)
 
 ## Summary
 
-This is a web part that displays announcements from a SharePoint list. The announcements are displayed based on startdate and enddate. The web part support Target Audience for the announcements added to the list.
+This is a web part that displays announcements from a SharePoint list. The announcements are displayed based on startdate and enddate. The web part support Target Audience for the announcements added to the list. Users who may add items to the list get a **New announcement** button that opens a form built from the fields of the list, and the fields shown in the popover are selected in the web part properties.
 
 | Announcements                                                                             | Popover (on click)                                                                        |
 | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
@@ -23,6 +23,20 @@ This is a web part that displays announcements from a SharePoint list. The annou
     * `PzlPinned` (Yes/No): pinned announcements are sorted first and shown with a pin icon.
     * `PzlNotifyTeams` (Yes/No, default No): ask the notification service to send a Teams activity notification for levels other than "Varsel". Not read by the web part.
     * `PzlNotifiedAt` (Date/Time, hidden in forms): set by the notification service when the notification has been sent. Shown in the popover as "Varslet i Teams dd.mm. kl. hh:mm".
+
+## Web part properties
+
+| Group | Property | Description |
+| --- | --- | --- |
+| Generelt | Tittel, Beskrivelse | Header title and the text behind the info icon. |
+| Generelt | Aktiver målgruppeangivelse | Filter announcements on the list's audience targeting column. |
+| Felter i detaljvisning | One toggle per list field | Which fields are shown in the popover (on click). The toggles are read from the default content type of the list, so columns added to the list show up here. Title is always shown. Defaults match 1.2.0: content, start/end date, affected systems, consequences, responsible and "notified in Teams". |
+| Skjul/vis | Skjul header | Hide the header (the button for new announcements is still shown). |
+| Skjul/vis | Skjul knapp for ny driftsmelding | Hide the **New announcement** button for everyone. |
+
+### Registering announcements from the web part
+
+The **New announcement** button is shown only to users who have the *Add items* permission on the list (checked with `currentUserHasPermissions`), and only if it is not hidden in the web part properties. It opens a dialog with a form generated from the fields of the list's default content type (fields that are hidden, read-only or have `ShowInNewForm="FALSE"` are left out). Supported column types: single/multiple lines of text, choice (single and multi), date/time, yes/no, person or group (single and multi), number, currency and hyperlink. Other column types are not shown in the form and get their default value from the list. Required columns are validated before saving. Rich text columns (such as *Innhold*) are entered as plain text/markdown, which the web part renders as markdown.
 
 ## Teams notifications and deep links
 
@@ -95,6 +109,12 @@ npm run package
 The package is written to `sharepoint/solution/pzl-announcement.sppkg`.
 
 ## Changelog
+
+### 1.3.0
+
+* Web part property group **Felter i detaljvisning**: choose which list fields are shown in the popover. The fields are read from the list, so custom columns can be shown too.
+* **New announcement** button with a dialog that creates list items. The form is generated from the fields of the list. Shown only to users with *Add items* permission on the list, and can be hidden with **Skjul knapp for ny driftsmelding**.
+* Popover labels now use the display names of the list columns. Date columns are shown with time only if the column format is *Date & Time*.
 
 ### 1.2.0
 

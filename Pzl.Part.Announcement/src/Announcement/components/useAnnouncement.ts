@@ -20,14 +20,26 @@ const OPEN_FOCUSED_DELAY = 250
  */
 export const useAnnouncement = (props: IAnnouncementProps) => {
   const { state, setState } = useAnnouncementState()
-  useAnnouncementDataFetch(props, setState)
+  const { refresh } = useAnnouncementDataFetch(props, setState)
 
   const fluentProviderId = useId('fp-announcement')
+  const toasterId = useId('toaster-announcement')
 
   /**
    * ID of the announcement whose popover is currently open (controlled popovers)
    */
   const [openAnnouncementId, setOpenAnnouncementId] = useState<string>(null)
+
+  /**
+   * Whether the create dialog is open
+   */
+  const [createDialogOpen, setCreateDialogOpen] = useState(false)
+
+  /**
+   * Toggles the popover for an announcement (keyboard activation of the trigger)
+   */
+  const toggleAnnouncement = (id: string) =>
+    setOpenAnnouncementId((current) => (current === id ? null : id))
 
   /**
    * Refs to the announcement elements, used to scroll the focused one into view
@@ -60,12 +72,32 @@ export const useAnnouncement = (props: IAnnouncementProps) => {
     return () => clearTimeout(timer)
   }, [state.loading, state.focusedAnnouncementId])
 
+  /**
+   * Fields selected for the popover (in content type order)
+   */
+  const popoverFields = state.fields.filter(
+    (field) => props.popoverFields?.[field.internalName] === true
+  )
+
+  /**
+   * The create button is shown to users who may add items to the list,
+   * unless hidden in the web part properties.
+   */
+  const showCreateButton = state.canCreate && !props.hideCreateButton
+
   return {
     state,
     setState,
+    refresh,
     fluentProviderId,
+    toasterId,
     openAnnouncementId,
     setOpenAnnouncementId,
-    setAnnouncementRef
+    setAnnouncementRef,
+    toggleAnnouncement,
+    popoverFields,
+    showCreateButton,
+    createDialogOpen,
+    setCreateDialogOpen
   }
 }

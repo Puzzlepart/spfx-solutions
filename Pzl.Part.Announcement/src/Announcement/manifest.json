@@ -6,21 +6,44 @@
   "version": "*",
   "manifestVersion": 2,
   "requiresCustomScript": false,
-  "supportedHosts": ["SharePointWebPart", "TeamsPersonalApp", "TeamsTab", "SharePointFullPage"],
+  "supportedHosts": [
+    "SharePointWebPart",
+    "TeamsPersonalApp",
+    "TeamsTab",
+    "SharePointFullPage"
+  ],
   "supportsThemeVariants": true,
-
-  "preconfiguredEntries": [{
-    "groupId": "b7c1f2a4-6e3d-4c8a-9f10-2d5e7a9b3c61",
-    "group": { "default": "Puzzlepart", "nb-no": "Puzzlepart" },
-    "title": { "default": "Announcements", "nb-no": "Driftsmeldinger" },
-    "description": {
-      "default": "Shows active announcements from the Driftsmeldinger list, with details on click. Supports audience targeting, pinning and Teams notifications.",
-      "nb-no": "Viser aktive driftsmeldinger fra lista Driftsmeldinger, med detaljer ved klikk. Støtter målgruppestyring, festing og Teams-varsling."
-    },
-    "officeFabricIconFontName": "Megaphone",
-    "properties": {
-      "title": "Driftsmeldinger",
-      "description": "Her vil driftsmeldinger dukke opp, som for eksempel planlagt vedlikehold eller uforutsette hendelser."
+  "preconfiguredEntries": [
+    {
+      "groupId": "b7c1f2a4-6e3d-4c8a-9f10-2d5e7a9b3c61",
+      "group": {
+        "default": "Puzzlepart",
+        "nb-no": "Puzzlepart"
+      },
+      "title": {
+        "default": "Announcements",
+        "nb-no": "Driftsmeldinger"
+      },
+      "description": {
+        "default": "Shows active announcements from the Driftsmeldinger list, with details on click. Supports audience targeting, pinning and Teams notifications.",
+        "nb-no": "Viser aktive driftsmeldinger fra lista Driftsmeldinger, med detaljer ved klikk. Støtter målgruppestyring, festing og Teams-varsling."
+      },
+      "officeFabricIconFontName": "Megaphone",
+      "properties": {
+        "title": "Driftsmeldinger",
+        "description": "Her vil driftsmeldinger dukke opp, som for eksempel planlagt vedlikehold eller uforutsette hendelser.",
+        "popoverFields": {
+          "PzlContent": true,
+          "PzlStartDate": true,
+          "PzlEndDate": true,
+          "PzlAffectedSystems": true,
+          "PzlConsequences": true,
+          "PzlResponsible": true,
+          "PzlNotifiedAt": true
+        },
+        "hideHeader": false,
+        "hideCreateButton": false
+      }
     }
-  }]
+  ]
 }
