@@ -46,6 +46,16 @@ Connect-PnPOnline -Url "https://<tenant>.sharepoint.com/sites/<site>" -Interacti
 Invoke-PnPSiteTemplate -Path ".\Templates\Announcement.xml"
 ```
 
+> **Known issue with PnP.PowerShell 3.4.x.** `Invoke-PnPSiteTemplate` fails with `Could not load file or assembly 'Microsoft.SharePoint.Client.UserProfiles, Version=16.1.0.0'` on PnP.PowerShell 3.4.0, 3.4.1 and the current nightly. The assembly resolver introduced in 3.4.0 does not resolve CSOM assemblies that are not loaded at import, and the templates in this solution use localization (`<pnp:Localizations>`), which makes PnP.Framework load `UserProfiles`. Either use PnP.PowerShell 3.2.0 (verified) or pre-load the CSOM assemblies after importing the module and before connecting:
+>
+> ```powershell
+> Import-Module PnP.PowerShell
+> Get-ChildItem (Join-Path (Get-Module PnP.PowerShell).ModuleBase 'Core') -Filter 'Microsoft.*SharePoint*.dll' |
+>   ForEach-Object { [System.Reflection.Assembly]::LoadFrom($_.FullName) | Out-Null }
+> ```
+>
+> The same applies to `Templates\NotificationConfig.xml`.
+
 ### Upload the web part package to a site collection app catalog
 
 This can be done manually by navigating to the app catalog and uploading the .sppkg package from the build.
