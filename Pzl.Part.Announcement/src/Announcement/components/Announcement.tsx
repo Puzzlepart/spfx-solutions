@@ -13,6 +13,7 @@ import {
   Label,
   Avatar
 } from '@fluentui/react-components'
+import { Alert16Regular } from '@fluentui/react-icons'
 import styles from './Announcement.module.scss'
 import { IAnnouncementProps } from './types'
 import { AnnouncementContext } from './context'
@@ -20,12 +21,19 @@ import { useAnnouncement } from './useAnnouncement'
 import { UserMessage } from './UserMessage'
 import { format } from '@fluentui/react'
 import strings from 'AnnouncementStrings'
-import { formatDate } from '../util/formatDate'
+import { formatDate, formatShortDateTime } from '../util/formatDate'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 
 export const Announcement: FC<IAnnouncementProps> = (props) => {
-  const { state, setState, fluentProviderId } = useAnnouncement(props)
+  const {
+    state,
+    setState,
+    fluentProviderId,
+    openAnnouncementId,
+    setOpenAnnouncementId,
+    setAnnouncementRef
+  } = useAnnouncement(props)
 
   if (state.loading) {
     return (
@@ -69,15 +77,28 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
             )}
             <div className={styles.announcements}>
               {state.announcements.length > 0 ? (
-                state.announcements.map((announcement, idx) => (
-                  <Popover key={idx} withArrow closeOnScroll>
+                state.announcements.map((announcement) => (
+                  <Popover
+                    key={announcement.id}
+                    withArrow
+                    closeOnScroll
+                    open={openAnnouncementId === announcement.id}
+                    onOpenChange={(_, data) =>
+                      setOpenAnnouncementId(data.open ? announcement.id : null)
+                    }
+                  >
                     <PopoverTrigger>
-                      <div className={styles.message}>
+                      <div
+                        className={styles.message}
+                        ref={setAnnouncementRef(announcement.id)}
+                        data-announcement-id={announcement.id}
+                      >
                         <UserMessage
-                          key={announcement.id}
                           title={announcement.title}
                           text={announcement.content}
                           intent={announcement.severity}
+                          pinned={announcement.pinned}
+                          pinnedTitle={strings.Aria.PinnedTitle}
                         />
                       </div>
                     </PopoverTrigger>
@@ -139,6 +160,17 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                           <div className={styles.content}>
                             <Label weight='semibold'>{strings.EndDateLabel}</Label>
                             <span>{formatDate(announcement.endDate.toString(), true)}</span>
+                          </div>
+                        )}
+                        {announcement.notifiedAt && (
+                          <div className={styles.notified}>
+                            <Alert16Regular />
+                            <Text size={200}>
+                              {format(
+                                strings.NotifiedAtText,
+                                formatShortDateTime(announcement.notifiedAt)
+                              )}
+                            </Text>
                           </div>
                         )}
                       </div>

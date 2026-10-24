@@ -17,6 +17,16 @@ export interface IUserMessageProps extends MessageBarProps {
   text?: string
 
   /**
+   * Show a pin icon in front of the title
+   */
+  pinned?: boolean
+
+  /**
+   * Title (tooltip) for the pin icon
+   */
+  pinnedTitle?: string
+
+  /**
    * On click handler for the message
    */
   onClick?: (event: React.MouseEvent<any>) => void

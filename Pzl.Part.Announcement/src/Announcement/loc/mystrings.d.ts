@@ -1,6 +1,7 @@
 declare interface IAnnouncementStrings {
   Aria: {
     HeaderInfoTitle: string
+    PinnedTitle: string
   }
   AnnouncementsListName: string
   AffectedSystemsLabel: string
@@ -8,6 +9,7 @@ declare interface IAnnouncementStrings {
   ResponsibleLabel: string
   StartDateLabel: string
   EndDateLabel: string
+  NotifiedAtText: string
   NoAnnouncementsText: string
   AnnouncementFetchErrorText: string
   Severity: {

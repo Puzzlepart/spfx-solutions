@@ -127,4 +127,22 @@
   <data name="View_AllItems_DisplayName" xml:space="preserve">
     <value>All Items</value>
   </data>
+  <data name="SiteFields_NotifyTeams_DisplayName" xml:space="preserve">
+    <value>Notify in Teams</value>
+  </data>
+  <data name="SiteFields_NotifyTeams_Description" xml:space="preserve">
+    <value>Send a Teams notification to the recipients when the announcement becomes active. Announcements with level "Alert" are always notified.</value>
+  </data>
+  <data name="SiteFields_Pinned_DisplayName" xml:space="preserve">
+    <value>Pin to top</value>
+  </data>
+  <data name="SiteFields_Pinned_Description" xml:space="preserve">
+    <value>Pinned announcements are shown at the top of the web part</value>
+  </data>
+  <data name="SiteFields_NotifiedAt_DisplayName" xml:space="preserve">
+    <value>Notified in Teams</value>
+  </data>
+  <data name="SiteFields_NotifiedAt_Description" xml:space="preserve">
+    <value>Set automatically by the notification service when the notification has been sent</value>
+  </data>
 </root>

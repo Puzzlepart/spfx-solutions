@@ -9,5 +9,8 @@
     <pnp:FieldRef ID="5837187c-85c8-4fa9-87a1-4457f326df54" Name="PzlAffectedSystems" UpdateChildren="true" />
     <pnp:FieldRef ID="6f006ea9-73a4-497c-ac2c-39e0a01102d9" Name="PzlConsequences" UpdateChildren="true" />
     <pnp:FieldRef ID="078e1aaf-c463-41d3-80d4-c5239cc0986a" Name="PzlResponsible" UpdateChildren="true" />
+    <pnp:FieldRef ID="7e89dd82-1342-4ac7-a257-18176dc17266" Name="PzlPinned" UpdateChildren="true" />
+    <pnp:FieldRef ID="3e65d1ee-5948-4a41-b295-317184aaa28f" Name="PzlNotifyTeams" UpdateChildren="true" />
+    <pnp:FieldRef ID="8f0539a0-f520-42a2-b2fb-56a56ce33d1d" Name="PzlNotifiedAt" UpdateChildren="true" />
   </pnp:FieldRefs>
 </pnp:ContentType>

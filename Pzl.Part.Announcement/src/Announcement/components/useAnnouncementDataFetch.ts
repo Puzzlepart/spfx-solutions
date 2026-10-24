@@ -15,41 +15,62 @@ import strings from 'AnnouncementStrings'
 import { MessageBarIntent } from '@fluentui/react-components'
 
 /**
+ * Fields added in v1.1.0 (Teams notification). Lists provisioned with an older
+ * template do not have them, so the query is retried without them on failure.
+ */
+const NOTIFICATION_FIELDS = ['PzlPinned', 'PzlNotifiedAt']
+
+/**
  * Component data fetch hook for `Announcement`. This hook is responsible for
  * fetching data and setting state.
  *
  * @param props Props
- * @param refetch Timestamp for refetch. Changes to this variable refetches the data in `useEffect`
  * @param setState Set state callback
  */
 export function useAnnouncementDataFetch(
   props: IAnnouncementProps,
   setState: (newState: Partial<IAnnouncementState>) => void
 ) {
-  const getAnnouncements = async (): Promise<any[]> => {
+  const sp = spfi().using(SPFx(props.context))
+
+  /**
+   * Fetches active items from the announcement list.
+   *
+   * @param includeNotificationFields Include the fields added in v1.1.0
+   */
+  const fetchItems = (includeNotificationFields: boolean): Promise<any[]> => {
+    const now = new Date().toISOString()
+    const announcementList = sp.web.lists.getByTitle(strings.AnnouncementsListName)
+    return announcementList.items
+      .select(
+        'ID',
+        'Title',
+        'PzlSeverity',
+        'PzlContent',
+        'PzlStartDate',
+        'PzlEndDate',
+        'PzlAffectedSystems',
+        'PzlConsequences',
+        'PzlResponsible/Title',
+        'PzlResponsible/EMail',
+        ...(includeNotificationFields ? NOTIFICATION_FIELDS : []),
+        props.targetAudience ? 'OData__ModernAudienceTargetUserFieldId' : '*'
+      )
+      .filter(`PzlStartDate le datetime'${now}' and PzlEndDate ge datetime'${now}'`)
+      .expand('PzlResponsible')()
+  }
+
+  const getAnnouncements = async (): Promise<IAnnouncement[]> => {
     try {
       const graph = graphfi().using(graphSPFx(props.context))
-      const sp = spfi().using(SPFx(props.context))
-      const now = new Date()
-      const announcementList = sp.web.lists.getByTitle(strings.AnnouncementsListName)
-      const spItems = await announcementList.items
-        .select(
-          'ID',
-          'Title',
-          'PzlSeverity',
-          'PzlContent',
-          'PzlStartDate',
-          'PzlEndDate',
-          'PzlAffectedSystems',
-          'PzlConsequences',
-          'PzlResponsible/Title',
-          'PzlResponsible/EMail',
-          props.targetAudience ? 'OData__ModernAudienceTargetUserFieldId' : '*'
-        )
-        .filter(
-          `PzlStartDate le datetime'${now.toISOString()}' and PzlEndDate ge datetime'${now.toISOString()}'`
-        )
-        .expand('PzlResponsible')()
+
+      let spItems: any[]
+      try {
+        spItems = await fetchItems(true)
+      } catch {
+        // List not updated with the v1.1.0 template, fall back to the original fields
+        spItems = await fetchItems(false)
+      }
 
       const memberOfGroups = props.targetAudience && (await graph.me.getMemberGroups())
 
@@ -88,7 +109,7 @@ export function useAnnouncementDataFetch(
           }
 
           return {
-            id: item.ID,
+            id: String(item.ID),
             title: item.Title,
             severity,
             content: item.PzlContent,
@@ -97,11 +118,18 @@ export function useAnnouncementDataFetch(
             affectedSystems: item.PzlAffectedSystems,
             consequence: item.PzlConsequences,
             responsible: { name: item.PzlResponsible?.Title, email: item.PzlResponsible?.EMail },
-            hasAccess
+            hasAccess,
+            pinned: item.PzlPinned === true,
+            notifiedAt: item.PzlNotifiedAt ?? null
           }
         })
       )
-      return announcements.filter((announcement) => announcement.hasAccess)
+      return (
+        announcements
+          .filter((announcement) => announcement.hasAccess)
+          // Pinned first, otherwise keep list order (sort is stable)
+          .sort((a, b) => Number(b.pinned) - Number(a.pinned))
+      )
     } catch {
       throw new Error(strings.AnnouncementFetchErrorText)
     }

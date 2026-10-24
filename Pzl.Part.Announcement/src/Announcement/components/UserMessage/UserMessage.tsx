@@ -7,6 +7,7 @@ import {
   useId,
   webLightTheme
 } from '@fluentui/react-components'
+import { Pin16Filled } from '@fluentui/react-icons'
 import React, { FC } from 'react'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
@@ -34,7 +35,18 @@ export const UserMessage: FC<IUserMessageProps> = (props: IUserMessageProps) => 
       >
         <MessageBar {...messageProps} className={styles.message} intent={props.intent}>
           <MessageBarBody>
-            {props.title && <MessageBarTitle>{props.title}</MessageBarTitle>}
+            {props.title && (
+              <MessageBarTitle>
+                {props.pinned && (
+                  <Pin16Filled
+                    className={styles.pin}
+                    title={props.pinnedTitle}
+                    aria-label={props.pinnedTitle}
+                  />
+                )}
+                {props.title}
+              </MessageBarTitle>
+            )}
             {props.text && (
               <ReactMarkdown linkTarget={props.linkTarget} rehypePlugins={[rehypeRaw]}>
                 {props.text}
