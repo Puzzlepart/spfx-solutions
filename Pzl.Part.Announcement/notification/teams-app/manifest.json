@@ -1,0 +1,54 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/teams/v1.19/MicrosoftTeams.schema.json",
+  "manifestVersion": "1.19",
+  "version": "1.0.0",
+  "id": "{{TEAMS_APP_ID}}",
+  "developer": {
+    "name": "{{DEVELOPER_NAME}}",
+    "websiteUrl": "{{SITE_URL}}",
+    "privacyUrl": "{{SITE_URL}}",
+    "termsOfUseUrl": "{{SITE_URL}}"
+  },
+  "name": {
+    "short": "{{APP_NAME}}",
+    "full": "{{APP_NAME}} – varsler"
+  },
+  "description": {
+    "short": "Varsler om nyheter og driftsmeldinger fra intranettet",
+    "full": "Sender varsler i Teams-aktivitetsfeeden når nye nyheter publiseres og driftsmeldinger blir aktive på intranettet. Appen har ingen egen funksjonalitet utover varslene; fanen åpner intranettet."
+  },
+  "icons": {
+    "color": "color.png",
+    "outline": "outline.png"
+  },
+  "accentColor": "#FFFFFF",
+  "staticTabs": [
+    {
+      "entityId": "intranet",
+      "name": "Intranett",
+      "contentUrl": "{{SITE_URL}}/_layouts/15/teamslogon.aspx?SPFX=true&dest={{SITE_URL_ENCODED}}",
+      "websiteUrl": "{{SITE_URL}}",
+      "scopes": ["personal"]
+    }
+  ],
+  "permissions": ["identity"],
+  "validDomains": ["{{SITE_HOST}}", "*.sharepoint.com", "*.login.microsoftonline.com"],
+  "webApplicationInfo": {
+    "id": "{{NOTIFICATION_CLIENT_ID}}",
+    "resource": "api://{{SITE_HOST}}/{{NOTIFICATION_CLIENT_ID}}"
+  },
+  "activities": {
+    "activityTypes": [
+      {
+        "type": "announcement",
+        "description": "Driftsmelding",
+        "templateText": "Driftsmelding: {title}"
+      },
+      {
+        "type": "news",
+        "description": "Nyhet",
+        "templateText": "Ny nyhet: {title}"
+      }
+    ]
+  }
+}

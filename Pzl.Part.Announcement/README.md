@@ -16,6 +16,8 @@ This is a web part that displays announcements from a SharePoint list. The annou
 
 * Driftsmeldinger (Announcement)
   * Entries for announcements.
+* Varslingskonfigurasjon (optional, `Templates/NotificationConfig.xml`)
+  * One row per site for the Teams notification service, see [notification/README.md](notification/README.md).
   * Target Audience needs to be activated for the list and can be used if needed.
   * Columns added in 1.1.0 (Teams notification):
     * `PzlPinned` (Yes/No): pinned announcements are sorted first and shown with a pin icon.
@@ -24,7 +26,7 @@ This is a web part that displays announcements from a SharePoint list. The annou
 
 ## Teams notifications and deep links
 
-The web part itself does not send notifications. A separate service (for example an Azure Function) reads the list, sends Teams activity notifications and writes `PzlNotifiedAt`. See the customer-specific setup for details.
+The web part itself does not send notifications. The optional notification service in [`notification/`](notification/README.md) (Azure Function + a small Teams app) reads the lists, sends Teams activity notifications for new news pages and active announcements, and writes `PzlNotifiedAt`. The list and the web part work without it; see [notification/README.md](notification/README.md) for the deployment guide.
 
 To open a specific announcement when the page loads, the web part reads an announcement ID from one of these sources (in this order) and opens its popover:
 

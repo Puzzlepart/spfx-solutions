@@ -1,0 +1,22 @@
+<pnp:Lists xmlns:pnp="http://schemas.dev.office.com/PnP/2021/03/ProvisioningSchema">
+  <pnp:ListInstance Title="{resource:Lists_NotificationConfig_Title}" Description="{resource:Lists_NotificationConfig_Description}" DocumentTemplate="" TemplateType="100" Url="{resource:Lists_NotificationConfig_Url}" Hidden="false" EnableVersioning="true" MinorVersionLimit="0" MaxVersionLimit="50" DraftVersionVisibility="0" ContentTypesEnabled="true" RemoveExistingContentTypes="true" EnableFolderCreation="false" EnableAttachments="false">
+    <pnp:ContentTypeBindings>
+      <pnp:ContentTypeBinding ContentTypeID="0x01004E7C2D9B6A1F4C8E9D3B5A7F1E2C4D6B" Default="true" />
+    </pnp:ContentTypeBindings>
+    <pnp:Views>
+      <View DefaultView="TRUE" MobileView="TRUE" MobileDefaultView="TRUE" Type="HTML" DisplayName="{resource:View_AllItems_DisplayName}" Url="{site}/{resource:Lists_NotificationConfig_Url}/AllItems.aspx" Level="1" BaseViewID="1" ContentTypeID="0x">
+        <ViewFields>
+          <FieldRef Name="LinkTitle" />
+          <FieldRef Name="PzlSiteUrl" />
+          <FieldRef Name="PzlNotifyNews" />
+          <FieldRef Name="PzlNotifyAnnouncements" />
+          <FieldRef Name="PzlDefaultGroupIds" />
+          <FieldRef Name="PzlAnnouncementListTitle" />
+          <FieldRef Name="PzlActive" />
+        </ViewFields>
+        <RowLimit Paged="TRUE">30</RowLimit>
+        <JSLink>clienttemplates.js</JSLink>
+      </View>
+    </pnp:Views>
+  </pnp:ListInstance>
+</pnp:Lists>

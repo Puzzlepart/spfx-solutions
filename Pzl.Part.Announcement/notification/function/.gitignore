@@ -1,0 +1,4 @@
+dist
+node_modules
+local.settings.json
+*.log

@@ -1,0 +1,28 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "AzureWebJobsFeatureFlags": "EnableWorkerIndexing",
+
+    "AZURE_CLIENT_ID": "<client id of the user-assigned managed identity, or an app registration when running locally>",
+    "AZURE_TENANT_ID": "<tenant id, local development only>",
+    "AZURE_CLIENT_SECRET": "<client secret, local development only - never in Azure>",
+
+    "CONFIG_SITE_URL": "https://contoso.sharepoint.com",
+    "CONFIG_LIST_TITLE": "Varslingskonfigurasjon",
+    "ANNOUNCEMENT_LIST_TITLE": "Driftsmeldinger",
+    "ALWAYS_NOTIFY_SEVERITIES": "Varsel,Alert",
+    "NEWS_LOOKBACK_DAYS": "7",
+    "INCLUDE_GUESTS": "false",
+
+    "TEAMS_DEEPLINK_APP_ID": "",
+    "TEAMS_DEEPLINK_ENTITY_ID": "",
+
+    "STATE_STORAGE_ACCOUNT_NAME": "",
+    "STATE_TABLE_NAME": "NotificationState",
+
+    "TIMER_SCHEDULE": "0 * * * * *",
+    "DRY_RUN": "true"
+  }
+}

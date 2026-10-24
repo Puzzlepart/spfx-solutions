@@ -145,4 +145,52 @@
   <data name="SiteFields_NotifiedAt_Description" xml:space="preserve">
     <value>Set automatically by the notification service when the notification has been sent</value>
   </data>
+  <data name="ContentTypes_NotificationConfig_Name" xml:space="preserve">
+    <value>Notification configuration</value>
+  </data>
+  <data name="Lists_NotificationConfig_Title" xml:space="preserve">
+    <value>Varslingskonfigurasjon</value>
+  </data>
+  <data name="Lists_NotificationConfig_Description" xml:space="preserve">
+    <value>Configuration for Teams notifications of news and announcements. One row per site.</value>
+  </data>
+  <data name="Lists_NotificationConfig_Url" xml:space="preserve">
+    <value>Lists/Varslingskonfigurasjon</value>
+  </data>
+  <data name="SiteFields_NotifySiteUrl_DisplayName" xml:space="preserve">
+    <value>Site URL</value>
+  </data>
+  <data name="SiteFields_NotifySiteUrl_Description" xml:space="preserve">
+    <value>Full URL of the site to monitor, e.g. https://tenant.sharepoint.com/sites/intranet</value>
+  </data>
+  <data name="SiteFields_NotifyNews_DisplayName" xml:space="preserve">
+    <value>Notify news</value>
+  </data>
+  <data name="SiteFields_NotifyNews_Description" xml:space="preserve">
+    <value>Send a Teams notification when a news page is published on the site</value>
+  </data>
+  <data name="SiteFields_NotifyAnnouncements_DisplayName" xml:space="preserve">
+    <value>Notify announcements</value>
+  </data>
+  <data name="SiteFields_NotifyAnnouncements_Description" xml:space="preserve">
+    <value>Send Teams notifications for announcements on the site (level "Alert" always, otherwise when "Notify in Teams" is set)</value>
+  </data>
+  <data name="SiteFields_NotifyDefaultGroupIds_DisplayName" xml:space="preserve">
+    <value>Default recipient groups</value>
+  </data>
+  <data name="SiteFields_NotifyDefaultGroupIds_Description" xml:space="preserve">
+    <value>Object IDs (GUIDs) of Entra groups to notify when the item has no audience. One per line.</value>
+  </data>
+  <data name="SiteFields_NotifyAnnouncementListTitle_DisplayName" xml:space="preserve">
+    <value>Announcement list</value>
+  </data>
+  <data name="SiteFields_NotifyAnnouncementListTitle_Description" xml:space="preserve">
+    <value>Title of the announcement list on the site. Empty means the default (Driftsmeldinger).</value>
+  </data>
+  <data name="SiteFields_NotifyActive_DisplayName" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="SiteFields_NotifyActive_Description" xml:space="preserve">
+    <value>Turn off to stop notifications for the site without deleting the row</value>
+  </data>
 </root>
