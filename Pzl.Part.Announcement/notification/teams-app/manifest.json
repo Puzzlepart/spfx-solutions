@@ -26,7 +26,7 @@
     {
       "entityId": "intranet",
       "name": "Intranett",
-      "contentUrl": "{{SITE_URL}}/_layouts/15/teamslogon.aspx?SPFX=true&dest={{SITE_URL_ENCODED}}",
+      "contentUrl": "{{SITE_URL}}/_layouts/15/teamslogon.aspx?SPFX=true&dest={{SITE_URL_ENCODED}}%2F%3Fdriftsmelding%3D{subEntityId}",
       "websiteUrl": "{{SITE_URL}}",
       "scopes": ["personal"]
     }
