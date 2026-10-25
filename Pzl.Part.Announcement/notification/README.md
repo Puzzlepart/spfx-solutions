@@ -15,7 +15,7 @@ Lista og webdelen fungerer uten dette tillegget. Kolonnene `PzlNotifyTeams`, `Pz
 |---|---|
 | `function/` | Azure Function (TypeScript, Node 20+, Functions v4). Kjører hvert minutt. |
 | `teams-app/` | Manifest-mal og ikoner for Teams-appen som eier varslene. |
-| `scripts/` | `Deploy-NotificationInfrastructure.ps1` (Azure-ressurser), `Grant-NotificationPermissions.ps1` (app-rettigheter), `New-NotificationTeamsApp.ps1` (Teams-app-pakke) og `Publish-NotificationFunction.ps1` (bygg og deploy). |
+| `scripts/` | `Deploy-NotificationInfrastructure.ps1` (Azure-ressurser), `Grant-NotificationPermissions.ps1` (app-rettigheter), `New-NotificationTeamsApp.ps1` (Teams-app-pakke), `Publish-NotificationFunction.ps1` (bygg og deploy) og `Get-NotificationLog.ps1` (logg fra Application Insights). |
 | `../Templates/NotificationConfig.xml` | PnP-mal for konfigurasjonslista `Varslingskonfigurasjon`. |
 
 ## Slik virker det
@@ -163,7 +163,13 @@ az functionapp config appsettings set -n func-intranet-notification -g rg-intran
 | `TIMER_SCHEDULE` | `0 * * * * *` | NCRONTAB, hvert minutt |
 | `DRY_RUN` | `false` | Logg hva som ville blitt sendt, uten å sende eller skrive |
 
-Start med `DRY_RUN=true` og se i loggen (Application Insights eller `func azure functionapp logstream`) at riktige elementer og mottakerantall plukkes opp. Sett så `DRY_RUN=false`.
+Start med `DRY_RUN=true` og se i loggen at riktige elementer og mottakerantall plukkes opp. Flex Consumption har ingen logstream (`az webapp log tail` gir 404), så bruk `scripts/Get-NotificationLog.ps1`, som spør Application Insights, eller Invocations på funksjonen i portalen. Loggene kommer med ett til noen minutters forsinkelse.
+
+```powershell
+.\scripts\Get-NotificationLog.ps1 -ResourceGroupName rg-intranet-notification -FunctionAppName func-intranet-notification -Minutes 30
+```
+
+Sett så `DRY_RUN=false`.
 
 ## Steg 6: Test og pilot
 
