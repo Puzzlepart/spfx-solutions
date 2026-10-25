@@ -55,12 +55,20 @@ if (-not $IdentityName) { $IdentityName = "$FunctionAppName-identity" }
 if (-not $AppInsightsName) { $AppInsightsName = "$FunctionAppName-insights" }
 
 function Invoke-Az {
-  # Runs az, throws on failure, returns parsed JSON (or $null for empty output)
+  # Runs az, throws on failure, returns parsed JSON (or $null for empty output).
+  # az writes warnings to stderr; they are kept apart from stdout so they never end up in the JSON.
   param([Parameter(ValueFromRemainingArguments = $true)] [string[]]$Arguments)
-  $output = & az @Arguments -o json 2>&1
-  if ($LASTEXITCODE -ne 0) { throw "az $($Arguments[0..1] -join ' ') failed:`n$output" }
-  if ([string]::IsNullOrWhiteSpace("$output")) { return $null }
-  return ($output | ConvertFrom-Json)
+  $raw = & az @Arguments -o json 2>&1
+  $exit = $LASTEXITCODE
+  $stderr = @($raw | Where-Object { $_ -is [System.Management.Automation.ErrorRecord] } | ForEach-Object { "$_" })
+  $stdout = @($raw | Where-Object { $_ -isnot [System.Management.Automation.ErrorRecord] } | ForEach-Object { "$_" })
+  foreach ($line in $stderr) { if ($line -match '^WARNING') { Write-Verbose $line } }
+  if ($exit -ne 0) { throw "az $($Arguments[0..1] -join ' ') failed:`n$(($stderr + $stdout) -join "`n")" }
+  $text = ($stdout -join "`n").Trim()
+  # Keep only the JSON part in case a notice was printed on stdout before it
+  $idx = @($text.IndexOf('{'), $text.IndexOf('[')) | Where-Object { $_ -ge 0 } | Sort-Object | Select-Object -First 1
+  if ($null -eq $idx) { return $null }
+  return ($text.Substring($idx) | ConvertFrom-Json)
 }
 
 function Test-Az {
