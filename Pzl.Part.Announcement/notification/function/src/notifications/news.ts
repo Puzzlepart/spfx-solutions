@@ -78,7 +78,7 @@ export async function processNews(
       const pageUrl = `${new URL(site.siteUrl).origin}${page.FileRef}`
       const notification = {
         activityType: NEWS_ACTIVITY_TYPE,
-        title: page.Title,
+        source: site.title,
         previewText: toPlainText(page.Description) || page.Title,
         webUrl: buildLink(settings, `page:${page.FileRef}`, pageUrl),
         templateParameters: { title: page.Title }
