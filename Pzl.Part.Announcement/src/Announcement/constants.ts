@@ -29,6 +29,12 @@ export const DEFAULT_POPOVER_FIELDS: Record<string, boolean> = {
 }
 
 /**
+ * Fields written by the notification service. Never shown in the create form,
+ * even if the list schema does not say `ShowInNewForm="FALSE"`.
+ */
+export const SERVICE_MANAGED_FIELDS = ['PzlNotifiedAt']
+
+/**
  * Field types the create form knows how to edit. Other field types are left out
  * of the form (and get their default value from the list).
  */

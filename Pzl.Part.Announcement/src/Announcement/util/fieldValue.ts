@@ -16,6 +16,29 @@ export function isEmptyValue(value: any): boolean {
   return false
 }
 
+/**
+ * Whether a string value looks like HTML (rich text stored by SharePoint)
+ *
+ * @param value Field value
+ */
+export function looksLikeHtml(value: any): boolean {
+  return typeof value === 'string' && /<\/?[a-z][^>]*>/i.test(value)
+}
+
+/**
+ * Text content of an HTML string (tags and entities removed), used to check
+ * whether a rich text value is empty.
+ *
+ * @param html HTML
+ */
+export function htmlToText(html: string): string {
+  return (html ?? '')
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/&nbsp;|&#160;/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim()
+}
+
 const pad = (n: number) => (n < 10 ? `0${n}` : `${n}`)
 
 /**

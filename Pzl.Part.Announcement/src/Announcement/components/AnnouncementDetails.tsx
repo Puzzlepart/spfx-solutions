@@ -9,7 +9,7 @@ import styles from './Announcement.module.scss'
 import { IAnnouncement, IListField } from './types'
 import { CONTENT_FIELD, NOTIFIED_AT_FIELD } from '../constants'
 import { formatDate, formatShortDateTime } from '../util/formatDate'
-import { isEmptyValue } from '../util/fieldValue'
+import { isEmptyValue, looksLikeHtml } from '../util/fieldValue'
 
 interface IUserValueProps {
   user: { Title?: string; EMail?: string }
@@ -45,6 +45,9 @@ interface IFieldValueProps {
 const FieldValue: FC<IFieldValueProps> = ({ field, value }) => {
   switch (field.type) {
     case 'Note':
+      if (looksLikeHtml(value)) {
+        return <div dangerouslySetInnerHTML={{ __html: String(value) }} />
+      }
       return field.richText ? (
         <ReactMarkdown rehypePlugins={[rehypeRaw]}>{String(value)}</ReactMarkdown>
       ) : (

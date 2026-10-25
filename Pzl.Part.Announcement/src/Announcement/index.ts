@@ -10,7 +10,7 @@ import {
 } from '@microsoft/sp-property-pane'
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { Announcement, IAnnouncementProps, IListField } from './components'
-import { AnnouncementListService } from './services/AnnouncementListService'
+import { AnnouncementListService, isFormField } from './services/AnnouncementListService'
 import { DEFAULT_POPOVER_FIELDS } from './constants'
 
 export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnouncementProps> {
@@ -35,6 +35,9 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
     this._service = new AnnouncementListService(this.context)
     if (!this.properties.popoverFields) {
       this.properties.popoverFields = { ...DEFAULT_POPOVER_FIELDS }
+    }
+    if (!this.properties.formFields) {
+      this.properties.formFields = {}
     }
   }
 
@@ -78,6 +81,24 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
       )
   }
 
+  /**
+   * One toggle per editable list field for the create form
+   */
+  private _getFormFieldToggles(): IPropertyPaneField<any>[] {
+    if (!this._fields) {
+      return [PropertyPaneLabel('formFieldsLoading', { text: 'Laster felter fra lista …' })]
+    }
+    return this._fields.filter(isFormField).map((field) =>
+      PropertyPaneToggle(`formFields.${field.internalName}`, {
+        label: field.title,
+        checked: this.properties.formFields?.[field.internalName] !== false,
+        disabled: field.required,
+        onText: 'Vis',
+        offText: 'Skjul'
+      })
+    )
+  }
+
   protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
     return {
       pages: [
@@ -115,6 +136,15 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
                   text: 'Velg hvilke felter fra lista som vises når man klikker på en driftsmelding. Tittel vises alltid.'
                 }),
                 ...this._getPopoverFieldToggles()
+              ]
+            },
+            {
+              groupName: 'Felter i skjema for ny driftsmelding',
+              groupFields: [
+                PropertyPaneLabel('formFieldsDescription', {
+                  text: 'Velg hvilke felter som vises i skjemaet for ny driftsmelding. Påkrevde felter og felter som er skjult i lista kan ikke endres her.'
+                }),
+                ...this._getFormFieldToggles()
               ]
             },
             {

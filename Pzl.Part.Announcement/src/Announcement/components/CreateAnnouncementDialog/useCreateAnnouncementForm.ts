@@ -2,13 +2,19 @@ import { useEffect, useState } from 'react'
 import strings from 'AnnouncementStrings'
 import { IListField } from '../types'
 import { AnnouncementListService, isFormField } from '../../services/AnnouncementListService'
-import { dateInputValueToIso, getInitialFormValue, isEmptyValue } from '../../util/fieldValue'
+import {
+  dateInputValueToIso,
+  getInitialFormValue,
+  htmlToText,
+  isEmptyValue
+} from '../../util/fieldValue'
 
 /**
  * Whether a form value counts as filled in (for required validation)
  */
 function hasValue(field: IListField, value: any): boolean {
   if (field.type === 'Boolean') return true
+  if (field.type === 'Note' && field.richText) return htmlToText(value).length > 0
   if (typeof value === 'string') return value.trim().length > 0
   return !isEmptyValue(value)
 }
@@ -70,16 +76,20 @@ async function buildPayload(
  *
  * @param open Whether the dialog is open (the form is reset when it opens)
  * @param allFields All list fields
+ * @param hiddenFormFields Fields hidden in the web part properties (`false` = hidden)
  * @param service List service
  * @param onCreated Called after the item has been created
  */
 export function useCreateAnnouncementForm(
   open: boolean,
   allFields: IListField[],
+  hiddenFormFields: Record<string, boolean> | undefined,
   service: AnnouncementListService,
   onCreated: () => void
 ) {
-  const formFields = allFields.filter(isFormField)
+  const formFields = allFields.filter(
+    (field) => isFormField(field) && hiddenFormFields?.[field.internalName] !== false
+  )
   const [values, setValues] = useState<Record<string, any>>({})
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [saving, setSaving] = useState(false)

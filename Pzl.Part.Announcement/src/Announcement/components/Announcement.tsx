@@ -159,6 +159,7 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
             <CreateAnnouncementDialog
               open={createDialogOpen}
               fields={state.fields}
+              hiddenFormFields={props.formFields}
               service={props.service}
               onOpenChange={setCreateDialogOpen}
               onCreated={onCreated}
