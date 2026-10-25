@@ -74,7 +74,7 @@ Tjenesteidentiteten trenger disse applikasjonstillatelsene:
 | SharePoint Online | `Sites.Selected` | Lese lister via SharePoint REST, skrive `PzlNotifiedAt` |
 
 ```powershell
-.\scripts\Grant-NotificationPermissions.ps1 -ServicePrincipalObjectId <MI_PRINCIPAL>
+.\scripts\Grant-NotificationPermissions.ps1 -TenantId <tenant-id> -ServicePrincipalObjectId <principal-id fra steg 1>
 ```
 
 Deretter gis tilgang per område. Konfigurasjonsområdet trenger `Read`, hvert område med driftsmeldinger trenger `Write` (for `PzlNotifiedAt`), og områder med bare nyheter trenger `Read`:
