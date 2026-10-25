@@ -5,7 +5,7 @@ Valgfritt tillegg til [Pzl.Part.Announcement](../README.md). En timer-trigget Az
 - en **nyhetsside** publiseres på et konfigurert område, og
 - en **driftsmelding** blir aktiv og enten har meldingsnivået «Varsel» eller har «Varsle i Teams» satt.
 
-Varslene respekterer **målgruppestyring**: har elementet målgrupper, varsles medlemmene i de gruppene. Ellers varsles standardgruppene for området. Klikk på et driftsmeldingsvarsel åpner en Teams-fane som viser intranettet, med meldingen i popover. Klikk på et nyhetsvarsel åpner nyhetssiden i et stage view-vindu i Teams. Graph krever at lenkene er Teams-deep-linker, så fanen er enten varsel-appens egen fane (standard) eller en fane i intranettets egen Teams-app.
+Varslene respekterer **målgruppestyring**: har elementet målgrupper, varsles medlemmene i de gruppene. Ellers varsles standardgruppene for området. Klikk på et driftsmeldingsvarsel åpner en Teams-fane som viser intranettet, med meldingen i popover. Klikk på et nyhetsvarsel åpner samme fane med nyhetssiden (eller, med `NEWS_LINK_MODE=stage`, nyhetssiden i et stage view-vindu). Graph krever at lenkene er Teams-deep-linker, så fanen er enten varsel-appens egen fane (standard) eller en fane i intranettets egen Teams-app.
 
 Lista og webdelen fungerer uten dette tillegget. Kolonnene `PzlNotifyTeams`, `PzlPinned` og `PzlNotifiedAt` finnes i hovedmalen fra versjon 1.1.0 og er uten effekt til tjenesten tas i bruk.
 
@@ -145,7 +145,7 @@ Aktivitetsvarsler må sendes fra en Teams-app der `webApplicationInfo.id` er cli
    az functionapp config appsettings set -g <ressursgruppe> -n <function-app> --settings TEAMS_DEEPLINK_APP_ID=<Teams-app-ID fra punkt 1> TEAMS_DEEPLINK_ENTITY_ID=intranet
    ```
 
-   Driftsmeldinger åpner fanen i varsel-appen. Fanen sender `{subEntityId}` videre til intranettet som `?driftsmelding=`, og webdelen åpner meldingen i popover. Nyheter åpner nyhetssiden direkte i et stage view-vindu i Teams (`https://teams.microsoft.com/l/stage/<app-id>/0?context=...`), lastet via `teamslogon.aspx`, så de trenger ingen fane. Sidens domene må stå i appens `validDomains`, og `*.sharepoint.com` gjør det.
+   Varslene åpner fanen. Fanen sender `{subEntityId}` videre til intranettet som `?driftsmelding=`: for driftsmeldinger (`driftsmelding:<id>`) åpner webdelen meldingen i popover, for nyheter (`page:<url>`) sender webdelen brukeren videre til nyhetssiden, så fanen viser artikkelen. Webdelen må derfor ligge på siden fanen åpner (forsiden). Alternativt kan nyheter åpnes i et stage view-vindu i Teams i stedet for fanen, med `NEWS_LINK_MODE=stage`; da trengs ingen webdel på forsiden.
 
    **Har intranettet en egen Teams-app** med SharePoint-SSO, pek varslene dit i stedet. Det er anbefalt der den finnes, siden varsel-appen ikke garanterer stille pålogging på desktop og mobil:
 
@@ -185,6 +185,7 @@ App-innstillingene ble satt i steg 1, bortsett fra `TEAMS_DEEPLINK_APP_ID`, som 
 | `INCLUDE_GUESTS` | `false` | Ta med gjestebrukere som mottakere |
 | `TEAMS_DEEPLINK_APP_ID` | *(påkrevd)* | Teams-app som varslene åpner: varsel-appen selv (steg 4) eller intranett-appen. Uten denne sendes ingenting, og loggen sier hvorfor. |
 | `TEAMS_DEEPLINK_ENTITY_ID` | `intranet` | `entityId` for fanen i den appen. `intranet` er varsel-appens fane. |
+| `NEWS_LINK_MODE` | `tab` | Hvordan nyhetsvarsler åpnes: `tab` åpner fanen og webdelen sender videre til nyhetssiden; `stage` åpner nyhetssiden i et stage view-vindu i Teams. |
 | `STATE_STORAGE_ACCOUNT_NAME` | Function-appens konto | Lagringskonto for sendt-status for sider |
 | `STATE_TABLE_NAME` | `NotificationState` | Tabellnavn |
 | `TIMER_SCHEDULE` | `0 * * * * *` | NCRONTAB, hvert minutt |

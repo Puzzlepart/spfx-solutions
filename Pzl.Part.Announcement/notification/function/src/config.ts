@@ -22,6 +22,12 @@ export interface Settings {
    */
   teamsDeepLinkAppId: string
   teamsDeepLinkEntityId: string
+  /**
+   * How news notifications open: `tab` opens the Teams tab with `page:<url>` as
+   * subEntityId, and the intranet page forwards to the news page (the Announcement
+   * web part does this); `stage` opens the news page in a Teams stage view window.
+   */
+  newsLinkMode: 'tab' | 'stage'
   /** Storage account used for the state table. Defaults to the function app's own storage account */
   stateStorageAccountName: string
   stateTableName: string
@@ -52,6 +58,7 @@ export function getSettings(): Settings {
     includeGuests: bool(env('INCLUDE_GUESTS', 'false')),
     teamsDeepLinkAppId: env('TEAMS_DEEPLINK_APP_ID'),
     teamsDeepLinkEntityId: env('TEAMS_DEEPLINK_ENTITY_ID', 'intranet'),
+    newsLinkMode: env('NEWS_LINK_MODE', 'tab').toLowerCase() === 'stage' ? 'stage' : 'tab',
     stateStorageAccountName: env(
       'STATE_STORAGE_ACCOUNT_NAME',
       env('AzureWebJobsStorage__accountName')

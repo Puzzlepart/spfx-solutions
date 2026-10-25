@@ -32,7 +32,9 @@ export async function testNotification(
   const pageUrl = req.query.get('pageUrl') || settings.configSiteUrl
   const webUrl =
     type === 'news'
-      ? buildStageLink(settings, pageUrl, 'Testvarsel')
+      ? settings.newsLinkMode === 'stage'
+        ? buildStageLink(settings, pageUrl, 'Testvarsel')
+        : buildLink(settings, `page:${new URL(pageUrl).pathname}`, pageUrl)
       : buildLink(settings, 'driftsmelding:0', settings.configSiteUrl)
   const stamp = new Date().toISOString()
   const body: Record<string, unknown> = {

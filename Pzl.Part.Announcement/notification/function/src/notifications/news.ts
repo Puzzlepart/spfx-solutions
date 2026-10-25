@@ -4,7 +4,7 @@ import { sendActivityNotification } from '../graph'
 import { odataDate, SharePointClient } from '../sharepoint'
 import { NotificationState } from '../state'
 import { SiteConfiguration } from './configuration'
-import { buildStageLink, toPlainText } from './deeplink'
+import { buildLink, buildStageLink, toPlainText } from './deeplink'
 import { RecipientResolver } from './recipients'
 
 /** Activity type in the Teams app manifest */
@@ -80,7 +80,10 @@ export async function processNews(
         activityType: NEWS_ACTIVITY_TYPE,
         source: site.title,
         previewText: toPlainText(page.Description) || page.Title,
-        webUrl: buildStageLink(settings, pageUrl, page.Title),
+        webUrl:
+          settings.newsLinkMode === 'stage'
+            ? buildStageLink(settings, pageUrl, page.Title)
+            : buildLink(settings, `page:${page.FileRef}`, pageUrl),
         templateParameters: { title: page.Title }
       }
 
