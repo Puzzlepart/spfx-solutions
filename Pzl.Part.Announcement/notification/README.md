@@ -135,7 +135,9 @@ Aktivitetsvarsler må sendes fra en Teams-app der `webApplicationInfo.id` er cli
    az functionapp config appsettings set -g <ressursgruppe> -n <function-app> --settings TEAMS_DEEPLINK_APP_ID=<Teams-app-ID fra punkt 1> TEAMS_DEEPLINK_ENTITY_ID=intranet
    ```
 
-   Har intranettet en egen Teams-app med SharePoint-SSO, kan du i stedet bruke dens app-ID og fanens `entityId`, så åpnes varslene der. Webdelen leser `subEntityId` i begge tilfeller.
+   Fanen i varsel-appen sender `{subEntityId}` videre til intranettet som `?driftsmelding=`, og det er den parameteren webdelen bruker for å åpne riktig driftsmelding. Har intranettet en egen Teams-app med SharePoint-SSO, kan du i stedet bruke dens app-ID og fanens `entityId`; da må den fanens `contentUrl` sende `{subEntityId}` på samme måte, for `subPageId` fra Teams-konteksten når ikke alltid fram til webdelen.
+
+5. Ved oppdatering av manifestet (ny versjon lastet opp i admin center): Teams-klientene beholder den gamle app-definisjonen til de henter på nytt, som kan ta timer. Logg ut og inn av Teams for å tvinge det fram under test.
 
 > **Ikke verifisert i alle tenanter:** at en managed identity aksepteres som `webApplicationInfo.id`. Test tidlig med én mottaker. Alternativet er en app-registrering med managed identity som federated identity credential; Function-koden er den samme (`AZURE_CLIENT_ID` settes til app-registreringens client ID).
 
