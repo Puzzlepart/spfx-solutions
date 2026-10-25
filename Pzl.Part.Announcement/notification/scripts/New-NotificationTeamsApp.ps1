@@ -87,4 +87,4 @@ Write-Host "Teams app package: $zip" -ForegroundColor Green
 } | Format-List
 Write-Host 'Upload in Teams admin center: Teams apps > Manage apps > Upload new app. Keep TeamsAppId for later updates.'
 Write-Host 'Point the notifications at this app (its tab opens the intranet):'
-Write-Host "  az functionapp config appsettings set -g <resource-group> -n <function-app> --settings TEAMS_DEEPLINK_APP_ID=$AppId TEAMS_DEEPLINK_ENTITY_ID=intranet\"
+Write-Host "  az functionapp config appsettings set -g <resource-group> -n <function-app> --settings TEAMS_DEEPLINK_APP_ID=$AppId TEAMS_DEEPLINK_ENTITY_ID=intranet"
