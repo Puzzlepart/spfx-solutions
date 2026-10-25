@@ -15,7 +15,7 @@ Lista og webdelen fungerer uten dette tillegget. Kolonnene `PzlNotifyTeams`, `Pz
 |---|---|
 | `function/` | Azure Function (TypeScript, Node 20+, Functions v4). Kjører hvert minutt. |
 | `teams-app/` | Manifest-mal og ikoner for Teams-appen som eier varslene. |
-| `scripts/` | `Deploy-NotificationInfrastructure.ps1` (Azure-ressurser), `Grant-NotificationPermissions.ps1` (app-rettigheter) og `Publish-NotificationFunction.ps1` (bygg og deploy). |
+| `scripts/` | `Deploy-NotificationInfrastructure.ps1` (Azure-ressurser), `Grant-NotificationPermissions.ps1` (app-rettigheter), `New-NotificationTeamsApp.ps1` (Teams-app-pakke) og `Publish-NotificationFunction.ps1` (bygg og deploy). |
 | `../Templates/NotificationConfig.xml` | PnP-mal for konfigurasjonslista `Varslingskonfigurasjon`. |
 
 ## Slik virker det
@@ -115,19 +115,19 @@ Grant-PnPAzureADAppSitePermission -AppId <MI_CLIENT> -DisplayName "Intranett-var
 
 Aktivitetsvarsler må sendes fra en Teams-app der `webApplicationInfo.id` er client ID til avsenderen. Intranett-appen som bruker SharePoint-SSO kan ikke endre det feltet, derfor en egen, minimal app.
 
-1. Kopier `teams-app/` og fyll inn plassholderne i `manifest.json`:
+1. Bygg pakken med `scripts/New-NotificationTeamsApp.ps1`. Den fyller inn malen i `teams-app/manifest.json` og zipper den med ikonene til `teams-app/dist/`:
 
-   | Plassholder | Verdi |
-   |---|---|
-   | `{{TEAMS_APP_ID}}` | Ny GUID (`[guid]::NewGuid()`) |
-   | `{{NOTIFICATION_CLIENT_ID}}` | `MI_CLIENT` |
-   | `{{SITE_URL}}` / `{{SITE_URL_ENCODED}}` | Intranettets URL, og samme URL URL-kodet |
-   | `{{SITE_HOST}}` | `<tenant>.sharepoint.com` |
-   | `{{APP_NAME}}`, `{{DEVELOPER_NAME}}` | Visningsnavn og organisasjon |
+   ```powershell
+   .\scripts\New-NotificationTeamsApp.ps1 `
+     -NotificationClientId <client-id fra steg 1> `
+     -SiteUrl https://<tenant>.sharepoint.com `
+     -AppName "Intranett-varsler" `
+     -DeveloperName "<organisasjon>"
+   ```
 
-   Bytt gjerne ikonene, så appen får samme ikon som intranett-appen. Tekstene i `activityTypes` er det brukeren ser i bjella og kan oversettes.
+   Scriptet skriver ut Teams-app-ID-en. Ta vare på den og send den inn med `-AppId` ved senere oppdateringer, sammen med ny `-Version`. Bytt gjerne ikoner med `-ColorIcon` (192x192) og `-OutlineIcon` (32x32, transparent), så appen får samme ikon som intranett-appen. Tekstene i `activityTypes` i malen er det brukeren ser i bjella og kan oversettes før bygging.
 
-2. Zip `manifest.json`, `color.png` og `outline.png` og last opp i Teams admin center (Teams apps > Manage apps > Upload new app).
+2. Last opp zip-fila i Teams admin center (Teams apps > Manage apps > Upload new app).
 3. Lag en **app setup policy** som installerer appen for mottakerne (uten å feste den i appfeltet), og tildel den til samme grupper som i konfigurasjonen. Start med en testgruppe.
 4. Finn Teams-app-ID og `entityId` for intranett-fanen som varslene skal åpne. Legg dem i `TEAMS_DEEPLINK_APP_ID` og `TEAMS_DEEPLINK_ENTITY_ID` i steg 5. Uten disse lenker varslene rett til SharePoint-siden.
 
