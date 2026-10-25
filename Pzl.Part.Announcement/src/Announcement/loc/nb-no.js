@@ -23,6 +23,16 @@ define([], function () {
     PeoplePickerPlaceholder: 'Søk etter navn eller e-post',
     PeoplePickerSearchingText: 'Søker …',
     PeoplePickerNoResultsText: 'Ingen treff',
+    RichText: {
+      ToolbarLabel: 'Formatering',
+      Bold: 'Fet',
+      Italic: 'Kursiv',
+      Underline: 'Understreket',
+      BulletList: 'Punktliste',
+      NumberList: 'Nummerert liste',
+      Link: 'Sett inn lenke',
+      LinkPrompt: 'Adresse (URL) til lenken:'
+    },
     Severity: {
       Info: 'Informasjon',
       Warning: 'Advarsel',

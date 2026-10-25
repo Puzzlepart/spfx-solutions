@@ -15,6 +15,11 @@ export interface IAnnouncementProps {
    * web part in `onInit` (see `DEFAULT_POPOVER_FIELDS`).
    */
   popoverFields: Record<string, boolean>
+  /**
+   * Fields hidden from the create form, keyed by internal name (`false` = hidden).
+   * Fields missing from the map are shown if the list schema allows it.
+   */
+  formFields: Record<string, boolean>
 
   // Hide/show
   hideHeader: boolean

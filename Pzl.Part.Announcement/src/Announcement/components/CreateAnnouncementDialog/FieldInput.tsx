@@ -4,6 +4,7 @@ import strings from 'AnnouncementStrings'
 import { IListField } from '../types'
 import { IPersonOption } from '../../services/AnnouncementListService'
 import { PeoplePicker } from './PeoplePicker'
+import { RichTextEditor } from './RichTextEditor'
 
 export interface IFieldInputProps {
   field: IListField
@@ -23,10 +24,13 @@ export const FieldInput: FC<IFieldInputProps> = (props) => {
   const renderControl = () => {
     switch (field.type) {
       case 'Note':
+        if (field.richText) {
+          return <RichTextEditor value={value ?? ''} disabled={disabled} onChange={onChange} />
+        }
         return (
           <Textarea
             value={value ?? ''}
-            rows={field.richText ? 6 : 3}
+            rows={4}
             resize='vertical'
             disabled={disabled}
             onChange={(_, data) => onChange(data.value)}

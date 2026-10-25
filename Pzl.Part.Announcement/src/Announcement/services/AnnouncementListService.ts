@@ -12,7 +12,7 @@ import { PermissionKind } from '@pnp/sp/security'
 import { IFieldInfo } from '@pnp/sp/fields'
 import strings from 'AnnouncementStrings'
 import { IListField } from '../components/types'
-import { SUPPORTED_FORM_FIELD_TYPES } from '../constants'
+import { SERVICE_MANAGED_FIELDS, SUPPORTED_FORM_FIELD_TYPES } from '../constants'
 import { FALLBACK_FIELDS } from './fallbackFields'
 
 /**
@@ -37,7 +37,8 @@ const BASE_TYPE_FIELDS_TO_KEEP = ['Title', 'Author', 'Editor', 'Created', 'Modif
  * Reads an attribute from a field's `SchemaXml`
  */
 function schemaAttribute(schemaXml: string, name: string): string | undefined {
-  const match = new RegExp(`\s${name}="([^"]*)"`, 'i').exec(schemaXml ?? '')
+  // Note: `\\s` because this is a template literal (`\s` would be a plain "s")
+  const match = new RegExp(`\\s${name}="([^"]*)"`, 'i').exec(schemaXml ?? '')
   return match ? match[1] : undefined
 }
 
@@ -47,7 +48,10 @@ function schemaAttribute(schemaXml: string, name: string): string | undefined {
  * (hidden/required as set under list settings).
  */
 export interface IFieldOverrides {
-  listSchemaXml?: string
+  /**
+   * The list field (list-level schema and typed properties such as `RichText`)
+   */
+  listField?: IFieldInfo
   linkHidden?: boolean
   linkRequired?: boolean
 }
@@ -60,8 +64,14 @@ export interface IFieldOverrides {
  */
 export function mapField(info: IFieldInfo, overrides: IFieldOverrides = {}): IListField {
   const choices: any = info.Choices
-  // List schema first: list-level settings are what the list forms use
-  const schemas = [overrides.listSchemaXml, info.SchemaXml].filter(Boolean)
+  // List field first: list-level settings are what the list forms use
+  const schemas = [overrides.listField?.SchemaXml, info.SchemaXml].filter(Boolean)
+  // Typed properties of the derived field types (SP.FieldMultiLineText.RichText,
+  // SP.FieldDateTime.DisplayFormat, SP.FieldUser.SelectionMode), when present
+  const typed = (name: string): any => {
+    const fromList = (overrides.listField as any)?.[name]
+    return fromList !== undefined ? fromList : (info as any)[name]
+  }
   const attribute = (name: string) =>
     schemas.map((schema) => schemaAttribute(schema, name)).filter((value) => value !== undefined)
   const first = (name: string) => attribute(name)[0] ?? ''
@@ -79,9 +89,14 @@ export function mapField(info: IFieldInfo, overrides: IFieldOverrides = {}): ILi
     fromBaseType: info.FromBaseType === true,
     choices: Array.isArray(choices) ? choices : choices?.results,
     defaultValue: info.DefaultValue ?? undefined,
-    richText: /^true$/i.test(first('RichText')),
-    dateOnly: info.TypeAsString === 'DateTime' && !/^DateTime$/i.test(first('Format')),
-    allowGroups: /^PeopleAndGroups$/i.test(first('UserSelectionMode')),
+    richText: typed('RichText') === true || /^true$/i.test(first('RichText')),
+    dateOnly:
+      info.TypeAsString === 'DateTime' &&
+      (typeof typed('DisplayFormat') === 'number'
+        ? typed('DisplayFormat') === 0
+        : !/^DateTime$/i.test(first('Format'))),
+    allowGroups:
+      typed('SelectionMode') === 1 || /^PeopleAndGroups$/i.test(first('UserSelectionMode')),
     showInNewForm: !anyFalse('ShowInNewForm')
   }
 }
@@ -94,6 +109,7 @@ export function isFormField(field: IListField): boolean {
     !field.hidden &&
     !field.readOnly &&
     field.showInNewForm &&
+    !SERVICE_MANAGED_FIELDS.includes(field.internalName) &&
     (!field.fromBaseType || field.internalName === 'Title') &&
     SUPPORTED_FORM_FIELD_TYPES.includes(field.type)
   )
@@ -155,7 +171,7 @@ export class AnnouncementListService {
       const linkById = new Map(links.map((link) => [link.Id, link]))
       fields = infos.map((info) =>
         mapField(info, {
-          listSchemaXml: listFieldById.get(info.Id)?.SchemaXml,
+          listField: listFieldById.get(info.Id),
           linkHidden: linkById.get(info.Id)?.Hidden,
           linkRequired: linkById.get(info.Id)?.Required
         })

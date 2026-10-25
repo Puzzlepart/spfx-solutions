@@ -42,7 +42,8 @@
           "PzlNotifiedAt": true
         },
         "hideHeader": false,
-        "hideCreateButton": false
+        "hideCreateButton": false,
+        "formFields": {}
       }
     }
   ]

@@ -1,6 +1,6 @@
 # Announcement (Driftsmeldinger)
 
-[![version](https://img.shields.io/badge/version-1.3.0-orange.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.3.1-orange.svg)](https://semver.org)
 
 ## Summary
 
@@ -31,12 +31,13 @@ This is a web part that displays announcements from a SharePoint list. The annou
 | Generelt | Tittel, Beskrivelse | Header title and the text behind the info icon. |
 | Generelt | Aktiver målgruppeangivelse | Filter announcements on the list's audience targeting column. |
 | Felter i detaljvisning | One toggle per list field | Which fields are shown in the popover (on click). The toggles are read from the default content type of the list, so columns added to the list show up here. Title is always shown. Defaults match 1.2.0: content, start/end date, affected systems, consequences, responsible and "notified in Teams". |
+| Felter i skjema for ny driftsmelding | One toggle per editable list field | Which fields are shown in the form for new announcements. Required fields and fields hidden in the list cannot be changed here. |
 | Skjul/vis | Skjul header | Hide the header (the button for new announcements is still shown). |
 | Skjul/vis | Skjul knapp for ny driftsmelding | Hide the **New announcement** button for everyone. |
 
 ### Registering announcements from the web part
 
-The **New announcement** button is shown only to users who have the *Add items* permission on the list (checked with `currentUserHasPermissions`), and only if it is not hidden in the web part properties. It opens a dialog with a form generated from the fields of the list's default content type (fields that are hidden in the column or in the content type, read-only or have `ShowInNewForm="FALSE"` on the site or list column are left out). Supported column types: single/multiple lines of text, choice (single and multi), date/time, yes/no, person or group (single and multi), number, currency and hyperlink. Other column types are not shown in the form and get their default value from the list. Required columns are validated before saving. Rich text columns (such as *Innhold*) are entered as plain text/markdown, which the web part renders as markdown.
+The **New announcement** button is shown only to users who have the *Add items* permission on the list (checked with `currentUserHasPermissions`), and only if it is not hidden in the web part properties. It opens a dialog with a form generated from the fields of the list's default content type (fields that are hidden in the column or in the content type, read-only or have `ShowInNewForm="FALSE"` on the site or list column are left out). Supported column types: single/multiple lines of text, choice (single and multi), date/time, yes/no, person or group (single and multi), number, currency and hyperlink. Other column types are not shown in the form and get their default value from the list. Required columns are validated before saving. Rich text columns (such as *Innhold*) get a small formatting toolbar (bold, italic, underline, lists, link) and are stored as HTML, like in the list form. `PzlNotifiedAt` is never shown in the form since it is written by the notification service.
 
 ## Teams notifications and deep links
 
@@ -109,6 +110,13 @@ npm run package
 The package is written to `sharepoint/solution/pzl-announcement.sppkg`.
 
 ## Changelog
+
+### 1.3.1
+
+* Fixed reading of `ShowInNewForm`, `RichText`, `Format` and `UserSelectionMode` from the list schema (the attributes were never matched), so fields hidden from the new form are left out and rich text columns are detected. Typed field properties (`RichText`, `DisplayFormat`, `SelectionMode`) and the content type's field links are used too.
+* Popover renders rich text (HTML) columns as HTML.
+* Rich text columns get a formatting toolbar in the form for new announcements and are stored as HTML.
+* New property group **Felter i skjema for ny driftsmelding** to hide fields from the form.
 
 ### 1.3.0
 

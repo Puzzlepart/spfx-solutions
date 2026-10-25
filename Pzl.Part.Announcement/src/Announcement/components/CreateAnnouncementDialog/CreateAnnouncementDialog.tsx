@@ -26,6 +26,10 @@ export interface ICreateAnnouncementDialogProps {
    * All list fields; the form shows the editable ones
    */
   fields: IListField[]
+  /**
+   * Fields hidden from the form in the web part properties (`false` = hidden)
+   */
+  hiddenFormFields?: Record<string, boolean>
   service: AnnouncementListService
   onOpenChange: (open: boolean) => void
   /**
@@ -40,7 +44,13 @@ export interface ICreateAnnouncementDialogProps {
  */
 export const CreateAnnouncementDialog: FC<ICreateAnnouncementDialogProps> = (props) => {
   const { formFields, values, errors, saving, saveError, setValue, submit } =
-    useCreateAnnouncementForm(props.open, props.fields, props.service, props.onCreated)
+    useCreateAnnouncementForm(
+      props.open,
+      props.fields,
+      props.hiddenFormFields,
+      props.service,
+      props.onCreated
+    )
 
   const searchPeople = (query: string, allowGroups: boolean) =>
     props.service.searchPeople(query, allowGroups)

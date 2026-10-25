@@ -22,6 +22,16 @@ declare interface IAnnouncementStrings {
   PeoplePickerPlaceholder: string
   PeoplePickerSearchingText: string
   PeoplePickerNoResultsText: string
+  RichText: {
+    ToolbarLabel: string
+    Bold: string
+    Italic: string
+    Underline: string
+    BulletList: string
+    NumberList: string
+    Link: string
+    LinkPrompt: string
+  }
   Severity: {
     Info: string
     Warning: string

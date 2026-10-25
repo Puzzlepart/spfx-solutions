@@ -14,3 +14,39 @@
   display: flex;
   align-items: center;
 }
+
+.richText {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  .editor {
+    min-height: 120px;
+    padding: 8px 12px;
+    box-sizing: border-box;
+    border: 1px solid var(--colorNeutralStroke1);
+    border-bottom-color: var(--colorNeutralStrokeAccessible);
+    border-radius: var(--borderRadiusMedium);
+    background-color: var(--colorNeutralBackground1);
+    color: var(--colorNeutralForeground1);
+    font-family: var(--fontFamilyBase);
+    font-size: var(--fontSizeBase300);
+    line-height: var(--lineHeightBase300);
+    outline: none;
+
+    &:focus {
+      border-bottom: 2px solid var(--colorCompoundBrandStroke);
+      padding-bottom: 7px;
+    }
+
+    &:empty::before {
+      content: attr(data-placeholder);
+      color: var(--colorNeutralForeground4);
+    }
+  }
+
+  &.disabled .editor {
+    color: var(--colorNeutralForegroundDisabled);
+    border-color: var(--colorNeutralStrokeDisabled);
+  }
+}
