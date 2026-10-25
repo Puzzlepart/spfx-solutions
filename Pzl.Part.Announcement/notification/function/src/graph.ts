@@ -51,7 +51,12 @@ export interface ActivityNotification {
   previewText: string
   /** Where a click on the notification goes */
   webUrl: string
-  /** Values for the `templateText` placeholders in the manifest */
+  /**
+   * Values for the `templateText` placeholders in the manifest. Send exactly the
+   * placeholders the manifest declares: the bulk endpoint accepts unknown parameters
+   * but then drops the notification without an error (the per-user endpoint returns
+   * "Incorrect template parameter arity").
+   */
   templateParameters?: Record<string, string>
 }
 

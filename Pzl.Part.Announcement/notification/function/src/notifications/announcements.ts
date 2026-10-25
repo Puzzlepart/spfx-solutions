@@ -74,7 +74,9 @@ export async function processAnnouncements(
           `driftsmelding:${item.Id}`,
           `${site.siteUrl}/?driftsmelding=${item.Id}`
         ),
-        templateParameters: { title: item.Title, severity: item.PzlSeverity ?? '' }
+        // Must match the placeholders in the manifest's templateText exactly: Graph's bulk
+        // endpoint accepts extra parameters but then silently drops the notification.
+        templateParameters: { title: item.Title }
       }
 
       if (settings.dryRun) {
