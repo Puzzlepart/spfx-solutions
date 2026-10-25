@@ -1,6 +1,6 @@
 # Announcement (Driftsmeldinger)
 
-[![version](https://img.shields.io/badge/version-1.3.1-orange.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.3.2-orange.svg)](https://semver.org)
 
 ## Summary
 
@@ -110,6 +110,10 @@ npm run package
 The package is written to `sharepoint/solution/pzl-announcement.sppkg`.
 
 ## Changelog
+
+### 1.3.2
+
+* Deep link focus: the `driftsmelding` query parameter is read before the Teams context, and the Teams SDK call has a 3 s timeout. The notification Teams app passes `{subEntityId}` in the tab URL, so focus works in Teams tabs without relying on `subPageId`.
 
 ### 1.3.1
 
