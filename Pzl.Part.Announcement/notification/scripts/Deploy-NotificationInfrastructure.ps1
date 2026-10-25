@@ -23,6 +23,11 @@
 .PARAMETER Location
   Region for all resources. Must support Flex Consumption: az functionapp list-flexconsumption-locations
 
+.PARAMETER TeamsDeepLinkAppId
+  Teams app ID the notifications open (Graph requires links to be Teams deep links). Usually the
+  notification app itself, whose static tab "intranet" opens the site. It is created in step 4, so this
+  is normally set afterwards: az functionapp config appsettings set ... --settings TEAMS_DEEPLINK_APP_ID=<id>
+
 .PARAMETER DryRun
   Value for the DRY_RUN app setting. Keep $true until the first test run looks right.
 
@@ -46,7 +51,7 @@ param(
   [string]$AlwaysNotifySeverities = 'Varsel,Alert',
   [string]$NewsLookbackDays = '7',
   [string]$TeamsDeepLinkAppId = '',
-  [string]$TeamsDeepLinkEntityId = '',
+  [string]$TeamsDeepLinkEntityId = 'intranet',
   [bool]$DryRun = $true
 )
 
@@ -164,5 +169,8 @@ Write-Host '== Done. Values for the next steps:' -ForegroundColor Green
 Write-Host 'Next:'
 Write-Host "  1. .\Grant-NotificationPermissions.ps1 -ServicePrincipalObjectId $($identity.principalId)"
 Write-Host "  2. Grant-PnPAzureADAppSitePermission -AppId $($identity.clientId) -DisplayName '$FunctionAppName' -Site <site> -Permissions Write   (per site, see README)"
-Write-Host "  3. Teams app manifest: webApplicationInfo.id = $($identity.clientId)"
+Write-Host "  3. .\New-NotificationTeamsApp.ps1 -NotificationClientId $($identity.clientId) -SiteUrl $ConfigSiteUrl -AppName <name> -DeveloperName <org>"
+if (-not $TeamsDeepLinkAppId) {
+  Write-Host "     then: az functionapp config appsettings set -g $ResourceGroupName -n $FunctionAppName --settings TEAMS_DEEPLINK_APP_ID=<Teams app id from step 3>"
+}
 Write-Host "  4. .\Publish-NotificationFunction.ps1 -ResourceGroupName $ResourceGroupName -FunctionAppName $FunctionAppName"

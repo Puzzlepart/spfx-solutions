@@ -16,8 +16,8 @@
     "NEWS_LOOKBACK_DAYS": "7",
     "INCLUDE_GUESTS": "false",
 
-    "TEAMS_DEEPLINK_APP_ID": "",
-    "TEAMS_DEEPLINK_ENTITY_ID": "",
+    "TEAMS_DEEPLINK_APP_ID": "<Teams app id of the notification app (or the intranet app), required>",
+    "TEAMS_DEEPLINK_ENTITY_ID": "intranet",
 
     "STATE_STORAGE_ACCOUNT_NAME": "",
     "STATE_TABLE_NAME": "NotificationState",

@@ -5,7 +5,7 @@ Valgfritt tillegg til [Pzl.Part.Announcement](../README.md). En timer-trigget Az
 - en **nyhetsside** publiseres på et konfigurert område, og
 - en **driftsmelding** blir aktiv og enten har meldingsnivået «Varsel» eller har «Varsle i Teams» satt.
 
-Varslene respekterer **målgruppestyring**: har elementet målgrupper, varsles medlemmene i de gruppene. Ellers varsles standardgruppene for området. Klikk på et varsel åpner intranett-fanen i Teams med elementet i fokus (driftsmeldinger åpnes i popover av webdelen), eller SharePoint-siden direkte hvis ingen Teams-fane er konfigurert.
+Varslene respekterer **målgruppestyring**: har elementet målgrupper, varsles medlemmene i de gruppene. Ellers varsles standardgruppene for området. Klikk på et varsel åpner en Teams-fane som viser intranettet, med elementet i fokus (driftsmeldinger åpnes i popover av webdelen). Graph krever at lenken er en Teams-deep-link, så fanen er enten varsel-appens egen fane (standard) eller en fane i intranettets egen Teams-app.
 
 Lista og webdelen fungerer uten dette tillegget. Kolonnene `PzlNotifyTeams`, `PzlPinned` og `PzlNotifiedAt` finnes i hovedmalen fra versjon 1.1.0 og er uten effekt til tjenesten tas i bruk.
 
@@ -129,7 +129,13 @@ Aktivitetsvarsler må sendes fra en Teams-app der `webApplicationInfo.id` er cli
 
 2. Last opp zip-fila i Teams admin center (Teams apps > Manage apps > Upload new app).
 3. Lag en **app setup policy** som installerer appen for mottakerne (uten å feste den i appfeltet), og tildel den til samme grupper som i konfigurasjonen. Start med en testgruppe.
-4. Finn Teams-app-ID og `entityId` for intranett-fanen som varslene skal åpne. Legg dem i `TEAMS_DEEPLINK_APP_ID` og `TEAMS_DEEPLINK_ENTITY_ID` i steg 5. Uten disse lenker varslene rett til SharePoint-siden.
+4. Pek varslene på en Teams-fane. Graph godtar bare Teams-deep-linker som `webUrl`, så dette er påkrevd. Enklest er varsel-appens egen fane, som åpner intranettet:
+
+   ```bash
+   az functionapp config appsettings set -g <ressursgruppe> -n <function-app> --settings TEAMS_DEEPLINK_APP_ID=<Teams-app-ID fra punkt 1> TEAMS_DEEPLINK_ENTITY_ID=intranet
+   ```
+
+   Har intranettet en egen Teams-app med SharePoint-SSO, kan du i stedet bruke dens app-ID og fanens `entityId`, så åpnes varslene der. Webdelen leser `subEntityId` i begge tilfeller.
 
 > **Ikke verifisert i alle tenanter:** at en managed identity aksepteres som `webApplicationInfo.id`. Test tidlig med én mottaker. Alternativet er en app-registrering med managed identity som federated identity credential; Function-koden er den samme (`AZURE_CLIENT_ID` settes til app-registreringens client ID).
 
@@ -141,11 +147,7 @@ Aktivitetsvarsler må sendes fra en Teams-app der `webApplicationInfo.id` er cli
 .\scripts\Publish-NotificationFunction.ps1 -ResourceGroupName rg-intranet-notification -FunctionAppName func-intranet-notification
 ```
 
-App-innstillingene ble satt i steg 1. Endre dem senere med `az functionapp config appsettings set`, for eksempel når Teams-app-ID-ene fra steg 4 er klare:
-
-```bash
-az functionapp config appsettings set -n func-intranet-notification -g rg-intranet-notification --settings   TEAMS_DEEPLINK_APP_ID=<intranett-appens id>   TEAMS_DEEPLINK_ENTITY_ID=<fanens entityId>
-```
+App-innstillingene ble satt i steg 1, bortsett fra `TEAMS_DEEPLINK_APP_ID`, som settes i steg 4 når Teams-appen finnes. Endre innstillinger senere med `az functionapp config appsettings set`.
 
 | Innstilling | Standard | Beskrivelse |
 |---|---|---|
@@ -156,8 +158,8 @@ az functionapp config appsettings set -n func-intranet-notification -g rg-intran
 | `ALWAYS_NOTIFY_SEVERITIES` | `Varsel,Alert` | Meldingsnivåer som alltid varsles |
 | `NEWS_LOOKBACK_DAYS` | `7` | Hvor langt tilbake nye nyheter hentes |
 | `INCLUDE_GUESTS` | `false` | Ta med gjestebrukere som mottakere |
-| `TEAMS_DEEPLINK_APP_ID` | | Teams-app som varslene skal åpne (intranett-appen) |
-| `TEAMS_DEEPLINK_ENTITY_ID` | | `entityId` for fanen i den appen |
+| `TEAMS_DEEPLINK_APP_ID` | *(påkrevd)* | Teams-app som varslene åpner: varsel-appen selv (steg 4) eller intranett-appen. Uten denne sendes ingenting, og loggen sier hvorfor. |
+| `TEAMS_DEEPLINK_ENTITY_ID` | `intranet` | `entityId` for fanen i den appen. `intranet` er varsel-appens fane. |
 | `STATE_STORAGE_ACCOUNT_NAME` | Function-appens konto | Lagringskonto for sendt-status for sider |
 | `STATE_TABLE_NAME` | `NotificationState` | Tabellnavn |
 | `TIMER_SCHEDULE` | `0 * * * * *` | NCRONTAB, hvert minutt |
@@ -193,7 +195,8 @@ Kopier `function/local.settings.json.example` til `local.settings.json`. Lokalt 
 |---|---|
 | `401`/`403` fra SharePoint | App-rollen `Sites.Selected` på **SharePoint Online** (ikke bare Graph), og `Grant-PnPAzureADAppSitePermission` på riktig område med riktig nivå |
 | `403` fra `transitiveMembers` | `GroupMember.Read.All` tildelt, og at admin consent er gitt (scriptet tildeler app-roller direkte, consent er implisitt) |
-| `400`/`403` fra `sendActivityNotificationToRecipients` | `TeamsActivity.Send`, at Teams-appen er installert for mottakeren (setup policy), og at `webApplicationInfo.id` i manifestet er client ID til identiteten som sender |
+| `400` «Invalid 'webUrl' specified» fra `sendActivityNotificationToRecipients` | `TEAMS_DEEPLINK_APP_ID` mangler eller er ikke en Teams-app-ID. Lenken må være `https://teams.microsoft.com/l/...` |
+| `400`/`403` ellers fra `sendActivityNotificationToRecipients` | `TeamsActivity.Send`, at Teams-appen er installert for mottakeren (setup policy), og at `webApplicationInfo.id` i manifestet er client ID til identiteten som sender |
 | Ingen mottakere | Gruppe-ID-ene i konfigurasjonen, og at gruppa har medlemmer som ikke er deaktivert/gjester |
 | Nyheter varsles ikke | `PromotedState = 2`, publisert hovedversjon, innenfor `NEWS_LOOKBACK_DAYS`, og ikke allerede en rad i tabellen `NotificationState` |
 | Driftsmeldinger varsles ikke | Startdato passert, sluttdato ikke passert, `PzlNotifiedAt` tom, og nivå/«Varsle i Teams» |
