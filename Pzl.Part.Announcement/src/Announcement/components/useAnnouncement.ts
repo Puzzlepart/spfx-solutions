@@ -3,7 +3,7 @@ import { useAnnouncementState } from './useAnnouncementState'
 import { IAnnouncementProps } from './types'
 import { useId } from '@fluentui/react-components'
 import { useAnnouncementDataFetch } from './useAnnouncementDataFetch'
-import { getFocusedAnnouncementId } from '../util/getFocusedAnnouncementId'
+import { getFocusedAnnouncementId, getPageDeepLink } from '../util/getFocusedAnnouncementId'
 
 /**
  * Delay (ms) between scrolling the focused announcement into view and opening
@@ -49,6 +49,15 @@ export const useAnnouncement = (props: IAnnouncementProps) => {
   const setAnnouncementRef = (id: string) => (element: HTMLDivElement) => {
     announcementRefs.current[id] = element
   }
+
+  // A news deep link (`page:<url>`) lands on the page hosting the web part;
+  // go to the news page itself (same origin only, see getPageDeepLink)
+  useEffect(() => {
+    const page = getPageDeepLink()
+    if (page && page.toLowerCase() !== window.location.pathname.toLowerCase()) {
+      window.location.replace(page)
+    }
+  }, [])
 
   // Resolve the announcement to focus from the Teams deep link or the URL
   useEffect(() => {
