@@ -1,19 +1,22 @@
 import { Settings } from '../config'
 
 /**
- * Builds the URL a notification opens.
+ * Builds the Teams deep link a notification opens.
  *
- * When `TEAMS_DEEPLINK_APP_ID` and `TEAMS_DEEPLINK_ENTITY_ID` are set, the link
- * opens that tab in Teams with `subEntityId` set, so the page can focus the
- * item (the Announcement web part reads `driftsmelding:<id>`). Otherwise the
- * SharePoint URL is used directly.
+ * Graph only accepts `webUrl` values on a Teams domain followed by `/l/`, so the
+ * link always targets the tab given by `TEAMS_DEEPLINK_APP_ID` and
+ * `TEAMS_DEEPLINK_ENTITY_ID`, with `subEntityId` set so the page can focus the
+ * item (the Announcement web part reads `driftsmelding:<id>`). `webUrl` is the
+ * browser fallback when the tab cannot be opened.
  */
-export function buildLink(settings: Settings, subEntityId: string, fallbackUrl: string): string {
-  if (!settings.teamsDeepLinkAppId || !settings.teamsDeepLinkEntityId) return fallbackUrl
+export function buildLink(settings: Settings, subEntityId: string, webUrl: string): string {
+  if (!settings.teamsDeepLinkAppId || !settings.teamsDeepLinkEntityId) {
+    throw new Error('TEAMS_DEEPLINK_APP_ID and TEAMS_DEEPLINK_ENTITY_ID must be set')
+  }
   const context = encodeURIComponent(JSON.stringify({ subEntityId }))
   return `https://teams.microsoft.com/l/entity/${settings.teamsDeepLinkAppId}/${encodeURIComponent(
     settings.teamsDeepLinkEntityId
-  )}?context=${context}`
+  )}?webUrl=${encodeURIComponent(webUrl)}&context=${context}`
 }
 
 /** Strips HTML tags and collapses whitespace, for preview text */

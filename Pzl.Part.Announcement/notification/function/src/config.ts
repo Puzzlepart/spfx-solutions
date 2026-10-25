@@ -15,7 +15,11 @@ export interface Settings {
   newsLookbackDays: number
   /** Include guest users as recipients */
   includeGuests: boolean
-  /** Teams app and entity (tab) that notifications deep link to. Empty = link to SharePoint directly */
+  /**
+   * Teams app and entity (static tab) that notifications open. Graph requires `webUrl` to be a
+   * Teams deep link, so this is mandatory. Use the notification app itself (its tab opens the
+   * intranet) or the intranet's own Teams app.
+   */
   teamsDeepLinkAppId: string
   teamsDeepLinkEntityId: string
   /** Storage account used for the state table. Defaults to the function app's own storage account */
@@ -47,7 +51,7 @@ export function getSettings(): Settings {
     newsLookbackDays: Number(env('NEWS_LOOKBACK_DAYS', '7')) || 7,
     includeGuests: bool(env('INCLUDE_GUESTS', 'false')),
     teamsDeepLinkAppId: env('TEAMS_DEEPLINK_APP_ID'),
-    teamsDeepLinkEntityId: env('TEAMS_DEEPLINK_ENTITY_ID'),
+    teamsDeepLinkEntityId: env('TEAMS_DEEPLINK_ENTITY_ID', 'intranet'),
     stateStorageAccountName: env(
       'STATE_STORAGE_ACCOUNT_NAME',
       env('AzureWebJobsStorage__accountName')

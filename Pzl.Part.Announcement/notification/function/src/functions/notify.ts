@@ -14,6 +14,12 @@ export async function notify(timer: Timer, context: InvocationContext): Promise<
   const settings = getSettings()
   if (timer.isPastDue) context.warn('Timer is past due, running now')
   if (settings.dryRun) context.warn('DRY_RUN is enabled: nothing is sent or written')
+  if (!settings.teamsDeepLinkAppId) {
+    context.error(
+      'TEAMS_DEEPLINK_APP_ID is not set. Graph requires notification links to be Teams deep links; set it to the Teams app ID of the notification app (tab "intranet") or of the intranet app. Nothing is sent.'
+    )
+    return
+  }
 
   const sites = await getSiteConfigurations(settings)
   context.log(`${sites.length} active site configuration(s) in ${settings.configSiteUrl}`)
