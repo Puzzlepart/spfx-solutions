@@ -175,6 +175,19 @@ Sett så `DRY_RUN=false`.
 
 ## Steg 6: Test og pilot
 
+Send først et testvarsel til én bruker med test-endepunktet i Function-appen. Det bruker Graphs per-bruker-endepunkt, som rapporterer leveringsfeil, i motsetning til masse-endepunktet timeren bruker:
+
+```powershell
+$key = az functionapp keys list -g rg-intranet-notification -n func-intranet-notification --query functionKeys.default -o tsv
+$userId = az ad user show --id bruker@tenant.onmicrosoft.com --query id -o tsv
+Invoke-RestMethod -Method Post -Uri "https://func-intranet-notification.azurewebsites.net/api/test-notification?userId=$userId&type=announcement" -Headers @{ 'x-functions-key' = $key }
+```
+
+Svaret inneholder `ok` og eventuell Graph-feil. Varselet skal dukke opp i bjella innen sekunder. `type=news` tester nyhetsvarianten. Legg til `&bulk=1` for å sende via masse-endepunktet.
+
+> **Malparametere må stemme nøyaktig** med plassholderne i `templateText` i manifestet (`{title}`). Masse-endepunktet godtar ekstra parametere, men leverer da ingenting, uten feil. Per-bruker-endepunktet svarer «Incorrect template parameter arity». Endrer du `templateText`, må `templateParameters` i `announcements.ts`/`news.ts` endres tilsvarende.
+
+
 1. Konfigurasjonsrad mot en testgruppe, setup policy mot samme gruppe.
 2. Test de tre variantene: nyhet, driftsmelding med nivå «Varsel», driftsmelding med «Varsle i Teams».
 3. Klikk varselet på desktop, web og mobil og se at riktig side/driftsmelding åpnes.
@@ -198,6 +211,7 @@ Kopier `function/local.settings.json.example` til `local.settings.json`. Lokalt 
 | `400` «Invalid 'webUrl' specified» fra `sendActivityNotificationToRecipients` | `TEAMS_DEEPLINK_APP_ID` mangler eller er ikke en Teams-app-ID. Lenken må være `https://teams.microsoft.com/l/...` |
 | `400`/`403` ellers fra `sendActivityNotificationToRecipients` | `TeamsActivity.Send`, at Teams-appen er installert for mottakeren (setup policy), og at `webApplicationInfo.id` i manifestet er client ID til identiteten som sender |
 | Ingen mottakere | Gruppe-ID-ene i konfigurasjonen, og at gruppa har medlemmer som ikke er deaktivert/gjester |
+| Loggen sier «Sent … to N recipients», men ingenting i bjella | Appen var ikke installert for mottakeren da det ble sendt (setup policy tar tid), eller `templateParameters` matcher ikke `templateText`. Send et testvarsel med `/api/test-notification` til én bruker for å få feilen. |
 | Nyheter varsles ikke | `PromotedState = 2`, publisert hovedversjon, innenfor `NEWS_LOOKBACK_DAYS`, og ikke allerede en rad i tabellen `NotificationState` |
 | Driftsmeldinger varsles ikke | Startdato passert, sluttdato ikke passert, `PzlNotifiedAt` tom, og nivå/«Varsle i Teams» |
 | Dobbelt varsel | Viva Connections kan også varsle om nyheter. Skru av det ene. |
