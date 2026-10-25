@@ -35,7 +35,7 @@ export async function testNotification(
   )
   const stamp = new Date().toISOString()
   const body: Record<string, unknown> = {
-    topic: { source: 'text', value: 'Testvarsel', webUrl },
+    topic: { source: 'text', value: new URL(settings.configSiteUrl).host, webUrl },
     activityType: type,
     previewText: {
       content: `Testvarsel (${bulk ? 'bulk' : 'single'}${extra ? ', extra' : ''}) ${stamp}`

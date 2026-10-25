@@ -125,7 +125,17 @@ Aktivitetsvarsler må sendes fra en Teams-app der `webApplicationInfo.id` er cli
      -DeveloperName "<organisasjon>"
    ```
 
-   Scriptet skriver ut Teams-app-ID-en. Ta vare på den og send den inn med `-AppId` ved senere oppdateringer, sammen med ny `-Version`. Bytt gjerne ikoner med `-ColorIcon` (192x192) og `-OutlineIcon` (32x32, transparent), så appen får samme ikon som intranett-appen. Tekstene i `activityTypes` i malen er det brukeren ser i bjella og kan oversettes før bygging.
+   Anbefalte verdier i produksjon:
+
+   | Parameter | Anbefaling |
+   |---|---|
+   | `-AppName` | Intranettets navn pluss «varsler», f.eks. «Svaneposten varsler». Navnet vises i bjella og i applisten. |
+   | `-DeveloperName` | Organisasjonen som eier intranettet, f.eks. kommunens navn. |
+   | `-ColorIcon` / `-OutlineIcon` | Intranett-appens egne ikoner (192x192 farge, 32x32 transparent), så varslene får samme ikon som intranettet. |
+   | `-AppId` | Ny GUID første gang. Ta vare på den og bruk samme ved oppdateringer. |
+   | `-Version` | Øk ved hver opplasting, f.eks. 1.0.0, 1.0.1. |
+
+   Tekstene i `activityTypes` i `teams-app/manifest.json` («Driftsmelding: {title}», «Ny nyhet: {title}») er det brukeren ser i bjella og kan tilpasses før bygging. Linjen under varselet viser tittelen på konfigurasjonsraden i steg 3, så gi radene navn som gir mening for brukeren («Svaneposten», «Lederportalen»).
 
 2. Last opp zip-fila i Teams admin center (Teams apps > Manage apps > Upload new app).
 3. Lag en **app setup policy** som installerer appen for mottakerne (uten å feste den i appfeltet), og tildel den til samme grupper som i konfigurasjonen. Start med en testgruppe.
@@ -135,7 +145,20 @@ Aktivitetsvarsler må sendes fra en Teams-app der `webApplicationInfo.id` er cli
    az functionapp config appsettings set -g <ressursgruppe> -n <function-app> --settings TEAMS_DEEPLINK_APP_ID=<Teams-app-ID fra punkt 1> TEAMS_DEEPLINK_ENTITY_ID=intranet
    ```
 
-   Fanen i varsel-appen sender `{subEntityId}` videre til intranettet som `?driftsmelding=`, og det er den parameteren webdelen bruker for å åpne riktig driftsmelding. Har intranettet en egen Teams-app med SharePoint-SSO, kan du i stedet bruke dens app-ID og fanens `entityId`; da må den fanens `contentUrl` sende `{subEntityId}` på samme måte, for `subPageId` fra Teams-konteksten når ikke alltid fram til webdelen.
+   Fanen i varsel-appen sender `{subEntityId}` videre til intranettet som `?driftsmelding=`, og det er den parameteren webdelen bruker for å åpne riktig driftsmelding.
+
+   **Har intranettet en egen Teams-app** med SharePoint-SSO, pek varslene dit i stedet. Det er anbefalt der den finnes, siden varsel-appen ikke garanterer stille pålogging på desktop og mobil:
+
+   1. Legg `{subEntityId}` inn i fanens `contentUrl` i intranett-appens manifest, som URL-parameter `driftsmelding` på siden `dest` peker til. Har siden allerede parametere, legg den til med `%26` (URL-kodet `&`):
+
+      ```text
+      https://<tenant>.sharepoint.com/_layouts/15/teamslogon.aspx?spfx=true&dest=https%3A%2F%2F<tenant>.sharepoint.com%2F%3Fapp%3Dportals%26driftsmelding%3D{subEntityId}
+      ```
+
+   2. Øk versjonen, last opp manifestet som oppdatering, og la brukerne logge ut og inn av Teams under test (se punkt 5).
+   3. Sett `TEAMS_DEEPLINK_APP_ID` til intranett-appens app-ID og `TEAMS_DEEPLINK_ENTITY_ID` til fanens `entityId`.
+
+   Varsel-appen må uansett finnes og være installert for mottakerne: Graph krever at avsenderens identitet står i `webApplicationInfo.id` i appen varselet vises for, og intranett-appen må ha SharePoints app-ID der for SSO. `subPageId` fra Teams-konteksten når ikke fram til webdelen i fanen, så URL-parameteren er eneste pålitelige vei.
 
 5. Ved oppdatering av manifestet (ny versjon lastet opp i admin center): Teams-klientene beholder den gamle app-definisjonen til de henter på nytt, som kan ta timer. Logg ut og inn av Teams for å tvinge det fram under test.
 

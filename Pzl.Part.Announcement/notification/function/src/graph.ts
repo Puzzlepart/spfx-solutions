@@ -45,8 +45,11 @@ export async function getGroupMemberIds(
 export interface ActivityNotification {
   /** Must match an `activityType` in the Teams app manifest */
   activityType: string
-  /** Shown as the notification title */
-  title: string
+  /**
+   * Shown under the notification as its source, e.g. the intranet or site name.
+   * (Graph `topic.value`; the title itself comes from `templateParameters`.)
+   */
+  source: string
   /** Shown as the notification body (max 150 characters are shown) */
   previewText: string
   /** Where a click on the notification goes */
@@ -78,7 +81,7 @@ export async function sendActivityNotification(
       body: {
         topic: {
           source: 'text',
-          value: notification.title.substring(0, 100),
+          value: notification.source.substring(0, 100),
           webUrl: notification.webUrl
         },
         activityType: notification.activityType,
@@ -93,7 +96,7 @@ export async function sendActivityNotification(
       }
     })
     context.log(
-      `Sent "${notification.title}" (${notification.activityType}) to ${batch.length} recipients (${i + batch.length}/${recipients.length})`
+      `Sent "${notification.templateParameters?.title ?? notification.source}" (${notification.activityType}) to ${batch.length} recipients (${i + batch.length}/${recipients.length})`
     )
   }
   return recipients.length

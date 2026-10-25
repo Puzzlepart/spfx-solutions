@@ -4,6 +4,7 @@ import { SharePointClient } from '../sharepoint'
 /** One row in the configuration list (`Templates/NotificationConfig.xml`) */
 export interface SiteConfiguration {
   id: number
+  /** Row title; shown under notifications as their source (e.g. the intranet name) */
   title: string
   siteUrl: string
   notifyNews: boolean
