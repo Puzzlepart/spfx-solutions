@@ -42,30 +42,47 @@ function schemaAttribute(schemaXml: string, name: string): string | undefined {
 }
 
 /**
- * Maps `SP.Field` to `IListField`
+ * Settings that can override the field definition from the content type: the
+ * list field (list-level schema) and the content type's field link
+ * (hidden/required as set under list settings).
  */
-export function mapField(info: IFieldInfo): IListField {
+export interface IFieldOverrides {
+  listSchemaXml?: string
+  linkHidden?: boolean
+  linkRequired?: boolean
+}
+
+/**
+ * Maps `SP.Field` to `IListField`
+ *
+ * @param info Field from the content type
+ * @param overrides List field schema and field link settings
+ */
+export function mapField(info: IFieldInfo, overrides: IFieldOverrides = {}): IListField {
   const choices: any = info.Choices
+  // List schema first: list-level settings are what the list forms use
+  const schemas = [overrides.listSchemaXml, info.SchemaXml].filter(Boolean)
+  const attribute = (name: string) =>
+    schemas.map((schema) => schemaAttribute(schema, name)).filter((value) => value !== undefined)
+  const first = (name: string) => attribute(name)[0] ?? ''
+  const anyTrue = (name: string) => attribute(name).some((value) => /^true$/i.test(value))
+  const anyFalse = (name: string) => attribute(name).some((value) => /^false$/i.test(value))
   return {
     internalName: info.InternalName,
     entityPropertyName: info.EntityPropertyName || info.InternalName,
     title: info.Title,
     description: info.Description ?? '',
     type: info.TypeAsString,
-    required: info.Required === true,
+    required: overrides.linkRequired ?? info.Required === true,
     readOnly: info.ReadOnlyField === true,
-    hidden: info.Hidden === true,
+    hidden: info.Hidden === true || overrides.linkHidden === true || anyTrue('Hidden'),
     fromBaseType: info.FromBaseType === true,
     choices: Array.isArray(choices) ? choices : choices?.results,
     defaultValue: info.DefaultValue ?? undefined,
-    richText: /^true$/i.test(schemaAttribute(info.SchemaXml, 'RichText') ?? ''),
-    dateOnly:
-      info.TypeAsString === 'DateTime' &&
-      !/^DateTime$/i.test(schemaAttribute(info.SchemaXml, 'Format') ?? ''),
-    allowGroups: /^PeopleAndGroups$/i.test(
-      schemaAttribute(info.SchemaXml, 'UserSelectionMode') ?? ''
-    ),
-    showInNewForm: !/^false$/i.test(schemaAttribute(info.SchemaXml, 'ShowInNewForm') ?? '')
+    richText: /^true$/i.test(first('RichText')),
+    dateOnly: info.TypeAsString === 'DateTime' && !/^DateTime$/i.test(first('Format')),
+    allowGroups: /^PeopleAndGroups$/i.test(first('UserSelectionMode')),
+    showInNewForm: !anyFalse('ShowInNewForm')
   }
 }
 
@@ -126,16 +143,31 @@ export class AnnouncementListService {
         (ct) =>
           ct.StringId.indexOf('0x01') === 0 && ct.StringId.indexOf('0x0120') !== 0 && !ct.Hidden
       ) ?? contentTypes[0]
-    const infos: IFieldInfo[] = defaultContentType
-      ? await this.list.contentTypes.getById(defaultContentType.StringId).fields()
-      : await this.list.fields()
-    return infos
-      .filter(
-        (info) =>
-          !info.Hidden &&
-          (!info.FromBaseType || BASE_TYPE_FIELDS_TO_KEEP.includes(info.InternalName))
+    let fields: IListField[]
+    if (defaultContentType) {
+      const contentType = this.list.contentTypes.getById(defaultContentType.StringId)
+      const [infos, links, listFields] = await Promise.all([
+        contentType.fields(),
+        contentType.fieldLinks(),
+        this.list.fields()
+      ])
+      const listFieldById = new Map(listFields.map((field) => [field.Id, field]))
+      const linkById = new Map(links.map((link) => [link.Id, link]))
+      fields = infos.map((info) =>
+        mapField(info, {
+          listSchemaXml: listFieldById.get(info.Id)?.SchemaXml,
+          linkHidden: linkById.get(info.Id)?.Hidden,
+          linkRequired: linkById.get(info.Id)?.Required
+        })
       )
-      .map(mapField)
+    } else {
+      fields = (await this.list.fields()).map((info) => mapField(info))
+    }
+    return fields.filter(
+      (field) =>
+        !field.hidden &&
+        (!field.fromBaseType || BASE_TYPE_FIELDS_TO_KEEP.includes(field.internalName))
+    )
   }
 
   /**
