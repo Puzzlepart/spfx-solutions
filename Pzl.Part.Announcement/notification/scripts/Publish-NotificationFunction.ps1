@@ -81,7 +81,7 @@ Write-Host '== Functions in the app' -ForegroundColor Cyan
 & az functionapp function list -g $ResourceGroupName -n $FunctionAppName --query '[].{name:name, trigger:config.bindings[0].type}' -o table
 
 Write-Host ''
-Write-Host 'Deployed. Watch the first runs with:' -ForegroundColor Green
-Write-Host "  az webapp log tail -g $ResourceGroupName -n $FunctionAppName"
+Write-Host 'Deployed. Watch the first runs with (logs arrive after a minute or two):' -ForegroundColor Green
+Write-Host "  .\Get-NotificationLog.ps1 -ResourceGroupName $ResourceGroupName -FunctionAppName $FunctionAppName"
 Write-Host 'Set DRY_RUN=false when the dry run looks right:'
 Write-Host "  az functionapp config appsettings set -g $ResourceGroupName -n $FunctionAppName --settings DRY_RUN=false"
