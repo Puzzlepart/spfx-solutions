@@ -147,6 +147,8 @@ Aktivitetsvarsler må sendes fra en Teams-app der `webApplicationInfo.id` er cli
 
    Fanen i varsel-appen sender `{subEntityId}` videre til intranettet som `?driftsmelding=`, og det er den parameteren webdelen bruker: `driftsmelding:<id>` åpner driftsmeldingen i popover, `page:<url>` (nyheter) sender brukeren videre til nyhetssiden. Webdelen må derfor ligge på siden fanen åpner, normalt forsiden.
 
+   Videresendingen for nyheter gjøres fra 1.4.0 av application customizer-en **AnnouncementDeepLink** i samme pakke, så den skjer før sideinnholdet lastes og uavhengig av om kolonnen med webdelen rendres (på små skjermer lastes høyrekolonna sent eller ikke). Den registreres som custom action på området når pakken installeres fra en områdesamlings-appkatalog. Er pakken distribuert for hele tenanten, kjør `Invoke-PnPSiteTemplate -Path .\Templates\DeepLinkCustomAction.xml` på området fanen åpner, se [README](../README.md#deep-link-redirect-application-customizer).
+
    **Har intranettet en egen Teams-app** med SharePoint-SSO, pek varslene dit i stedet. Det er anbefalt der den finnes, siden varsel-appen ikke garanterer stille pålogging på desktop og mobil:
 
    1. Legg `{subEntityId}` inn i fanens `contentUrl` i intranett-appens manifest, som URL-parameter `driftsmelding` på siden `dest` peker til. Har siden allerede parametere, legg den til med `%26` (URL-kodet `&`):

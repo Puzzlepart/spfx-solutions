@@ -3,7 +3,7 @@
   "solution": {
     "name": "Announcements by Puzzlepart",
     "id": "a65ac2f2-48d4-41ad-81b2-4c89e28c3481",
-    "version": "1.3.3.0",
+    "version": "1.4.0.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
@@ -31,6 +31,15 @@
         "description": "Activates the Announcements (Driftsmeldinger) web part.",
         "id": "2db0bc78-5fba-4740-a35a-3971f718f070",
         "version": "1.0.0.0"
+      },
+      {
+        "title": "Announcements by Puzzlepart - deep link redirect",
+        "description": "Registers the AnnouncementDeepLink application customizer, which sends the user to the page a ?driftsmelding=page: deep link points to before the page renders.",
+        "id": "c4a1e9d7-2f36-4b58-9a0e-6d7f8b1c3e52",
+        "version": "1.0.0.0",
+        "assets": {
+          "elementManifests": ["elements.xml"]
+        }
       }
     ]
   },

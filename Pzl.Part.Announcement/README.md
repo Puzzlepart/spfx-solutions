@@ -1,6 +1,6 @@
 # Announcement (Driftsmeldinger)
 
-[![version](https://img.shields.io/badge/version-1.3.3-orange.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.4.0-orange.svg)](https://semver.org)
 
 ## Summary
 
@@ -47,6 +47,19 @@ To open a specific announcement when the page loads, the web part reads an annou
 
 1. Teams deep link: `subEntityId`/`subPageId` set to `driftsmelding:<id>` (read via `context.sdks.microsoftTeams`).
 2. Query string: `?driftsmelding=<id>` on the page URL. The value may carry the deep link prefix (`driftsmelding:<id>`); `page:<server-relative url>` navigates to that page instead (news notifications).
+
+### Deep link redirect (application customizer)
+
+The package also contains the application customizer **AnnouncementDeepLink** (component ID `9f3d6a2c-7b14-4e8f-a5c0-3d2e1f6b8a47`). It reads the `driftsmelding` query parameter when the page loads and, for `page:<url>` deep links, sends the user to that page right away. The web part does the same when it renders, but only if the section holding it is rendered: on small screens the right column of the home page is loaded late or not at all, so the redirect is left to the customizer, which runs before the page content regardless of layout. Only same-origin `.aspx` paths are accepted, and other query parameters (such as `app=portals` from the Teams tab) are carried over. `driftsmelding:<id>` deep links are still handled by the web part, which owns the popover.
+
+The customizer is registered as a site custom action by the feature **Announcements by Puzzlepart - deep link redirect** when the package is installed on a site (site collection app catalog, or "add app" on the site). With a tenant-wide deployment from the tenant app catalog the feature is not activated per site, so register the custom action on the site the Teams tab opens (normally the root site) with the template:
+
+```powershell
+Connect-PnPOnline -Url "https://<tenant>.sharepoint.com" -Interactive -ClientId "<clientid>"
+Invoke-PnPSiteTemplate -Path ".\Templates\DeepLinkCustomAction.xml"
+```
+
+or directly with `Add-PnPCustomAction -Name AnnouncementDeepLink -Title AnnouncementDeepLink -Location ClientSideExtension.ApplicationCustomizer -ClientSideComponentId 9f3d6a2c-7b14-4e8f-a5c0-3d2e1f6b8a47 -ClientSideComponentProperties "{}" -Scope Site`. Check with `Get-PnPCustomAction -Scope Site`. The customizer does nothing on pages opened without the `driftsmelding` parameter.
 
 Lists provisioned with the 1.0.x template still work: the web part falls back to the original fields if `PzlPinned`/`PzlNotifiedAt` are missing. Re-run `Invoke-PnPSiteTemplate` to add the new columns.
 
@@ -110,6 +123,11 @@ npm run package
 The package is written to `sharepoint/solution/pzl-announcement.sppkg`.
 
 ## Changelog
+
+### 1.4.0
+
+* New application customizer **AnnouncementDeepLink** in the same package: redirects `?driftsmelding=page:<url>` deep links (news notifications) to the news page as soon as the page's SPFx components load, without waiting for the web part. On small screens the column holding the web part was loaded late or not at all, so the redirect did not always happen. Registered by the new feature **Announcements by Puzzlepart - deep link redirect** on site install; `Templates/DeepLinkCustomAction.xml` registers it for tenant-wide deployments.
+* The deep link parsing is shared between the web part and the customizer (`src/shared/deepLink.ts`). The web part keeps its redirect as a fallback for sites without the custom action.
 
 ### 1.3.3
 
