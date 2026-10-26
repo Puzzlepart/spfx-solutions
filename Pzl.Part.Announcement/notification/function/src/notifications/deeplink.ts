@@ -19,6 +19,20 @@ export function buildLink(settings: Settings, subEntityId: string, webUrl: strin
   )}?webUrl=${encodeURIComponent(webUrl)}&context=${context}`
 }
 
+/**
+ * Builds a Teams "stage view" deep link that opens a SharePoint page in a
+ * full-screen view inside Teams. Used for news, which has no fixed tab: the
+ * page is loaded through teamslogon.aspx so sign-in works like in the tab.
+ * The page's host must be in the Teams app's validDomains (*.sharepoint.com).
+ */
+export function buildStageLink(settings: Settings, pageUrl: string, name: string): string {
+  if (!settings.teamsDeepLinkAppId) throw new Error('TEAMS_DEEPLINK_APP_ID must be set')
+  const { origin } = new URL(pageUrl)
+  const contentUrl = `${origin}/_layouts/15/teamslogon.aspx?SPFX=true&dest=${encodeURIComponent(pageUrl)}`
+  const context = encodeURIComponent(JSON.stringify({ contentUrl, websiteUrl: pageUrl, name }))
+  return `https://teams.microsoft.com/l/stage/${settings.teamsDeepLinkAppId}/0?context=${context}`
+}
+
 /** Strips HTML tags and collapses whitespace, for preview text */
 export function toPlainText(html: string | null | undefined, maxLength = 150): string {
   const text = (html ?? '')

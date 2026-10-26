@@ -2,7 +2,7 @@ import { app, HttpRequest, HttpResponseInit, InvocationContext } from '@azure/fu
 import { getSettings } from '../config'
 import { getAccessToken } from '../auth'
 import { HttpError, request } from '../http'
-import { buildLink } from '../notifications/deeplink'
+import { buildLink, buildStageLink } from '../notifications/deeplink'
 
 const GRAPH = 'https://graph.microsoft.com/v1.0'
 
@@ -28,11 +28,12 @@ export async function testNotification(
   const extra = req.query.get('extra') === '1'
   if (!userId) return { status: 400, jsonBody: { error: 'userId query parameter is required' } }
 
-  const webUrl = buildLink(
-    settings,
-    type === 'news' ? 'page:/SitePages/Home.aspx' : 'driftsmelding:0',
-    settings.configSiteUrl
-  )
+  // news: stage view straight to a page (the site home here); announcement: the tab with focus
+  const pageUrl = req.query.get('pageUrl') || settings.configSiteUrl
+  const webUrl =
+    type === 'news'
+      ? buildStageLink(settings, pageUrl, 'Testvarsel')
+      : buildLink(settings, 'driftsmelding:0', settings.configSiteUrl)
   const stamp = new Date().toISOString()
   const body: Record<string, unknown> = {
     topic: { source: 'text', value: new URL(settings.configSiteUrl).host, webUrl },
