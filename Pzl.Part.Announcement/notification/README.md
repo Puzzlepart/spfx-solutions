@@ -145,7 +145,7 @@ Aktivitetsvarsler må sendes fra en Teams-app der `webApplicationInfo.id` er cli
    az functionapp config appsettings set -g <ressursgruppe> -n <function-app> --settings TEAMS_DEEPLINK_APP_ID=<Teams-app-ID fra punkt 1> TEAMS_DEEPLINK_ENTITY_ID=intranet
    ```
 
-   Driftsmeldinger åpner fanen i varsel-appen. Fanen sender `{subEntityId}` videre til intranettet som `?driftsmelding=`, og webdelen åpner meldingen i popover. Nyheter åpner nyhetssiden direkte i et stage view-vindu i Teams (`https://teams.microsoft.com/l/stage/<app-id>/0?context=...`), lastet via `teamslogon.aspx`, så de trenger ingen fane. Sidens domene må stå i appens `validDomains`, og `*.sharepoint.com` gjør det.
+   Fanen i varsel-appen sender `{subEntityId}` videre til intranettet som `?driftsmelding=`, og det er den parameteren webdelen bruker: `driftsmelding:<id>` åpner driftsmeldingen i popover, `page:<url>` (nyheter) sender brukeren videre til nyhetssiden. Webdelen må derfor ligge på siden fanen åpner, normalt forsiden.
 
    **Har intranettet en egen Teams-app** med SharePoint-SSO, pek varslene dit i stedet. Det er anbefalt der den finnes, siden varsel-appen ikke garanterer stille pålogging på desktop og mobil:
 

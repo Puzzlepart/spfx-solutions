@@ -8,9 +8,38 @@ export const SUB_PAGE_ID_PREFIX = 'driftsmelding:'
 
 /**
  * Query string parameter used as fallback outside Teams
- * (e.g. `?driftsmelding=12`).
+ * (e.g. `?driftsmelding=12`). The notification Teams app's tab also passes the
+ * deep link `subEntityId` through this parameter, prefix included.
  */
 export const QUERY_PARAM_NAME = 'driftsmelding'
+
+/**
+ * Prefix used in deep links for news pages (e.g. `page:/SitePages/News.aspx`).
+ * The home page cannot show a news page, so the web part navigates to it.
+ */
+export const PAGE_PREFIX = 'page:'
+
+/**
+ * Returns the server-relative page a `page:<url>` deep link points to, or
+ * `null` when the parameter is absent or not a safe same-origin page path.
+ * Only paths like `/sites/x/SitePages/Page.aspx` are accepted: no scheme,
+ * no host, no `..`, no query or fragment.
+ */
+export function getPageDeepLink(): string | null {
+  try {
+    const raw = new URLSearchParams(window.location.search).get(QUERY_PARAM_NAME)
+    if (!raw || raw.indexOf(PAGE_PREFIX) !== 0) return null
+    const path = raw.substring(PAGE_PREFIX.length)
+    const lower = path.toLowerCase()
+    const forbidden = ['?', '#', '..', String.fromCharCode(92)]
+    if (path.charAt(0) !== '/' || path.charAt(1) === '/') return null
+    if (forbidden.some((c) => path.indexOf(c) !== -1)) return null
+    if (lower.substring(lower.length - 5) !== '.aspx') return null
+    return path
+  } catch {
+    return null
+  }
+}
 
 /**
  * Parses an announcement ID from a raw value. Accepts `driftsmelding:<id>`

@@ -1,6 +1,6 @@
 # Announcement (Driftsmeldinger)
 
-[![version](https://img.shields.io/badge/version-1.3.2-orange.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.3.3-orange.svg)](https://semver.org)
 
 ## Summary
 
@@ -46,7 +46,7 @@ The web part itself does not send notifications. The optional notification servi
 To open a specific announcement when the page loads, the web part reads an announcement ID from one of these sources (in this order) and opens its popover:
 
 1. Teams deep link: `subEntityId`/`subPageId` set to `driftsmelding:<id>` (read via `context.sdks.microsoftTeams`).
-2. Query string: `?driftsmelding=<id>` on the page URL.
+2. Query string: `?driftsmelding=<id>` on the page URL. The value may carry the deep link prefix (`driftsmelding:<id>`); `page:<server-relative url>` navigates to that page instead (news notifications).
 
 Lists provisioned with the 1.0.x template still work: the web part falls back to the original fields if `PzlPinned`/`PzlNotifiedAt` are missing. Re-run `Invoke-PnPSiteTemplate` to add the new columns.
 
@@ -110,6 +110,10 @@ npm run package
 The package is written to `sharepoint/solution/pzl-announcement.sppkg`.
 
 ## Changelog
+
+### 1.3.3
+
+* News deep links: when the page is opened with `?driftsmelding=page:<server-relative page url>` (what the notification Teams app's tab passes for news notifications), the web part navigates to that page. Only same-origin `.aspx` paths are accepted.
 
 ### 1.3.2
 
