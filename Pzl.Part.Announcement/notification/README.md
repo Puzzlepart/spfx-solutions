@@ -5,7 +5,7 @@ Valgfritt tillegg til [Pzl.Part.Announcement](../README.md). En timer-trigget Az
 - en **nyhetsside** publiseres på et konfigurert område, og
 - en **driftsmelding** blir aktiv og enten har meldingsnivået «Varsel» eller har «Varsle i Teams» satt.
 
-Varslene respekterer **målgruppestyring**: har elementet målgrupper, varsles medlemmene i de gruppene. Ellers varsles standardgruppene for området. Klikk på et driftsmeldingsvarsel åpner en Teams-fane som viser intranettet, med meldingen i popover. Klikk på et nyhetsvarsel åpner nyhetssiden i et stage view-vindu i Teams. Graph krever at lenkene er Teams-deep-linker, så fanen er enten varsel-appens egen fane (standard) eller en fane i intranettets egen Teams-app.
+Varslene respekterer **målgruppestyring**: har elementet målgrupper, varsles medlemmene i de gruppene. Ellers varsles standardgruppene for området. Klikk på et driftsmeldingsvarsel åpner en Teams-fane som viser intranettet, med meldingen i popover. Klikk på et nyhetsvarsel åpner samme fane, og customizer-en **AnnouncementDeepLink** (Pzl.Part.Announcement 1.4.0 eller nyere, se [README](../README.md#deep-link-redirect-application-customizer)) sender brukeren rett til nyhetssiden. Stage view ble prøvd for nyheter og forkastet: artikkelen åpnet i et vindu uten intranettets navigasjon, og mobil støtter det ikke. Graph krever at lenkene er Teams-deep-linker, så fanen er enten varsel-appens egen fane (standard) eller en fane i intranettets egen Teams-app.
 
 Lista og webdelen fungerer uten dette tillegget. Kolonnene `PzlNotifyTeams`, `PzlPinned` og `PzlNotifiedAt` finnes i hovedmalen fra versjon 1.1.0 og er uten effekt til tjenesten tas i bruk.
 
