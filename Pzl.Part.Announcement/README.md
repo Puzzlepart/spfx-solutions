@@ -1,6 +1,6 @@
 # Announcement (Driftsmeldinger)
 
-[![version](https://img.shields.io/badge/version-1.4.0-orange.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.4.1-orange.svg)](https://semver.org)
 
 ## Summary
 
@@ -123,6 +123,10 @@ npm run package
 The package is written to `sharepoint/solution/pzl-announcement.sppkg`.
 
 ## Changelog
+
+### 1.4.1
+
+* Fixed the 1.4.0 package, which the app catalog rejected with "Component ID ddfa2478-… exists more than once in the package": both features included every component. Each feature now lists its own component (`componentIds`), so the web part belongs to the web part feature and the customizer to the deep link feature. 1.4.0 never published its assets, so update to 1.4.1 before registering the custom action.
 
 ### 1.4.0
 
