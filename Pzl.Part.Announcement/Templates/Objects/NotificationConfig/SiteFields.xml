@@ -6,6 +6,14 @@
   <Field Type="Boolean" DisplayName="{resource:SiteFields_NotifyAnnouncements_DisplayName}" Description="{resource:SiteFields_NotifyAnnouncements_Description}" Group="Puzzlepart" ID="{d9faa27e-4f07-43dd-909c-4c23981d02f4}" StaticName="PzlNotifyAnnouncements" Name="PzlNotifyAnnouncements">
     <Default>1</Default>
   </Field>
+  <Field Type="MultiChoice" DisplayName="{resource:SiteFields_NotifySeverities_DisplayName}" Description="{resource:SiteFields_NotifySeverities_Description}" FillInChoice="TRUE" Group="Puzzlepart" ID="{31486421-247a-498c-a364-fb1ebaf9facd}" StaticName="PzlNotifySeverities" Name="PzlNotifySeverities">
+    <CHOICES>
+      <CHOICE>{resource:SiteFields_Severity_Choice_Success}</CHOICE>
+      <CHOICE>{resource:SiteFields_Severity_Choice_Warning}</CHOICE>
+      <CHOICE>{resource:SiteFields_Severity_Choice_Info}</CHOICE>
+      <CHOICE>{resource:SiteFields_Severity_Choice_Error}</CHOICE>
+    </CHOICES>
+  </Field>
   <Field Type="Note" DisplayName="{resource:SiteFields_NotifyDefaultGroupIds_DisplayName}" Description="{resource:SiteFields_NotifyDefaultGroupIds_Description}" NumLines="3" RichText="FALSE" Group="Puzzlepart" ID="{96a8b4eb-3a78-4a62-949a-1b966b3ff029}" StaticName="PzlDefaultGroupIds" Name="PzlDefaultGroupIds" />
   <Field Type="Text" DisplayName="{resource:SiteFields_NotifyAnnouncementListTitle_DisplayName}" Description="{resource:SiteFields_NotifyAnnouncementListTitle_Description}" MaxLength="255" Group="Puzzlepart" ID="{3e46be51-4470-45dd-959c-f298c931ff6b}" StaticName="PzlAnnouncementListTitle" Name="PzlAnnouncementListTitle" />
   <Field Type="Boolean" DisplayName="{resource:SiteFields_NotifyActive_DisplayName}" Description="{resource:SiteFields_NotifyActive_Description}" Group="Puzzlepart" ID="{ef5492ea-5995-4345-9ae1-52a097121499}" StaticName="PzlActive" Name="PzlActive">
