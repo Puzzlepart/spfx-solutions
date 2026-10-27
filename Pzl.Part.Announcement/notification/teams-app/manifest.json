@@ -47,7 +47,7 @@
       {
         "type": "news",
         "description": "Nyhet",
-        "templateText": "Ny nyhet: {title}"
+        "templateText": "{title}"
       }
     ]
   }
