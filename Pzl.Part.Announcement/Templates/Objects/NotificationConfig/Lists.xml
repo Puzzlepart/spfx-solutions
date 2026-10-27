@@ -10,6 +10,7 @@
           <FieldRef Name="PzlSiteUrl" />
           <FieldRef Name="PzlNotifyNews" />
           <FieldRef Name="PzlNotifyAnnouncements" />
+          <FieldRef Name="PzlNotifySeverities" />
           <FieldRef Name="PzlDefaultGroupIds" />
           <FieldRef Name="PzlAnnouncementListTitle" />
           <FieldRef Name="PzlActive" />

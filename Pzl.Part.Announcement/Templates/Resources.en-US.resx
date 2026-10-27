@@ -173,7 +173,13 @@
     <value>Notify announcements</value>
   </data>
   <data name="SiteFields_NotifyAnnouncements_Description" xml:space="preserve">
-    <value>Send Teams notifications for announcements on the site (level "Alert" always, otherwise when "Notify in Teams" is set)</value>
+    <value>Send Teams notifications for announcements on the site (the levels under "Levels that always notify", otherwise when "Notify in Teams" is set)</value>
+  </data>
+  <data name="SiteFields_NotifySeverities_DisplayName" xml:space="preserve">
+    <value>Levels that always notify</value>
+  </data>
+  <data name="SiteFields_NotifySeverities_Description" xml:space="preserve">
+    <value>Message levels that are notified in Teams without "Notify in Teams" being set on the announcement. Empty means the service default (ALWAYS_NOTIFY_SEVERITIES, normally "Alert").</value>
   </data>
   <data name="SiteFields_NotifyDefaultGroupIds_DisplayName" xml:space="preserve">
     <value>Default recipient groups</value>

@@ -25,7 +25,8 @@ Timer (1 min)
   └─ Les aktive rader i Varslingskonfigurasjon (CONFIG_SITE_URL)
        └─ Per område
             ├─ Driftsmeldinger: PzlStartDate <= nå, PzlEndDate >= nå, PzlNotifiedAt tom,
-            │     og (PzlSeverity i ALWAYS_NOTIFY_SEVERITIES eller PzlNotifyTeams = ja)
+            │     og (PzlSeverity i radens «Nivåer som alltid varsles», ellers ALWAYS_NOTIFY_SEVERITIES,
+            │          eller PzlNotifyTeams = ja)
             │     → sett PzlNotifiedAt (claim) → send → ved feil: nullstill PzlNotifiedAt
             └─ Nyheter: PromotedState = 2, FirstPublishedDate innen NEWS_LOOKBACK_DAYS,
                   publisert (hovedversjon, godkjent), ikke registrert i Table Storage
@@ -103,11 +104,14 @@ Grant-PnPAzureADAppSitePermission -AppId <MI_CLIENT> -DisplayName "Intranett-var
    | Områdeadresse | Full URL til området |
    | Varsle nyheter | Ja/nei |
    | Varsle driftsmeldinger | Ja/nei |
+   | Nivåer som alltid varsles | Meldingsnivåer som varsles uten at «Varsle i Teams» er satt på driftsmeldingen. Tom betyr standard fra `ALWAYS_NOTIFY_SEVERITIES` (normalt «Varsel»). Egne verdier kan skrives inn hvis lista har andre nivåer. |
    | Standard mottakergrupper | Objekt-ID for én eller flere Entra-grupper, én per linje. Brukes når elementet ikke har målgruppe. |
    | Driftsmeldingsliste | Tom for standard (`Driftsmeldinger`), ellers tittel på lista |
    | Aktiv | Ja |
 
    Et område med egen mottakergruppe (for eksempel en lederportal) får en egen rad med den gruppa som standard.
+
+   Kolonnen «Nivåer som alltid varsles» kom til etter første utgave av malen. Kjør `Invoke-PnPSiteTemplate -Path .\Templates\NotificationConfig.xml` på nytt for å legge den til i en eksisterende liste. Tjenesten fungerer uten kolonnen og bruker da `ALWAYS_NOTIFY_SEVERITIES`.
 
 4. Aktiver målgruppestyring på Site Pages-biblioteket og driftsmeldingslista der målgrupper skal brukes. Uten målgruppestyring brukes alltid standardgruppene.
 
@@ -182,7 +186,7 @@ App-innstillingene ble satt i steg 1, bortsett fra `TEAMS_DEEPLINK_APP_ID`, som 
 | `CONFIG_SITE_URL` | *(påkrevd)* | Område med konfigurasjonslista |
 | `CONFIG_LIST_TITLE` | `Varslingskonfigurasjon` | Tittel på konfigurasjonslista |
 | `ANNOUNCEMENT_LIST_TITLE` | `Driftsmeldinger` | Standard tittel på driftsmeldingslista |
-| `ALWAYS_NOTIFY_SEVERITIES` | `Varsel,Alert` | Meldingsnivåer som alltid varsles |
+| `ALWAYS_NOTIFY_SEVERITIES` | `Varsel,Alert` | Meldingsnivåer som alltid varsles, for rader der «Nivåer som alltid varsles» er tom. Sett tom for å varsle bare ved «Varsle i Teams». |
 | `NEWS_LOOKBACK_DAYS` | `7` | Hvor langt tilbake nye nyheter hentes |
 | `INCLUDE_GUESTS` | `false` | Ta med gjestebrukere som mottakere |
 | `TEAMS_DEEPLINK_APP_ID` | *(påkrevd)* | Teams-app som varslene åpner: varsel-appen selv (steg 4) eller intranett-appen. Uten denne sendes ingenting, og loggen sier hvorfor. |

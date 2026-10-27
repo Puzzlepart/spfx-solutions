@@ -5,6 +5,7 @@
       <pnp:FieldRef ID="eb54b1a3-8880-4000-bc30-1d16eafa8602" Name="PzlSiteUrl" Required="true" UpdateChildren="true" />
       <pnp:FieldRef ID="d2b03c61-2e52-4e42-8246-4dd56794bce1" Name="PzlNotifyNews" UpdateChildren="true" />
       <pnp:FieldRef ID="d9faa27e-4f07-43dd-909c-4c23981d02f4" Name="PzlNotifyAnnouncements" UpdateChildren="true" />
+      <pnp:FieldRef ID="31486421-247a-498c-a364-fb1ebaf9facd" Name="PzlNotifySeverities" UpdateChildren="true" />
       <pnp:FieldRef ID="96a8b4eb-3a78-4a62-949a-1b966b3ff029" Name="PzlDefaultGroupIds" Required="true" UpdateChildren="true" />
       <pnp:FieldRef ID="3e46be51-4470-45dd-959c-f298c931ff6b" Name="PzlAnnouncementListTitle" UpdateChildren="true" />
       <pnp:FieldRef ID="ef5492ea-5995-4345-9ae1-52a097121499" Name="PzlActive" UpdateChildren="true" />

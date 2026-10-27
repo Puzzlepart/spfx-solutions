@@ -14,6 +14,11 @@ export interface SiteConfiguration {
   siteUrl: string
   notifyNews: boolean
   notifyAnnouncements: boolean
+  /**
+   * Severity values (`PzlSeverity`) that are notified without `PzlNotifyTeams`
+   * (`PzlNotifySeverities`). Empty means the `ALWAYS_NOTIFY_SEVERITIES` setting.
+   */
+  notifySeverities: string[]
   defaultGroupIds: string[]
   announcementListTitle: string
 }
@@ -24,6 +29,8 @@ interface ConfigurationItem {
   PzlSiteUrl: string
   PzlNotifyNews: boolean | null
   PzlNotifyAnnouncements: boolean | null
+  /** Multi-choice; missing on lists provisioned before the column was added */
+  PzlNotifySeverities?: string[] | null
   PzlDefaultGroupIds: string | null
   PzlAnnouncementListTitle: string | null
 }
@@ -45,6 +52,8 @@ export async function getSiteConfigurations(settings: Settings): Promise<SiteCon
         'PzlDefaultGroupIds',
         'PzlAnnouncementListTitle'
       ],
+      // Added after 1.1.0; dropped (and the query retried) when the list does not have it
+      optionalSelect: ['PzlNotifySeverities'],
       filter: 'PzlActive eq 1'
     }
   )
@@ -57,6 +66,7 @@ export async function getSiteConfigurations(settings: Settings): Promise<SiteCon
       siteUrl: item.PzlSiteUrl.trim().replace(/\/+$/, ''),
       notifyNews: item.PzlNotifyNews === true,
       notifyAnnouncements: item.PzlNotifyAnnouncements === true,
+      notifySeverities: (item.PzlNotifySeverities ?? []).map((s) => s.trim()).filter(Boolean),
       defaultGroupIds:
         (item.PzlDefaultGroupIds ?? '').match(GUID)?.map((g) => g.toLowerCase()) ?? [],
       announcementListTitle: item.PzlAnnouncementListTitle?.trim() || settings.announcementListTitle

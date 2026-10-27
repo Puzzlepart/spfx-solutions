@@ -43,12 +43,16 @@ export async function processAnnouncements(
     filter: `PzlStartDate le ${now} and PzlEndDate ge ${now} and PzlNotifiedAt eq null`
   })
 
+  // Levels that notify without "Notify in Teams": the row's own, else the app setting
+  const severities = site.notifySeverities.length
+    ? site.notifySeverities
+    : settings.alwaysNotifySeverities
   const candidates = items.filter(
-    (item) =>
-      item.PzlNotifyTeams === true ||
-      settings.alwaysNotifySeverities.includes((item.PzlSeverity ?? '').trim())
+    (item) => item.PzlNotifyTeams === true || severities.includes((item.PzlSeverity ?? '').trim())
   )
-  context.log(`${site.title}: ${items.length} active announcements, ${candidates.length} to notify`)
+  context.log(
+    `${site.title}: ${items.length} active announcements, ${candidates.length} to notify (always: ${severities.join(', ') || 'none'}${site.notifySeverities.length ? '' : ', from app setting'})`
+  )
 
   for (const item of candidates) {
     const label = `announcement ${item.Id} "${item.Title}" on ${site.siteUrl}`
