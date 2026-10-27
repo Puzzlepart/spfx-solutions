@@ -67,6 +67,10 @@ export interface IAnnouncement {
    */
   pinned: boolean
   /**
+   * Also shown as a banner by the AnnouncementBanner customizer (`PzlShowAsBanner`)
+   */
+  showAsBanner: boolean
+  /**
    * When the Teams notification for this announcement was sent (`PzlNotifiedAt`).
    * Set by the notification service, `null` if not notified.
    */

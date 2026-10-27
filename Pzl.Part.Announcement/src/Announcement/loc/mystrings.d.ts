@@ -22,6 +22,11 @@ declare interface IAnnouncementStrings {
   PeoplePickerPlaceholder: string
   PeoplePickerSearchingText: string
   PeoplePickerNoResultsText: string
+  Banner: {
+    DismissTitle: string
+    OpenDetails: string
+    CloseButtonText: string
+  }
   RichText: {
     ToolbarLabel: string
     Bold: string

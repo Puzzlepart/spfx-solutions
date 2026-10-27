@@ -1,4 +1,4 @@
-import React, { FC } from 'react'
+import React, { CSSProperties, FC } from 'react'
 import { Avatar, Link, Text } from '@fluentui/react-components'
 import { Alert16Regular } from '@fluentui/react-icons'
 import { format } from '@fluentui/react'
@@ -94,21 +94,36 @@ export interface IAnnouncementDetailsProps {
    * Fields to show, in order
    */
   fields: IListField[]
+  /**
+   * Hide the title (e.g. when the host already shows it as a dialog title)
+   */
+  hideTitle?: boolean
+  /**
+   * Style for the root element (e.g. to lift the popover's max width in a dialog)
+   */
+  style?: CSSProperties
 }
 
 /**
  * Popover content for an announcement: title, the selected fields and the
- * "notified in Teams" footer.
+ * "notified in Teams" footer. Also used by the banner's dialog.
  */
-export const AnnouncementDetails: FC<IAnnouncementDetailsProps> = ({ announcement, fields }) => {
+export const AnnouncementDetails: FC<IAnnouncementDetailsProps> = ({
+  announcement,
+  fields,
+  hideTitle,
+  style
+}) => {
   const showNotifiedAt = fields.some((field) => field.internalName === NOTIFIED_AT_FIELD)
   const bodyFields = fields.filter((field) => field.internalName !== NOTIFIED_AT_FIELD)
 
   return (
-    <div className={styles.popover}>
-      <Text weight='semibold' size={400} block>
-        {announcement.title}
-      </Text>
+    <div className={styles.popover} style={style}>
+      {!hideTitle && (
+        <Text weight='semibold' size={400} block>
+          {announcement.title}
+        </Text>
+      )}
       {bodyFields.map((field) => {
         const value = announcement.values[field.entityPropertyName]
         if (isEmptyValue(value)) return null

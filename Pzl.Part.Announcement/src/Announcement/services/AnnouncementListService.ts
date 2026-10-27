@@ -1,4 +1,4 @@
-import { WebPartContext } from '@microsoft/sp-webpart-base'
+import { BaseComponentContext } from '@microsoft/sp-component-base'
 import { spfi, SPFI, SPFx, PrincipalSource, PrincipalType } from '@pnp/sp'
 import '@pnp/sp/webs'
 import '@pnp/sp/lists'
@@ -122,11 +122,17 @@ export class AnnouncementListService {
   private _sp: SPFI
   private _fields: Promise<IListField[]>
 
+  /**
+   * @param context Component context (web part or application customizer)
+   * @param _listTitle Title of the announcement list
+   * @param siteUrl Site that hosts the list. Defaults to the current web.
+   */
   constructor(
-    context: WebPartContext,
-    private _listTitle: string = strings.AnnouncementsListName
+    context: BaseComponentContext,
+    private _listTitle: string = strings.AnnouncementsListName,
+    siteUrl?: string
   ) {
-    this._sp = spfi().using(SPFx(context))
+    this._sp = (siteUrl ? spfi(siteUrl) : spfi()).using(SPFx(context))
   }
 
   public get sp(): SPFI {

@@ -1,6 +1,6 @@
 # Announcement (Driftsmeldinger)
 
-[![version](https://img.shields.io/badge/version-1.4.1-orange.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.5.0-orange.svg)](https://semver.org)
 
 ## Summary
 
@@ -23,6 +23,8 @@ This is a web part that displays announcements from a SharePoint list. The annou
     * `PzlPinned` (Yes/No): pinned announcements are sorted first and shown with a pin icon.
     * `PzlNotifyTeams` (Yes/No, default No): ask the notification service to send a Teams activity notification for levels other than "Varsel". Not read by the web part.
     * `PzlNotifiedAt` (Date/Time, hidden in forms): set by the notification service when the notification has been sent. Shown in the popover as "Varslet i Teams dd.mm. kl. hh:mm".
+  * Column added in 1.5.0 (banner):
+    * `PzlShowAsBanner` (Yes/No, default No): the announcement is also shown as a banner at the top of the pages by the **AnnouncementBanner** application customizer, see [Banner](#banner-application-customizer). Not read by the web part.
 
 ## Web part properties
 
@@ -61,7 +63,33 @@ Invoke-PnPSiteTemplate -Path ".\Templates\DeepLinkCustomAction.xml"
 
 or directly with `Add-PnPCustomAction -Name AnnouncementDeepLink -Title AnnouncementDeepLink -Location ClientSideExtension.ApplicationCustomizer -ClientSideComponentId 9f3d6a2c-7b14-4e8f-a5c0-3d2e1f6b8a47 -ClientSideComponentProperties "{}" -Scope Site`. Check with `Get-PnPCustomAction -Scope Site`. The customizer does nothing on pages opened without the `driftsmelding` parameter.
 
-Lists provisioned with the 1.0.x template still work: the web part falls back to the original fields if `PzlPinned`/`PzlNotifiedAt` are missing. Re-run `Invoke-PnPSiteTemplate` to add the new columns.
+Lists provisioned with the 1.0.x template still work: the web part falls back to the original fields if `PzlPinned`/`PzlNotifiedAt`/`PzlShowAsBanner` are missing. Re-run `Invoke-PnPSiteTemplate` to add the new columns.
+
+## Banner (application customizer)
+
+The package also contains the application customizer **AnnouncementBanner** (component ID `c0d1edf4-db39-4feb-8052-a4c27ffe1954`). On every page of a site where it is registered it reads the announcement list and shows the active announcements with **Vis som banner** (`PzlShowAsBanner`) set as message bars in the page's top placeholder:
+
+* Colour and icon follow the announcement's level (`PzlSeverity`), like in the web part. Pinned announcements come first and get the pin icon.
+* The banner shows the title and the first 160 characters of the content. Clicking it (or Enter/Space) opens a dialog with the same content as the web part's popover: the fields in `popoverFields` (default: the web part's default popover fields) and the "notified in Teams" footer.
+* The close button dismisses the banner for the user. The dismissal is kept in `localStorage` (`pzl-announcement-banner-dismissed`) per announcement and version (`Modified`), so an edited announcement comes back. Dismissals for announcements that are no longer active are pruned.
+* Audience targeting is honoured when `targetAudience` is set, with the same rules as the web part.
+* The list is read first and the UI is loaded only when there is a banner to show, so pages without banner announcements cost one list query.
+
+The customizer is **not** registered by the package (the banner is optional). Register it on the intranet site, and on each site in the hub that should show the banners, with the template. `ListSiteUrl` points the banner at the list on the intranet site when it is registered elsewhere:
+
+```powershell
+Connect-PnPOnline -Url "https://<tenant>.sharepoint.com/sites/<site>" -Interactive -ClientId "<clientid>"
+Invoke-PnPSiteTemplate -Path ".\Templates\BannerCustomAction.xml" -Parameters @{ ListSiteUrl = "https://<tenant>.sharepoint.com" }
+```
+
+| Parameter / property | Default | Description |
+| --- | --- | --- |
+| `ListSiteUrl` / `listSiteUrl` | Current site | Site that hosts the Driftsmeldinger list. Users on the site must have read access to the list. |
+| `ListTitle` / `listTitle` | `Driftsmeldinger` | Title of the list |
+| `TargetAudience` / `targetAudience` | `false` | Filter on the list's audience targeting column |
+| `popoverFields` (property only) | Web part defaults | Fields shown in the dialog, keyed by internal name, e.g. `{"PzlContent":true,"PzlEndDate":true}`. Set it with `Set-PnPCustomAction` or in a copy of the template. |
+
+Remove the banner from a site with `Remove-PnPCustomAction -Identity AnnouncementBanner -Scope Site -Force`. Application customizers are not rendered in the Viva Connections mobile app, and the web part keeps showing the announcement in its list regardless of the banner.
 
 ## Installation
 
@@ -123,6 +151,12 @@ npm run package
 The package is written to `sharepoint/solution/pzl-announcement.sppkg`.
 
 ## Changelog
+
+### 1.5.0
+
+* New column **Vis som banner** (`PzlShowAsBanner`) in the template and in the web part's form and popover toggles. Re-run `Templates/Announcement.xml` to add it.
+* New application customizer **AnnouncementBanner** in the same package: shows the active announcements with **Vis som banner** set as message bars at the top of the pages, coloured by level, dismissable per user (remembered in `localStorage` until the announcement is edited), and with a dialog showing the same details as the web part's popover on click. Registered per site with `Templates/BannerCustomAction.xml`, which can point the banner at the list on another site (`ListSiteUrl`), so the whole hub can show the intranet's banners.
+* The announcement fetch (active items, audience targeting, severity mapping) is shared between the web part and the banner (`services/fetchAnnouncements.ts`), and `AnnouncementListService` can read a list on another site.
 
 ### 1.4.1
 

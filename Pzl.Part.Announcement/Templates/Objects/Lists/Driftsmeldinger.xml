@@ -15,6 +15,7 @@
         <FieldRef Name="PzlConsequences" />
         <FieldRef Name="PzlResponsible" />
         <FieldRef Name="PzlPinned" />
+        <FieldRef Name="PzlShowAsBanner" />
         <FieldRef Name="PzlNotifyTeams" />
         <FieldRef Name="PzlNotifiedAt" />
       </ViewFields>
