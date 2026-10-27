@@ -4,8 +4,13 @@ import { SharePointClient } from '../sharepoint'
 /** One row in the configuration list (`Templates/NotificationConfig.xml`) */
 export interface SiteConfiguration {
   id: number
-  /** Row title; shown under notifications as their source (e.g. the intranet name) */
+  /** Row title; used in the log, and as the notification source if the site title cannot be read */
   title: string
+  /**
+   * Shown under notifications as their source: the site's own title (web title),
+   * resolved by `resolveSourceName`. Falls back to `title`.
+   */
+  sourceName: string
   siteUrl: string
   notifyNews: boolean
   notifyAnnouncements: boolean
@@ -48,6 +53,7 @@ export async function getSiteConfigurations(settings: Settings): Promise<SiteCon
     .map((item) => ({
       id: item.Id,
       title: item.Title,
+      sourceName: item.Title,
       siteUrl: item.PzlSiteUrl.trim().replace(/\/+$/, ''),
       notifyNews: item.PzlNotifyNews === true,
       notifyAnnouncements: item.PzlNotifyAnnouncements === true,
@@ -55,4 +61,24 @@ export async function getSiteConfigurations(settings: Settings): Promise<SiteCon
         (item.PzlDefaultGroupIds ?? '').match(GUID)?.map((g) => g.toLowerCase()) ?? [],
       announcementListTitle: item.PzlAnnouncementListTitle?.trim() || settings.announcementListTitle
     }))
+}
+
+/**
+ * Sets `sourceName` to the site's title (`web/Title`), so the line under the
+ * notification shows the site as the user knows it rather than the name of the
+ * configuration row. Keeps the row title when the site title is empty or cannot
+ * be read (the error is logged, the run continues).
+ */
+export async function resolveSourceName(
+  site: SiteConfiguration,
+  log: { warn: (message: string) => void }
+): Promise<void> {
+  try {
+    const sp = new SharePointClient(site.siteUrl)
+    const web = await sp.get<{ Title: string | null }>('web?$select=Title')
+    const title = (web.Title ?? '').trim()
+    if (title) site.sourceName = title
+  } catch (error) {
+    log.warn(`${site.title}: could not read the site title, using the row title: ${error}`)
+  }
 }

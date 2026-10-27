@@ -2,7 +2,7 @@ import { app, InvocationContext, Timer } from '@azure/functions'
 import { getSettings } from '../config'
 import { NotificationState } from '../state'
 import { processAnnouncements } from '../notifications/announcements'
-import { getSiteConfigurations } from '../notifications/configuration'
+import { getSiteConfigurations, resolveSourceName } from '../notifications/configuration'
 import { processNews } from '../notifications/news'
 import { RecipientResolver } from '../notifications/recipients'
 
@@ -28,6 +28,7 @@ export async function notify(timer: Timer, context: InvocationContext): Promise<
   const state = new NotificationState(settings, context)
 
   for (const site of sites) {
+    await resolveSourceName(site, context)
     if (!site.defaultGroupIds.length) {
       context.warn(
         `${site.title}: no default recipient groups configured, items without audience are skipped`
