@@ -67,7 +67,7 @@ export async function processAnnouncements(
 
       const notification = {
         activityType: ANNOUNCEMENT_ACTIVITY_TYPE,
-        source: site.title,
+        source: site.sourceName,
         previewText: toPlainText(item.PzlContent) || item.Title,
         webUrl: buildLink(
           settings,
