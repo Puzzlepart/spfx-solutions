@@ -3,7 +3,7 @@
 Valgfritt tillegg til [Pzl.Part.Announcement](../README.md). En timer-trigget Azure Function sender varsler i Teams-aktivitetsfeeden (bjella) når
 
 - en **nyhetsside** publiseres på et konfigurert område, og
-- en **driftsmelding** blir aktiv og enten har meldingsnivået «Varsel» eller har «Varsle i Teams» satt.
+- en **driftsmelding** blir aktiv og enten har et meldingsnivå som er satt opp under «Nivåer som alltid varsles» for området, eller har «Varsle i Teams» satt.
 
 Varslene respekterer **målgruppestyring**: har elementet målgrupper, varsles medlemmene i de gruppene. Ellers varsles standardgruppene for området. Klikk på et driftsmeldingsvarsel åpner en Teams-fane som viser intranettet, med meldingen i popover. Klikk på et nyhetsvarsel åpner samme fane, og customizer-en **AnnouncementDeepLink** (Pzl.Part.Announcement 1.4.0 eller nyere, se [README](../README.md#deep-link-redirect-application-customizer)) sender brukeren rett til nyhetssiden. Stage view ble prøvd for nyheter og forkastet: artikkelen åpnet i et vindu uten intranettets navigasjon, og mobil støtter det ikke. Graph krever at lenkene er Teams-deep-linker, så fanen er enten varsel-appens egen fane (standard) eller en fane i intranettets egen Teams-app.
 
@@ -25,8 +25,7 @@ Timer (1 min)
   └─ Les aktive rader i Varslingskonfigurasjon (CONFIG_SITE_URL)
        └─ Per område
             ├─ Driftsmeldinger: PzlStartDate <= nå, PzlEndDate >= nå, PzlNotifiedAt tom,
-            │     og (PzlSeverity i radens «Nivåer som alltid varsles», ellers ALWAYS_NOTIFY_SEVERITIES,
-            │          eller PzlNotifyTeams = ja)
+            │     og (PzlSeverity i radens «Nivåer som alltid varsles» eller PzlNotifyTeams = ja)
             │     → sett PzlNotifiedAt (claim) → send → ved feil: nullstill PzlNotifiedAt
             └─ Nyheter: PromotedState = 2, FirstPublishedDate innen NEWS_LOOKBACK_DAYS,
                   publisert (hovedversjon, godkjent), ikke registrert i Table Storage
@@ -59,7 +58,7 @@ az login --tenant <tenant-id>
   -ConfigSiteUrl https://<tenant>.sharepoint.com
 ```
 
-Regionen må støtte Flex Consumption (`az functionapp list-flexconsumption-locations`). Norway East gjør det ikke per oktober 2026, West Europe gjør det. Valgfrie parametere: `-TeamsDeepLinkAppId`, `-TeamsDeepLinkEntityId`, `-ConfigListTitle`, `-AnnouncementListTitle`, `-AlwaysNotifySeverities`, `-DryRun` (standard `$true`).
+Regionen må støtte Flex Consumption (`az functionapp list-flexconsumption-locations`). Norway East gjør det ikke per oktober 2026, West Europe gjør det. Valgfrie parametere: `-TeamsDeepLinkAppId`, `-TeamsDeepLinkEntityId`, `-ConfigListTitle`, `-AnnouncementListTitle`, `-DryRun` (standard `$true`).
 
 Scriptet skriver ut **client ID** og **principal ID** for identiteten til slutt. De brukes i de neste stegene.
 
@@ -104,14 +103,14 @@ Grant-PnPAzureADAppSitePermission -AppId <MI_CLIENT> -DisplayName "Intranett-var
    | Områdeadresse | Full URL til området |
    | Varsle nyheter | Ja/nei |
    | Varsle driftsmeldinger | Ja/nei |
-   | Nivåer som alltid varsles | Meldingsnivåer som varsles uten at «Varsle i Teams» er satt på driftsmeldingen. Tom betyr standard fra `ALWAYS_NOTIFY_SEVERITIES` (normalt «Varsel»). Egne verdier kan skrives inn hvis lista har andre nivåer. |
+   | Nivåer som alltid varsles | Meldingsnivåer som varsles uten at «Varsle i Teams» er satt på driftsmeldingen, typisk «Varsel». Tom betyr at driftsmeldinger bare varsles når «Varsle i Teams» er satt. Egne verdier kan skrives inn hvis lista har andre nivåer. |
    | Standard mottakergrupper | Objekt-ID for én eller flere Entra-grupper, én per linje. Brukes når elementet ikke har målgruppe. |
    | Driftsmeldingsliste | Tom for standard (`Driftsmeldinger`), ellers tittel på lista |
    | Aktiv | Ja |
 
    Et område med egen mottakergruppe (for eksempel en lederportal) får en egen rad med den gruppa som standard.
 
-   Kolonnen «Nivåer som alltid varsles» kom til etter første utgave av malen. Kjør `Invoke-PnPSiteTemplate -Path .\Templates\NotificationConfig.xml` på nytt for å legge den til i en eksisterende liste. Tjenesten fungerer uten kolonnen og bruker da `ALWAYS_NOTIFY_SEVERITIES`.
+   Kolonnen «Nivåer som alltid varsles» kom til etter første utgave av malen og erstatter app-innstillingen `ALWAYS_NOTIFY_SEVERITIES`. Kjør `Invoke-PnPSiteTemplate -Path .\Templates\NotificationConfig.xml` på nytt for å legge den til i en eksisterende liste, og fyll inn «Varsel» på radene som skal ha dagens oppførsel. Mangler kolonnen, eller er den tom, varsles driftsmeldinger bare når «Varsle i Teams» er satt.
 
 4. Aktiver målgruppestyring på Site Pages-biblioteket og driftsmeldingslista der målgrupper skal brukes. Uten målgruppestyring brukes alltid standardgruppene.
 
@@ -186,7 +185,6 @@ App-innstillingene ble satt i steg 1, bortsett fra `TEAMS_DEEPLINK_APP_ID`, som 
 | `CONFIG_SITE_URL` | *(påkrevd)* | Område med konfigurasjonslista |
 | `CONFIG_LIST_TITLE` | `Varslingskonfigurasjon` | Tittel på konfigurasjonslista |
 | `ANNOUNCEMENT_LIST_TITLE` | `Driftsmeldinger` | Standard tittel på driftsmeldingslista |
-| `ALWAYS_NOTIFY_SEVERITIES` | `Varsel,Alert` | Meldingsnivåer som alltid varsles, for rader der «Nivåer som alltid varsles» er tom. Sett tom for å varsle bare ved «Varsle i Teams». |
 | `NEWS_LOOKBACK_DAYS` | `7` | Hvor langt tilbake nye nyheter hentes |
 | `INCLUDE_GUESTS` | `false` | Ta med gjestebrukere som mottakere |
 | `TEAMS_DEEPLINK_APP_ID` | *(påkrevd)* | Teams-app som varslene åpner: varsel-appen selv (steg 4) eller intranett-appen. Uten denne sendes ingenting, og loggen sier hvorfor. |
@@ -220,7 +218,7 @@ Svaret inneholder `ok` og eventuell Graph-feil. Varselet skal dukke opp i bjella
 
 
 1. Konfigurasjonsrad mot en testgruppe, setup policy mot samme gruppe.
-2. Test de tre variantene: nyhet, driftsmelding med nivå «Varsel», driftsmelding med «Varsle i Teams».
+2. Test de tre variantene: nyhet, driftsmelding med et nivå fra «Nivåer som alltid varsles», driftsmelding med «Varsle i Teams».
 3. Klikk varselet på desktop, web og mobil og se at riktig side/driftsmelding åpnes.
 4. Sjekk at `PzlNotifiedAt` settes på driftsmeldingen og vises i webdelens popover.
 5. Bytt standardgruppe og setup policy til produksjonsgruppene.

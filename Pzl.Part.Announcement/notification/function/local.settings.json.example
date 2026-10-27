@@ -12,7 +12,6 @@
     "CONFIG_SITE_URL": "https://contoso.sharepoint.com",
     "CONFIG_LIST_TITLE": "Varslingskonfigurasjon",
     "ANNOUNCEMENT_LIST_TITLE": "Driftsmeldinger",
-    "ALWAYS_NOTIFY_SEVERITIES": "Varsel,Alert",
     "NEWS_LOOKBACK_DAYS": "7",
     "INCLUDE_GUESTS": "false",
 

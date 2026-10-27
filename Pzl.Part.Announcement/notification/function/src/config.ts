@@ -9,8 +9,6 @@ export interface Settings {
   configListTitle: string
   /** Default title of the announcement list (can be overridden per configuration row) */
   announcementListTitle: string
-  /** Severity values (PzlSeverity) that are always notified, regardless of PzlNotifyTeams */
-  alwaysNotifySeverities: string[]
   /** How far back to look for new news pages */
   newsLookbackDays: number
   /** Include guest users as recipients */
@@ -44,10 +42,6 @@ export function getSettings(): Settings {
     configSiteUrl,
     configListTitle: env('CONFIG_LIST_TITLE', 'Varslingskonfigurasjon'),
     announcementListTitle: env('ANNOUNCEMENT_LIST_TITLE', 'Driftsmeldinger'),
-    alwaysNotifySeverities: env('ALWAYS_NOTIFY_SEVERITIES', 'Varsel,Alert')
-      .split(',')
-      .map((s) => s.trim())
-      .filter(Boolean),
     newsLookbackDays: Number(env('NEWS_LOOKBACK_DAYS', '7')) || 7,
     includeGuests: bool(env('INCLUDE_GUESTS', 'false')),
     teamsDeepLinkAppId: env('TEAMS_DEEPLINK_APP_ID'),

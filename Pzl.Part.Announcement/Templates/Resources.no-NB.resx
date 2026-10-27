@@ -131,7 +131,7 @@
     <value>Varsle i Teams</value>
   </data>
   <data name="SiteFields_NotifyTeams_Description" xml:space="preserve">
-    <value>Send varsel i Teams til mottakerne når meldingen blir aktiv. Meldinger med nivået «Varsel» varsles alltid.</value>
+    <value>Send varsel i Teams til mottakerne når meldingen blir aktiv. Nivåer satt opp under «Nivåer som alltid varsles» i varslingskonfigurasjonen varsles uansett.</value>
   </data>
   <data name="SiteFields_Pinned_DisplayName" xml:space="preserve">
     <value>Fest til toppen</value>
@@ -179,7 +179,7 @@
     <value>Nivåer som alltid varsles</value>
   </data>
   <data name="SiteFields_NotifySeverities_Description" xml:space="preserve">
-    <value>Meldingsnivåer som varsles i Teams uten at «Varsle i Teams» er satt på driftsmeldingen. Tom betyr standard fra tjenesten (ALWAYS_NOTIFY_SEVERITIES, normalt «Varsel»).</value>
+    <value>Meldingsnivåer som varsles i Teams uten at «Varsle i Teams» er satt på driftsmeldingen. Tom betyr at driftsmeldinger bare varsles når «Varsle i Teams» er satt.</value>
   </data>
   <data name="SiteFields_NotifyDefaultGroupIds_DisplayName" xml:space="preserve">
     <value>Standard mottakergrupper</value>
