@@ -9,6 +9,14 @@
           "manifest": "./src/Announcement/manifest.json"
         }
       ]
+    },
+    "announcement-deep-link-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/announcementDeepLink/AnnouncementDeepLinkApplicationCustomizer.js",
+          "manifest": "./src/extensions/announcementDeepLink/AnnouncementDeepLinkApplicationCustomizer.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
