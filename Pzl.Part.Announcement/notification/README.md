@@ -135,7 +135,7 @@ Aktivitetsvarsler må sendes fra en Teams-app der `webApplicationInfo.id` er cli
    | `-AppId` | Ny GUID første gang. Ta vare på den og bruk samme ved oppdateringer. |
    | `-Version` | Øk ved hver opplasting, f.eks. 1.0.0, 1.0.1. |
 
-   Tekstene i `activityTypes` i `teams-app/manifest.json` («Driftsmelding: {title}», «Ny nyhet: {title}») er det brukeren ser i bjella og kan tilpasses før bygging. Linjen under varselet viser tittelen på området varselet kommer fra (områdets navn i SharePoint, lest fra `web/Title` ved hver kjøring). Kan ikke tittelen leses, brukes tittelen på konfigurasjonsraden i steg 3 i stedet.
+   Tekstene i `activityTypes` i `teams-app/manifest.json` er det brukeren ser i bjella og kan tilpasses før bygging: driftsmeldinger vises som «Driftsmelding: {title}», nyheter bare med tittelen («{title}»), siden typen framgår av aktivitetstypens beskrivelse («Nyhet») og forhåndsvisningen. Linjen under varselet viser tittelen på området varselet kommer fra (områdets navn i SharePoint, lest fra `web/Title` ved hver kjøring). Kan ikke tittelen leses, brukes tittelen på konfigurasjonsraden i steg 3 i stedet.
 
 2. Last opp zip-fila i Teams admin center (Teams apps > Manage apps > Upload new app).
 3. Lag en **app setup policy** som installerer appen for mottakerne (uten å feste den i appfeltet), og tildel den til samme grupper som i konfigurasjonen. Start med en testgruppe.
