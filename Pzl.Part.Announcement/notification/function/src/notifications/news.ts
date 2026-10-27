@@ -4,7 +4,7 @@ import { sendActivityNotification } from '../graph'
 import { odataDate, SharePointClient } from '../sharepoint'
 import { NotificationState } from '../state'
 import { SiteConfiguration } from './configuration'
-import { buildStageLink, toPlainText } from './deeplink'
+import { buildLink, toPlainText } from './deeplink'
 import { RecipientResolver } from './recipients'
 
 /** Activity type in the Teams app manifest */
@@ -80,7 +80,9 @@ export async function processNews(
         activityType: NEWS_ACTIVITY_TYPE,
         source: site.sourceName,
         previewText: toPlainText(page.Description) || page.Title,
-        webUrl: buildStageLink(settings, pageUrl, page.Title),
+        // The tab lands on the intranet home page with `?driftsmelding=page:<path>`;
+        // the AnnouncementDeepLink customizer (web part 1.4.0+) redirects to the page.
+        webUrl: buildLink(settings, `page:${page.FileRef}`, pageUrl),
         templateParameters: { title: page.Title }
       }
 
