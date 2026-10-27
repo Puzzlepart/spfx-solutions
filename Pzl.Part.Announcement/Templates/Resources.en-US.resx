@@ -131,7 +131,7 @@
     <value>Notify in Teams</value>
   </data>
   <data name="SiteFields_NotifyTeams_Description" xml:space="preserve">
-    <value>Send a Teams notification to the recipients when the announcement becomes active. Announcements with level "Alert" are always notified.</value>
+    <value>Send a Teams notification to the recipients when the announcement becomes active. Levels listed under "Levels that always notify" in the notification configuration are notified regardless.</value>
   </data>
   <data name="SiteFields_Pinned_DisplayName" xml:space="preserve">
     <value>Pin to top</value>
@@ -179,7 +179,7 @@
     <value>Levels that always notify</value>
   </data>
   <data name="SiteFields_NotifySeverities_Description" xml:space="preserve">
-    <value>Message levels that are notified in Teams without "Notify in Teams" being set on the announcement. Empty means the service default (ALWAYS_NOTIFY_SEVERITIES, normally "Alert").</value>
+    <value>Message levels that are notified in Teams without "Notify in Teams" being set on the announcement. Empty means announcements are notified only when "Notify in Teams" is set.</value>
   </data>
   <data name="SiteFields_NotifyDefaultGroupIds_DisplayName" xml:space="preserve">
     <value>Default recipient groups</value>

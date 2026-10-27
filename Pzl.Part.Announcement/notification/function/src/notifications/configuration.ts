@@ -16,7 +16,8 @@ export interface SiteConfiguration {
   notifyAnnouncements: boolean
   /**
    * Severity values (`PzlSeverity`) that are notified without `PzlNotifyTeams`
-   * (`PzlNotifySeverities`). Empty means the `ALWAYS_NOTIFY_SEVERITIES` setting.
+   * (`PzlNotifySeverities`). Empty means announcements are notified only when
+   * `PzlNotifyTeams` is set.
    */
   notifySeverities: string[]
   defaultGroupIds: string[]
