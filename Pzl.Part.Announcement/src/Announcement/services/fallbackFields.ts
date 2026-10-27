@@ -45,6 +45,7 @@ export const FALLBACK_FIELDS: IListField[] = [
   field('PzlConsequences', 'Note'),
   field('PzlResponsible', 'User'),
   field('PzlPinned', 'Boolean'),
+  field('PzlShowAsBanner', 'Boolean'),
   field('PzlNotifyTeams', 'Boolean'),
   field('PzlNotifiedAt', 'DateTime', { readOnly: true, showInNewForm: false })
 ]

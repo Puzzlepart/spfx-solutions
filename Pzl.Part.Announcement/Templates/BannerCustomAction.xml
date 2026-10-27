@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!--
+  Optional: registers the AnnouncementBanner application customizer on a site. It shows the
+  active announcements marked "Vis som banner" as message bars at the top of every page.
+  Apply to the intranet site, and to each site in the hub that should show the banners:
+    Invoke-PnPSiteTemplate -Path .\Templates\BannerCustomAction.xml -Parameters @{ ListSiteUrl = "https://<tenant>.sharepoint.com" }
+  Parameters (all optional):
+    ListSiteUrl     Site that hosts the Driftsmeldinger list. Empty means the current site.
+    ListTitle       Title of the list. Empty means "Driftsmeldinger".
+    TargetAudience  true/false, filter on the list's audience targeting column. Default false.
+  Idempotent: re-running the template updates the existing custom action.
+-->
+<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
+  <pnp:Parameters>
+    <pnp:Parameter Key="ListSiteUrl" Required="false"></pnp:Parameter>
+    <pnp:Parameter Key="ListTitle" Required="false"></pnp:Parameter>
+    <pnp:Parameter Key="TargetAudience" Required="false">false</pnp:Parameter>
+  </pnp:Parameters>
+  <pnp:Templates ID="CONTAINER-TEMPLATE-ANNOUNCEMENT-BANNER">
+    <pnp:ProvisioningTemplate ID="TEMPLATE-ANNOUNCEMENT-BANNER" Version="1" Scope="RootSite">
+      <pnp:CustomActions>
+        <pnp:SiteCustomActions>
+          <pnp:CustomAction
+            Name="AnnouncementBanner"
+            Title="AnnouncementBanner"
+            Description="Shows announcements marked 'Vis som banner' at the top of the pages"
+            Location="ClientSideExtension.ApplicationCustomizer"
+            ClientSideComponentId="c0d1edf4-db39-4feb-8052-a4c27ffe1954"
+            ClientSideComponentProperties="{&quot;listSiteUrl&quot;:&quot;{parameter:ListSiteUrl}&quot;,&quot;listTitle&quot;:&quot;{parameter:ListTitle}&quot;,&quot;targetAudience&quot;:{parameter:TargetAudience}}"
+            Sequence="110"
+            RegistrationType="None" />
+        </pnp:SiteCustomActions>
+      </pnp:CustomActions>
+    </pnp:ProvisioningTemplate>
+  </pnp:Templates>
+</pnp:Provisioning>

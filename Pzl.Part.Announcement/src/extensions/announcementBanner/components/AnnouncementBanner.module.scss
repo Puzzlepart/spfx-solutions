@@ -1,0 +1,28 @@
+.banner {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background-color: transparent;
+
+  .message {
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 0;
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: 2px solid var(--colorStrokeFocus2);
+      outline-offset: -2px;
+    }
+  }
+
+  .pin {
+    vertical-align: text-bottom;
+    margin-right: 4px;
+  }
+}
+
+.dialogBody {
+  max-height: 70vh;
+  overflow-y: auto;
+}

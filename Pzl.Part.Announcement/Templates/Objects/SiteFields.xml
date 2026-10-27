@@ -21,5 +21,8 @@
   <Field Type="Boolean" DisplayName="{resource:SiteFields_Pinned_DisplayName}" Description="{resource:SiteFields_Pinned_Description}" Group="Puzzlepart" ID="{7e89dd82-1342-4ac7-a257-18176dc17266}" StaticName="PzlPinned" Name="PzlPinned">
     <Default>0</Default>
   </Field>
+  <Field Type="Boolean" DisplayName="{resource:SiteFields_ShowAsBanner_DisplayName}" Description="{resource:SiteFields_ShowAsBanner_Description}" Group="Puzzlepart" ID="{36425670-4466-4af9-9550-d57574335430}" StaticName="PzlShowAsBanner" Name="PzlShowAsBanner">
+    <Default>0</Default>
+  </Field>
   <Field Type="DateTime" DisplayName="{resource:SiteFields_NotifiedAt_DisplayName}" Description="{resource:SiteFields_NotifiedAt_Description}" Format="DateTime" ShowInNewForm="FALSE" ShowInEditForm="FALSE" Group="Puzzlepart" ID="{8f0539a0-f520-42a2-b2fb-56a56ce33d1d}" StaticName="PzlNotifiedAt" Name="PzlNotifiedAt" />
 </pnp:SiteFields>

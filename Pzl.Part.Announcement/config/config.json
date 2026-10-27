@@ -10,6 +10,14 @@
         }
       ]
     },
+    "announcement-banner-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/announcementBanner/AnnouncementBannerApplicationCustomizer.js",
+          "manifest": "./src/extensions/announcementBanner/AnnouncementBannerApplicationCustomizer.manifest.json"
+        }
+      ]
+    },
     "announcement-deep-link-application-customizer": {
       "components": [
         {

@@ -23,6 +23,11 @@ define([], function () {
     PeoplePickerPlaceholder: 'Søk etter navn eller e-post',
     PeoplePickerSearchingText: 'Søker …',
     PeoplePickerNoResultsText: 'Ingen treff',
+    Banner: {
+      DismissTitle: 'Lukk banneret',
+      OpenDetails: 'Vis detaljer for {0}',
+      CloseButtonText: 'Lukk'
+    },
     RichText: {
       ToolbarLabel: 'Formatering',
       Bold: 'Fet',
@@ -49,6 +54,7 @@ define([], function () {
       PzlConsequences: 'Eventuelle konsekvenser',
       PzlResponsible: 'Ansvarlig',
       PzlPinned: 'Fest til toppen',
+      PzlShowAsBanner: 'Vis som banner',
       PzlNotifyTeams: 'Varsle i Teams',
       PzlNotifiedAt: 'Varslet i Teams'
     }

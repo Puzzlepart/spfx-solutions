@@ -9,10 +9,22 @@ export const CONTENT_FIELD = 'PzlContent'
 export const NOTIFIED_AT_FIELD = 'PzlNotifiedAt'
 
 /**
- * Fields added in v1.1.0 (Teams notification). Lists provisioned with an older
- * template do not have them, so queries are retried without them on failure.
+ * Internal name of the "show as banner" field (v1.5.0), read by the
+ * AnnouncementBanner application customizer
  */
-export const NOTIFICATION_FIELDS = ['PzlPinned', 'PzlNotifyTeams', 'PzlNotifiedAt']
+export const SHOW_AS_BANNER_FIELD = 'PzlShowAsBanner'
+
+/**
+ * Fields added after v1.0.0 (Teams notification in v1.1.0, banner in v1.5.0).
+ * Lists provisioned with an older template do not have them, so queries are
+ * retried without them on failure.
+ */
+export const OPTIONAL_FIELDS = [
+  'PzlPinned',
+  'PzlNotifyTeams',
+  'PzlNotifiedAt',
+  SHOW_AS_BANNER_FIELD
+]
 
 /**
  * Default fields shown in the popover (matches the behaviour before the fields

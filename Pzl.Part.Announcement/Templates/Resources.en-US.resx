@@ -145,6 +145,12 @@
   <data name="SiteFields_NotifiedAt_Description" xml:space="preserve">
     <value>Set automatically by the notification service when the notification has been sent</value>
   </data>
+  <data name="SiteFields_ShowAsBanner_DisplayName" xml:space="preserve">
+    <value>Show as banner</value>
+  </data>
+  <data name="SiteFields_ShowAsBanner_Description" xml:space="preserve">
+    <value>Also show the announcement as a banner at the top of the pages while it is active. Users can dismiss the banner.</value>
+  </data>
   <data name="ContentTypes_NotificationConfig_Name" xml:space="preserve">
     <value>Notification configuration</value>
   </data>

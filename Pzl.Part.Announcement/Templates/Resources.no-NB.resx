@@ -145,6 +145,12 @@
   <data name="SiteFields_NotifiedAt_Description" xml:space="preserve">
     <value>Settes automatisk av varslingstjenesten når varselet er sendt</value>
   </data>
+  <data name="SiteFields_ShowAsBanner_DisplayName" xml:space="preserve">
+    <value>Vis som banner</value>
+  </data>
+  <data name="SiteFields_ShowAsBanner_Description" xml:space="preserve">
+    <value>Vis meldingen også som et banner øverst på sidene mens den er aktiv. Brukeren kan lukke banneret.</value>
+  </data>
   <data name="ContentTypes_NotificationConfig_Name" xml:space="preserve">
     <value>Varslingskonfigurasjon</value>
   </data>

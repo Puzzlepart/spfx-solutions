@@ -3,7 +3,7 @@
   "solution": {
     "name": "Announcements by Puzzlepart",
     "id": "a65ac2f2-48d4-41ad-81b2-4c89e28c3481",
-    "version": "1.4.1.0",
+    "version": "1.5.0.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
@@ -31,17 +31,32 @@
         "description": "Activates the Announcements (Driftsmeldinger) web part.",
         "id": "2db0bc78-5fba-4740-a35a-3971f718f070",
         "version": "1.0.0.0",
-        "componentIds": ["ddfa2478-1872-408c-8f8f-a1c704f93d66"]
+        "componentIds": [
+          "ddfa2478-1872-408c-8f8f-a1c704f93d66"
+        ]
       },
       {
         "title": "Announcements by Puzzlepart - deep link redirect",
         "description": "Registers the AnnouncementDeepLink application customizer, which sends the user to the page a ?driftsmelding=page: deep link points to before the page renders.",
         "id": "c4a1e9d7-2f36-4b58-9a0e-6d7f8b1c3e52",
         "version": "1.0.0.0",
-        "componentIds": ["9f3d6a2c-7b14-4e8f-a5c0-3d2e1f6b8a47"],
+        "componentIds": [
+          "9f3d6a2c-7b14-4e8f-a5c0-3d2e1f6b8a47"
+        ],
         "assets": {
-          "elementManifests": ["elements.xml"]
+          "elementManifests": [
+            "elements.xml"
+          ]
         }
+      },
+      {
+        "title": "Announcements by Puzzlepart - banner",
+        "description": "Makes the AnnouncementBanner application customizer available. It is registered per site with Templates/BannerCustomAction.xml and shows announcements marked 'Vis som banner' at the top of the pages.",
+        "id": "2ef9765f-6b7e-4176-b0ec-d1cba0eccd86",
+        "version": "1.0.0.0",
+        "componentIds": [
+          "c0d1edf4-db39-4feb-8052-a4c27ffe1954"
+        ]
       }
     ]
   },
