@@ -1,8 +1,10 @@
 <?xml version="1.0"?>
 <!--
-  Optional: registers the AnnouncementBanner application customizer on a site. It shows the
+  Optional: registers the AnnouncementBanner application customizer on one site. It shows the
   active announcements marked "Vis som banner" as message bars at the top of every page.
-  Apply to the intranet site, and to each site in the hub that should show the banners:
+  The site's own URL is passed as targeting ({hosturl}{sitecollection}), so the banner is shown
+  on this site collection only. For a hub, or several sites at once, use the tenant-wide
+  registration instead (see README.md): a site that is covered by both shows the banner once.
     Invoke-PnPSiteTemplate -Path .\Templates\BannerCustomAction.xml -Parameters @{ ListSiteUrl = "https://<tenant>.sharepoint.com" }
   Parameters (all optional):
     ListSiteUrl     Site that hosts the Driftsmeldinger list. Empty means the current site.
@@ -26,7 +28,7 @@
             Description="Shows announcements marked 'Vis som banner' at the top of the pages"
             Location="ClientSideExtension.ApplicationCustomizer"
             ClientSideComponentId="c0d1edf4-db39-4feb-8052-a4c27ffe1954"
-            ClientSideComponentProperties="{&quot;listSiteUrl&quot;:&quot;{parameter:ListSiteUrl}&quot;,&quot;listTitle&quot;:&quot;{parameter:ListTitle}&quot;,&quot;targetAudience&quot;:{parameter:TargetAudience}}"
+            ClientSideComponentProperties="{&quot;listSiteUrl&quot;:&quot;{parameter:ListSiteUrl}&quot;,&quot;listTitle&quot;:&quot;{parameter:ListTitle}&quot;,&quot;targetAudience&quot;:{parameter:TargetAudience},&quot;siteUrls&quot;:[&quot;{hosturl}{sitecollection}&quot;]}"
             Sequence="110"
             RegistrationType="None" />
         </pnp:SiteCustomActions>

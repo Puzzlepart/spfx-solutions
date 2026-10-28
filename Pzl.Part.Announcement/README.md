@@ -1,6 +1,6 @@
 # Announcement (Driftsmeldinger)
 
-[![version](https://img.shields.io/badge/version-1.5.0-orange.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.5.1-orange.svg)](https://semver.org)
 
 ## Summary
 
@@ -73,23 +73,51 @@ The package also contains the application customizer **AnnouncementBanner** (com
 * The banner shows the title and the first 160 characters of the content. Clicking it (or Enter/Space) opens a dialog with the same content as the web part's popover: the fields in `popoverFields` (default: the web part's default popover fields) and the "notified in Teams" footer.
 * The close button dismisses the banner for the user. The dismissal is kept in `localStorage` (`pzl-announcement-banner-dismissed`) per announcement and version (`Modified`), so an edited announcement comes back. Dismissals for announcements that are no longer active are pruned.
 * Audience targeting is honoured when `targetAudience` is set, with the same rules as the web part.
-* The list is read first and the UI is loaded only when there is a banner to show, so pages without banner announcements cost one list query.
+* The customizer decides from the page context alone whether the page is targeted (see below). Only on targeted pages is the list code loaded and the list read, and the UI is loaded only when there is a banner to show. Pages outside the targeting cost a few KB of script, which is what makes the tenant-wide registration affordable.
 
-The customizer is **not** registered by the package (the banner is optional). Register it on the intranet site, and on each site in the hub that should show the banners, with the template. `ListSiteUrl` points the banner at the list on the intranet site when it is registered elsewhere:
+### Where the banner is shown (targeting)
+
+The banner is shown on a page when one of these properties matches. With none of them set, it is shown nowhere.
+
+| Property | Matches |
+| --- | --- |
+| `siteUrls` | Absolute site URLs. A site collection URL also covers its subsites (`/sites/x` covers `/sites/x/sub`, not `/sites/xy`). The root site collection URL matches the root site and its subsites only. Case and trailing slash are ignored. |
+| `hubSiteUrls` | The hub site's absolute URL or its hub site ID (GUID). Every site associated with that hub shows the banner, the hub site included. Sites are matched on their own hub only, so a hub associated to another hub must be listed itself. |
+| `everywhere` | `true` shows the banner on every site the customizer is registered on. |
+
+### Registering the banner
+
+**Tenant-wide (hub and lists of sites).** When the package is deployed tenant-wide ("make available to all sites"), the feature adds a row for the customizer to the **Tenant Wide Extensions** list in the tenant app catalog, with no targeting. Edit the row (Site contents of the app catalog, column *Component Properties*) and set the list site and the targeting, e.g.
+
+```json
+{
+  "listSiteUrl": "https://<tenant>.sharepoint.com",
+  "siteUrls": ["https://<tenant>.sharepoint.com", "https://<tenant>.sharepoint.com/sites/x"],
+  "hubSiteUrls": ["https://<tenant>.sharepoint.com/sites/abc"],
+  "targetAudience": false
+}
+```
+
+The change applies on the next page load; nothing is deployed or scripted per site. Sites that join the hub get the banner, sites that leave lose it. With PnP: `Set-PnPListItem -List "Tenant Wide Extensions" -Identity <id> -Values @{ TenantWideExtensionComponentProperties = '<json>' }` on the app catalog site. Was the package not deployed tenant-wide, the row can be added by hand with *Component Id* `c0d1edf4-db39-4feb-8052-a4c27ffe1954` and *Location* `ClientSideExtension.ApplicationCustomizer`.
+
+**One site.** `Templates/BannerCustomAction.xml` registers the customizer on a single site collection and passes that site's URL as `siteUrls`, so a site owner can turn the banner on without touching the app catalog. `ListSiteUrl` points it at the list on the intranet site when registered elsewhere:
 
 ```powershell
 Connect-PnPOnline -Url "https://<tenant>.sharepoint.com/sites/<site>" -Interactive -ClientId "<clientid>"
 Invoke-PnPSiteTemplate -Path ".\Templates\BannerCustomAction.xml" -Parameters @{ ListSiteUrl = "https://<tenant>.sharepoint.com" }
 ```
 
+A site covered by both registrations shows the banner once: the first instance on the page sets a marker on `window`, and the second does nothing. Remove a site registration with `Remove-PnPCustomAction -Identity AnnouncementBanner -Scope Site -Force`.
+
 | Parameter / property | Default | Description |
 | --- | --- | --- |
-| `ListSiteUrl` / `listSiteUrl` | Current site | Site that hosts the Driftsmeldinger list. Users on the site must have read access to the list. |
+| `ListSiteUrl` / `listSiteUrl` | Current site | Site that hosts the Driftsmeldinger list. Users on the site must have read access to the list. Set it on the tenant-wide row. |
 | `ListTitle` / `listTitle` | `Driftsmeldinger` | Title of the list |
 | `TargetAudience` / `targetAudience` | `false` | Filter on the list's audience targeting column |
-| `popoverFields` (property only) | Web part defaults | Fields shown in the dialog, keyed by internal name, e.g. `{"PzlContent":true,"PzlEndDate":true}`. Set it with `Set-PnPCustomAction` or in a copy of the template. |
+| `siteUrls`, `hubSiteUrls`, `everywhere` | none | Targeting, see above. The site template sets `siteUrls` to the site itself. |
+| `popoverFields` (property only) | Web part defaults | Fields shown in the dialog, keyed by internal name, e.g. `{"PzlContent":true,"PzlEndDate":true}`. |
 
-Remove the banner from a site with `Remove-PnPCustomAction -Identity AnnouncementBanner -Scope Site -Force`. Application customizers are not rendered in the Viva Connections mobile app, and the web part keeps showing the announcement in its list regardless of the banner.
+Application customizers are not rendered in the Viva Connections mobile app, and the web part keeps showing the announcement in its list regardless of the banner.
 
 ## Installation
 
@@ -151,6 +179,13 @@ npm run package
 The package is written to `sharepoint/solution/pzl-announcement.sppkg`.
 
 ## Changelog
+
+### 1.5.1
+
+* Banner targeting: new properties `siteUrls`, `hubSiteUrls` and `everywhere` decide where the banner is shown, from the page context alone. With no targeting the banner is shown nowhere.
+* Tenant-wide registration: the banner feature now carries a `ClientSideInstance.xml`, so a tenant-wide deployment adds the customizer to the Tenant Wide Extensions list with no targeting. Set `listSiteUrl` and the targeting on that row to show the banner on a hub and on chosen sites, with no per-site scripting; joining and leaving the hub is picked up on the next page load.
+* `Templates/BannerCustomAction.xml` passes the site's own URL as `siteUrls`. A site covered by both a site registration and the tenant-wide row shows the banner once.
+* The customizer's entry bundle holds only the targeting check; the list code is loaded on targeted pages and the UI when there is a banner to show.
 
 ### 1.5.0
 
