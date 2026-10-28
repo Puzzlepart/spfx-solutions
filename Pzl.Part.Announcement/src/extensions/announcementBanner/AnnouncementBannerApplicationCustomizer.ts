@@ -6,24 +6,31 @@ import {
   PlaceholderContent,
   PlaceholderName
 } from '@microsoft/sp-application-base'
-import strings from 'AnnouncementStrings'
-import { AnnouncementListService } from '../../Announcement/services/AnnouncementListService'
-import { fetchAnnouncements } from '../../Announcement/services/fetchAnnouncements'
-import { DEFAULT_POPOVER_FIELDS } from '../../Announcement/constants'
-import { IAnnouncement, IListField } from '../../Announcement/components/types'
+import { getPageLocation, IBannerTargeting, isTargeted } from './targeting'
+import type { IBannerListOptions } from './loadBanner'
 import type { IAnnouncementBannerProps } from './components/AnnouncementBanner'
 
 const LOG_SOURCE = 'AnnouncementBannerApplicationCustomizer'
 
 /**
- * Properties of the custom action (`ClientSideComponentProperties`), see
- * `Templates/BannerCustomAction.xml`. All are optional.
+ * Marker on `window` set by the first instance that shows the banner on a
+ * page. A site can be registered both tenant-wide and with its own custom
+ * action; the second instance then does nothing instead of rendering twice.
  */
-export interface IAnnouncementBannerApplicationCustomizerProperties {
+const INSTANCE_MARKER = '__pzlAnnouncementBanner'
+
+/**
+ * Properties of the custom action (`ClientSideComponentProperties`), see
+ * `Templates/BannerCustomAction.xml` and `sharepoint/assets/ClientSideInstance.xml`.
+ * All are optional, but with no targeting (`siteUrls`, `hubSiteUrls` or
+ * `everywhere`) the banner is shown nowhere.
+ */
+export interface IAnnouncementBannerApplicationCustomizerProperties
+  extends IBannerTargeting, IBannerListOptions {
   /**
-   * Site that hosts the announcement list. Defaults to the current web, so the
-   * same custom action works on the intranet site and (pointed at it) on the
-   * other sites in the hub.
+   * Site that hosts the announcement list. Defaults to the current web, so a
+   * site-level registration on the intranet needs nothing; a tenant-wide
+   * registration points this at the intranet site.
    */
   listSiteUrl?: string
   /**
@@ -47,9 +54,12 @@ export interface IAnnouncementBannerApplicationCustomizerProperties {
  * (remembered in localStorage until the announcement changes) and clicked to
  * open a dialog with the same details as the web part's popover.
  *
- * The list is read first; the UI bundle is loaded only when there is
- * something to show, so pages without banner announcements pay for one list
- * query and nothing else.
+ * The entry bundle only decides whether the page is targeted (`siteUrls`,
+ * `hubSiteUrls`, `everywhere`), synchronously from the page context. On a
+ * targeted page the list code is loaded and the list read; the UI bundle is
+ * loaded only when there is something to show. Pages outside the targeting
+ * pay for this file alone, which is what makes a tenant-wide registration
+ * affordable.
  */
 export default class AnnouncementBannerApplicationCustomizer extends BaseApplicationCustomizer<IAnnouncementBannerApplicationCustomizerProperties> {
   private _placeholder: PlaceholderContent | undefined
@@ -57,7 +67,22 @@ export default class AnnouncementBannerApplicationCustomizer extends BaseApplica
 
   public async onInit(): Promise<void> {
     try {
-      const props = await this._load()
+      const page = getPageLocation(this.context.pageContext)
+      if (!isTargeted(this.properties, page)) {
+        Log.verbose(LOG_SOURCE, `Not targeted: ${page.webUrl}`)
+        return
+      }
+      const w = window as any
+      if (w[INSTANCE_MARKER]) {
+        Log.info(LOG_SOURCE, 'Another registration already shows the banner on this page')
+        return
+      }
+      w[INSTANCE_MARKER] = true
+
+      const { loadBanner } = await import(
+        /* webpackChunkName: 'announcement-banner-data' */ './loadBanner'
+      )
+      const props = await loadBanner(this.context, this.properties)
       if (!props) return
       this._props = props
       this.context.placeholderProvider.changedEvent.add(this, this._render)
@@ -65,28 +90,6 @@ export default class AnnouncementBannerApplicationCustomizer extends BaseApplica
     } catch (error) {
       Log.warn(LOG_SOURCE, `Banner not shown: ${error}`)
     }
-  }
-
-  /**
-   * Reads the list and returns the props for the banner, or `null` when there
-   * is no active announcement marked for the banner.
-   */
-  private async _load(): Promise<IAnnouncementBannerProps | null> {
-    const { listSiteUrl, listTitle, targetAudience } = this.properties
-    const service = new AnnouncementListService(
-      this.context,
-      listTitle?.trim() || strings.AnnouncementsListName,
-      listSiteUrl?.trim() || undefined
-    )
-    const fields = await service.getFields()
-    const announcements = (
-      await fetchAnnouncements(service, this.context, fields, targetAudience === true)
-    ).filter((announcement) => announcement.showAsBanner)
-    if (!announcements.length) return null
-
-    const popoverFields = this.properties.popoverFields ?? DEFAULT_POPOVER_FIELDS
-    const detailFields = fields.filter((field) => popoverFields[field.internalName] === true)
-    return { announcements, fields: detailFields }
   }
 
   private _render(): void {
@@ -115,7 +118,7 @@ export default class AnnouncementBannerApplicationCustomizer extends BaseApplica
 
   protected onDispose(): void {
     this._dispose()
+    const w = window as any
+    if (w[INSTANCE_MARKER]) delete w[INSTANCE_MARKER]
   }
 }
-
-export type { IAnnouncement, IListField }
