@@ -1,6 +1,6 @@
 # Announcement (Driftsmeldinger)
 
-[![version](https://img.shields.io/badge/version-1.5.2-orange.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.5.3-orange.svg)](https://semver.org)
 
 ## Summary
 
@@ -185,6 +185,10 @@ npm run package
 The package is written to `sharepoint/solution/pzl-announcement.sppkg`.
 
 ## Changelog
+
+### 1.5.3
+
+* New solution ID (`cd056a9e-7e02-48ae-890d-bf87e815febd`) and new feature IDs. In a tenant where the previous package had been deleted from the tenant app catalog, a fresh deployment of the old solution ID kept failing with "Deployment failed" and a correlation ID, while the same package deployed fine to a site collection app catalog; the tenant catalog keeps state for a deleted solution ID that emptying the recycle bins does not clear. The component IDs are unchanged, so existing web part instances, the deep link custom action and the Tenant Wide Extensions row keep working. In the app catalog this is a new app: deploy 1.5.3, then delete the old "Announcements by Puzzlepart" row (solution ID `a65ac2f2-…`) if it is still there. The assets get a new CDN folder.
 
 ### 1.5.2
 
