@@ -3,7 +3,7 @@
   "solution": {
     "name": "Announcements by Puzzlepart",
     "id": "a65ac2f2-48d4-41ad-81b2-4c89e28c3481",
-    "version": "1.5.1.0",
+    "version": "1.5.2.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
@@ -51,17 +51,12 @@
       },
       {
         "title": "Announcements by Puzzlepart - banner",
-        "description": "Makes the AnnouncementBanner application customizer available and, on a tenant-wide deployment, adds it to the Tenant Wide Extensions list with no targeting. It shows announcements marked 'Vis som banner' at the top of the pages on the sites given by siteUrls/hubSiteUrls.",
+        "description": "Makes the AnnouncementBanner application customizer available. Register it tenant-wide with a row in the Tenant Wide Extensions list, or per site with Templates/BannerCustomAction.xml. It shows announcements marked 'Vis som banner' at the top of the pages on the sites given by siteUrls/hubSiteUrls.",
         "id": "2ef9765f-6b7e-4176-b0ec-d1cba0eccd86",
         "version": "1.0.0.0",
         "componentIds": [
           "c0d1edf4-db39-4feb-8052-a4c27ffe1954"
-        ],
-        "assets": {
-          "elementManifests": [
-            "ClientSideInstance.xml"
-          ]
-        }
+        ]
       }
     ]
   },

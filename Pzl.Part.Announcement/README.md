@@ -1,6 +1,6 @@
 # Announcement (Driftsmeldinger)
 
-[![version](https://img.shields.io/badge/version-1.5.1-orange.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.5.2-orange.svg)](https://semver.org)
 
 ## Summary
 
@@ -87,18 +87,24 @@ The banner is shown on a page when one of these properties matches. With none of
 
 ### Registering the banner
 
-**Tenant-wide (hub and lists of sites).** When the package is deployed tenant-wide ("make available to all sites"), the feature adds a row for the customizer to the **Tenant Wide Extensions** list in the tenant app catalog, with no targeting. Edit the row (Site contents of the app catalog, column *Component Properties*) and set the list site and the targeting, e.g.
+**Tenant-wide (hub and lists of sites).** The package must be deployed tenant-wide ("make available to all sites"). Then add one row for the customizer to the **Tenant Wide Extensions** list on the tenant app catalog site (Site contents), with the list site and the targeting in *Component Properties*:
 
-```json
-{
-  "listSiteUrl": "https://<tenant>.sharepoint.com",
-  "siteUrls": ["https://<tenant>.sharepoint.com", "https://<tenant>.sharepoint.com/sites/x"],
-  "hubSiteUrls": ["https://<tenant>.sharepoint.com/sites/abc"],
-  "targetAudience": false
+```powershell
+Connect-PnPOnline -Url "https://<tenant>.sharepoint.com/sites/appcatalog" -Interactive -ClientId "<clientid>"
+Add-PnPListItem -List "Tenant Wide Extensions" -Values @{
+  Title                                  = "AnnouncementBanner"
+  TenantWideExtensionComponentId         = "c0d1edf4-db39-4feb-8052-a4c27ffe1954"
+  TenantWideExtensionLocation            = "ClientSideExtension.ApplicationCustomizer"
+  TenantWideExtensionComponentProperties = '{"listSiteUrl":"https://<tenant>.sharepoint.com","siteUrls":["https://<tenant>.sharepoint.com/sites/x"],"hubSiteUrls":["https://<tenant>.sharepoint.com/sites/abc"],"targetAudience":false}'
+  TenantWideExtensionSequence            = 110
+  TenantWideExtensionListTemplate        = 0
+  TenantWideExtensionDisabled            = $false
 }
 ```
 
-The change applies on the next page load; nothing is deployed or scripted per site. Sites that join the hub get the banner, sites that leave lose it. With PnP: `Set-PnPListItem -List "Tenant Wide Extensions" -Identity <id> -Values @{ TenantWideExtensionComponentProperties = '<json>' }` on the app catalog site. Was the package not deployed tenant-wide, the row can be added by hand with *Component Id* `c0d1edf4-db39-4feb-8052-a4c27ffe1954` and *Location* `ClientSideExtension.ApplicationCustomizer`.
+The same can be done with **New item** in the list: Title, Component Id, Component Properties, Location `ClientSideExtension.ApplicationCustomizer`, Sequence 110, Disabled = No; leave Web template and List template empty. The row applies on the next page load and is edited in place later (`Set-PnPListItem -Identity <id> -Values @{ TenantWideExtensionComponentProperties = '<json>' }`); nothing is deployed or scripted per site. Sites that join the hub get the banner, sites that leave lose it.
+
+The package does not create this row itself. SPFx can ship a `ClientSideInstance.xml` for that, but SharePoint processes it only on a first-time tenant-wide deployment (never on an upgrade), and in 1.5.1 a first-time deployment failed in a tenant where the row already existed, so it was removed again in 1.5.2.
 
 **One site.** `Templates/BannerCustomAction.xml` registers the customizer on a single site collection and passes that site's URL as `siteUrls`, so a site owner can turn the banner on without touching the app catalog. `ListSiteUrl` points it at the list on the intranet site when registered elsewhere:
 
@@ -180,10 +186,14 @@ The package is written to `sharepoint/solution/pzl-announcement.sppkg`.
 
 ## Changelog
 
+### 1.5.2
+
+* Removed `ClientSideInstance.xml` from the banner feature. SharePoint only processes it on a first-time tenant-wide deployment (an upgrade never creates the row), and a first-time deployment of 1.5.1 failed in a tenant where the row had been added by hand. The Tenant Wide Extensions row is created by hand or with PnP, see [Registering the banner](#registering-the-banner).
+
 ### 1.5.1
 
 * Banner targeting: new properties `siteUrls`, `hubSiteUrls` and `everywhere` decide where the banner is shown, from the page context alone. With no targeting the banner is shown nowhere.
-* Tenant-wide registration: the banner feature now carries a `ClientSideInstance.xml`, so a tenant-wide deployment adds the customizer to the Tenant Wide Extensions list with no targeting. Set `listSiteUrl` and the targeting on that row to show the banner on a hub and on chosen sites, with no per-site scripting; joining and leaving the hub is picked up on the next page load.
+* Tenant-wide registration: a row for the customizer in the Tenant Wide Extensions list, with `listSiteUrl` and the targeting, shows the banner on a hub and on chosen sites with no per-site scripting; joining and leaving the hub is picked up on the next page load. (1.5.1 shipped a `ClientSideInstance.xml` to create the row; removed in 1.5.2, see below.)
 * `Templates/BannerCustomAction.xml` passes the site's own URL as `siteUrls`. A site covered by both a site registration and the tenant-wide row shows the banner once.
 * The customizer's entry bundle holds only the targeting check; the list code is loaded on targeted pages and the UI when there is a banner to show.
 

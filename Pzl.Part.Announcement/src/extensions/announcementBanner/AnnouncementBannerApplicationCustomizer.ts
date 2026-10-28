@@ -21,7 +21,7 @@ const INSTANCE_MARKER = '__pzlAnnouncementBanner'
 
 /**
  * Properties of the custom action (`ClientSideComponentProperties`), see
- * `Templates/BannerCustomAction.xml` and `sharepoint/assets/ClientSideInstance.xml`.
+ * `Templates/BannerCustomAction.xml` and the Tenant Wide Extensions row (README).
  * All are optional, but with no targeting (`siteUrls`, `hubSiteUrls` or
  * `everywhere`) the banner is shown nowhere.
  */
