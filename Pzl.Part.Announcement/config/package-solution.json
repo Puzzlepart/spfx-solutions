@@ -2,8 +2,8 @@
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
     "name": "Announcements by Puzzlepart",
-    "id": "a65ac2f2-48d4-41ad-81b2-4c89e28c3481",
-    "version": "1.5.2.0",
+    "id": "cd056a9e-7e02-48ae-890d-bf87e815febd",
+    "version": "1.5.4.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
@@ -29,7 +29,7 @@
       {
         "title": "Announcements by Puzzlepart",
         "description": "Activates the Announcements (Driftsmeldinger) web part.",
-        "id": "2db0bc78-5fba-4740-a35a-3971f718f070",
+        "id": "f657d25f-6fa0-4dbb-a61b-a4b4daba4f45",
         "version": "1.0.0.0",
         "componentIds": [
           "ddfa2478-1872-408c-8f8f-a1c704f93d66"
@@ -37,8 +37,8 @@
       },
       {
         "title": "Announcements by Puzzlepart - deep link redirect",
-        "description": "Registers the AnnouncementDeepLink application customizer, which sends the user to the page a ?driftsmelding=page: deep link points to before the page renders.",
-        "id": "c4a1e9d7-2f36-4b58-9a0e-6d7f8b1c3e52",
+        "description": "Registers the AnnouncementDeepLink application customizer, which redirects ?driftsmelding=page: deep links to the page before it renders.",
+        "id": "f5314222-bc94-455c-8e3f-62946d00862f",
         "version": "1.0.0.0",
         "componentIds": [
           "9f3d6a2c-7b14-4e8f-a5c0-3d2e1f6b8a47"
@@ -51,8 +51,8 @@
       },
       {
         "title": "Announcements by Puzzlepart - banner",
-        "description": "Makes the AnnouncementBanner application customizer available. Register it tenant-wide with a row in the Tenant Wide Extensions list, or per site with Templates/BannerCustomAction.xml. It shows announcements marked 'Vis som banner' at the top of the pages on the sites given by siteUrls/hubSiteUrls.",
-        "id": "2ef9765f-6b7e-4176-b0ec-d1cba0eccd86",
+        "description": "Makes the AnnouncementBanner application customizer available. Shows announcements marked 'Vis som banner' at the top of the pages, see README.",
+        "id": "8c492ecb-4db5-4d10-a2dc-13d9b0926f4e",
         "version": "1.0.0.0",
         "componentIds": [
           "c0d1edf4-db39-4feb-8052-a4c27ffe1954"
