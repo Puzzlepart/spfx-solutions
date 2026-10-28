@@ -1,6 +1,6 @@
 # Announcement (Driftsmeldinger)
 
-[![version](https://img.shields.io/badge/version-1.5.3-orange.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.5.4-orange.svg)](https://semver.org)
 
 ## Summary
 
@@ -185,6 +185,10 @@ npm run package
 The package is written to `sharepoint/solution/pzl-announcement.sppkg`.
 
 ## Changelog
+
+### 1.5.4
+
+* Fixed the deployment failure of 1.5.1 to 1.5.3 on a first-time deployment ("Deployment failed" with only a correlation ID): the description of the banner feature was longer than 255 characters, which the app catalog's component manifest list cannot store, so the banner component was never registered. Feature descriptions are now short. Keep feature titles and descriptions under 255 characters.
 
 ### 1.5.3
 

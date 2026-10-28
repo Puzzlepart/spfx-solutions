@@ -3,7 +3,7 @@
   "solution": {
     "name": "Announcements by Puzzlepart",
     "id": "cd056a9e-7e02-48ae-890d-bf87e815febd",
-    "version": "1.5.3.0",
+    "version": "1.5.4.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,
@@ -37,7 +37,7 @@
       },
       {
         "title": "Announcements by Puzzlepart - deep link redirect",
-        "description": "Registers the AnnouncementDeepLink application customizer, which sends the user to the page a ?driftsmelding=page: deep link points to before the page renders.",
+        "description": "Registers the AnnouncementDeepLink application customizer, which redirects ?driftsmelding=page: deep links to the page before it renders.",
         "id": "f5314222-bc94-455c-8e3f-62946d00862f",
         "version": "1.0.0.0",
         "componentIds": [
@@ -51,7 +51,7 @@
       },
       {
         "title": "Announcements by Puzzlepart - banner",
-        "description": "Makes the AnnouncementBanner application customizer available. Register it tenant-wide with a row in the Tenant Wide Extensions list, or per site with Templates/BannerCustomAction.xml. It shows announcements marked 'Vis som banner' at the top of the pages on the sites given by siteUrls/hubSiteUrls.",
+        "description": "Makes the AnnouncementBanner application customizer available. Shows announcements marked 'Vis som banner' at the top of the pages, see README.",
         "id": "8c492ecb-4db5-4d10-a2dc-13d9b0926f4e",
         "version": "1.0.0.0",
         "componentIds": [
