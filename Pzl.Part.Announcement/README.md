@@ -135,9 +135,11 @@ Application customizers are not rendered in the Viva Connections mobile app, and
 `scripts/Install-Driftsmeldinger.ps1` does the steps below in one go and can be run again for every upgrade. It is idempotent and supports `-WhatIf`. It needs PnP.PowerShell (not installed by the script), SharePoint Administrator rights and the package built with `npm run package`.
 
 ```powershell
-.\scripts\Install-Driftsmeldinger.ps1 -SiteUrl "https://<tenant>.sharepoint.com" -ClientId "<clientid>" -WhatIf
-.\scripts\Install-Driftsmeldinger.ps1 -SiteUrl "https://<tenant>.sharepoint.com" -ClientId "<clientid>" -BannerHubSiteUrls "https://<tenant>.sharepoint.com/sites/<hub>"
+.\scripts\Install-Driftsmeldinger.ps1 -SiteUrl "https://<tenant>.sharepoint.com" -WhatIf
+.\scripts\Install-Driftsmeldinger.ps1 -SiteUrl "https://<tenant>.sharepoint.com" -BannerHubSiteUrls "https://<tenant>.sharepoint.com/sites/<hub>"
 ```
+
+`-ClientId` defaults to the Prosjektportalen (PP365) PnP app `da6c31a6-b557-4ac3-9994-7315da06ea3a`; pass `-ClientId` if the tenant uses its own app registration for PnP.PowerShell.
 
 | Step | What it does |
 | --- | --- |

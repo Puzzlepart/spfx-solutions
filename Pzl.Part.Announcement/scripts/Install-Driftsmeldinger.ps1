@@ -30,7 +30,9 @@
   Site that hosts (or will host) the central Driftsmeldinger list, normally the root site.
 
 .PARAMETER ClientId
-  Client ID of the Entra app registration used by Connect-PnPOnline -Interactive.
+  Client ID of the Entra app registration used by Connect-PnPOnline -Interactive. Defaults to
+  the Prosjektportalen (PP365) PnP app, da6c31a6-b557-4ac3-9994-7315da06ea3a. Pass another
+  if the tenant uses its own app registration.
 
 .PARAMETER AppCatalogUrl
   Tenant app catalog site. Looked up with Get-PnPTenantAppCatalogUrl when empty.
@@ -64,16 +66,16 @@
   Path to pzl-ext-notification.sppkg. Defaults to the build output of Pzl.Ext.Notification.
 
 .EXAMPLE
-  .\Install-Driftsmeldinger.ps1 -SiteUrl https://contoso.sharepoint.com -ClientId <client-id>
+  .\Install-Driftsmeldinger.ps1 -SiteUrl https://contoso.sharepoint.com
 
 .EXAMPLE
-  .\Install-Driftsmeldinger.ps1 -SiteUrl https://contoso.sharepoint.com -ClientId <client-id> `
+  .\Install-Driftsmeldinger.ps1 -SiteUrl https://contoso.sharepoint.com `
     -BannerHubSiteUrls https://contoso.sharepoint.com/sites/hub -EnableTeamsNotifications -WhatIf
 #>
 [CmdletBinding(SupportsShouldProcess = $true)]
 param(
   [Parameter(Mandatory = $true)] [string]$SiteUrl,
-  [Parameter(Mandatory = $true)] [string]$ClientId,
+  [string]$ClientId = 'da6c31a6-b557-4ac3-9994-7315da06ea3a',
   [string]$AppCatalogUrl = '',
   [string]$PackagePath = (Join-Path $PSScriptRoot '..\sharepoint\solution\pzl-announcement.sppkg'),
   [switch]$SkipPackage,
