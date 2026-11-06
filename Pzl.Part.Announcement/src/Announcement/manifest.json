@@ -17,16 +17,16 @@
     {
       "groupId": "b7c1f2a4-6e3d-4c8a-9f10-2d5e7a9b3c61",
       "group": {
-        "default": "Puzzlepart",
-        "nb-no": "Puzzlepart"
+        "default": "SoftwareOne",
+        "nb-no": "SoftwareOne"
       },
       "title": {
-        "default": "Announcements",
+        "default": "Driftsmeldinger",
         "nb-no": "Driftsmeldinger"
       },
       "description": {
-        "default": "Shows active announcements from the Driftsmeldinger list, with details on click. Supports audience targeting, pinning and Teams notifications.",
-        "nb-no": "Viser aktive driftsmeldinger fra lista Driftsmeldinger, med detaljer ved klikk. Støtter målgruppestyring, festing og Teams-varsling."
+        "default": "Shows active announcements from the central Driftsmeldinger list, with level, status and details on click.",
+        "nb-no": "Viser aktive driftsmeldinger fra den sentrale lista Driftsmeldinger, med meldingsnivå, status og detaljer ved klikk."
       },
       "officeFabricIconFontName": "Megaphone",
       "properties": {

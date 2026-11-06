@@ -1,10 +1,12 @@
-# Announcement (Driftsmeldinger)
+# Driftsmeldinger (Pzl.Part.Announcement)
 
-[![version](https://img.shields.io/badge/version-1.5.4-orange.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-2.0.0-orange.svg)](https://semver.org)
 
 ## Summary
 
-This is a web part that displays announcements from a SharePoint list. The announcements are displayed based on startdate and enddate. The web part support Target Audience for the announcements added to the list. Users who may add items to the list get a **New announcement** button that opens a form built from the fields of the list, and the fields shown in the popover are selected in the web part properties.
+Driftsmeldinger shows operational announcements (incidents, outages, planned maintenance) from one central SharePoint list, in a web part and optionally as a banner at the top of the pages. Each announcement has a **message level** (*Informasjon / Advarsel / Kritisk*) and a **status** (*Planlagt / Pågår / Løst*), and is shown between its start and end date. Audience targeting is supported. Users who may add items to the list get a **New announcement** button that opens a form built from the fields of the list; users who may edit items can change the status from the popover.
+
+Teams notifications are an optional add-on, [Pzl.Ext.Notification](../Pzl.Ext.Notification/README.md). The terms used in the solution are defined in [CONTEXT.md](CONTEXT.md).
 
 | Announcements                                                                             | Popover (on click)                                                                        |
 | ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
@@ -12,32 +14,46 @@ This is a web part that displays announcements from a SharePoint list. The annou
 
 ![image](https://github.com/user-attachments/assets/c934d56e-1590-4880-8877-8a545acb9cf6)
 
-## Lists
+## The list
 
-* Driftsmeldinger (Announcement)
-  * Entries for announcements.
-  * Target Audience needs to be activated for the list and can be used if needed.
-  * Columns added in 1.1.0 (Teams notification):
-    * `PzlPinned` (Yes/No): pinned announcements are sorted first and shown with a pin icon.
-    * `PzlNotifyTeams` (Yes/No, default No): ask the notification service to send a Teams activity notification for levels other than "Varsel". Not read by the web part.
-    * `PzlNotifiedAt` (Date/Time, hidden in forms): set by the notification service when the notification has been sent. Shown in the popover as "Varslet i Teams dd.mm. kl. hh:mm".
-  * Column added in 1.5.0 (banner):
-    * `PzlShowAsBanner` (Yes/No, default No): the announcement is also shown as a banner at the top of the pages by the **AnnouncementBanner** application customizer, see [Banner](#banner-application-customizer). Not read by the web part.
+One list **Driftsmeldinger** per tenant, normally on the intranet's root site (`Templates/Announcement.xml`). The web part and the banner on other sites read it through **Område for driftsmeldinger** / `listSiteUrl`. Audience targeting must be turned on for the list if it is used.
+
+| Column | Internal name | Description |
+| --- | --- | --- |
+| Tittel | `Title` | Required. |
+| Meldingsnivå | `PzlSeverity` | Required, default *Advarsel*. *Informasjon*, *Advarsel* or *Kritisk*; sets the colour and icon. The 1.x values *Varsel* and *Normal* are shown as *Kritisk* and *Informasjon*. |
+| Status | `PzlStatus` | Required, default *Planlagt*. *Planlagt*, *Pågår* or *Løst*. *Løst* is shown green whatever the level. Items without a status (created before 2.0) count as *Pågår*. |
+| Innhold | `PzlContent` | Required, rich text. |
+| Startdato, Sluttdato | `PzlStartDate`, `PzlEndDate` | Required. When the announcement is shown on the intranet, not when the incident or the work happens. |
+| Systemer berørt | `PzlAffectedSystems` | |
+| Eventuelle konsekvenser | `PzlConsequences` | Consequences that last after the issue is resolved. |
+| Ansvarlig | `PzlResponsible` | Who users can contact. |
+| Fest til toppen | `PzlPinned` | Pinned announcements come first, with a pin icon. |
+| Vis som banner | `PzlShowAsBanner` | Also shown as a banner at the top of the pages, see [Banner](#banner-application-customizer). Preselected in the web part's form for *Kritisk*. |
+
+Every column has a description in the list form that tells the editor when to use it. The Teams columns (`PzlNotifyTeams`, `PzlNotifyAgain`, `PzlNotifiedAt`) belong to the notification add-on and are added by its template `AnnouncementFields.xml`.
+
+Announcements are sorted: pinned first, then status (*Pågår*, *Planlagt*, *Løst*), then level (*Kritisk* first), then the newest start date. Level and status are read with fixed tables (`src/Announcement/model.ts`) in Norwegian and English, independent of the user's language.
 
 ## Web part properties
 
 | Group | Property | Description |
 | --- | --- | --- |
 | Generelt | Tittel, Beskrivelse | Header title and the text behind the info icon. |
+| Generelt | Område for driftsmeldinger | Absolute URL of the site with the Driftsmeldinger list (the central list). Empty means the current site. Users need read access to the list; the create button and the quick actions check the user's permissions on that list. |
 | Generelt | Aktiver målgruppeangivelse | Filter announcements on the list's audience targeting column. |
 | Felter i detaljvisning | One toggle per list field | Which fields are shown in the popover (on click). The toggles are read from the default content type of the list, so columns added to the list show up here. Title is always shown. Defaults match 1.2.0: content, start/end date, affected systems, consequences, responsible and "notified in Teams". |
-| Felter i skjema for ny driftsmelding | One toggle per editable list field | Which fields are shown in the form for new announcements. Required fields and fields hidden in the list cannot be changed here. |
+| Felter i skjema for ny driftsmelding | One toggle per editable list field | Which fields are shown in the form for new announcements. Required fields and fields hidden in the list cannot be changed here. «Varsle i Teams» (notification add-on) is off by default. |
 | Skjul/vis | Skjul header | Hide the header (the button for new announcements is still shown). |
 | Skjul/vis | Skjul knapp for ny driftsmelding | Hide the **New announcement** button for everyone. |
 
 ### Registering announcements from the web part
 
-The **New announcement** button is shown only to users who have the *Add items* permission on the list (checked with `currentUserHasPermissions`), and only if it is not hidden in the web part properties. It opens a dialog with a form generated from the fields of the list's default content type (fields that are hidden in the column or in the content type, read-only or have `ShowInNewForm="FALSE"` on the site or list column are left out). Supported column types: single/multiple lines of text, choice (single and multi), date/time, yes/no, person or group (single and multi), number, currency and hyperlink. Other column types are not shown in the form and get their default value from the list. Required columns are validated before saving. Rich text columns (such as *Innhold*) get a small formatting toolbar (bold, italic, underline, lists, link) and are stored as HTML, like in the list form. `PzlNotifiedAt` is never shown in the form since it is written by the notification service.
+The **New announcement** button is shown only to users who have the *Add items* permission on the list (checked with `currentUserHasPermissions`), and only if it is not hidden in the web part properties. It opens a dialog with a form generated from the fields of the list's default content type (fields that are hidden in the column or in the content type, read-only or have `ShowInNewForm="FALSE"` on the site or list column are left out). Supported column types: single/multiple lines of text, choice (single and multi), date/time, yes/no, person or group (single and multi), number, currency and hyperlink. Other column types are not shown in the form and get their default value from the list. Required columns are validated before saving. Rich text columns (such as *Innhold*) get a small formatting toolbar (bold, italic, underline, lists, link) and are stored as HTML, like in the list form. «Vis som banner» follows the level until the user changes it: on for *Kritisk*, off otherwise. `PzlNotifiedAt` and `PzlNotifyAgain` (notification add-on) are never shown in the form.
+
+### Quick actions
+
+Users with the *Edit items* permission on the list get buttons at the bottom of the popover: **Marker som pågår** (planned announcements), **Marker som løst** (planned and ongoing) and **Rediger**, which opens the list's edit form and returns to the page. The status is written with the list's own choice value, so a list provisioned in English gets *Resolved*. The quick actions are shown only when the list has the *Status* column.
 
 ## Teams notifications and deep links
 
@@ -50,15 +66,15 @@ To open a specific announcement when the page loads, the web part reads an annou
 
 `page:<url>` values (news notifications) are ignored by the web part and handled by the add-on's **NotificationDeepLink** customizer.
 
-Lists provisioned with the 1.0.x template still work: the web part falls back to the original fields if `PzlPinned`/`PzlNotifiedAt`/`PzlShowAsBanner` are missing. Re-run `Invoke-PnPSiteTemplate` to add the new columns.
+Lists provisioned with an older template still work: the web part falls back to the original fields if `PzlPinned`/`PzlShowAsBanner`/`PzlStatus` are missing. Re-run `Invoke-PnPSiteTemplate` to add the new columns, see [Upgrading from 1.x](#upgrading-from-1x).
 
 ## Banner (application customizer)
 
 The package also contains the application customizer **AnnouncementBanner** (component ID `c0d1edf4-db39-4feb-8052-a4c27ffe1954`). On every page of a site where it is registered it reads the announcement list and shows the active announcements with **Vis som banner** (`PzlShowAsBanner`) set as message bars in the page's top placeholder:
 
-* Colour and icon follow the announcement's level (`PzlSeverity`), like in the web part. Pinned announcements come first and get the pin icon.
+* Colour and icon follow the announcement's level and status, like in the web part: *Løst* is green with the label «Løst», *Planlagt* has a calendar icon and the label «Planlagt». Pinned announcements come first and get the pin icon.
 * The banner shows the title and the first 160 characters of the content. Clicking it (or Enter/Space) opens a dialog with the same content as the web part's popover: the fields in `popoverFields` (default: the web part's default popover fields) and the "notified in Teams" footer.
-* The close button dismisses the banner for the user. The dismissal is kept in `localStorage` (`pzl-announcement-banner-dismissed`) per announcement and version (`Modified`), so an edited announcement comes back. Dismissals for announcements that are no longer active are pruned.
+* The close button dismisses the banner for the user. The dismissal is kept in `localStorage` (`pzl-announcement-banner-dismissed`) per announcement and version (`Modified`), so an edited announcement comes back. That is how users who dismissed a critical banner see it once more, green, when it is marked as resolved. Dismissals for announcements that are no longer active are pruned.
 * Audience targeting is honoured when `targetAudience` is set, with the same rules as the web part.
 * The customizer decides from the page context alone whether the page is targeted (see below). Only on targeted pages is the list code loaded and the list read, and the UI is loaded only when there is a banner to show. Pages outside the targeting cost a few KB of script, which is what makes the tenant-wide registration affordable.
 
@@ -114,7 +130,7 @@ Application customizers are not rendered in the Viva Connections mobile app, and
 
 ## Installation
 
-### Create the needed lists on the site where you want to host the quick links solutions
+### Create the list on the site that hosts it (normally the root site)
 
 Clone the project or download all artefacts. The template `Announcement.xml` is located in the Templates-folder. Use PnP.PowerShell 1.12 or later to install, see example:
 
@@ -133,9 +149,19 @@ Invoke-PnPSiteTemplate -Path ".\Templates\Announcement.xml"
 >
 > The same applies to the templates in [Pzl.Ext.Notification](../Pzl.Ext.Notification/README.md).
 
-### Upload the web part package to a site collection app catalog
+### Upload the package to an app catalog
 
-This can be done manually by navigating to the app catalog and uploading the .sppkg package from the build.
+Upload `sharepoint/solution/pzl-announcement.sppkg` from the build to the tenant app catalog (or a site collection app catalog), add the web part to a page and set **Område for driftsmeldinger** on sites other than the one with the list.
+
+### Upgrading from 1.x
+
+2.0.0 keeps the solution ID and the component IDs, so it is an in-place upgrade: existing web part instances and the banner's Tenant Wide Extensions row keep working.
+
+1. Upload the 2.0.0 package to the app catalog where 1.x is deployed (replace the existing app). Sites with the app installed from a site collection app catalog need **Update** under Site contents.
+2. Re-run `Invoke-PnPSiteTemplate -Path ".\Templates\Announcement.xml"` on the site with the list. This adds *Status*, changes the level choices to *Informasjon / Advarsel / Kritisk* and updates the column descriptions. Existing items keep their values: *Varsel* is shown as *Kritisk*, *Normal* as *Informasjon*, and items without a status as *Pågår*. When such an item is edited, the editor picks a new level and a status.
+3. If the 1.4 to 1.5 deep link customizer (**AnnouncementDeepLink**) was registered on a site, remove it, since the component is no longer in the package: `Remove-PnPCustomAction -Identity AnnouncementDeepLink -Scope Site -Force`. Its replacement, **NotificationDeepLink**, is part of [Pzl.Ext.Notification](../Pzl.Ext.Notification/README.md) and only needed with Teams notifications.
+4. The columns *Varsle i Teams* and *Varslet i Teams* stay on lists that had them (the template never deletes columns). They do nothing without the notification add-on and are hidden in the web part's form by default; delete them in the list settings if they are not wanted.
+5. On web parts placed on other sites than the list, set **Område for driftsmeldinger**.
 
 ## Building
 
@@ -157,6 +183,12 @@ You can test/debug using `npm run serve` (runs `heft start`), then open
 https://<tenant>.sharepoint.com/sites/<site>?debug=true&noredir=true&debugManifestsFile=https://localhost:4321/temp/build/manifests.js
 ```
 
+### Unit tests
+
+```bash
+npm test
+```
+
 ### Linting
 
 ```bash
@@ -172,6 +204,20 @@ npm run package
 The package is written to `sharepoint/solution/pzl-announcement.sppkg`.
 
 ## Changelog
+
+### 2.0.0
+
+* New name and publisher: **Driftsmeldinger** by SoftwareOne. The solution ID and the component IDs are unchanged.
+* Teams notifications are a separate add-on, [Pzl.Ext.Notification](../Pzl.Ext.Notification/README.md): the notification service, its Teams app, the configuration list template and the deep link customizer (now **NotificationDeepLink**, new component ID) moved there. The Teams columns moved from the main template to the add-on's `AnnouncementFields.xml`. The web part no longer handles `page:` deep links.
+* New column **Status** (`PzlStatus`): *Planlagt / Pågår / Løst*, required, default *Planlagt*. *Løst* is shown green with a check mark, *Planlagt* with a calendar icon, in the web part, the popover and the banner.
+* Message levels renamed to *Informasjon / Advarsel / Kritisk* («Varsel» was easy to confuse with Teams notifications; «Normal» is removed). Levels and status are read with fixed tables in Norwegian and English, not with the user interface strings.
+* Column descriptions that tell editors when to use each column.
+* Sorting: pinned, status, level, newest start date.
+* Quick actions in the popover for users who may edit the list: **Marker som pågår**, **Marker som løst**, **Rediger**.
+* New web part property **Område for driftsmeldinger** (`listSiteUrl`): the web part reads the central list on another site, like the banner.
+* «Vis som banner» is preselected in the web part's form when the level is *Kritisk*.
+* «Varsle i Teams» is hidden in the web part's form unless turned on.
+* Unit tests for the level and status mapping and the sorting (`npm test`).
 
 ### 1.5.4
 
