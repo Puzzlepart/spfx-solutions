@@ -27,6 +27,18 @@ declare interface IAnnouncementStrings {
     OpenDetails: string
     CloseButtonText: string
   }
+  Status: {
+    Planned: string
+    Ongoing: string
+    Resolved: string
+  }
+  QuickActions: {
+    MarkOngoing: string
+    MarkResolved: string
+    Edit: string
+    StatusChangedText: string
+    StatusChangeErrorText: string
+  }
   RichText: {
     ToolbarLabel: string
     Bold: string

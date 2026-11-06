@@ -10,7 +10,7 @@ import '@pnp/sp/site-users/web'
 import strings from 'AnnouncementStrings'
 import { IAnnouncement, IListField } from '../components/types'
 import { OPTIONAL_FIELDS } from '../constants'
-import { toSeverity, toStatus } from '../model'
+import { compareAnnouncements, toSeverity, toStatus } from '../model'
 import type { AnnouncementListService } from './AnnouncementListService'
 
 /**
@@ -45,7 +45,7 @@ function buildQuery(fields: IListField[], targetAudience: boolean) {
 
 /**
  * Fetches the active announcements (start date passed, end date not passed)
- * the current user may see, pinned first. Shared by the web part and the
+ * the current user may see, sorted with `compareAnnouncements`. Shared by the web part and the
  * AnnouncementBanner application customizer.
  *
  * @param service List service
@@ -106,6 +106,7 @@ export async function fetchAnnouncements(
           title: item.Title,
           severity: toSeverity(item.PzlSeverity),
           status: toStatus(item.PzlStatus),
+          startDate: item.PzlStartDate ?? undefined,
           content: item.PzlContent,
           hasAccess,
           pinned: item.PzlPinned === true,
@@ -115,12 +116,7 @@ export async function fetchAnnouncements(
         }
       })
     )
-    return (
-      announcements
-        .filter((announcement) => announcement.hasAccess)
-        // Pinned first, otherwise keep list order (sort is stable)
-        .sort((a, b) => Number(b.pinned) - Number(a.pinned))
-    )
+    return announcements.filter((announcement) => announcement.hasAccess).sort(compareAnnouncements)
   } catch {
     throw new Error(strings.AnnouncementFetchErrorText)
   }

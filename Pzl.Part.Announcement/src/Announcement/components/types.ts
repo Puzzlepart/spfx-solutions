@@ -8,6 +8,11 @@ export interface IAnnouncementProps {
   title: string
   description: string
   targetAudience: boolean
+  /**
+   * Absolute URL of the site that hosts the announcement list (the central
+   * list). Empty means the current site.
+   */
+  listSiteUrl?: string
 
   /**
    * Fields to show in the popover, keyed by internal name (`true` = visible).
@@ -56,6 +61,10 @@ export interface IAnnouncementState {
    * Whether the current user may add items to the announcement list
    */
   canCreate: boolean
+  /**
+   * Whether the current user may edit items in the announcement list (quick actions)
+   */
+  canEdit: boolean
 }
 
 export interface IAnnouncement {
@@ -70,6 +79,10 @@ export interface IAnnouncement {
    * no status column or the item no value.
    */
   status: Status
+  /**
+   * Start date (`PzlStartDate`), ISO string. Used for sorting.
+   */
+  startDate?: string
   content: string
   hasAccess?: boolean
   /**

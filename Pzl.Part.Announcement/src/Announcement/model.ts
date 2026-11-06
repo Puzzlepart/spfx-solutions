@@ -89,3 +89,35 @@ export function toStatus(value: string | null | undefined): Status {
 export function isCriticalValue(value: string | null | undefined): boolean {
   return !!value && toSeverity(value) === 'critical'
 }
+
+const STATUS_ORDER: Record<Status, number> = { ongoing: 0, planned: 1, resolved: 2 }
+
+const SEVERITY_ORDER: Record<Severity, number> = { critical: 0, warning: 1, info: 2 }
+
+/**
+ * Sort order of announcements: pinned first, then status (ongoing, planned,
+ * resolved), then message level (critical first), then the newest start date.
+ */
+export function compareAnnouncements(
+  a: { pinned: boolean; status: Status; severity: Severity; startDate?: string },
+  b: { pinned: boolean; status: Status; severity: Severity; startDate?: string }
+): number {
+  return (
+    Number(b.pinned) - Number(a.pinned) ||
+    STATUS_ORDER[a.status] - STATUS_ORDER[b.status] ||
+    SEVERITY_ORDER[a.severity] - SEVERITY_ORDER[b.severity] ||
+    (Date.parse(b.startDate ?? '') || 0) - (Date.parse(a.startDate ?? '') || 0)
+  )
+}
+
+/**
+ * The list's choice value for a status: the field's own choice that maps to
+ * the status (so a list provisioned in another language gets its own value),
+ * or the template's Norwegian value.
+ *
+ * @param status Status
+ * @param choices Choices of the `PzlStatus` field, if known
+ */
+export function statusChoiceValue(status: Status, choices?: string[]): string {
+  return choices?.find((choice) => toStatus(choice) === status) ?? STATUS_VALUES[status]
+}

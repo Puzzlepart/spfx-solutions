@@ -121,6 +121,8 @@ export function isFormField(field: IListField): boolean {
 export class AnnouncementListService {
   private _sp: SPFI
   private _fields: Promise<IListField[]>
+  private _editFormUrl: string | null | undefined
+  private _siteOrigin: string
 
   /**
    * @param context Component context (web part or application customizer)
@@ -133,6 +135,7 @@ export class AnnouncementListService {
     siteUrl?: string
   ) {
     this._sp = (siteUrl ? spfi(siteUrl) : spfi()).using(SPFx(context))
+    this._siteOrigin = new URL(siteUrl || context.pageContext.web.absoluteUrl).origin
   }
 
   public get sp(): SPFI {
@@ -197,6 +200,41 @@ export class AnnouncementListService {
    */
   public canCreateItems(): Promise<boolean> {
     return this.list.currentUserHasPermissions(PermissionKind.AddListItems).catch(() => false)
+  }
+
+  /**
+   * Whether the current user may edit items in the list (quick actions)
+   */
+  public canEditItems(): Promise<boolean> {
+    return this.list.currentUserHasPermissions(PermissionKind.EditListItems).catch(() => false)
+  }
+
+  /**
+   * Absolute URL of the list's edit form for an item, returning to the
+   * current page after save. `null` if the list's form URL cannot be read.
+   *
+   * @param id Item ID
+   */
+  public async getEditFormUrl(id: string): Promise<string | null> {
+    if (this._editFormUrl === undefined) {
+      this._editFormUrl = await this.list
+        .select('DefaultEditFormUrl')()
+        .then((list) => list.DefaultEditFormUrl || null)
+        .catch((): string => null)
+    }
+    if (!this._editFormUrl) return null
+    const source = encodeURIComponent(window.location.href)
+    return `${new URL(this._editFormUrl, this._siteOrigin).href}?ID=${id}&Source=${source}`
+  }
+
+  /**
+   * Updates fields on an item
+   *
+   * @param id Item ID
+   * @param values Field values keyed by entity property name
+   */
+  public async updateItem(id: string, values: Record<string, any>): Promise<void> {
+    await this.list.items.getById(Number(id)).update(values)
   }
 
   /**

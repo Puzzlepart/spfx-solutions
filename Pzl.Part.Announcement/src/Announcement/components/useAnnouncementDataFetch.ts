@@ -23,8 +23,12 @@ export function useAnnouncementDataFetch(
    * never throw (they fall back to the template fields / `false`).
    */
   const fetchData = async () => {
-    const [fields, canCreate] = await Promise.all([service.getFields(), service.canCreateItems()])
-    setState({ fields, canCreate })
+    const [fields, canCreate, canEdit] = await Promise.all([
+      service.getFields(),
+      service.canCreateItems(),
+      service.canEditItems()
+    ])
+    setState({ fields, canCreate, canEdit })
     try {
       const announcements = await fetchAnnouncements(
         service,

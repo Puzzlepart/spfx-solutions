@@ -4,6 +4,9 @@ import { IAnnouncementProps } from './types'
 import { useId } from '@fluentui/react-components'
 import { useAnnouncementDataFetch } from './useAnnouncementDataFetch'
 import { getFocusedAnnouncementId } from '../util/getFocusedAnnouncementId'
+import { IAnnouncement } from './types'
+import { Status, statusChoiceValue } from '../model'
+import { STATUS_FIELD } from '../constants'
 
 /**
  * Delay (ms) between scrolling the focused announcement into view and opening
@@ -85,6 +88,33 @@ export const useAnnouncement = (props: IAnnouncementProps) => {
    */
   const showCreateButton = state.canCreate && !props.hideCreateButton
 
+  /**
+   * Quick actions (status, edit) are shown to users who may edit items, when
+   * the list has the status column
+   */
+  const statusField = state.fields.find((field) => field.internalName === STATUS_FIELD)
+  const showQuickActions = state.canEdit && !!statusField
+
+  /**
+   * Sets the status of an announcement (quick action), closes its popover
+   * and fetches the announcements again
+   *
+   * @param announcement Announcement
+   * @param status New status
+   */
+  const setStatus = async (announcement: IAnnouncement, status: Status): Promise<void> => {
+    await props.service.updateItem(announcement.id, {
+      [statusField.entityPropertyName]: statusChoiceValue(status, statusField.choices)
+    })
+    setOpenAnnouncementId(null)
+    await refresh().catch(() => {
+      // Ignore, the list is shown as it was
+    })
+  }
+
+  const getEditFormUrl = (announcement: IAnnouncement) =>
+    props.service.getEditFormUrl(announcement.id)
+
   return {
     state,
     setState,
@@ -97,6 +127,9 @@ export const useAnnouncement = (props: IAnnouncementProps) => {
     toggleAnnouncement,
     popoverFields,
     showCreateButton,
+    showQuickActions,
+    setStatus,
+    getEditFormUrl,
     createDialogOpen,
     setCreateDialogOpen
   }

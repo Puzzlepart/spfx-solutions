@@ -25,6 +25,10 @@ import { UserMessage } from './UserMessage'
 import { AnnouncementDetails } from './AnnouncementDetails'
 import { CreateAnnouncementDialog } from './CreateAnnouncementDialog'
 import { getIntent } from './intent'
+import { QuickActions } from './QuickActions'
+import { statusText } from './StatusBadge'
+import { IAnnouncement } from './types'
+import { Status } from '../model'
 import { format } from '@fluentui/react'
 import strings from 'AnnouncementStrings'
 
@@ -41,6 +45,9 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
     toggleAnnouncement,
     popoverFields,
     showCreateButton,
+    showQuickActions,
+    setStatus,
+    getEditFormUrl,
     createDialogOpen,
     setCreateDialogOpen
   } = useAnnouncement(props)
@@ -57,6 +64,28 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
     refresh().catch(() => {
       // Ignore, the list is shown as it was
     })
+  }
+
+  const onSetStatus = async (announcement: IAnnouncement, status: Status) => {
+    try {
+      await setStatus(announcement, status)
+      dispatchToast(
+        <Toast>
+          <ToastTitle>
+            {format(strings.QuickActions.StatusChangedText, statusText(status).toLowerCase())}
+          </ToastTitle>
+        </Toast>,
+        { intent: 'success' }
+      )
+    } catch (error) {
+      dispatchToast(
+        <Toast>
+          <ToastTitle>{strings.QuickActions.StatusChangeErrorText}</ToastTitle>
+        </Toast>,
+        { intent: 'error' }
+      )
+      throw error
+    }
   }
 
   if (state.loading) {
@@ -141,11 +170,24 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                           intent={getIntent(announcement)}
                           pinned={announcement.pinned}
                           pinnedTitle={strings.Aria.PinnedTitle}
+                          status={announcement.status}
                         />
                       </div>
                     </PopoverTrigger>
                     <PopoverSurface tabIndex={-1}>
-                      <AnnouncementDetails announcement={announcement} fields={popoverFields} />
+                      <AnnouncementDetails
+                        announcement={announcement}
+                        fields={popoverFields}
+                        footer={
+                          showQuickActions && (
+                            <QuickActions
+                              announcement={announcement}
+                              onSetStatus={onSetStatus}
+                              getEditFormUrl={getEditFormUrl}
+                            />
+                          )
+                        }
+                      />
                     </PopoverSurface>
                   </Popover>
                 ))

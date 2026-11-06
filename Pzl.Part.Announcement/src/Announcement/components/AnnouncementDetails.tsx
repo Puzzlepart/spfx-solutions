@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC } from 'react'
+import React, { CSSProperties, FC, ReactNode } from 'react'
 import { Avatar, Link, Text } from '@fluentui/react-components'
 import { Alert16Regular } from '@fluentui/react-icons'
 import { format } from '@fluentui/react'
@@ -10,6 +10,7 @@ import { IAnnouncement, IListField } from './types'
 import { CONTENT_FIELD, NOTIFIED_AT_FIELD } from '../constants'
 import { formatDate, formatShortDateTime } from '../util/formatDate'
 import { isEmptyValue, looksLikeHtml } from '../util/fieldValue'
+import { StatusBadge } from './StatusBadge'
 
 interface IUserValueProps {
   user: { Title?: string; EMail?: string }
@@ -102,6 +103,10 @@ export interface IAnnouncementDetailsProps {
    * Style for the root element (e.g. to lift the popover's max width in a dialog)
    */
   style?: CSSProperties
+  /**
+   * Shown at the bottom, e.g. the web part's quick actions
+   */
+  footer?: ReactNode
 }
 
 /**
@@ -112,7 +117,8 @@ export const AnnouncementDetails: FC<IAnnouncementDetailsProps> = ({
   announcement,
   fields,
   hideTitle,
-  style
+  style,
+  footer
 }) => {
   const showNotifiedAt = fields.some((field) => field.internalName === NOTIFIED_AT_FIELD)
   const bodyFields = fields.filter((field) => field.internalName !== NOTIFIED_AT_FIELD)
@@ -123,6 +129,11 @@ export const AnnouncementDetails: FC<IAnnouncementDetailsProps> = ({
         <Text weight='semibold' size={400} block>
           {announcement.title}
         </Text>
+      )}
+      {announcement.status !== 'ongoing' && (
+        <div>
+          <StatusBadge status={announcement.status} />
+        </div>
       )}
       {bodyFields.map((field) => {
         const value = announcement.values[field.entityPropertyName]
@@ -146,6 +157,7 @@ export const AnnouncementDetails: FC<IAnnouncementDetailsProps> = ({
           </Text>
         </div>
       )}
+      {footer}
     </div>
   )
 }

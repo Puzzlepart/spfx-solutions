@@ -31,6 +31,7 @@
       "officeFabricIconFontName": "Megaphone",
       "properties": {
         "title": "Driftsmeldinger",
+        "listSiteUrl": "",
         "description": "Her vil driftsmeldinger dukke opp, som for eksempel planlagt vedlikehold eller uforutsette hendelser.",
         "popoverFields": {
           "PzlContent": true,

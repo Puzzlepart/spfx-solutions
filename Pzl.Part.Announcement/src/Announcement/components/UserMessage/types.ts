@@ -1,4 +1,5 @@
 import { MessageBarProps } from '@fluentui/react-components'
+import { Status } from '../../model'
 
 /**
  * @category UserMessage
@@ -25,6 +26,12 @@ export interface IUserMessageProps extends MessageBarProps {
    * Title (tooltip) for the pin icon
    */
   pinnedTitle?: string
+
+  /**
+   * Status of the announcement. Planned and resolved announcements get a
+   * label after the title, planned ones a calendar icon.
+   */
+  status?: Status
 
   /**
    * On click handler for the message

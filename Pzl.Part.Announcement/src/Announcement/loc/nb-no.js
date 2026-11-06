@@ -28,6 +28,18 @@ define([], function () {
       OpenDetails: 'Vis detaljer for {0}',
       CloseButtonText: 'Lukk'
     },
+    Status: {
+      Planned: 'Planlagt',
+      Ongoing: 'Pågår',
+      Resolved: 'Løst'
+    },
+    QuickActions: {
+      MarkOngoing: 'Marker som pågår',
+      MarkResolved: 'Marker som løst',
+      Edit: 'Rediger',
+      StatusChangedText: 'Driftsmeldingen er markert som {0}.',
+      StatusChangeErrorText: 'Kunne ikke endre status. Prøv igjen.'
+    },
     RichText: {
       ToolbarLabel: 'Formatering',
       Bold: 'Fet',

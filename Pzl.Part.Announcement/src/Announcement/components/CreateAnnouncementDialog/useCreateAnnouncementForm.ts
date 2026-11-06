@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import strings from 'AnnouncementStrings'
 import { IListField } from '../types'
 import { AnnouncementListService, isFormField } from '../../services/AnnouncementListService'
-import { isFormFieldEnabled } from '../../constants'
+import { isFormFieldEnabled, SEVERITY_FIELD, SHOW_AS_BANNER_FIELD } from '../../constants'
+import { isCriticalValue } from '../../model'
 import {
   dateInputValueToIso,
   getInitialFormValue,
@@ -97,6 +98,12 @@ export function useCreateAnnouncementForm(
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [saving, setSaving] = useState(false)
   const [saveError, setSaveError] = useState<string>(null)
+  /**
+   * Whether the user has changed «Vis som banner» in this form. Until then it
+   * follows the message level: on for «Kritisk», off otherwise.
+   */
+  const bannerTouched = useRef(false)
+  const hasBannerField = formFields.some((field) => field.internalName === SHOW_AS_BANNER_FIELD)
 
   // Reset the form each time the dialog opens
   useEffect(() => {
@@ -105,6 +112,10 @@ export function useCreateAnnouncementForm(
     formFields.forEach((field) => {
       initial[field.internalName] = getInitialFormValue(field)
     })
+    bannerTouched.current = false
+    if (hasBannerField && isCriticalValue(initial[SEVERITY_FIELD])) {
+      initial[SHOW_AS_BANNER_FIELD] = true
+    }
     setValues(initial)
     setErrors({})
     setSaveError(null)
@@ -112,7 +123,14 @@ export function useCreateAnnouncementForm(
   }, [open, allFields])
 
   const setValue = (internalName: string, value: any) => {
-    setValues((current) => ({ ...current, [internalName]: value }))
+    if (internalName === SHOW_AS_BANNER_FIELD) bannerTouched.current = true
+    const preselectBanner =
+      internalName === SEVERITY_FIELD && hasBannerField && !bannerTouched.current
+    setValues((current) => ({
+      ...current,
+      [internalName]: value,
+      ...(preselectBanner ? { [SHOW_AS_BANNER_FIELD]: isCriticalValue(value) } : {})
+    }))
     setErrors((current) => {
       if (!current[internalName]) return current
       const next = { ...current }
