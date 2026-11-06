@@ -104,6 +104,8 @@ Grant-PnPAzureADAppSitePermission -AppId <MI_CLIENT> -DisplayName "Intranett-var
 
 ## Steg 3: SharePoint
 
+Steg 1 til 3 under (og SPFx-pakken fra steg 4) kan gjøres med `Pzl.Part.Announcement/scripts/Install-Driftsmeldinger.ps1 -EnableTeamsNotifications`, se [README for Driftsmeldinger](../Pzl.Part.Announcement/README.md#with-the-install-script-new-installation-and-upgrade). Radene i konfigurasjonslista og målgruppestyring gjøres for hånd.
+
 1. Legg varslingskolonnene til driftsmeldingslista på hvert område tjenesten skal varsle fra. Malen bygger på innholdstypen fra hovedmalen, så kjør den etter `Announcement.xml`, og kjør den på nytt hver gang hovedmalen er kjørt på nytt:
 
    ```powershell

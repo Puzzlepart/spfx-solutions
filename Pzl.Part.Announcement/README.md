@@ -130,7 +130,28 @@ Application customizers are not rendered in the Viva Connections mobile app, and
 
 ## Installation
 
-### Create the list on the site that hosts it (normally the root site)
+### With the install script (new installation and upgrade)
+
+`scripts/Install-Driftsmeldinger.ps1` does the steps below in one go and can be run again for every upgrade. It is idempotent and supports `-WhatIf`. It needs PnP.PowerShell (not installed by the script), SharePoint Administrator rights and the package built with `npm run package`.
+
+```powershell
+.\scripts\Install-Driftsmeldinger.ps1 -SiteUrl "https://<tenant>.sharepoint.com" -ClientId "<clientid>" -WhatIf
+.\scripts\Install-Driftsmeldinger.ps1 -SiteUrl "https://<tenant>.sharepoint.com" -ClientId "<clientid>" -BannerHubSiteUrls "https://<tenant>.sharepoint.com/sites/<hub>"
+```
+
+| Step | What it does |
+| --- | --- |
+| Package | Uploads and publishes `pzl-announcement.sppkg` to the tenant app catalog (replaces 1.x in place) and updates the app on the list site if it was added there. `-SkipPackage` skips it. |
+| List | Applies `Templates/Announcement.xml` to `-SiteUrl`, with the workaround for PnP.PowerShell 3.4.x. Detects a new installation, an upgrade from 1.x (no *Status* column) or an update of 2.x. |
+| Cleanup | Removes the 1.x `AnnouncementDeepLink` custom action from the list site and the notification site. |
+| Banner | With `-BannerSiteUrls`, `-BannerHubSiteUrls` or `-BannerEverywhere` (and `-BannerTargetAudience`): creates or updates the banner's row in Tenant Wide Extensions. Properties not given, such as `popoverFields`, are kept. |
+| Teams notifications | With `-EnableTeamsNotifications`: uploads `pzl-ext-notification.sppkg` and applies `AnnouncementFields.xml` (list site), `NotificationConfig.xml` and `DeepLinkCustomAction.xml` (`-NotificationSiteUrl`, default the list site). The Azure, Entra and Teams part is done by hand, see [Pzl.Ext.Notification](../Pzl.Ext.Notification/README.md). |
+
+The script ends with the manual steps that are left, such as adding the web part to a page and setting **Område for driftsmeldinger** on other sites.
+
+### By hand
+
+#### Create the list on the site that hosts it (normally the root site)
 
 Clone the project or download all artefacts. The template `Announcement.xml` is located in the Templates-folder. Use PnP.PowerShell 1.12 or later to install, see example:
 
@@ -149,13 +170,13 @@ Invoke-PnPSiteTemplate -Path ".\Templates\Announcement.xml"
 >
 > The same applies to the templates in [Pzl.Ext.Notification](../Pzl.Ext.Notification/README.md).
 
-### Upload the package to an app catalog
+#### Upload the package to an app catalog
 
 Upload `sharepoint/solution/pzl-announcement.sppkg` from the build to the tenant app catalog (or a site collection app catalog), add the web part to a page and set **Område for driftsmeldinger** on sites other than the one with the list.
 
 ### Upgrading from 1.x
 
-2.0.0 keeps the solution ID and the component IDs, so it is an in-place upgrade: existing web part instances and the banner's Tenant Wide Extensions row keep working.
+2.0.0 keeps the solution ID and the component IDs, so it is an in-place upgrade: existing web part instances and the banner's Tenant Wide Extensions row keep working. `scripts/Install-Driftsmeldinger.ps1` does steps 1 to 3; the steps by hand:
 
 1. Upload the 2.0.0 package to the app catalog where 1.x is deployed (replace the existing app). Sites with the app installed from a site collection app catalog need **Update** under Site contents.
 2. Re-run `Invoke-PnPSiteTemplate -Path ".\Templates\Announcement.xml"` on the site with the list. This adds *Status*, changes the level choices to *Informasjon / Advarsel / Kritisk* and updates the column descriptions. Existing items keep their values: *Varsel* is shown as *Kritisk*, *Normal* as *Informasjon*, and items without a status as *Pågår*. When such an item is edited, the editor picks a new level and a status.
@@ -218,6 +239,7 @@ The package is written to `sharepoint/solution/pzl-announcement.sppkg`.
 * «Vis som banner» is preselected in the web part's form when the level is *Kritisk*.
 * «Varsle i Teams» is hidden in the web part's form unless turned on.
 * Unit tests for the level and status mapping and the sorting (`npm test`).
+* New install and upgrade script `scripts/Install-Driftsmeldinger.ps1`.
 
 ### 1.5.4
 
