@@ -16,8 +16,6 @@ This is a web part that displays announcements from a SharePoint list. The annou
 
 * Driftsmeldinger (Announcement)
   * Entries for announcements.
-* Varslingskonfigurasjon (optional, `Templates/NotificationConfig.xml`)
-  * One row per site for the Teams notification service, see [notification/README.md](notification/README.md).
   * Target Audience needs to be activated for the list and can be used if needed.
   * Columns added in 1.1.0 (Teams notification):
     * `PzlPinned` (Yes/No): pinned announcements are sorted first and shown with a pin icon.
@@ -43,25 +41,14 @@ The **New announcement** button is shown only to users who have the *Add items* 
 
 ## Teams notifications and deep links
 
-The web part itself does not send notifications. The optional notification service in [`notification/`](notification/README.md) (Azure Function + a small Teams app) reads the lists, sends Teams activity notifications for new news pages and active announcements, and writes `PzlNotifiedAt`. The list and the web part work without it; see [notification/README.md](notification/README.md) for the deployment guide.
+The web part itself does not send notifications. Teams notifications are an optional add-on, [Pzl.Ext.Notification](../Pzl.Ext.Notification/README.md) (Azure Function, a small Teams app and an SPFx package that redirects news notifications). The list and the web part work without it.
 
 To open a specific announcement when the page loads, the web part reads an announcement ID from one of these sources (in this order) and opens its popover:
 
-1. Teams deep link: `subEntityId`/`subPageId` set to `driftsmelding:<id>` (read via `context.sdks.microsoftTeams`).
-2. Query string: `?driftsmelding=<id>` on the page URL. The value may carry the deep link prefix (`driftsmelding:<id>`); `page:<server-relative url>` navigates to that page instead (news notifications).
+1. Query string: `?driftsmelding=<id>` on the page URL, so a link to one announcement can be shared. The value may carry the deep link prefix (`driftsmelding:<id>`).
+2. Teams deep link: `subEntityId`/`subPageId` set to `driftsmelding:<id>` (read via `context.sdks.microsoftTeams`).
 
-### Deep link redirect (application customizer)
-
-The package also contains the application customizer **AnnouncementDeepLink** (component ID `9f3d6a2c-7b14-4e8f-a5c0-3d2e1f6b8a47`). It reads the `driftsmelding` query parameter when the page loads and, for `page:<url>` deep links, sends the user to that page right away. The web part does the same when it renders, but only if the section holding it is rendered: on small screens the right column of the home page is loaded late or not at all, so the redirect is left to the customizer, which runs before the page content regardless of layout. Only same-origin `.aspx` paths are accepted, and other query parameters (such as `app=portals` from the Teams tab) are carried over. `driftsmelding:<id>` deep links are still handled by the web part, which owns the popover.
-
-The customizer is registered as a site custom action by the feature **Announcements by Puzzlepart - deep link redirect** when the package is installed on a site (site collection app catalog, or "add app" on the site). With a tenant-wide deployment from the tenant app catalog the feature is not activated per site, so register the custom action on the site the Teams tab opens (normally the root site) with the template:
-
-```powershell
-Connect-PnPOnline -Url "https://<tenant>.sharepoint.com" -Interactive -ClientId "<clientid>"
-Invoke-PnPSiteTemplate -Path ".\Templates\DeepLinkCustomAction.xml"
-```
-
-or directly with `Add-PnPCustomAction -Name AnnouncementDeepLink -Title AnnouncementDeepLink -Location ClientSideExtension.ApplicationCustomizer -ClientSideComponentId 9f3d6a2c-7b14-4e8f-a5c0-3d2e1f6b8a47 -ClientSideComponentProperties "{}" -Scope Site`. Check with `Get-PnPCustomAction -Scope Site`. The customizer does nothing on pages opened without the `driftsmelding` parameter.
+`page:<url>` values (news notifications) are ignored by the web part and handled by the add-on's **NotificationDeepLink** customizer.
 
 Lists provisioned with the 1.0.x template still work: the web part falls back to the original fields if `PzlPinned`/`PzlNotifiedAt`/`PzlShowAsBanner` are missing. Re-run `Invoke-PnPSiteTemplate` to add the new columns.
 
@@ -144,7 +131,7 @@ Invoke-PnPSiteTemplate -Path ".\Templates\Announcement.xml"
 >   ForEach-Object { [System.Reflection.Assembly]::LoadFrom($_.FullName) | Out-Null }
 > ```
 >
-> The same applies to `Templates\NotificationConfig.xml`.
+> The same applies to the templates in [Pzl.Ext.Notification](../Pzl.Ext.Notification/README.md).
 
 ### Upload the web part package to a site collection app catalog
 

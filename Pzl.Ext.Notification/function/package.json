@@ -1,7 +1,7 @@
 {
-  "name": "pzl-announcement-notification",
+  "name": "pzl-ext-notification-function",
   "version": "1.0.0",
-  "description": "Timer-triggered Azure Function that sends Teams activity notifications for SharePoint news pages and announcements (Pzl.Part.Announcement)",
+  "description": "Timer-triggered Azure Function that sends Teams activity notifications for SharePoint news pages and announcements (Driftsmeldinger, Pzl.Ext.Notification)",
   "private": true,
   "main": "dist/src/index.js",
   "engines": {

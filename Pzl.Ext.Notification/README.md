@@ -1,11 +1,11 @@
-# Teams-varsling for nyheter og driftsmeldinger
+# Pzl.Ext.Notification – Teams-varsling for driftsmeldinger og nyheter
 
-Valgfritt tillegg til [Pzl.Part.Announcement](../README.md). En timer-trigget Azure Function sender varsler i Teams-aktivitetsfeeden (bjella) når
+Valgfritt tillegg til [Driftsmeldinger (Pzl.Part.Announcement)](../Pzl.Part.Announcement/README.md). En timer-trigget Azure Function sender varsler i Teams-aktivitetsfeeden (bjella) når
 
 - en **nyhetsside** publiseres på et konfigurert område, og
 - en **driftsmelding** blir aktiv og enten har et meldingsnivå som er satt opp under «Nivåer som alltid varsles» for området, eller har «Varsle i Teams» satt.
 
-Varslene respekterer **målgruppestyring**: har elementet målgrupper, varsles medlemmene i de gruppene. Ellers varsles standardgruppene for området. Klikk på et driftsmeldingsvarsel åpner en Teams-fane som viser intranettet, med meldingen i popover. Klikk på et nyhetsvarsel åpner samme fane, og customizer-en **AnnouncementDeepLink** (Pzl.Part.Announcement 1.4.0 eller nyere, se [README](../README.md#deep-link-redirect-application-customizer)) sender brukeren rett til nyhetssiden. Stage view ble prøvd for nyheter og forkastet: artikkelen åpnet i et vindu uten intranettets navigasjon, og mobil støtter det ikke. Graph krever at lenkene er Teams-deep-linker, så fanen er enten varsel-appens egen fane (standard) eller en fane i intranettets egen Teams-app.
+Varslene respekterer **målgruppestyring**: har elementet målgrupper, varsles medlemmene i de gruppene. Ellers varsles standardgruppene for området. Klikk på et driftsmeldingsvarsel åpner en Teams-fane som viser intranettet, med meldingen i popover. Klikk på et nyhetsvarsel åpner samme fane, og customizer-en **NotificationDeepLink** i SPFx-pakken til dette tillegget (se [steg 4](#steg-4-teams-appen)) sender brukeren rett til nyhetssiden. Stage view ble prøvd for nyheter og forkastet: artikkelen åpnet i et vindu uten intranettets navigasjon, og mobil støtter det ikke. Graph krever at lenkene er Teams-deep-linker, så fanen er enten varsel-appens egen fane (standard) eller en fane i intranettets egen Teams-app.
 
 Lista og webdelen fungerer uten dette tillegget. Kolonnene `PzlNotifyTeams`, `PzlPinned` og `PzlNotifiedAt` finnes i hovedmalen fra versjon 1.1.0 og er uten effekt til tjenesten tas i bruk.
 
@@ -13,10 +13,12 @@ Lista og webdelen fungerer uten dette tillegget. Kolonnene `PzlNotifyTeams`, `Pz
 
 | Mappe | Hva |
 |---|---|
+| `src/`, `config/`, `sharepoint/` | SPFx-pakken `pzl-ext-notification.sppkg` med customizer-en **NotificationDeepLink** (videresending av nyhetsvarsler). |
 | `function/` | Azure Function (TypeScript, Node 20+, Functions v4). Kjører hvert minutt. |
 | `teams-app/` | Manifest-mal og ikoner for Teams-appen som eier varslene. |
 | `scripts/` | `Deploy-NotificationInfrastructure.ps1` (Azure-ressurser), `Grant-NotificationPermissions.ps1` (app-rettigheter), `New-NotificationTeamsApp.ps1` (Teams-app-pakke), `Publish-NotificationFunction.ps1` (bygg og deploy) og `Get-NotificationLog.ps1` (logg fra Application Insights). |
-| `../Templates/NotificationConfig.xml` | PnP-mal for konfigurasjonslista `Varslingskonfigurasjon`. |
+| `Templates/NotificationConfig.xml` | PnP-mal for konfigurasjonslista `Varslingskonfigurasjon`. |
+| `Templates/DeepLinkCustomAction.xml` | PnP-mal som registrerer **NotificationDeepLink** på ett område (ved tenant-distribusjon). |
 
 ## Slik virker det
 
@@ -150,7 +152,14 @@ Aktivitetsvarsler må sendes fra en Teams-app der `webApplicationInfo.id` er cli
 
    Fanen i varsel-appen sender `{subEntityId}` videre til intranettet som `?driftsmelding=`, og det er den parameteren webdelen bruker: `driftsmelding:<id>` åpner driftsmeldingen i popover, `page:<url>` (nyheter) sender brukeren videre til nyhetssiden. Webdelen må derfor ligge på siden fanen åpner, normalt forsiden.
 
-   Videresendingen for nyheter gjøres fra 1.4.0 av application customizer-en **AnnouncementDeepLink** i samme pakke, så den skjer før sideinnholdet lastes og uavhengig av om kolonnen med webdelen rendres (på små skjermer lastes høyrekolonna sent eller ikke). Den registreres som custom action på området når pakken installeres fra en områdesamlings-appkatalog. Er pakken distribuert for hele tenanten, kjør `Invoke-PnPSiteTemplate -Path .\Templates\DeepLinkCustomAction.xml` på området fanen åpner, se [README](../README.md#deep-link-redirect-application-customizer).
+   Videresendingen for nyheter gjøres av application customizer-en **NotificationDeepLink** (komponent-ID `1e8a8edf-84b4-4a5e-9fcc-5ec33e34a509`) i SPFx-pakken til dette tillegget, så den skjer før sideinnholdet lastes og uavhengig av hvilke webdeler siden har. Bygg pakken med `npm i` og `npm run package` i denne mappa (Node 22), og last opp `sharepoint/solution/pzl-ext-notification.sppkg` til appkatalogen. Customizer-en registreres som custom action på området når pakken legges til fra en områdesamlings-appkatalog. Er pakken distribuert for hele tenanten, kjør malen på området fanen åpner:
+
+   ```powershell
+   Connect-PnPOnline -Url https://<tenant>.sharepoint.com -Interactive -ClientId <pnp-client-id>
+   Invoke-PnPSiteTemplate -Path .\Templates\DeepLinkCustomAction.xml
+   ```
+
+   Sjekk med `Get-PnPCustomAction -Scope Site`. Customizer-en gjør ingenting på sider som åpnes uten `driftsmelding=page:`-parameteren. Bare samme-opprinnelse `.aspx`-stier godtas, og andre URL-parametere (som `app=portals` fra Teams-fanen) beholdes.
 
    **Har intranettet en egen Teams-app** med SharePoint-SSO, pek varslene dit i stedet. Det er anbefalt der den finnes, siden varsel-appen ikke garanterer stille pålogging på desktop og mobil:
 

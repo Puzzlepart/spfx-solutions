@@ -1,7 +1,7 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/spfx/client-side-extension-manifest.schema.json",
-  "id": "9f3d6a2c-7b14-4e8f-a5c0-3d2e1f6b8a47",
-  "alias": "AnnouncementDeepLinkApplicationCustomizer",
+  "id": "1e8a8edf-84b4-4a5e-9fcc-5ec33e34a509",
+  "alias": "NotificationDeepLinkApplicationCustomizer",
   "componentType": "Extension",
   "extensionType": "ApplicationCustomizer",
   "version": "*",

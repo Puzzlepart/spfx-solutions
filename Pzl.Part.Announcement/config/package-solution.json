@@ -36,20 +36,6 @@
         ]
       },
       {
-        "title": "Announcements by Puzzlepart - deep link redirect",
-        "description": "Registers the AnnouncementDeepLink application customizer, which redirects ?driftsmelding=page: deep links to the page before it renders.",
-        "id": "f5314222-bc94-455c-8e3f-62946d00862f",
-        "version": "1.0.0.0",
-        "componentIds": [
-          "9f3d6a2c-7b14-4e8f-a5c0-3d2e1f6b8a47"
-        ],
-        "assets": {
-          "elementManifests": [
-            "elements.xml"
-          ]
-        }
-      },
-      {
         "title": "Announcements by Puzzlepart - banner",
         "description": "Makes the AnnouncementBanner application customizer available. Shows announcements marked 'Vis som banner' at the top of the pages, see README.",
         "id": "8c492ecb-4db5-4d10-a2dc-13d9b0926f4e",

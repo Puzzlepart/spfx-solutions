@@ -81,7 +81,7 @@ export async function processNews(
         source: site.sourceName,
         previewText: toPlainText(page.Description) || page.Title,
         // The tab lands on the intranet home page with `?driftsmelding=page:<path>`;
-        // the AnnouncementDeepLink customizer (web part 1.4.0+) redirects to the page.
+        // the NotificationDeepLink customizer redirects to the page.
         webUrl: buildLink(settings, `page:${page.FileRef}`, pageUrl),
         templateParameters: { title: page.Title }
       }

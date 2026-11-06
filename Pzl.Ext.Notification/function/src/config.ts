@@ -1,6 +1,6 @@
 /**
  * Settings read from app settings / environment variables.
- * See ../README.md for a description of each setting.
+ * See ../../README.md for a description of each setting.
  */
 export interface Settings {
   /** Site that hosts the configuration list */

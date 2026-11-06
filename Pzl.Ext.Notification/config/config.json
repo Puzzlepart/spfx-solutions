@@ -1,0 +1,16 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "notification-deep-link-application-customizer": {
+      "components": [
+        {
+          "entrypoint": "./lib/extensions/notificationDeepLink/NotificationDeepLinkApplicationCustomizer.js",
+          "manifest": "./src/extensions/notificationDeepLink/NotificationDeepLinkApplicationCustomizer.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {}
+}

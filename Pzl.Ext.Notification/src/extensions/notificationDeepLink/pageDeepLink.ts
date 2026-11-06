@@ -1,25 +1,21 @@
 /**
- * Deep link parsing shared by the Announcement web part and the
- * AnnouncementDeepLink application customizer. Keep this module free of SPFx
- * imports: the customizer runs on every page load and should stay small.
+ * Parsing of `?driftsmelding=page:<url>` deep links from news notifications.
+ * Kept free of SPFx imports: the customizer runs on every page load and should
+ * stay small.
  */
 
 /**
- * Prefix used in the Teams deep link `subEntityId`/`subPageId`
- * (e.g. `driftsmelding:12`).
- */
-export const SUB_PAGE_ID_PREFIX = 'driftsmelding:'
-
-/**
- * Query string parameter used as fallback outside Teams
- * (e.g. `?driftsmelding=12`). The notification Teams app's tab also passes the
- * deep link `subEntityId` through this parameter, prefix included.
+ * Query string parameter the notification Teams app's tab passes the deep
+ * link `subEntityId` through (e.g. `?driftsmelding=page:/SitePages/News.aspx`).
+ * The name is shared with the Driftsmeldinger web part, which reads
+ * `driftsmelding:<id>` values from the same parameter.
  */
 export const QUERY_PARAM_NAME = 'driftsmelding'
 
 /**
  * Prefix used in deep links for news pages (e.g. `page:/SitePages/News.aspx`).
- * The home page cannot show a news page, so the user is sent to it.
+ * The tab opens the intranet home page, which cannot show a news page, so the
+ * user is sent to it.
  */
 export const PAGE_PREFIX = 'page:'
 
@@ -65,16 +61,4 @@ export function getPageRedirectUrl(
   params.delete(QUERY_PARAM_NAME)
   const query = params.toString()
   return query ? `${page}?${query}` : page
-}
-
-/**
- * Parses an announcement ID from a raw value. Accepts `driftsmelding:<id>`
- * or a bare numeric ID. Returns `null` for anything else (e.g. `page:...`
- * deep links for news).
- */
-export function parseAnnouncementId(value: string | undefined | null): string | null {
-  if (!value) return null
-  const id =
-    value.indexOf(SUB_PAGE_ID_PREFIX) === 0 ? value.substring(SUB_PAGE_ID_PREFIX.length) : value
-  return /^\d+$/.test(id) ? id : null
 }

@@ -29,7 +29,7 @@ export async function testNotification(
   if (!userId) return { status: 400, jsonBody: { error: 'userId query parameter is required' } }
 
   // Both types open the tab. news: `page:<server-relative path>` of pageUrl (defaults to the
-  // config site's home page), redirected by the AnnouncementDeepLink customizer; announcement:
+  // config site's home page), redirected by the NotificationDeepLink customizer; announcement:
   // focus on a (non-existing) item
   const pageUrl = req.query.get('pageUrl') || `${settings.configSiteUrl}/SitePages/Home.aspx`
   const webUrl =
