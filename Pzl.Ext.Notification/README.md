@@ -27,7 +27,7 @@ Lista og webdelen fungerer uten dette tillegget. Kolonnene tjenesten bruker (`Pz
 | `src/`, `config/`, `sharepoint/` | SPFx-pakken `pzl-ext-notification.sppkg` med customizer-en **NotificationDeepLink** (videresending av nyhetsvarsler). |
 | `function/` | Azure Function (TypeScript, Node 20+, Functions v4). Kjører hvert minutt. |
 | `teams-app/` | Manifest-mal og ikoner for Teams-appen som eier varslene. |
-| `scripts/` | `Deploy-NotificationInfrastructure.ps1` (Azure-ressurser), `Grant-NotificationPermissions.ps1` (app-rettigheter), `New-NotificationTeamsApp.ps1` (Teams-app-pakke), `Publish-NotificationFunction.ps1` (bygg og deploy) og `Get-NotificationLog.ps1` (logg fra Application Insights). |
+| `scripts/` | `Install-Notification.ps1` (alt under i ett, se [Installer med skript](#installer-med-skript)), `Deploy-NotificationInfrastructure.ps1` (Azure-ressurser), `Grant-NotificationPermissions.ps1` (app-rettigheter), `New-NotificationTeamsApp.ps1` (Teams-app-pakke), `Publish-NotificationFunction.ps1` (bygg og deploy) og `Get-NotificationLog.ps1` (logg fra Application Insights). |
 | `Templates/AnnouncementFields.xml` | PnP-mal som legger varslingskolonnene til driftsmeldingslista. |
 | `Templates/NotificationConfig.xml` | PnP-mal for konfigurasjonslista `Varslingskonfigurasjon`. |
 | `Templates/DeepLinkCustomAction.xml` | PnP-mal som registrerer **NotificationDeepLink** på ett område (ved tenant-distribusjon). |
@@ -59,6 +59,29 @@ Timer (1 min)
 - Driftsmeldinger (Pzl.Part.Announcement) 2.0.0 eller nyere, med hovedmalen kjørt. Med eldre lister uten *Status* behandles alle driftsmeldinger som *Pågår*.
 - Azure-abonnement, og rettigheter til å opprette ressurser og tildele app-roller i Entra (Global Administrator eller Privileged Role Administrator for steg 2).
 - Verktøy: [Azure CLI](https://learn.microsoft.com/cli/azure/), [Azure Functions Core Tools](https://learn.microsoft.com/azure/azure-functions/functions-run-local) v4, Node 20 eller 22, PnP.PowerShell, Microsoft.Graph PowerShell.
+
+## Installer med skript
+
+`scripts/Install-Notification.ps1` gjør steg 1, 2, 4 og 5 under, pluss tilgangen per område fra steg 2, i én kjøring. Skriptet kan kjøres på nytt ved hver oppgradering og installerer ingen verktøy. SharePoint-delen (steg 3 og SPFx-pakken) gjøres med `Pzl.Part.Announcement/scripts/Install-Driftsmeldinger.ps1 -EnableTeamsNotifications`.
+
+```powershell
+az login --tenant <tenant-id>
+.\scripts\Install-Notification.ps1 -TenantId <tenant-id> -SubscriptionId <abonnement> `
+  -ResourceGroupName rg-intranet-notification -FunctionAppName func-intranet-notification `
+  -StorageAccountName stintranetnotify01 -ConfigSiteUrl https://<tenant>.sharepoint.com `
+  -AnnouncementSiteUrls https://<tenant>.sharepoint.com -NewsSiteUrls https://<tenant>.sharepoint.com/sites/nyheter `
+  -AppName "<Intranett> varsler" -DeveloperName "<organisasjon>"
+```
+
+| Steg | Hva skriptet gjør |
+|---|---|
+| 1. Azure | Kjører `Deploy-NotificationInfrastructure.ps1`. Teams-app-ID-en, `DRY_RUN` og listetitlene leses fra den eksisterende Function-appen og beholdes. `-DryRun On/Off` overstyrer. Nye installasjoner starter med `DRY_RUN=true`. |
+| 2. Entra | Kjører `Grant-NotificationPermissions.ps1` med identitetens principal ID. |
+| Tilgang per område | `Write` på `-AnnouncementSiteUrls` (standard: konfigurasjonsområdet), `Read` på konfigurasjonsområdet og `-NewsSiteUrls`. Eksisterende tilganger heves, men senkes aldri. Bruker PnP.PowerShell (lastet i økten, via `Import-PnPPowerShell` eller installert) med PP365-appen som standard `-ClientId`. |
+| 4. Teams-appen | Bygger pakken med `New-NotificationTeamsApp.ps1` og laster den opp til organisasjonens appkatalog med Graph: ny app første gang, ny versjon (patch-nummeret økes) ved oppgradering. `-SkipTeamsAppUpload` bygger bare pakken. |
+| 5. Funksjonen | Kjører `Publish-NotificationFunction.ps1`. |
+
+Roller: Owner (eller Contributor + User Access Administrator) på abonnementet, Global Administrator eller Privileged Role Administrator, Teams Administrator og SharePoint Administrator. Hvert steg kan hoppes over med `-Skip…`. For hånd gjenstår app setup policy i Teams admin center, radene i **Varslingskonfigurasjon** og testvarselet. Skriptet skriver dem ut til slutt.
 
 ## Steg 1: Azure-ressurser
 

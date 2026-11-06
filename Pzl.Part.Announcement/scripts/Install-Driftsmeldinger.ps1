@@ -111,12 +111,22 @@ function Write-Info([string]$Text) { Write-Host "   $Text" }
 #region PnP.PowerShell
 
 Write-Step 'PnP.PowerShell'
-$module = Get-Module -ListAvailable -Name PnP.PowerShell | Sort-Object Version -Descending | Select-Object -First 1
-if (-not $module) {
-  throw 'PnP.PowerShell is not installed. Install it yourself (this script does not), then run the script again.'
+# Order: a module already loaded in the session, then the local loader Import-PnPPowerShell
+# (if the machine has one, e.g. in the PowerShell profile), then an installed module.
+$module = Get-Module -Name PnP.PowerShell | Select-Object -First 1
+if (-not $module -and (Get-Command Import-PnPPowerShell -ErrorAction SilentlyContinue)) {
+  Write-Info 'Loading PnP.PowerShell with Import-PnPPowerShell'
+  Import-PnPPowerShell | Out-Null
+  $module = Get-Module -Name PnP.PowerShell | Select-Object -First 1
 }
-Import-Module $module.Path -ErrorAction Stop
-Write-Done "PnP.PowerShell $($module.Version)"
+if (-not $module) {
+  $available = Get-Module -ListAvailable -Name PnP.PowerShell | Sort-Object Version -Descending | Select-Object -First 1
+  if ($available) { $module = Import-Module $available.Path -PassThru -ErrorAction Stop }
+}
+if (-not $module) {
+  throw 'PnP.PowerShell was not found: not loaded, no Import-PnPPowerShell command and not installed. Load it in the session (Import-Module <path>\PnP.PowerShell.psd1) and run the script again. This script installs nothing.'
+}
+Write-Done "PnP.PowerShell $($module.Version) ($($module.ModuleBase))"
 
 # PnP.PowerShell 3.4.x does not resolve CSOM assemblies that are not loaded at import, and the
 # templates use localization, which makes PnP.Framework load Microsoft.SharePoint.Client.UserProfiles.
@@ -311,7 +321,7 @@ if ($EnableTeamsNotifications) {
   Invoke-Template (Join-Path $NotificationTemplateFolder 'DeepLinkCustomAction.xml') $NotificationSiteUrl
   $manualSteps.Add("Add one row per site to Varslingskonfigurasjon on $NotificationSiteUrl.")
   $manualSteps.Add('Turn on «Varsle i Teams» under «Felter i skjema for ny driftsmelding» in the web part properties if editors register announcements there.')
-  $manualSteps.Add('Azure, Entra and Teams part of the notification add-on: Pzl.Ext.Notification/README.md, steps 1, 2, 4 and 5.')
+  $manualSteps.Add('Azure, Entra and Teams part of the notification add-on: Pzl.Ext.Notification/scripts/Install-Notification.ps1.')
 }
 
 #endregion

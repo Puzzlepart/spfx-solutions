@@ -132,7 +132,7 @@ Application customizers are not rendered in the Viva Connections mobile app, and
 
 ### With the install script (new installation and upgrade)
 
-`scripts/Install-Driftsmeldinger.ps1` does the steps below in one go and can be run again for every upgrade. It is idempotent and supports `-WhatIf`. It needs PnP.PowerShell (not installed by the script), SharePoint Administrator rights and the package built with `npm run package`.
+`scripts/Install-Driftsmeldinger.ps1` does the steps below in one go and can be run again for every upgrade. It is idempotent and supports `-WhatIf`. It needs PnP.PowerShell (loaded in the session, loaded with `Import-PnPPowerShell` if that command exists, or installed; the script installs nothing), SharePoint Administrator rights and the package built with `npm run package`.
 
 ```powershell
 .\scripts\Install-Driftsmeldinger.ps1 -SiteUrl "https://<tenant>.sharepoint.com" -WhatIf
@@ -147,7 +147,7 @@ Application customizers are not rendered in the Viva Connections mobile app, and
 | List | Applies `Templates/Announcement.xml` to `-SiteUrl`, with the workaround for PnP.PowerShell 3.4.x. Detects a new installation, an upgrade from 1.x (no *Status* column) or an update of 2.x. |
 | Cleanup | Removes the 1.x `AnnouncementDeepLink` custom action from the list site and the notification site. |
 | Banner | With `-BannerSiteUrls`, `-BannerHubSiteUrls` or `-BannerEverywhere` (and `-BannerTargetAudience`): creates or updates the banner's row in Tenant Wide Extensions. Properties not given, such as `popoverFields`, are kept. |
-| Teams notifications | With `-EnableTeamsNotifications`: uploads `pzl-ext-notification.sppkg` and applies `AnnouncementFields.xml` (list site), `NotificationConfig.xml` and `DeepLinkCustomAction.xml` (`-NotificationSiteUrl`, default the list site). The Azure, Entra and Teams part is done by hand, see [Pzl.Ext.Notification](../Pzl.Ext.Notification/README.md). |
+| Teams notifications | With `-EnableTeamsNotifications`: uploads `pzl-ext-notification.sppkg` and applies `AnnouncementFields.xml` (list site), `NotificationConfig.xml` and `DeepLinkCustomAction.xml` (`-NotificationSiteUrl`, default the list site). The Azure, Entra and Teams part is installed with `Pzl.Ext.Notification/scripts/Install-Notification.ps1`, see [Pzl.Ext.Notification](../Pzl.Ext.Notification/README.md#installer-med-skript). |
 
 The script ends with the manual steps that are left, such as adding the web part to a page and setting **Område for driftsmeldinger** on other sites.
 
