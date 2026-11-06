@@ -24,6 +24,7 @@ import { useAnnouncement } from './useAnnouncement'
 import { UserMessage } from './UserMessage'
 import { AnnouncementDetails } from './AnnouncementDetails'
 import { CreateAnnouncementDialog } from './CreateAnnouncementDialog'
+import { getIntent } from './intent'
 import { format } from '@fluentui/react'
 import strings from 'AnnouncementStrings'
 
@@ -137,7 +138,7 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                         <UserMessage
                           title={announcement.title}
                           text={announcement.content}
-                          intent={announcement.severity}
+                          intent={getIntent(announcement)}
                           pinned={announcement.pinned}
                           pinnedTitle={strings.Aria.PinnedTitle}
                         />

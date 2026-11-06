@@ -68,10 +68,7 @@
     <value>Warning</value>
   </data>
   <data name="SiteFields_Severity_Choice_Error" xml:space="preserve">
-    <value>Alert</value>
-  </data>
-  <data name="SiteFields_Severity_Choice_Success" xml:space="preserve">
-    <value>Normal</value>
+    <value>Critical</value>
   </data>
   <data name="View_AllItems_DisplayName" xml:space="preserve">
     <value>All Items</value>
@@ -110,7 +107,7 @@
     <value>Levels that always notify</value>
   </data>
   <data name="SiteFields_NotifySeverities_Description" xml:space="preserve">
-    <value>Message levels that are notified in Teams without "Notify in Teams" being set on the announcement. Empty means announcements are notified only when "Notify in Teams" is set.</value>
+    <value>Message levels that are notified in Teams without "Notify in Teams" being set on the announcement, typically Critical. Empty means announcements are notified only when "Notify in Teams" is set.</value>
   </data>
   <data name="SiteFields_NotifyDefaultGroupIds_DisplayName" xml:space="preserve">
     <value>Default recipient groups</value>
@@ -129,5 +126,26 @@
   </data>
   <data name="SiteFields_NotifyActive_Description" xml:space="preserve">
     <value>Turn off to stop notifications for the site without deleting the row</value>
+  </data>
+  <data name="ContentTypes_Announcement_Name" xml:space="preserve">
+    <value>Announcement</value>
+  </data>
+  <data name="SiteFields_NotifyTeams_DisplayName" xml:space="preserve">
+    <value>Notify in Teams</value>
+  </data>
+  <data name="SiteFields_NotifyTeams_Description" xml:space="preserve">
+    <value>Send a Teams notification to the recipients when the announcement becomes active. Levels listed under "Levels that always notify" in the notification configuration are notified anyway. Announcements that are already resolved are not notified.</value>
+  </data>
+  <data name="SiteFields_NotifyAgain_DisplayName" xml:space="preserve">
+    <value>Notify again</value>
+  </data>
+  <data name="SiteFields_NotifyAgain_Description" xml:space="preserve">
+    <value>Send a new Teams notification when you save. Use it only for significant changes, for example a new expected resolution time or that the issue is resolved. Reset to No when the notification has been sent.</value>
+  </data>
+  <data name="SiteFields_NotifiedAt_DisplayName" xml:space="preserve">
+    <value>Notified in Teams</value>
+  </data>
+  <data name="SiteFields_NotifiedAt_Description" xml:space="preserve">
+    <value>Set automatically by the notification service when the notification has been sent.</value>
   </data>
 </root>

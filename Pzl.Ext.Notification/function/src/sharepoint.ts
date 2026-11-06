@@ -33,8 +33,11 @@ export class SharePointClient {
   }
 
   /**
-   * Queries list items. Fields in `optionalSelect` are dropped and the query
-   * retried if SharePoint rejects them (e.g. audience targeting not enabled).
+   * Queries list items. If SharePoint rejects the query and `optionalSelect`
+   * is set, the list's fields are read and the query retried with the optional
+   * fields the list has (e.g. audience targeting not enabled, or a column
+   * added in a later template version). User fields can be given with the
+   * `Id` suffix (`OData__ModernAudienceTargetUserFieldId`).
    */
   async getItems<T>(
     listPath: string,
@@ -59,11 +62,23 @@ export class SharePointClient {
       return result.value
     } catch (error) {
       if (query.optionalSelect?.length && error instanceof HttpError && error.status === 400) {
-        const result = await this.get<{ value: T[] }>(build(query.select))
+        const existing = await this.getFieldNames(listPath)
+        const optional = query.optionalSelect.filter(
+          (name) => existing.has(name) || (name.endsWith('Id') && existing.has(name.slice(0, -2)))
+        )
+        const result = await this.get<{ value: T[] }>(build([...query.select, ...optional]))
         return result.value
       }
       throw error
     }
+  }
+
+  /** Entity property names (REST names) of the list's fields */
+  async getFieldNames(listPath: string): Promise<Set<string>> {
+    const result = await this.get<{ value: { EntityPropertyName: string }[] }>(
+      `${listPath}/fields?$select=EntityPropertyName&$top=500`
+    )
+    return new Set(result.value.map((field) => field.EntityPropertyName))
   }
 
   /** Updates fields on a list item (MERGE) */

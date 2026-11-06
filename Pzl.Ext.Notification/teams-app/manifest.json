@@ -42,7 +42,7 @@
       {
         "type": "announcement",
         "description": "Driftsmelding",
-        "templateText": "Driftsmelding: {title}"
+        "templateText": "{title}"
       },
       {
         "type": "news",

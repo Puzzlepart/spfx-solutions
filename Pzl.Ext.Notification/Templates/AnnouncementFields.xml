@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+  Adds the Teams notification fields to the Driftsmeldinger list (the content type
+  "Driftsmelding" from Pzl.Part.Announcement/Templates/Announcement.xml):
+    PzlNotifyTeams  «Varsle i Teams»   notify when the announcement becomes active
+    PzlNotifyAgain  «Varsle på nytt»   send a new notification on save, reset by the service
+    PzlNotifiedAt   «Varslet i Teams»  set by the service, shown in the web part's popover
+  Apply after Announcement.xml, to every site with an announcement list the service notifies:
+    Invoke-PnPSiteTemplate -Path .\Templates\AnnouncementFields.xml
+  Idempotent. The field IDs of PzlNotifyTeams and PzlNotifiedAt are the ones used by
+  Pzl.Part.Announcement 1.1 to 1.5, so lists that already have them are left as they are.
+-->
+<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
+  <pnp:Localizations>
+    <pnp:Localization LCID="1044" Name="Norwegian" ResourceFile="Resources.no-NB.resx" />
+    <pnp:Localization LCID="1033" Name="English (US)" ResourceFile="Resources.en-US.resx" />
+  </pnp:Localizations>
+  <pnp:Templates ID="CONTAINER-TEMPLATE-NOTIFICATION-ANNOUNCEMENTFIELDS">
+    <pnp:ProvisioningTemplate ID="TEMPLATE-NOTIFICATION-ANNOUNCEMENTFIELDS" Version="1" Scope="RootSite">
+      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/AnnouncementFields/SiteFields.xml" />
+      <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="Objects/AnnouncementFields/ContentTypes.xml" />
+    </pnp:ProvisioningTemplate>
+  </pnp:Templates>
+</pnp:Provisioning>

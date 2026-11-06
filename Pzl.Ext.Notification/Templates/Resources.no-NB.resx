@@ -68,10 +68,7 @@
     <value>Advarsel</value>
   </data>
   <data name="SiteFields_Severity_Choice_Error" xml:space="preserve">
-    <value>Varsel</value>
-  </data>
-  <data name="SiteFields_Severity_Choice_Success" xml:space="preserve">
-    <value>Normal</value>
+    <value>Kritisk</value>
   </data>
   <data name="View_AllItems_DisplayName" xml:space="preserve">
     <value>Alle elementer</value>
@@ -110,7 +107,7 @@
     <value>Nivåer som alltid varsles</value>
   </data>
   <data name="SiteFields_NotifySeverities_Description" xml:space="preserve">
-    <value>Meldingsnivåer som varsles i Teams uten at «Varsle i Teams» er satt på driftsmeldingen. Tom betyr at driftsmeldinger bare varsles når «Varsle i Teams» er satt.</value>
+    <value>Meldingsnivåer som varsles i Teams uten at «Varsle i Teams» er satt på driftsmeldingen, typisk Kritisk. Tom betyr at driftsmeldinger bare varsles når «Varsle i Teams» er satt.</value>
   </data>
   <data name="SiteFields_NotifyDefaultGroupIds_DisplayName" xml:space="preserve">
     <value>Standard mottakergrupper</value>
@@ -129,5 +126,26 @@
   </data>
   <data name="SiteFields_NotifyActive_Description" xml:space="preserve">
     <value>Slå av for å stoppe varsling for området uten å slette raden</value>
+  </data>
+  <data name="ContentTypes_Announcement_Name" xml:space="preserve">
+    <value>Driftsmelding</value>
+  </data>
+  <data name="SiteFields_NotifyTeams_DisplayName" xml:space="preserve">
+    <value>Varsle i Teams</value>
+  </data>
+  <data name="SiteFields_NotifyTeams_Description" xml:space="preserve">
+    <value>Send varsel i Teams til mottakerne når meldingen blir aktiv. Nivåene under «Nivåer som alltid varsles» i varslingskonfigurasjonen varsles uansett. Meldinger som allerede er løst, varsles ikke.</value>
+  </data>
+  <data name="SiteFields_NotifyAgain_DisplayName" xml:space="preserve">
+    <value>Varsle på nytt</value>
+  </data>
+  <data name="SiteFields_NotifyAgain_Description" xml:space="preserve">
+    <value>Send et nytt varsel i Teams når du lagrer. Bruk det bare ved vesentlige endringer, for eksempel ny forventet løsningstid eller at saken er løst. Settes tilbake til Nei når varselet er sendt.</value>
+  </data>
+  <data name="SiteFields_NotifiedAt_DisplayName" xml:space="preserve">
+    <value>Varslet i Teams</value>
+  </data>
+  <data name="SiteFields_NotifiedAt_Description" xml:space="preserve">
+    <value>Settes automatisk av varslingstjenesten når varselet er sendt.</value>
   </data>
 </root>

@@ -1,5 +1,6 @@
 import { Settings } from '../config'
 import { SharePointClient } from '../sharepoint'
+import { Severity, toKnownSeverity } from './levels'
 
 /** One row in the configuration list (`Templates/NotificationConfig.xml`) */
 export interface SiteConfiguration {
@@ -15,11 +16,12 @@ export interface SiteConfiguration {
   notifyNews: boolean
   notifyAnnouncements: boolean
   /**
-   * Severity values (`PzlSeverity`) that are notified without `PzlNotifyTeams`
-   * (`PzlNotifySeverities`). Empty means announcements are notified only when
-   * `PzlNotifyTeams` is set.
+   * Message levels that are notified without `PzlNotifyTeams`
+   * (`PzlNotifySeverities`, mapped with `toKnownSeverity`, so «Varsel» from
+   * 1.x lists means critical). Empty means announcements are notified only
+   * when `PzlNotifyTeams` is set.
    */
-  notifySeverities: string[]
+  notifySeverities: Severity[]
   defaultGroupIds: string[]
   announcementListTitle: string
 }
@@ -67,7 +69,13 @@ export async function getSiteConfigurations(settings: Settings): Promise<SiteCon
       siteUrl: item.PzlSiteUrl.trim().replace(/\/+$/, ''),
       notifyNews: item.PzlNotifyNews === true,
       notifyAnnouncements: item.PzlNotifyAnnouncements === true,
-      notifySeverities: (item.PzlNotifySeverities ?? []).map((s) => s.trim()).filter(Boolean),
+      notifySeverities: [
+        ...new Set(
+          (item.PzlNotifySeverities ?? [])
+            .map(toKnownSeverity)
+            .filter((s): s is Severity => s !== null)
+        )
+      ],
       defaultGroupIds:
         (item.PzlDefaultGroupIds ?? '').match(GUID)?.map((g) => g.toLowerCase()) ?? [],
       announcementListTitle: item.PzlAnnouncementListTitle?.trim() || settings.announcementListTitle

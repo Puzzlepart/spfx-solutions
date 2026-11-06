@@ -8,9 +8,8 @@
   </Field>
   <Field Type="MultiChoice" DisplayName="{resource:SiteFields_NotifySeverities_DisplayName}" Description="{resource:SiteFields_NotifySeverities_Description}" FillInChoice="TRUE" Group="Puzzlepart" ID="{31486421-247a-498c-a364-fb1ebaf9facd}" StaticName="PzlNotifySeverities" Name="PzlNotifySeverities">
     <CHOICES>
-      <CHOICE>{resource:SiteFields_Severity_Choice_Success}</CHOICE>
-      <CHOICE>{resource:SiteFields_Severity_Choice_Warning}</CHOICE>
       <CHOICE>{resource:SiteFields_Severity_Choice_Info}</CHOICE>
+      <CHOICE>{resource:SiteFields_Severity_Choice_Warning}</CHOICE>
       <CHOICE>{resource:SiteFields_Severity_Choice_Error}</CHOICE>
     </CHOICES>
   </Field>

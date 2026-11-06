@@ -3,11 +3,22 @@
 Valgfritt tillegg til [Driftsmeldinger (Pzl.Part.Announcement)](../Pzl.Part.Announcement/README.md). En timer-trigget Azure Function sender varsler i Teams-aktivitetsfeeden (bjella) når
 
 - en **nyhetsside** publiseres på et konfigurert område, og
-- en **driftsmelding** blir aktiv og enten har et meldingsnivå som er satt opp under «Nivåer som alltid varsles» for området, eller har «Varsle i Teams» satt.
+- en **driftsmelding** blir aktiv og enten har et meldingsnivå som er satt opp under «Nivåer som alltid varsles» for området, eller har «Varsle i Teams» satt. Driftsmeldinger som allerede er *Løst*, varsles ikke, og
+- en redaktør setter **«Varsle på nytt»** på en driftsmelding (ved vesentlige endringer, eller når saken er løst).
+
+Tittelen i bjella sier hva slags varsel det er:
+
+| Varsel | Tittel i bjella |
+|---|---|
+| Første varsel, status *Pågår* | «Driftsmelding: <tittel>» |
+| Første varsel, status *Planlagt* | «Planlagt: <tittel>» |
+| «Varsle på nytt», status *Løst* | «Løst: <tittel>» |
+| «Varsle på nytt», ellers | «Oppdatert: <tittel>» |
+| Nyhet | «<tittel>» |
 
 Varslene respekterer **målgruppestyring**: har elementet målgrupper, varsles medlemmene i de gruppene. Ellers varsles standardgruppene for området. Klikk på et driftsmeldingsvarsel åpner en Teams-fane som viser intranettet, med meldingen i popover. Klikk på et nyhetsvarsel åpner samme fane, og customizer-en **NotificationDeepLink** i SPFx-pakken til dette tillegget (se [steg 4](#steg-4-teams-appen)) sender brukeren rett til nyhetssiden. Stage view ble prøvd for nyheter og forkastet: artikkelen åpnet i et vindu uten intranettets navigasjon, og mobil støtter det ikke. Graph krever at lenkene er Teams-deep-linker, så fanen er enten varsel-appens egen fane (standard) eller en fane i intranettets egen Teams-app.
 
-Lista og webdelen fungerer uten dette tillegget. Kolonnene `PzlNotifyTeams`, `PzlPinned` og `PzlNotifiedAt` finnes i hovedmalen fra versjon 1.1.0 og er uten effekt til tjenesten tas i bruk.
+Lista og webdelen fungerer uten dette tillegget. Kolonnene tjenesten bruker (`PzlNotifyTeams` «Varsle i Teams», `PzlNotifyAgain` «Varsle på nytt» og `PzlNotifiedAt` «Varslet i Teams») legges til driftsmeldingslista med malen `Templates/AnnouncementFields.xml` i dette tillegget, se [steg 3](#steg-3-sharepoint).
 
 ## Innhold
 
@@ -17,6 +28,7 @@ Lista og webdelen fungerer uten dette tillegget. Kolonnene `PzlNotifyTeams`, `Pz
 | `function/` | Azure Function (TypeScript, Node 20+, Functions v4). Kjører hvert minutt. |
 | `teams-app/` | Manifest-mal og ikoner for Teams-appen som eier varslene. |
 | `scripts/` | `Deploy-NotificationInfrastructure.ps1` (Azure-ressurser), `Grant-NotificationPermissions.ps1` (app-rettigheter), `New-NotificationTeamsApp.ps1` (Teams-app-pakke), `Publish-NotificationFunction.ps1` (bygg og deploy) og `Get-NotificationLog.ps1` (logg fra Application Insights). |
+| `Templates/AnnouncementFields.xml` | PnP-mal som legger varslingskolonnene til driftsmeldingslista. |
 | `Templates/NotificationConfig.xml` | PnP-mal for konfigurasjonslista `Varslingskonfigurasjon`. |
 | `Templates/DeepLinkCustomAction.xml` | PnP-mal som registrerer **NotificationDeepLink** på ett område (ved tenant-distribusjon). |
 
@@ -26,9 +38,12 @@ Lista og webdelen fungerer uten dette tillegget. Kolonnene `PzlNotifyTeams`, `Pz
 Timer (1 min)
   └─ Les aktive rader i Varslingskonfigurasjon (CONFIG_SITE_URL)
        └─ Per område
-            ├─ Driftsmeldinger: PzlStartDate <= nå, PzlEndDate >= nå, PzlNotifiedAt tom,
-            │     og (PzlSeverity i radens «Nivåer som alltid varsles» eller PzlNotifyTeams = ja)
-            │     → sett PzlNotifiedAt (claim) → send → ved feil: nullstill PzlNotifiedAt
+            ├─ Driftsmeldinger: PzlStartDate <= nå, PzlEndDate >= nå, og enten
+            │     • PzlNotifyAgain = ja (nytt varsel), eller
+            │     • PzlNotifiedAt tom, PzlStatus ikke Løst, og (PzlSeverity i radens
+            │       «Nivåer som alltid varsles» eller PzlNotifyTeams = ja) (første varsel)
+            │     → sett PzlNotifiedAt og PzlNotifyAgain = nei (claim) → send
+            │     → ved feil: sett feltene tilbake
             └─ Nyheter: PromotedState = 2, FirstPublishedDate innen NEWS_LOOKBACK_DAYS,
                   publisert (hovedversjon, godkjent), ikke registrert i Table Storage
                   → registrer i tabellen (claim) → send → ved feil: fjern raden
@@ -41,7 +56,7 @@ Timer (1 min)
 
 ## Forutsetninger
 
-- Pzl.Part.Announcement 1.1.0 eller nyere installert, med hovedmalen kjørt på nytt så de nye kolonnene finnes.
+- Driftsmeldinger (Pzl.Part.Announcement) 2.0.0 eller nyere, med hovedmalen kjørt. Med eldre lister uten *Status* behandles alle driftsmeldinger som *Pågår*.
 - Azure-abonnement, og rettigheter til å opprette ressurser og tildele app-roller i Entra (Global Administrator eller Privileged Role Administrator for steg 2).
 - Verktøy: [Azure CLI](https://learn.microsoft.com/cli/azure/), [Azure Functions Core Tools](https://learn.microsoft.com/azure/azure-functions/functions-run-local) v4, Node 20 eller 22, PnP.PowerShell, Microsoft.Graph PowerShell.
 
@@ -89,7 +104,14 @@ Grant-PnPAzureADAppSitePermission -AppId <MI_CLIENT> -DisplayName "Intranett-var
 
 ## Steg 3: SharePoint
 
-1. Kjør hovedmalen på nytt på områdene med driftsmeldinger, så kolonnene `PzlNotifyTeams`, `PzlPinned` og `PzlNotifiedAt` finnes (`Invoke-PnPSiteTemplate -Path .\Templates\Announcement.xml`).
+1. Legg varslingskolonnene til driftsmeldingslista på hvert område tjenesten skal varsle fra. Malen bygger på innholdstypen fra hovedmalen, så kjør den etter `Announcement.xml`, og kjør den på nytt hver gang hovedmalen er kjørt på nytt:
+
+   ```powershell
+   Connect-PnPOnline -Url https://<tenant>.sharepoint.com -Interactive -ClientId <pnp-client-id>
+   Invoke-PnPSiteTemplate -Path .\Templates\AnnouncementFields.xml
+   ```
+
+   Slå deretter på «Varsle i Teams» under «Felter i skjema for ny driftsmelding» i egenskapene til webdelen, hvis redaktørene registrerer driftsmeldinger der. Feltet er skjult i webdelens skjema som standard. «Varsle på nytt» vises bare i listeskjemaet når et element redigeres. Legg gjerne kolonnene til visningen av lista.
 2. Opprett konfigurasjonslista på området som skal eie konfigurasjonen (typisk rot- eller hub-området):
 
    ```powershell
@@ -105,14 +127,14 @@ Grant-PnPAzureADAppSitePermission -AppId <MI_CLIENT> -DisplayName "Intranett-var
    | Områdeadresse | Full URL til området |
    | Varsle nyheter | Ja/nei |
    | Varsle driftsmeldinger | Ja/nei |
-   | Nivåer som alltid varsles | Meldingsnivåer som varsles uten at «Varsle i Teams» er satt på driftsmeldingen, typisk «Varsel». Tom betyr at driftsmeldinger bare varsles når «Varsle i Teams» er satt. Egne verdier kan skrives inn hvis lista har andre nivåer. |
+   | Nivåer som alltid varsles | Meldingsnivåer som varsles uten at «Varsle i Teams» er satt på driftsmeldingen, typisk «Kritisk». Tom betyr at driftsmeldinger bare varsles når «Varsle i Teams» er satt. Verdiene tolkes uavhengig av språk, og 1.x-verdien «Varsel» betyr «Kritisk». |
    | Standard mottakergrupper | Objekt-ID for én eller flere Entra-grupper, én per linje. Brukes når elementet ikke har målgruppe. |
    | Driftsmeldingsliste | Tom for standard (`Driftsmeldinger`), ellers tittel på lista |
    | Aktiv | Ja |
 
    Et område med egen mottakergruppe (for eksempel en lederportal) får en egen rad med den gruppa som standard.
 
-   Kolonnen «Nivåer som alltid varsles» kom til etter første utgave av malen og erstatter app-innstillingen `ALWAYS_NOTIFY_SEVERITIES`. Kjør `Invoke-PnPSiteTemplate -Path .\Templates\NotificationConfig.xml` på nytt for å legge den til i en eksisterende liste, og fyll inn «Varsel» på radene som skal ha dagens oppførsel. Mangler kolonnen, eller er den tom, varsles driftsmeldinger bare når «Varsle i Teams» er satt.
+   Mangler kolonnen «Nivåer som alltid varsles», eller er den tom, varsles driftsmeldinger bare når «Varsle i Teams» er satt.
 
 4. Aktiver målgruppestyring på Site Pages-biblioteket og driftsmeldingslista der målgrupper skal brukes. Uten målgruppestyring brukes alltid standardgruppene.
 
@@ -140,7 +162,7 @@ Aktivitetsvarsler må sendes fra en Teams-app der `webApplicationInfo.id` er cli
    | `-AppId` | Ny GUID første gang. Ta vare på den og bruk samme ved oppdateringer. |
    | `-Version` | Øk ved hver opplasting, f.eks. 1.0.0, 1.0.1. |
 
-   Tekstene i `activityTypes` i `teams-app/manifest.json` er det brukeren ser i bjella og kan tilpasses før bygging: driftsmeldinger vises som «Driftsmelding: {title}», nyheter bare med tittelen («{title}»), siden typen framgår av aktivitetstypens beskrivelse («Nyhet») og forhåndsvisningen. Linjen under varselet viser tittelen på området varselet kommer fra (områdets navn i SharePoint, lest fra `web/Title` ved hver kjøring). Kan ikke tittelen leses, brukes tittelen på konfigurasjonsraden i steg 3 i stedet.
+   Tekstene i `activityTypes` i `teams-app/manifest.json` er det brukeren ser i bjella og kan tilpasses før bygging. Begge typene viser bare `{title}`: for driftsmeldinger setter tjenesten selv inn prefikset («Driftsmelding:», «Planlagt:», «Oppdatert:» eller «Løst:», se tabellen øverst), og for nyheter framgår typen av aktivitetstypens beskrivelse («Nyhet») og forhåndsvisningen. Linjen under varselet viser tittelen på området varselet kommer fra (områdets navn i SharePoint, lest fra `web/Title` ved hver kjøring). Kan ikke tittelen leses, brukes tittelen på konfigurasjonsraden i steg 3 i stedet.
 
 2. Last opp zip-fila i Teams admin center (Teams apps > Manage apps > Upload new app).
 3. Lag en **app setup policy** som installerer appen for mottakerne (uten å feste den i appfeltet), og tildel den til samme grupper som i konfigurasjonen. Start med en testgruppe.
@@ -227,7 +249,7 @@ Svaret inneholder `ok` og eventuell Graph-feil. Varselet skal dukke opp i bjella
 
 
 1. Konfigurasjonsrad mot en testgruppe, setup policy mot samme gruppe.
-2. Test de tre variantene: nyhet, driftsmelding med et nivå fra «Nivåer som alltid varsles», driftsmelding med «Varsle i Teams».
+2. Test variantene: nyhet, driftsmelding med et nivå fra «Nivåer som alltid varsles», driftsmelding med «Varsle i Teams», driftsmelding med status *Planlagt*, og «Varsle på nytt» på en driftsmelding som er satt til *Løst*.
 3. Klikk varselet på desktop, web og mobil og se at riktig side/driftsmelding åpnes.
 4. Sjekk at `PzlNotifiedAt` settes på driftsmeldingen og vises i webdelens popover.
 5. Bytt standardgruppe og setup policy til produksjonsgruppene.
@@ -251,5 +273,5 @@ Kopier `function/local.settings.json.example` til `local.settings.json`. Lokalt 
 | Ingen mottakere | Gruppe-ID-ene i konfigurasjonen, og at gruppa har medlemmer som ikke er deaktivert/gjester |
 | Loggen sier «Sent … to N recipients», men ingenting i bjella | Appen var ikke installert for mottakeren da det ble sendt (setup policy tar tid), eller `templateParameters` matcher ikke `templateText`. Send et testvarsel med `/api/test-notification` til én bruker for å få feilen. |
 | Nyheter varsles ikke | `PromotedState = 2`, publisert hovedversjon, innenfor `NEWS_LOOKBACK_DAYS`, og ikke allerede en rad i tabellen `NotificationState` |
-| Driftsmeldinger varsles ikke | Startdato passert, sluttdato ikke passert, `PzlNotifiedAt` tom, og nivå/«Varsle i Teams» |
+| Driftsmeldinger varsles ikke | Startdato passert, sluttdato ikke passert, `PzlNotifiedAt` tom, status ikke *Løst*, og nivå/«Varsle i Teams». For nytt varsel: «Varsle på nytt» satt (kolonnen fra `AnnouncementFields.xml`) |
 | Dobbelt varsel | Viva Connections kan også varsle om nyheter. Skru av det ene. |

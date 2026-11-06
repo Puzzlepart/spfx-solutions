@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import strings from 'AnnouncementStrings'
 import { IListField } from '../types'
 import { AnnouncementListService, isFormField } from '../../services/AnnouncementListService'
+import { isFormFieldEnabled } from '../../constants'
 import {
   dateInputValueToIso,
   getInitialFormValue,
@@ -88,7 +89,9 @@ export function useCreateAnnouncementForm(
   onCreated: () => void
 ) {
   const formFields = allFields.filter(
-    (field) => isFormField(field) && hiddenFormFields?.[field.internalName] !== false
+    (field) =>
+      isFormField(field) &&
+      (field.required || isFormFieldEnabled(field.internalName, hiddenFormFields))
   )
   const [values, setValues] = useState<Record<string, any>>({})
   const [errors, setErrors] = useState<Record<string, string>>({})

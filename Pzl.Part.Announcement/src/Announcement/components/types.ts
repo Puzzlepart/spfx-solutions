@@ -1,7 +1,7 @@
-import { MessageBarIntent } from '@fluentui/react-components'
 import { SPUser } from '@microsoft/sp-page-context'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import type { AnnouncementListService } from '../services/AnnouncementListService'
+import type { Severity, Status } from '../model'
 
 export interface IAnnouncementProps {
   // General
@@ -16,8 +16,10 @@ export interface IAnnouncementProps {
    */
   popoverFields: Record<string, boolean>
   /**
-   * Fields hidden from the create form, keyed by internal name (`false` = hidden).
-   * Fields missing from the map are shown if the list schema allows it.
+   * Fields shown in the create form, keyed by internal name (`true` = shown,
+   * `false` = hidden). Fields missing from the map are shown if the list schema
+   * allows it, except those in `DEFAULT_HIDDEN_FORM_FIELDS`. Required fields
+   * are always shown.
    */
   formFields: Record<string, boolean>
 
@@ -59,7 +61,15 @@ export interface IAnnouncementState {
 export interface IAnnouncement {
   id: string
   title: string
-  severity: MessageBarIntent
+  /**
+   * Message level (`PzlSeverity`), mapped with `toSeverity`
+   */
+  severity: Severity
+  /**
+   * Status (`PzlStatus`), mapped with `toStatus`. `ongoing` when the list has
+   * no status column or the item no value.
+   */
+  status: Status
   content: string
   hasAccess?: boolean
   /**

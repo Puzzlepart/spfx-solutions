@@ -38,15 +38,10 @@ define([], function () {
       Link: 'Sett inn lenke',
       LinkPrompt: 'Adresse (URL) til lenken:'
     },
-    Severity: {
-      Info: 'Informasjon',
-      Warning: 'Advarsel',
-      Error: 'Varsel',
-      Success: 'Normal'
-    },
     FieldTitles: {
       Title: 'Tittel',
       PzlSeverity: 'Meldingsnivå',
+      PzlStatus: 'Status',
       PzlContent: 'Innhold (Beskrivelse/konsekvenser)',
       PzlStartDate: 'Startdato',
       PzlEndDate: 'Sluttdato',
@@ -56,6 +51,7 @@ define([], function () {
       PzlPinned: 'Fest til toppen',
       PzlShowAsBanner: 'Vis som banner',
       PzlNotifyTeams: 'Varsle i Teams',
+      PzlNotifyAgain: 'Varsle på nytt',
       PzlNotifiedAt: 'Varslet i Teams'
     }
   }

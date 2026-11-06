@@ -23,6 +23,7 @@ import strings from 'AnnouncementStrings'
 import { IAnnouncement, IListField } from '../../../Announcement/components/types'
 import { AnnouncementDetails } from '../../../Announcement/components/AnnouncementDetails'
 import { htmlToText } from '../../../Announcement/util/fieldValue'
+import { getIntent } from '../../../Announcement/components/intent'
 import { useDismissedBanners } from './useDismissedBanners'
 import styles from './AnnouncementBanner.module.scss'
 
@@ -68,7 +69,7 @@ export const AnnouncementBanner: FC<IAnnouncementBannerProps> = ({ announcements
         {visible.map((announcement) => (
           <MessageBar
             key={announcement.id}
-            intent={announcement.severity}
+            intent={getIntent(announcement)}
             layout='multiline'
             className={styles.message}
             role='button'

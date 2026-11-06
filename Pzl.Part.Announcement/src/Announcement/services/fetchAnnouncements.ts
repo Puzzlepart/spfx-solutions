@@ -7,10 +7,10 @@ import '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/items'
 import '@pnp/sp/site-users/web'
-import { MessageBarIntent } from '@fluentui/react-components'
 import strings from 'AnnouncementStrings'
 import { IAnnouncement, IListField } from '../components/types'
 import { OPTIONAL_FIELDS } from '../constants'
+import { toSeverity, toStatus } from '../model'
 import type { AnnouncementListService } from './AnnouncementListService'
 
 /**
@@ -41,22 +41,6 @@ function buildQuery(fields: IListField[], targetAudience: boolean) {
     select.push('OData__ModernAudienceTargetUserFieldId')
   }
   return { select, expand }
-}
-
-/**
- * Maps the `PzlSeverity` choice value to a message bar intent
- */
-export function toSeverity(value: string | undefined): MessageBarIntent {
-  switch (value) {
-    case strings.Severity.Success:
-      return 'success'
-    case strings.Severity.Warning:
-      return 'warning'
-    case strings.Severity.Error:
-      return 'error'
-    default:
-      return 'info'
-  }
 }
 
 /**
@@ -121,6 +105,7 @@ export async function fetchAnnouncements(
           id: String(item.ID),
           title: item.Title,
           severity: toSeverity(item.PzlSeverity),
+          status: toStatus(item.PzlStatus),
           content: item.PzlContent,
           hasAccess,
           pinned: item.PzlPinned === true,

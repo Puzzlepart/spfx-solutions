@@ -3,6 +3,7 @@
   <pnp:FieldRefs>
     <pnp:FieldRef ID="fa564e0f-0c70-4ab9-b863-0177e6ddd247" Name="Title" Required="true" UpdateChildren="true" />
     <pnp:FieldRef ID="8cfea964-4168-4775-8970-2709d85a04cc" Name="PzlSeverity" Required="true" UpdateChildren="true" />
+    <pnp:FieldRef ID="06701bb5-e434-461f-8d63-86cfe9184593" Name="PzlStatus" Required="true" UpdateChildren="true" />
     <pnp:FieldRef ID="28b815cc-3613-4118-a1be-694b47e88ecf" Name="PzlContent" Required="true" UpdateChildren="true" />
     <pnp:FieldRef ID="31cbeda7-3ddc-43c2-9f44-136147558b37" Name="PzlStartDate" Required="true" UpdateChildren="true" />
     <pnp:FieldRef ID="68ba85c1-53ff-4ada-a682-e4038dcd6506" Name="PzlEndDate" Required="true" UpdateChildren="true" />
@@ -11,7 +12,5 @@
     <pnp:FieldRef ID="078e1aaf-c463-41d3-80d4-c5239cc0986a" Name="PzlResponsible" UpdateChildren="true" />
     <pnp:FieldRef ID="7e89dd82-1342-4ac7-a257-18176dc17266" Name="PzlPinned" UpdateChildren="true" />
     <pnp:FieldRef ID="36425670-4466-4af9-9550-d57574335430" Name="PzlShowAsBanner" UpdateChildren="true" />
-    <pnp:FieldRef ID="3e65d1ee-5948-4a41-b295-317184aaa28f" Name="PzlNotifyTeams" UpdateChildren="true" />
-    <pnp:FieldRef ID="8f0539a0-f520-42a2-b2fb-56a56ce33d1d" Name="PzlNotifiedAt" UpdateChildren="true" />
   </pnp:FieldRefs>
 </pnp:ContentType>

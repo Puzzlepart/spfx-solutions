@@ -37,12 +37,6 @@ declare interface IAnnouncementStrings {
     Link: string
     LinkPrompt: string
   }
-  Severity: {
-    Info: string
-    Warning: string
-    Error: string
-    Success: string
-  }
   /**
    * Display names of the template fields, used when the list schema cannot be read
    */

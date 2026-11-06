@@ -1,4 +1,5 @@
 import strings from 'AnnouncementStrings'
+import { DEFAULT_SEVERITY, DEFAULT_STATUS_VALUE, SEVERITY_VALUES, STATUS_VALUES } from '../model'
 import { IListField } from '../components/types'
 
 const field = (
@@ -24,19 +25,20 @@ const field = (
 
 /**
  * Fields of the list as provisioned by `Templates/Announcement.xml`. Used only
- * when the list schema cannot be read from SharePoint.
+ * when the list schema cannot be read from SharePoint. The Teams fields of the
+ * notification add-on (Pzl.Ext.Notification) are left out.
  */
 export const FALLBACK_FIELDS: IListField[] = [
   field('Title', 'Text', { required: true, fromBaseType: true }),
   field('PzlSeverity', 'Choice', {
     required: true,
-    choices: [
-      strings.Severity.Success,
-      strings.Severity.Warning,
-      strings.Severity.Info,
-      strings.Severity.Error
-    ],
-    defaultValue: strings.Severity.Warning
+    choices: [SEVERITY_VALUES.info, SEVERITY_VALUES.warning, SEVERITY_VALUES.critical],
+    defaultValue: SEVERITY_VALUES[DEFAULT_SEVERITY]
+  }),
+  field('PzlStatus', 'Choice', {
+    required: true,
+    choices: [STATUS_VALUES.planned, STATUS_VALUES.ongoing, STATUS_VALUES.resolved],
+    defaultValue: DEFAULT_STATUS_VALUE
   }),
   field('PzlContent', 'Note', { required: true, richText: true }),
   field('PzlStartDate', 'DateTime', { required: true }),
@@ -45,7 +47,5 @@ export const FALLBACK_FIELDS: IListField[] = [
   field('PzlConsequences', 'Note'),
   field('PzlResponsible', 'User'),
   field('PzlPinned', 'Boolean'),
-  field('PzlShowAsBanner', 'Boolean'),
-  field('PzlNotifyTeams', 'Boolean'),
-  field('PzlNotifiedAt', 'DateTime', { readOnly: true, showInNewForm: false })
+  field('PzlShowAsBanner', 'Boolean')
 ]

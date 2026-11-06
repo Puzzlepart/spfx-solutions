@@ -11,7 +11,7 @@ import {
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { Announcement, IAnnouncementProps, IListField } from './components'
 import { AnnouncementListService, isFormField } from './services/AnnouncementListService'
-import { DEFAULT_POPOVER_FIELDS } from './constants'
+import { DEFAULT_POPOVER_FIELDS, isFormFieldEnabled } from './constants'
 
 export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnouncementProps> {
   private _service: AnnouncementListService
@@ -91,7 +91,8 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
     return this._fields.filter(isFormField).map((field) =>
       PropertyPaneToggle(`formFields.${field.internalName}`, {
         label: field.title,
-        checked: this.properties.formFields?.[field.internalName] !== false,
+        checked:
+          field.required || isFormFieldEnabled(field.internalName, this.properties.formFields),
         disabled: field.required,
         onText: 'Vis',
         offText: 'Skjul'
