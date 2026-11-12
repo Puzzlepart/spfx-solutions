@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as ReactDom from 'react-dom'
+import { createRoot, type Root } from 'react-dom/client'
 import { Log } from '@microsoft/sp-core-library'
 import {
   BaseApplicationCustomizer,
@@ -64,6 +64,7 @@ export interface IAnnouncementBannerApplicationCustomizerProperties
 export default class AnnouncementBannerApplicationCustomizer extends BaseApplicationCustomizer<IAnnouncementBannerApplicationCustomizerProperties> {
   private _placeholder: PlaceholderContent | undefined
   private _props: IAnnouncementBannerProps | undefined
+  private _root: Root | undefined
 
   public async onInit(): Promise<void> {
     try {
@@ -106,13 +107,19 @@ export default class AnnouncementBannerApplicationCustomizer extends BaseApplica
     const element = this._placeholder.domElement
     import(/* webpackChunkName: 'announcement-banner-ui' */ './components/AnnouncementBanner')
       .then(({ AnnouncementBanner }) => {
-        ReactDom.render(React.createElement(AnnouncementBanner, this._props), element)
+        // The placeholder may have been disposed while the UI bundle loaded
+        if (this._placeholder?.domElement !== element) return
+        if (!this._root) {
+          this._root = createRoot(element)
+        }
+        this._root.render(React.createElement(AnnouncementBanner, this._props))
       })
       .catch((error) => Log.warn(LOG_SOURCE, `Could not render the banner: ${error}`))
   }
 
   private _dispose(): void {
-    if (this._placeholder) ReactDom.unmountComponentAtNode(this._placeholder.domElement)
+    this._root?.unmount()
+    this._root = undefined
     this._placeholder = undefined
   }
 

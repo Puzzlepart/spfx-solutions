@@ -214,8 +214,3 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
     </AnnouncementContext.Provider>
   )
 }
-
-Announcement.defaultProps = {
-  targetAudience: false,
-  hideCreateButton: false
-}

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import * as ReactDom from 'react-dom'
+import { createRoot, type Root } from 'react-dom/client'
 import { Version } from '@microsoft/sp-core-library'
 import {
   type IPropertyPaneConfiguration,
@@ -38,6 +38,7 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
    * List fields, loaded when the property pane opens
    */
   private _fields: IListField[]
+  private _root: Root | undefined
 
   public render(): void {
     const element: React.ReactElement<IAnnouncementProps> = React.createElement(Announcement, {
@@ -47,7 +48,10 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
       service: this._service
     })
 
-    ReactDom.render(element, this.domElement)
+    if (!this._root) {
+      this._root = createRoot(this.domElement)
+    }
+    this._root.render(element)
   }
 
   /**
@@ -76,7 +80,8 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
 
   protected onDispose(): void {
     window.clearTimeout(this._listSiteUrlTimer)
-    ReactDom.unmountComponentAtNode(this.domElement)
+    this._root?.unmount()
+    this._root = undefined
   }
 
   protected onPropertyPaneFieldChanged(propertyPath: string): void {

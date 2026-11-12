@@ -29,5 +29,11 @@
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx"
-  ]
+  ],
+  "watchOptions": {
+    "excludeDirectories": [
+      "**/teams",
+      "**/temp/copilot"
+    ]
+  }
 }

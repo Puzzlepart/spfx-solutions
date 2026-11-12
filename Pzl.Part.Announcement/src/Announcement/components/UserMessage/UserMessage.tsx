@@ -53,7 +53,7 @@ export const UserMessage: FC<IUserMessageProps> = (props: IUserMessageProps) => 
               </MessageBarTitle>
             )}
             {props.text && (
-              <ReactMarkdown linkTarget={props.linkTarget} rehypePlugins={[rehypeRaw]}>
+              <ReactMarkdown linkTarget={props.linkTarget ?? '_blank'} rehypePlugins={[rehypeRaw]}>
                 {props.text}
               </ReactMarkdown>
             )}
@@ -63,11 +63,6 @@ export const UserMessage: FC<IUserMessageProps> = (props: IUserMessageProps) => 
       </FluentProvider>
     </IdPrefixProvider>
   )
-}
-
-UserMessage.defaultProps = {
-  linkTarget: '_blank',
-  style: {}
 }
 
 export * from './types'

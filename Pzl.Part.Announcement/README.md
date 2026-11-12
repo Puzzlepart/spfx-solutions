@@ -188,7 +188,7 @@ Upload `sharepoint/solution/pzl-announcement.sppkg` from the build to the tenant
 
 ## Building
 
-Requires Node 22 (`>=22.14.0 <23`). The project uses SPFx 1.23 with the Heft toolchain (no gulp).
+Requires Node 22, 24 or 26 (`>=22.14.0 <23`, `24.x` or `26.x`). The project uses SPFx 1.24 and React 18 with the Heft toolchain (no gulp).
 
 ### Building the code
 
@@ -242,6 +242,7 @@ The package is written to `sharepoint/solution/pzl-announcement.sppkg`.
 * «Varsle i Teams» is hidden in the web part's form unless turned on.
 * Unit tests for the level and status mapping and the sorting (`npm test`).
 * New install and upgrade script `scripts/Install-Driftsmeldinger.ps1`.
+* Upgraded to SPFx 1.24.1 and React 18.3.1. The web part and the banner are rendered with `createRoot`. Updated Fluent UI, PnPjs and Prettier to latest stable.
 
 ### 1.5.4
 

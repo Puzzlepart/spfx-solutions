@@ -7,7 +7,7 @@ Beslutningene og begrepene står i [CONTEXT.md](CONTEXT.md). Arbeidet er gjort i
 - Kjør `scripts/Install-Driftsmeldinger.ps1` mot en testtenant, først med `-WhatIf`, både som nyinstallasjon og som oppgradering fra 1.5.4. Skriptet er syntakssjekket, men ikke kjørt mot SharePoint. Det samme gjelder `Pzl.Ext.Notification/scripts/Install-Notification.ps1` (Azure, Entra og Teams).
 - Test i en tenant: oppgradering fra 1.5.4 (malen kjørt på nytt på en liste med eksisterende elementer), hurtighandlinger, «Område for driftsmeldinger» mot et annet område, og banneret med *Løst*.
 - `Pzl.Ext.Notification/Templates/AnnouncementFields.xml` gjentar alle feltreferansene i innholdstypen. Bekreft at PnP legger til de tre nye feltene uten å endre resten.
-- `mpnId` i `package-solution.json` er satt til SPFx-standarden (`Undefined-1.23.2`). Erstatt den med SoftwareOnes Partner ID hvis den skal vises.
+- `mpnId` i `package-solution.json` er satt til SPFx-standarden (`Undefined-1.24.1`). Erstatt den med SoftwareOnes Partner ID hvis den skal vises.
 
 ## Fase 1: Skill ut `Pzl.Ext.Notification`
 

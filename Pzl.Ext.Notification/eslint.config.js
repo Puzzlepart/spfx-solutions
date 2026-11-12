@@ -15,6 +15,10 @@ module.exports = [
       'release/**',
       'temp/**',
       'sharepoint/**',
+      // The Azure Function is its own project (own tsconfig and Prettier check).
+      // From SPFx 1.24 Heft lints every file the flat config selects, not only
+      // the files in the TypeScript program, so it must be excluded here.
+      'function/**',
       'src/**/*.d.ts',
       'src/**/*.scss.ts',
       'eslint.config.js'
