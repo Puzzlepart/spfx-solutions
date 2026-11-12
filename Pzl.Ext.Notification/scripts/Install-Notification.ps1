@@ -290,6 +290,13 @@ if ($SkipSitePermissions) {
   $rank = @{ read = 1; write = 2; manage = 3; fullcontrol = 4 }
 
   $connection = Connect-PnPOnline -Url $ConfigSiteUrl -Interactive -ClientId $ClientId -ReturnConnection
+  # Connect-PnPOnline does not call SharePoint, and the lookup below ignores errors, so check the
+  # sign-in here: a rejected one would otherwise show up as a failed grant.
+  try {
+    Get-PnPWeb -Connection $connection -ErrorAction Stop | Out-Null
+  } catch {
+    throw "SharePoint refused the connection to $ConfigSiteUrl ($($_.Exception.Message)). Check that the account belongs to this tenant and has access to the site (sign in again in a private window if the browser picked another work account), that the URL is right, and that the app registration $ClientId is consented for SharePoint in this tenant (otherwise pass -ClientId)."
+  }
   foreach ($url in $wanted.Keys) {
     $level = $wanted[$url]
     $grants = @(Get-PnPAzureADAppSitePermission -Site $url -Connection $connection -ErrorAction SilentlyContinue |

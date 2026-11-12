@@ -145,11 +145,42 @@ if ($module.Version -ge [version]'3.4.0') {
 #region Connections
 
 $connections = @{}
+
+# Account, tenant and scopes of the SharePoint token, for the error message below. Empty if the
+# token cannot be read.
+function Get-SignedInAccount($Connection) {
+  try {
+    $token = Get-PnPAccessToken -ResourceTypeName SharePoint -Decoded -Connection $Connection -ErrorAction Stop
+    $claims = @{}
+    foreach ($claim in $token.Claims) { $claims[$claim.Type] = $claim.Value }
+    $name = @($claims['upn'], $claims['preferred_username'], $claims['unique_name']) | Where-Object { $_ } | Select-Object -First 1
+    return "Signed in as $name (tenant $($claims['tid']), scopes: $($claims['scp']))."
+  } catch {
+    return ''
+  }
+}
+
 function Get-Connection([string]$Url) {
   $key = $Url.TrimEnd('/').ToLowerInvariant()
   if (-not $connections.ContainsKey($key)) {
     Write-Info "Connecting to $Url"
-    $connections[$key] = Connect-PnPOnline -Url $Url -Interactive -ClientId $ClientId -ReturnConnection
+    $connection = Connect-PnPOnline -Url $Url -Interactive -ClientId $ClientId -ReturnConnection
+    # Connect-PnPOnline does not call SharePoint, so a rejected sign-in would otherwise surface as
+    # "Unauthorized" from whichever cmdlet runs first. Read the web here to fail with the cause.
+    try {
+      Get-PnPWeb -Connection $connection -ErrorAction Stop | Out-Null
+    } catch {
+      throw @"
+SharePoint refused the connection to $Url ($($_.Exception.Message))
+$(Get-SignedInAccount $connection)
+Check that:
+  - the account belongs to this tenant and has access to the site (the browser may have picked
+    another work account: sign in again in a private window)
+  - the site URL is right
+  - the app registration $ClientId is consented for SharePoint in this tenant (otherwise pass -ClientId)
+"@
+    }
+    $connections[$key] = $connection
   }
   return $connections[$key]
 }
