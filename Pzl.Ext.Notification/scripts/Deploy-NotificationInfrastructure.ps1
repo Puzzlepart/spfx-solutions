@@ -63,13 +63,25 @@ if (-not $AppInsightsName) { $AppInsightsName = "$FunctionAppName-insights" }
 function Invoke-Az {
   # Runs az, throws on failure, returns parsed JSON (or $null for empty output).
   # az writes warnings to stderr; they are kept apart from stdout so they never end up in the JSON.
+  #
+  # Azure can answer "not found" for a resource that exists, on and off for a while after it was
+  # created, most often when the resource group was deleted and created again in another region
+  # just before. Nothing this function is used for should be missing, so that answer is retried.
   param([Parameter(ValueFromRemainingArguments = $true)] [string[]]$Arguments)
-  $raw = & az @Arguments -o json 2>&1
-  $exit = $LASTEXITCODE
-  $stderr = @($raw | Where-Object { $_ -is [System.Management.Automation.ErrorRecord] } | ForEach-Object { "$_" })
-  $stdout = @($raw | Where-Object { $_ -isnot [System.Management.Automation.ErrorRecord] } | ForEach-Object { "$_" })
-  foreach ($line in $stderr) { if ($line -match '^WARNING') { Write-Verbose $line } }
-  if ($exit -ne 0) { throw "az $($Arguments[0..1] -join ' ') failed:`n$(($stderr + $stdout) -join "`n")" }
+  for ($attempt = 1; ; $attempt++) {
+    $raw = & az @Arguments -o json 2>&1
+    $exit = $LASTEXITCODE
+    $stderr = @($raw | Where-Object { $_ -is [System.Management.Automation.ErrorRecord] } | ForEach-Object { "$_" })
+    $stdout = @($raw | Where-Object { $_ -isnot [System.Management.Automation.ErrorRecord] } | ForEach-Object { "$_" })
+    foreach ($line in $stderr) { if ($line -match '^WARNING') { Write-Verbose $line } }
+    if ($exit -eq 0) { break }
+    $message = ($stderr + $stdout) -join "`n"
+    if ($attempt -ge 10 -or $message -notmatch '\((ResourceNotFound|ResourceGroupNotFound)\)') {
+      throw "az $($Arguments[0..1] -join ' ') failed:`n$message"
+    }
+    Write-Host "   Azure answered 'not found' for a resource that exists, trying again in 20 s (attempt $attempt of 10)"
+    Start-Sleep -Seconds 20
+  }
   $text = ($stdout -join "`n").Trim()
   # Keep only the JSON part in case a notice was printed on stdout before it
   $idx = @($text.IndexOf('{'), $text.IndexOf('[')) | Where-Object { $_ -ge 0 } | Sort-Object | Select-Object -First 1
@@ -146,21 +158,10 @@ if ($newAssignments -gt 0) { Write-Host '   waiting 30 s for role assignments to
 
 Write-Host "== Function app $FunctionAppName (Flex Consumption, Node 22)" -ForegroundColor Cyan
 if (-not (Test-Az functionapp show -n $FunctionAppName -g $ResourceGroupName)) {
-  # Azure can answer "not found" for the new storage account for some minutes, most often when
-  # the resource group was deleted and created again in another region just before. Try again.
-  for ($attempt = 1; ; $attempt++) {
-    try {
-      Invoke-Az functionapp create -n $FunctionAppName -g $ResourceGroupName --storage-account $StorageAccountName `
-        --flexconsumption-location $Location --runtime node --runtime-version 22 `
-        --assign-identity $identity.id --app-insights $AppInsightsName `
-        --deployment-storage-auth-type UserAssignedIdentity --deployment-storage-auth-value $identity.id | Out-Null
-      break
-    } catch {
-      if ($attempt -ge 6 -or "$_" -notmatch 'ResourceNotFound') { throw }
-      Write-Host "   Azure does not see the new resources yet, trying again in 30 s (attempt $attempt of 5 failed)"
-      Start-Sleep -Seconds 30
-    }
-  }
+  Invoke-Az functionapp create -n $FunctionAppName -g $ResourceGroupName --storage-account $StorageAccountName `
+    --flexconsumption-location $Location --runtime node --runtime-version 22 `
+    --assign-identity $identity.id --app-insights $AppInsightsName `
+    --deployment-storage-auth-type UserAssignedIdentity --deployment-storage-auth-value $identity.id | Out-Null
   Write-Host '   created'
 } else { Write-Host '   exists' }
 
