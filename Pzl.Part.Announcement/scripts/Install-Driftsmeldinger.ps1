@@ -130,8 +130,8 @@ Write-Done "PnP.PowerShell $($module.Version) ($($module.ModuleBase))"
 
 # PnP.PowerShell 3.4.x does not resolve CSOM assemblies that are not loaded at import, and the
 # templates use localization, which makes PnP.Framework load Microsoft.SharePoint.Client.UserProfiles.
-# Pre-loading them is harmless on other versions. See README, "Known issue with PnP.PowerShell 3.4.x".
-if ($module.Version -ge [version]'3.4.0') {
+# Fixed in 3.5.0. See README, "Known issue with PnP.PowerShell 3.4.x".
+if ($module.Version -ge [version]'3.4.0' -and $module.Version -lt [version]'3.5.0') {
   $core = Join-Path $module.ModuleBase 'Core'
   if (Test-Path $core) {
     Get-ChildItem $core -Filter 'Microsoft.*SharePoint*.dll' |
@@ -160,22 +160,35 @@ function Get-SignedInAccount($Connection) {
   }
 }
 
+# Reads the web. Returns the error message when SharePoint refuses the call, otherwise nothing.
+function Get-ConnectionError($Connection) {
+  try {
+    Get-PnPWeb -Connection $Connection -ErrorAction Stop | Out-Null
+  } catch {
+    return $_.Exception.Message
+  }
+}
+
 function Get-Connection([string]$Url) {
   $key = $Url.TrimEnd('/').ToLowerInvariant()
   if (-not $connections.ContainsKey($key)) {
     Write-Info "Connecting to $Url"
     $connection = Connect-PnPOnline -Url $Url -Interactive -ClientId $ClientId -ReturnConnection
-    # Connect-PnPOnline does not call SharePoint, so a rejected sign-in would otherwise surface as
-    # "Unauthorized" from whichever cmdlet runs first. Read the web here to fail with the cause.
-    try {
-      Get-PnPWeb -Connection $connection -ErrorAction Stop | Out-Null
-    } catch {
+    # Connect-PnPOnline does not call SharePoint, and it reuses the account of an earlier sign-in
+    # with the same client ID, also one from another tenant. Such a token is refused by whichever
+    # cmdlet runs first, so read the web here and ask for a new sign-in once if it is refused.
+    $failure = Get-ConnectionError $connection
+    if ($failure -match 'Unauthorized|Forbidden') {
+      Write-Warning "SharePoint refused the sign-in to $Url. $(Get-SignedInAccount $connection) Asking for a new sign-in: pick an account in the tenant of the site."
+      $connection = Connect-PnPOnline -Url $Url -Interactive -ClientId $ClientId -ForceAuthentication -ReturnConnection
+      $failure = Get-ConnectionError $connection
+    }
+    if ($failure) {
       throw @"
-SharePoint refused the connection to $Url ($($_.Exception.Message))
+SharePoint refused the connection to $Url ($failure)
 $(Get-SignedInAccount $connection)
 Check that:
-  - the account belongs to this tenant and has access to the site (the browser may have picked
-    another work account: sign in again in a private window)
+  - the account belongs to this tenant and has access to the site
   - the site URL is right
   - the app registration $ClientId is consented for SharePoint in this tenant (otherwise pass -ClientId)
 "@

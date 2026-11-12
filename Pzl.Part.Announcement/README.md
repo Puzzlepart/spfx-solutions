@@ -132,7 +132,7 @@ Application customizers are not rendered in the Viva Connections mobile app, and
 
 ### With the install script (new installation and upgrade)
 
-`scripts/Install-Driftsmeldinger.ps1` does the steps below in one go and can be run again for every upgrade. It is idempotent and supports `-WhatIf`. It needs PnP.PowerShell (loaded in the session, loaded with `Import-PnPPowerShell` if that command exists, or installed; the script installs nothing), SharePoint Administrator rights and the package built with `npm run package`.
+`scripts/Install-Driftsmeldinger.ps1` does the steps below in one go and can be run again for every upgrade. It is idempotent and supports `-WhatIf`. It needs PnP.PowerShell (loaded in the session, loaded with `Import-PnPPowerShell` if that command exists, or installed; the script installs nothing), SharePoint Administrator rights and the package built with `npm run package`. If SharePoint refuses the sign-in, typically because PnP.PowerShell reused an account from another tenant, the script asks for a new sign-in once.
 
 ```powershell
 .\scripts\Install-Driftsmeldinger.ps1 -SiteUrl "https://<tenant>.sharepoint.com" -WhatIf
@@ -162,7 +162,7 @@ Connect-PnPOnline -Url "https://<tenant>.sharepoint.com/sites/<site>" -Interacti
 Invoke-PnPSiteTemplate -Path ".\Templates\Announcement.xml"
 ```
 
-> **Known issue with PnP.PowerShell 3.4.x.** `Invoke-PnPSiteTemplate` fails with `Could not load file or assembly 'Microsoft.SharePoint.Client.UserProfiles, Version=16.1.0.0'` on PnP.PowerShell 3.4.0, 3.4.1 and the current nightly. The assembly resolver introduced in 3.4.0 does not resolve CSOM assemblies that are not loaded at import, and the templates in this solution use localization (`<pnp:Localizations>`), which makes PnP.Framework load `UserProfiles`. Either use PnP.PowerShell 3.2.0 (verified) or pre-load the CSOM assemblies after importing the module and before connecting:
+> **Known issue with PnP.PowerShell 3.4.x.** `Invoke-PnPSiteTemplate` fails with `Could not load file or assembly 'Microsoft.SharePoint.Client.UserProfiles, Version=16.1.0.0'` on PnP.PowerShell 3.4.0 and 3.4.1. It is fixed in 3.5.0. The assembly resolver introduced in 3.4.0 does not resolve CSOM assemblies that are not loaded at import, and the templates in this solution use localization (`<pnp:Localizations>`), which makes PnP.Framework load `UserProfiles`. Use PnP.PowerShell 3.5.0 or later, or 3.2.0 (verified), or pre-load the CSOM assemblies after importing the module and before connecting:
 >
 > ```powershell
 > Import-Module PnP.PowerShell
