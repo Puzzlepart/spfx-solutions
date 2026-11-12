@@ -169,26 +169,56 @@ function Get-ConnectionError($Connection) {
   }
 }
 
+# Tenant ID of the site, looked up from its host name (no connection needed). Empty if unknown.
+$tenantIds = @{}
+function Get-SiteTenantId([string]$Url) {
+  $hostName = ([uri]$Url).Host
+  if (-not $tenantIds.ContainsKey($hostName)) {
+    try {
+      $tenantIds[$hostName] = "$(Get-PnPTenantId -TenantUrl $hostName -ErrorAction Stop)"
+    } catch {
+      Write-Warning "Could not look up the tenant ID of $hostName ($($_.Exception.Message)). Signing in without it."
+      $tenantIds[$hostName] = ''
+    }
+  }
+  return $tenantIds[$hostName]
+}
+
+# Without -Tenant, PnP.PowerShell signs in against the common endpoint and silently reuses the first
+# account it has cached for the client ID (a persisted login included), also one from another
+# tenant. SharePoint answers such a token with "Unauthorized". With the tenant ID of the site, an
+# account from another tenant is not accepted and the browser asks for a sign-in.
+function Connect-Site([string]$Url, [switch]$Force) {
+  $params = @{ Url = $Url; Interactive = $true; ClientId = $ClientId; ReturnConnection = $true }
+  $tenantId = Get-SiteTenantId $Url
+  if ($tenantId) { $params.Tenant = $tenantId }
+  if ($Force) { $params.ForceAuthentication = $true }
+  return Connect-PnPOnline @params
+}
+
 function Get-Connection([string]$Url) {
   $key = $Url.TrimEnd('/').ToLowerInvariant()
   if (-not $connections.ContainsKey($key)) {
     Write-Info "Connecting to $Url"
-    $connection = Connect-PnPOnline -Url $Url -Interactive -ClientId $ClientId -ReturnConnection
-    # Connect-PnPOnline does not call SharePoint, and it reuses the account of an earlier sign-in
-    # with the same client ID, also one from another tenant. Such a token is refused by whichever
-    # cmdlet runs first, so read the web here and ask for a new sign-in once if it is refused.
+    $connection = Connect-Site $Url
+    # Connect-PnPOnline does not call SharePoint, so a refused sign-in would otherwise surface in
+    # whichever cmdlet runs first. Read the web here, and ask for a new sign-in once if it is refused.
     $failure = Get-ConnectionError $connection
     if ($failure -match 'Unauthorized|Forbidden') {
-      Write-Warning "SharePoint refused the sign-in to $Url. $(Get-SignedInAccount $connection) Asking for a new sign-in: pick an account in the tenant of the site."
-      $connection = Connect-PnPOnline -Url $Url -Interactive -ClientId $ClientId -ForceAuthentication -ReturnConnection
+      Write-Warning "SharePoint refused the sign-in to $Url. $(Get-SignedInAccount $connection) Asking for a new sign-in."
+      $connection = Connect-Site $Url -Force
       $failure = Get-ConnectionError $connection
     }
     if ($failure) {
       throw @"
 SharePoint refused the connection to $Url ($failure)
 $(Get-SignedInAccount $connection)
+The site belongs to tenant $(Get-SiteTenantId $Url).
 Check that:
-  - the account belongs to this tenant and has access to the site
+  - the account belongs to that tenant and has access to the site. A login persisted with
+    Connect-PnPOnline -PersistLogin is reused without asking: list them with Get-PnPPersistedLogin,
+    and remove one with Connect-PnPOnline (same -Url and -ClientId) followed by
+    Disconnect-PnPOnline -ClearPersistedLogin
   - the site URL is right
   - the app registration $ClientId is consented for SharePoint in this tenant (otherwise pass -ClientId)
 "@

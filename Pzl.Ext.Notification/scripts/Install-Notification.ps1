@@ -289,14 +289,16 @@ if ($SkipSitePermissions) {
   foreach ($url in $AnnouncementSiteUrls) { $wanted[$url.TrimEnd('/')] = 'Write' }
   $rank = @{ read = 1; write = 2; manage = 3; fullcontrol = 4 }
 
-  # Connect-PnPOnline does not call SharePoint, and it reuses the account of an earlier sign-in with
-  # the same client ID, also one from another tenant. The lookup below ignores errors, so read the
-  # web here and ask for a new sign-in once if SharePoint refuses the token.
+  # Without -Tenant, PnP.PowerShell signs in against the common endpoint and silently reuses the
+  # first account it has cached for the client ID (a persisted login included), also one from
+  # another tenant, and SharePoint answers such a token with "Unauthorized". Connect-PnPOnline does
+  # not call SharePoint and the lookup below ignores errors, so read the web here, and ask for a
+  # new sign-in once if the token is refused.
   $connection = $null
   $failure = ''
   foreach ($force in $false, $true) {
-    if ($force) { Write-Warning "SharePoint refused the sign-in to $ConfigSiteUrl ($failure). Asking for a new sign-in: pick an account in the tenant of the site." }
-    $connection = Connect-PnPOnline -Url $ConfigSiteUrl -Interactive -ClientId $ClientId -ForceAuthentication:$force -ReturnConnection
+    if ($force) { Write-Warning "SharePoint refused the sign-in to $ConfigSiteUrl ($failure). Asking for a new sign-in." }
+    $connection = Connect-PnPOnline -Url $ConfigSiteUrl -Interactive -ClientId $ClientId -Tenant $TenantId -ForceAuthentication:$force -ReturnConnection
     try {
       Get-PnPWeb -Connection $connection -ErrorAction Stop | Out-Null
       $failure = ''
@@ -306,7 +308,7 @@ if ($SkipSitePermissions) {
     if ($failure -notmatch 'Unauthorized|Forbidden') { break }
   }
   if ($failure) {
-    throw "SharePoint refused the connection to $ConfigSiteUrl ($failure). Check that the account belongs to this tenant and has access to the site, that the URL is right, and that the app registration $ClientId is consented for SharePoint in this tenant (otherwise pass -ClientId)."
+    throw "SharePoint refused the connection to $ConfigSiteUrl ($failure). Check that the account belongs to tenant $TenantId and has access to the site (a login persisted with -PersistLogin is reused without asking: see Get-PnPPersistedLogin and Disconnect-PnPOnline -ClearPersistedLogin), that the URL is right, and that the app registration $ClientId is consented for SharePoint in this tenant (otherwise pass -ClientId)."
   }
   foreach ($url in $wanted.Keys) {
     $level = $wanted[$url]

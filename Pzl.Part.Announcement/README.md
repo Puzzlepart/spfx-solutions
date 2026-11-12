@@ -132,7 +132,7 @@ Application customizers are not rendered in the Viva Connections mobile app, and
 
 ### With the install script (new installation and upgrade)
 
-`scripts/Install-Driftsmeldinger.ps1` does the steps below in one go and can be run again for every upgrade. It is idempotent and supports `-WhatIf`. It needs PnP.PowerShell (loaded in the session, loaded with `Import-PnPPowerShell` if that command exists, or installed; the script installs nothing), SharePoint Administrator rights and the package built with `npm run package`. If SharePoint refuses the sign-in, typically because PnP.PowerShell reused an account from another tenant, the script asks for a new sign-in once.
+`scripts/Install-Driftsmeldinger.ps1` does the steps below in one go and can be run again for every upgrade. It is idempotent and supports `-WhatIf`. It needs PnP.PowerShell (loaded in the session, loaded with `Import-PnPPowerShell` if that command exists, or installed; the script installs nothing), SharePoint Administrator rights and the package built with `npm run package`. The script signs in against the tenant of the site (`-Tenant`), so an account that PnP.PowerShell has cached from another tenant is not reused, and it asks for a new sign-in once if SharePoint refuses the first.
 
 ```powershell
 .\scripts\Install-Driftsmeldinger.ps1 -SiteUrl "https://<tenant>.sharepoint.com" -WhatIf
