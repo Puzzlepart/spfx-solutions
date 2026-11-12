@@ -8,6 +8,7 @@
       <ViewFields>
         <FieldRef Name="LinkTitle" />
         <FieldRef Name="PzlSeverity" />
+        <FieldRef Name="PzlStatus" />
         <FieldRef Name="PzlContent" />
         <FieldRef Name="PzlStartDate" />
         <FieldRef Name="PzlEndDate" />
@@ -16,8 +17,6 @@
         <FieldRef Name="PzlResponsible" />
         <FieldRef Name="PzlPinned" />
         <FieldRef Name="PzlShowAsBanner" />
-        <FieldRef Name="PzlNotifyTeams" />
-        <FieldRef Name="PzlNotifiedAt" />
       </ViewFields>
       <RowLimit Paged="TRUE">30</RowLimit>
       <JSLink>clienttemplates.js</JSLink>

@@ -1,13 +1,18 @@
-import { MessageBarIntent } from '@fluentui/react-components'
 import { SPUser } from '@microsoft/sp-page-context'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import type { AnnouncementListService } from '../services/AnnouncementListService'
+import type { Severity, Status } from '../model'
 
 export interface IAnnouncementProps {
   // General
   title: string
   description: string
   targetAudience: boolean
+  /**
+   * Absolute URL of the site that hosts the announcement list (the central
+   * list). Empty means the current site.
+   */
+  listSiteUrl?: string
 
   /**
    * Fields to show in the popover, keyed by internal name (`true` = visible).
@@ -16,8 +21,10 @@ export interface IAnnouncementProps {
    */
   popoverFields: Record<string, boolean>
   /**
-   * Fields hidden from the create form, keyed by internal name (`false` = hidden).
-   * Fields missing from the map are shown if the list schema allows it.
+   * Fields shown in the create form, keyed by internal name (`true` = shown,
+   * `false` = hidden). Fields missing from the map are shown if the list schema
+   * allows it, except those in `DEFAULT_HIDDEN_FORM_FIELDS`. Required fields
+   * are always shown.
    */
   formFields: Record<string, boolean>
 
@@ -54,12 +61,28 @@ export interface IAnnouncementState {
    * Whether the current user may add items to the announcement list
    */
   canCreate: boolean
+  /**
+   * Whether the current user may edit items in the announcement list (quick actions)
+   */
+  canEdit: boolean
 }
 
 export interface IAnnouncement {
   id: string
   title: string
-  severity: MessageBarIntent
+  /**
+   * Message level (`PzlSeverity`), mapped with `toSeverity`
+   */
+  severity: Severity
+  /**
+   * Status (`PzlStatus`), mapped with `toStatus`. `ongoing` when the list has
+   * no status column or the item no value.
+   */
+  status: Status
+  /**
+   * Start date (`PzlStartDate`), ISO string. Used for sorting.
+   */
+  startDate?: string
   content: string
   hasAccess?: boolean
   /**

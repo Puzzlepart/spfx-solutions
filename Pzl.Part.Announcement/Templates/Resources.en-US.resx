@@ -65,7 +65,7 @@
     <value>Message level</value>
   </data>
   <data name="SiteFields_Severity_Description" xml:space="preserve">
-    <value>Used to set the color of the notification banner (grey, yellow, red)</value>
+    <value>How serious is this for users? Critical: many cannot do their work. Warning: something is slow or partly unavailable. Information: no impact now, but good to know.</value>
   </data>
   <data name="SiteFields_Severity_Choice_Info" xml:space="preserve">
     <value>Information</value>
@@ -74,46 +74,43 @@
     <value>Warning</value>
   </data>
   <data name="SiteFields_Severity_Choice_Error" xml:space="preserve">
-    <value>Alert</value>
-  </data>
-  <data name="SiteFields_Severity_Choice_Success" xml:space="preserve">
-    <value>Normal</value>
+    <value>Critical</value>
   </data>
   <data name="SiteFields_Content_DisplayName" xml:space="preserve">
     <value>Content (Description/consequences)</value>
   </data>
   <data name="SiteFields_Content_Description" xml:space="preserve">
-    <value>Content to show in the announcement</value>
+    <value>What has happened or will happen, and what does it mean for users? For planned maintenance: state when the work starts and ends.</value>
   </data>
   <data name="SiteFields_StartDate_DisplayName" xml:space="preserve">
     <value>Startdate</value>
   </data>
   <data name="SiteFields_StartDate_Description" xml:space="preserve">
-    <value>Startdate for the announcement (Active from)</value>
+    <value>When the announcement is shown on the intranet. For planned maintenance: when users should be told, not when the work starts.</value>
   </data>
   <data name="SiteFields_EndDate_DisplayName" xml:space="preserve">
     <value>End date</value>
   </data>
   <data name="SiteFields_EndDate_Description" xml:space="preserve">
-    <value>End date for the announcement (Active until)</value>
+    <value>When the announcement is removed from the intranet.</value>
   </data>
   <data name="SiteFields_AffectedSystems_DisplayName" xml:space="preserve">
     <value>Affected services</value>
   </data>
   <data name="SiteFields_AffectedSystems_Description" xml:space="preserve">
-    <value>Define affected systems</value>
+    <value>Which systems or services are affected, for example "E-mail, Teams".</value>
   </data>
   <data name="SiteFields_Consequences_DisplayName" xml:space="preserve">
     <value>Consequences after resolution</value>
   </data>
   <data name="SiteFields_Consequences_Description" xml:space="preserve">
-    <value>Define consequences that can happen after resolution</value>
+    <value>Consequences that last after the issue is resolved, for example that something must be done again. Leave empty if there are none.</value>
   </data>
   <data name="SiteFields_Responsible_DisplayName" xml:space="preserve">
     <value>Responsible</value>
   </data>
   <data name="SiteFields_Responsible_Description" xml:space="preserve">
-    <value>Who is responsible?</value>
+    <value>Who users can contact about the issue.</value>
   </data>
   <data name="ContentTypes_Announcement_Name" xml:space="preserve">
     <value>Announcement</value>
@@ -127,82 +124,31 @@
   <data name="View_AllItems_DisplayName" xml:space="preserve">
     <value>All Items</value>
   </data>
-  <data name="SiteFields_NotifyTeams_DisplayName" xml:space="preserve">
-    <value>Notify in Teams</value>
-  </data>
-  <data name="SiteFields_NotifyTeams_Description" xml:space="preserve">
-    <value>Send a Teams notification to the recipients when the announcement becomes active. Levels listed under "Levels that always notify" in the notification configuration are notified regardless.</value>
-  </data>
   <data name="SiteFields_Pinned_DisplayName" xml:space="preserve">
     <value>Pin to top</value>
   </data>
   <data name="SiteFields_Pinned_Description" xml:space="preserve">
-    <value>Pinned announcements are shown at the top of the web part</value>
-  </data>
-  <data name="SiteFields_NotifiedAt_DisplayName" xml:space="preserve">
-    <value>Notified in Teams</value>
-  </data>
-  <data name="SiteFields_NotifiedAt_Description" xml:space="preserve">
-    <value>Set automatically by the notification service when the notification has been sent</value>
+    <value>Pinned announcements are shown at the top of the web part, before all others.</value>
   </data>
   <data name="SiteFields_ShowAsBanner_DisplayName" xml:space="preserve">
     <value>Show as banner</value>
   </data>
   <data name="SiteFields_ShowAsBanner_Description" xml:space="preserve">
-    <value>Also show the announcement as a banner at the top of the pages while it is active. Users can dismiss the banner.</value>
+    <value>Shown at the top of every page until the user dismisses it. Use it only when most users need to know now. When the announcement changes, for example to Resolved, the banner is shown once more.</value>
   </data>
-  <data name="ContentTypes_NotificationConfig_Name" xml:space="preserve">
-    <value>Notification configuration</value>
+  <data name="SiteFields_Status_DisplayName" xml:space="preserve">
+    <value>Status</value>
   </data>
-  <data name="Lists_NotificationConfig_Title" xml:space="preserve">
-    <value>Varslingskonfigurasjon</value>
+  <data name="SiteFields_Status_Description" xml:space="preserve">
+    <value>Planned: the work has not started. In progress: the issue or the work is ongoing. Resolved: everything works again. Change to In progress when the work starts or the issue occurs, and to Resolved when everything works. Leave a resolved announcement until the end date, so users see that it is resolved.</value>
   </data>
-  <data name="Lists_NotificationConfig_Description" xml:space="preserve">
-    <value>Configuration for Teams notifications of news and announcements. One row per site.</value>
+  <data name="SiteFields_Status_Choice_Planned" xml:space="preserve">
+    <value>Planned</value>
   </data>
-  <data name="Lists_NotificationConfig_Url" xml:space="preserve">
-    <value>Lists/Varslingskonfigurasjon</value>
+  <data name="SiteFields_Status_Choice_Ongoing" xml:space="preserve">
+    <value>In progress</value>
   </data>
-  <data name="SiteFields_NotifySiteUrl_DisplayName" xml:space="preserve">
-    <value>Site URL</value>
-  </data>
-  <data name="SiteFields_NotifySiteUrl_Description" xml:space="preserve">
-    <value>Full URL of the site to monitor, e.g. https://tenant.sharepoint.com/sites/intranet</value>
-  </data>
-  <data name="SiteFields_NotifyNews_DisplayName" xml:space="preserve">
-    <value>Notify news</value>
-  </data>
-  <data name="SiteFields_NotifyNews_Description" xml:space="preserve">
-    <value>Send a Teams notification when a news page is published on the site</value>
-  </data>
-  <data name="SiteFields_NotifyAnnouncements_DisplayName" xml:space="preserve">
-    <value>Notify announcements</value>
-  </data>
-  <data name="SiteFields_NotifyAnnouncements_Description" xml:space="preserve">
-    <value>Send Teams notifications for announcements on the site (the levels under "Levels that always notify", otherwise when "Notify in Teams" is set)</value>
-  </data>
-  <data name="SiteFields_NotifySeverities_DisplayName" xml:space="preserve">
-    <value>Levels that always notify</value>
-  </data>
-  <data name="SiteFields_NotifySeverities_Description" xml:space="preserve">
-    <value>Message levels that are notified in Teams without "Notify in Teams" being set on the announcement. Empty means announcements are notified only when "Notify in Teams" is set.</value>
-  </data>
-  <data name="SiteFields_NotifyDefaultGroupIds_DisplayName" xml:space="preserve">
-    <value>Default recipient groups</value>
-  </data>
-  <data name="SiteFields_NotifyDefaultGroupIds_Description" xml:space="preserve">
-    <value>Object IDs (GUIDs) of Entra groups to notify when the item has no audience. One per line.</value>
-  </data>
-  <data name="SiteFields_NotifyAnnouncementListTitle_DisplayName" xml:space="preserve">
-    <value>Announcement list</value>
-  </data>
-  <data name="SiteFields_NotifyAnnouncementListTitle_Description" xml:space="preserve">
-    <value>Title of the announcement list on the site. Empty means the default (Driftsmeldinger).</value>
-  </data>
-  <data name="SiteFields_NotifyActive_DisplayName" xml:space="preserve">
-    <value>Active</value>
-  </data>
-  <data name="SiteFields_NotifyActive_Description" xml:space="preserve">
-    <value>Turn off to stop notifications for the site without deleting the row</value>
+  <data name="SiteFields_Status_Choice_Resolved" xml:space="preserve">
+    <value>Resolved</value>
   </data>
 </root>

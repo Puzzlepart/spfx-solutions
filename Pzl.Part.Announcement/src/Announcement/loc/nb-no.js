@@ -28,6 +28,18 @@ define([], function () {
       OpenDetails: 'Vis detaljer for {0}',
       CloseButtonText: 'Lukk'
     },
+    Status: {
+      Planned: 'Planlagt',
+      Ongoing: 'Pågår',
+      Resolved: 'Løst'
+    },
+    QuickActions: {
+      MarkOngoing: 'Marker som pågår',
+      MarkResolved: 'Marker som løst',
+      Edit: 'Rediger',
+      StatusChangedText: 'Driftsmeldingen er markert som {0}.',
+      StatusChangeErrorText: 'Kunne ikke endre status. Prøv igjen.'
+    },
     RichText: {
       ToolbarLabel: 'Formatering',
       Bold: 'Fet',
@@ -38,15 +50,10 @@ define([], function () {
       Link: 'Sett inn lenke',
       LinkPrompt: 'Adresse (URL) til lenken:'
     },
-    Severity: {
-      Info: 'Informasjon',
-      Warning: 'Advarsel',
-      Error: 'Varsel',
-      Success: 'Normal'
-    },
     FieldTitles: {
       Title: 'Tittel',
       PzlSeverity: 'Meldingsnivå',
+      PzlStatus: 'Status',
       PzlContent: 'Innhold (Beskrivelse/konsekvenser)',
       PzlStartDate: 'Startdato',
       PzlEndDate: 'Sluttdato',
@@ -56,6 +63,7 @@ define([], function () {
       PzlPinned: 'Fest til toppen',
       PzlShowAsBanner: 'Vis som banner',
       PzlNotifyTeams: 'Varsle i Teams',
+      PzlNotifyAgain: 'Varsle på nytt',
       PzlNotifiedAt: 'Varslet i Teams'
     }
   }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">
+  <CustomAction
+    Title="NotificationDeepLink"
+    Location="ClientSideExtension.ApplicationCustomizer"
+    ClientSideComponentId="1e8a8edf-84b4-4a5e-9fcc-5ec33e34a509"
+    ClientSideComponentProperties="{}">
+  </CustomAction>
+</Elements>

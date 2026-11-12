@@ -1,14 +1,31 @@
 import { WebPartContext } from '@microsoft/sp-webpart-base'
-import { parseAnnouncementId, QUERY_PARAM_NAME } from '../../shared/deepLink'
 
-export {
-  SUB_PAGE_ID_PREFIX,
-  QUERY_PARAM_NAME,
-  PAGE_PREFIX,
-  getPageDeepLink,
-  getPageRedirectUrl,
-  parseAnnouncementId
-} from '../../shared/deepLink'
+/**
+ * Prefix used in the Teams deep link `subEntityId`/`subPageId`
+ * (e.g. `driftsmelding:12`).
+ */
+export const SUB_PAGE_ID_PREFIX = 'driftsmelding:'
+
+/**
+ * Query string parameter that opens an announcement (e.g. `?driftsmelding=12`).
+ * Links to an announcement can be shared this way, and the Teams tab of the
+ * notification add-on (Pzl.Ext.Notification) passes the deep link
+ * `subEntityId` through it, prefix included. `page:<url>` values (news
+ * notifications) are handled by the add-on's customizer and ignored here.
+ */
+export const QUERY_PARAM_NAME = 'driftsmelding'
+
+/**
+ * Parses an announcement ID from a raw value. Accepts `driftsmelding:<id>`
+ * or a bare numeric ID. Returns `null` for anything else (e.g. `page:...`
+ * deep links for news).
+ */
+export function parseAnnouncementId(value: string | undefined | null): string | null {
+  if (!value) return null
+  const id =
+    value.indexOf(SUB_PAGE_ID_PREFIX) === 0 ? value.substring(SUB_PAGE_ID_PREFIX.length) : value
+  return /^\d+$/.test(id) ? id : null
+}
 
 /**
  * Reads `subPageId` from the Teams context. Uses `teamsJs.app.getContext()`
@@ -39,8 +56,8 @@ async function getTeamsSubPageId(context: WebPartContext): Promise<string | null
 
 /**
  * Reads the `driftsmelding` query parameter from the page URL. The Teams app's
- * static tab passes `{subEntityId}` this way (see notification/teams-app), so
- * it also carries the deep link value, prefix included.
+ * static tab passes `{subEntityId}` this way (see Pzl.Ext.Notification), so it
+ * also carries the deep link value, prefix included.
  */
 function getUrlAnnouncementId(): string | null {
   try {

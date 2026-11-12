@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <xsd:schema id="root"
+    xmlns=""
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="SiteFields_Severity_Choice_Info" xml:space="preserve">
+    <value>Information</value>
+  </data>
+  <data name="SiteFields_Severity_Choice_Warning" xml:space="preserve">
+    <value>Warning</value>
+  </data>
+  <data name="SiteFields_Severity_Choice_Error" xml:space="preserve">
+    <value>Critical</value>
+  </data>
+  <data name="View_AllItems_DisplayName" xml:space="preserve">
+    <value>All Items</value>
+  </data>
+  <data name="ContentTypes_NotificationConfig_Name" xml:space="preserve">
+    <value>Notification configuration</value>
+  </data>
+  <data name="Lists_NotificationConfig_Title" xml:space="preserve">
+    <value>Varslingskonfigurasjon</value>
+  </data>
+  <data name="Lists_NotificationConfig_Description" xml:space="preserve">
+    <value>Configuration for Teams notifications of news and announcements. One row per site.</value>
+  </data>
+  <data name="Lists_NotificationConfig_Url" xml:space="preserve">
+    <value>Lists/Varslingskonfigurasjon</value>
+  </data>
+  <data name="SiteFields_NotifySiteUrl_DisplayName" xml:space="preserve">
+    <value>Site URL</value>
+  </data>
+  <data name="SiteFields_NotifySiteUrl_Description" xml:space="preserve">
+    <value>Full URL of the site to monitor, e.g. https://tenant.sharepoint.com/sites/intranet</value>
+  </data>
+  <data name="SiteFields_NotifyNews_DisplayName" xml:space="preserve">
+    <value>Notify news</value>
+  </data>
+  <data name="SiteFields_NotifyNews_Description" xml:space="preserve">
+    <value>Send a Teams notification when a news page is published on the site</value>
+  </data>
+  <data name="SiteFields_NotifyAnnouncements_DisplayName" xml:space="preserve">
+    <value>Notify announcements</value>
+  </data>
+  <data name="SiteFields_NotifyAnnouncements_Description" xml:space="preserve">
+    <value>Send Teams notifications for announcements on the site (the levels under "Levels that always notify", otherwise when "Notify in Teams" is set)</value>
+  </data>
+  <data name="SiteFields_NotifySeverities_DisplayName" xml:space="preserve">
+    <value>Levels that always notify</value>
+  </data>
+  <data name="SiteFields_NotifySeverities_Description" xml:space="preserve">
+    <value>Message levels that are notified in Teams without "Notify in Teams" being set on the announcement, typically Critical. Empty means announcements are notified only when "Notify in Teams" is set.</value>
+  </data>
+  <data name="SiteFields_NotifyDefaultGroupIds_DisplayName" xml:space="preserve">
+    <value>Default recipient groups</value>
+  </data>
+  <data name="SiteFields_NotifyDefaultGroupIds_Description" xml:space="preserve">
+    <value>Object IDs (GUIDs) of Entra groups to notify when the item has no audience. One per line.</value>
+  </data>
+  <data name="SiteFields_NotifyAnnouncementListTitle_DisplayName" xml:space="preserve">
+    <value>Announcement list</value>
+  </data>
+  <data name="SiteFields_NotifyAnnouncementListTitle_Description" xml:space="preserve">
+    <value>Title of the announcement list on the site. Empty means the default (Driftsmeldinger).</value>
+  </data>
+  <data name="SiteFields_NotifyActive_DisplayName" xml:space="preserve">
+    <value>Active</value>
+  </data>
+  <data name="SiteFields_NotifyActive_Description" xml:space="preserve">
+    <value>Turn off to stop notifications for the site without deleting the row</value>
+  </data>
+  <data name="ContentTypes_Announcement_Name" xml:space="preserve">
+    <value>Announcement</value>
+  </data>
+  <data name="SiteFields_NotifyTeams_DisplayName" xml:space="preserve">
+    <value>Notify in Teams</value>
+  </data>
+  <data name="SiteFields_NotifyTeams_Description" xml:space="preserve">
+    <value>Send a Teams notification to the recipients when the announcement becomes active. Levels listed under "Levels that always notify" in the notification configuration are notified anyway. Announcements that are already resolved are not notified.</value>
+  </data>
+  <data name="SiteFields_NotifyAgain_DisplayName" xml:space="preserve">
+    <value>Notify again</value>
+  </data>
+  <data name="SiteFields_NotifyAgain_Description" xml:space="preserve">
+    <value>Send a new Teams notification when you save. Use it only for significant changes, for example a new expected resolution time or that the issue is resolved. Reset to No when the notification has been sent.</value>
+  </data>
+  <data name="SiteFields_NotifiedAt_DisplayName" xml:space="preserve">
+    <value>Notified in Teams</value>
+  </data>
+  <data name="SiteFields_NotifiedAt_Description" xml:space="preserve">
+    <value>Set automatically by the notification service when the notification has been sent.</value>
+  </data>
+</root>

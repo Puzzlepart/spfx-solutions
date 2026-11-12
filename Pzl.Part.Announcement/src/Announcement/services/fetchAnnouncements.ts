@@ -7,10 +7,10 @@ import '@pnp/sp/webs'
 import '@pnp/sp/lists'
 import '@pnp/sp/items'
 import '@pnp/sp/site-users/web'
-import { MessageBarIntent } from '@fluentui/react-components'
 import strings from 'AnnouncementStrings'
 import { IAnnouncement, IListField } from '../components/types'
 import { OPTIONAL_FIELDS } from '../constants'
+import { compareAnnouncements, toSeverity, toStatus } from '../model'
 import type { AnnouncementListService } from './AnnouncementListService'
 
 /**
@@ -44,24 +44,8 @@ function buildQuery(fields: IListField[], targetAudience: boolean) {
 }
 
 /**
- * Maps the `PzlSeverity` choice value to a message bar intent
- */
-export function toSeverity(value: string | undefined): MessageBarIntent {
-  switch (value) {
-    case strings.Severity.Success:
-      return 'success'
-    case strings.Severity.Warning:
-      return 'warning'
-    case strings.Severity.Error:
-      return 'error'
-    default:
-      return 'info'
-  }
-}
-
-/**
  * Fetches the active announcements (start date passed, end date not passed)
- * the current user may see, pinned first. Shared by the web part and the
+ * the current user may see, sorted with `compareAnnouncements`. Shared by the web part and the
  * AnnouncementBanner application customizer.
  *
  * @param service List service
@@ -121,6 +105,8 @@ export async function fetchAnnouncements(
           id: String(item.ID),
           title: item.Title,
           severity: toSeverity(item.PzlSeverity),
+          status: toStatus(item.PzlStatus),
+          startDate: item.PzlStartDate ?? undefined,
           content: item.PzlContent,
           hasAccess,
           pinned: item.PzlPinned === true,
@@ -130,12 +116,7 @@ export async function fetchAnnouncements(
         }
       })
     )
-    return (
-      announcements
-        .filter((announcement) => announcement.hasAccess)
-        // Pinned first, otherwise keep list order (sort is stable)
-        .sort((a, b) => Number(b.pinned) - Number(a.pinned))
-    )
+    return announcements.filter((announcement) => announcement.hasAccess).sort(compareAnnouncements)
   } catch {
     throw new Error(strings.AnnouncementFetchErrorText)
   }

@@ -11,10 +11,29 @@ import {
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
 import { Announcement, IAnnouncementProps, IListField } from './components'
 import { AnnouncementListService, isFormField } from './services/AnnouncementListService'
-import { DEFAULT_POPOVER_FIELDS } from './constants'
+import { DEFAULT_POPOVER_FIELDS, isFormFieldEnabled } from './constants'
+
+/**
+ * Delay (ms) before a changed «Område for driftsmeldinger» is used, so the
+ * list is not read for every key stroke in the property pane
+ */
+const LIST_SITE_URL_DELAY = 800
+
+/**
+ * Normalized `listSiteUrl`: trimmed, no trailing slash, empty means the current site
+ */
+function normalizeSiteUrl(value: string | undefined): string {
+  return (value ?? '').trim().replace(/\/+$/, '')
+}
 
 export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnouncementProps> {
   private _service: AnnouncementListService
+  /**
+   * The `listSiteUrl` the current service reads from. Also the React key, so
+   * the component is mounted again (and the list read) when it changes.
+   */
+  private _serviceSiteUrl: string
+  private _listSiteUrlTimer: number
   /**
    * List fields, loaded when the property pane opens
    */
@@ -23,6 +42,7 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
   public render(): void {
     const element: React.ReactElement<IAnnouncementProps> = React.createElement(Announcement, {
       ...this.properties,
+      key: this._serviceSiteUrl || 'current',
       context: this.context,
       service: this._service
     })
@@ -30,9 +50,22 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
     ReactDom.render(element, this.domElement)
   }
 
+  /**
+   * Creates the list service for the site in `listSiteUrl` (the central list)
+   */
+  private _createService(): void {
+    this._serviceSiteUrl = normalizeSiteUrl(this.properties.listSiteUrl)
+    this._service = new AnnouncementListService(
+      this.context,
+      undefined,
+      this._serviceSiteUrl || undefined
+    )
+    this._fields = undefined
+  }
+
   protected async onInit(): Promise<void> {
     await super.onInit()
-    this._service = new AnnouncementListService(this.context)
+    this._createService()
     if (!this.properties.popoverFields) {
       this.properties.popoverFields = { ...DEFAULT_POPOVER_FIELDS }
     }
@@ -42,7 +75,20 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
   }
 
   protected onDispose(): void {
+    window.clearTimeout(this._listSiteUrlTimer)
     ReactDom.unmountComponentAtNode(this.domElement)
+  }
+
+  protected onPropertyPaneFieldChanged(propertyPath: string): void {
+    if (propertyPath !== 'listSiteUrl') return
+    window.clearTimeout(this._listSiteUrlTimer)
+    this._listSiteUrlTimer = window.setTimeout(() => {
+      if (normalizeSiteUrl(this.properties.listSiteUrl) === this._serviceSiteUrl) return
+      this._createService()
+      this.render()
+      this.onPropertyPaneConfigurationStart()
+      this.context.propertyPane.refresh()
+    }, LIST_SITE_URL_DELAY)
   }
 
   protected get dataVersion(): Version {
@@ -91,7 +137,8 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
     return this._fields.filter(isFormField).map((field) =>
       PropertyPaneToggle(`formFields.${field.internalName}`, {
         label: field.title,
-        checked: this.properties.formFields?.[field.internalName] !== false,
+        checked:
+          field.required || isFormFieldEnabled(field.internalName, this.properties.formFields),
         disabled: field.required,
         onText: 'Vis',
         offText: 'Skjul'
@@ -114,6 +161,15 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
                 PropertyPaneTextField('title', {
                   label: 'Tittel',
                   description: 'Tittel som vises i headeren på webdelen.'
+                }),
+                PropertyPaneTextField('listSiteUrl', {
+                  label: 'Område for driftsmeldinger',
+                  description:
+                    'Full adresse til området med lista Driftsmeldinger, for eksempel https://tenant.sharepoint.com. Tom betyr dette området. Brukerne må ha lesetilgang til lista.',
+                  onGetErrorMessage: (value) =>
+                    !value?.trim() || /^https:\/\/[^/]+/i.test(value.trim())
+                      ? ''
+                      : 'Skriv inn en full adresse som starter med https://'
                 }),
                 PropertyPaneTextField('description', {
                   label: 'Beskrivelse',

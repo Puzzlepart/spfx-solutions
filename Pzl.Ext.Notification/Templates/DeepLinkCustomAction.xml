@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+  Registers the NotificationDeepLink application customizer on the site (the
+  custom action the app package adds when it is installed from a site
+  collection app catalog). Use it when the package is deployed tenant-wide from
+  the tenant app catalog, where the package's feature is not activated per site.
+  Apply to the site the notification Teams app's tab opens (normally the root site):
+    Invoke-PnPSiteTemplate -Path .\Templates\DeepLinkCustomAction.xml
+  Idempotent: re-running the template updates the existing custom action.
+-->
+<pnp:Provisioning xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
+  <pnp:Templates ID="CONTAINER-TEMPLATE-NOTIFICATION-DEEPLINK">
+    <pnp:ProvisioningTemplate ID="TEMPLATE-NOTIFICATION-DEEPLINK" Version="1" Scope="RootSite">
+      <pnp:CustomActions>
+        <pnp:SiteCustomActions>
+          <pnp:CustomAction
+            Name="NotificationDeepLink"
+            Title="NotificationDeepLink"
+            Description="Sends the user to the page a ?driftsmelding=page: deep link points to"
+            Location="ClientSideExtension.ApplicationCustomizer"
+            ClientSideComponentId="1e8a8edf-84b4-4a5e-9fcc-5ec33e34a509"
+            ClientSideComponentProperties="{}"
+            Sequence="100"
+            RegistrationType="None" />
+        </pnp:SiteCustomActions>
+      </pnp:CustomActions>
+    </pnp:ProvisioningTemplate>
+  </pnp:Templates>
+</pnp:Provisioning>

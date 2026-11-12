@@ -17,12 +17,19 @@ import {
   useId,
   webLightTheme
 } from '@fluentui/react-components'
-import { Dismiss24Regular, DismissRegular, Pin16Filled } from '@fluentui/react-icons'
+import {
+  CalendarClock20Regular,
+  Dismiss24Regular,
+  DismissRegular,
+  Pin16Filled
+} from '@fluentui/react-icons'
 import { format } from '@fluentui/react'
 import strings from 'AnnouncementStrings'
 import { IAnnouncement, IListField } from '../../../Announcement/components/types'
 import { AnnouncementDetails } from '../../../Announcement/components/AnnouncementDetails'
 import { htmlToText } from '../../../Announcement/util/fieldValue'
+import { getIntent } from '../../../Announcement/components/intent'
+import { StatusBadge } from '../../../Announcement/components/StatusBadge'
 import { useDismissedBanners } from './useDismissedBanners'
 import styles from './AnnouncementBanner.module.scss'
 
@@ -49,7 +56,9 @@ function preview(content: string): string {
 
 /**
  * Message bars at the top of the page, one per announcement. Colour and icon
- * follow the announcement's severity (message bar intent). Click opens a
+ * follow the announcement's level and status (see `getIntent`): a resolved
+ * announcement is green. Editing an announcement (for example marking it as
+ * resolved) changes `Modified`, so a dismissed banner is shown once more. Click opens a
  * dialog with the same content as the web part's popover; the close button
  * dismisses the banner for this user.
  */
@@ -68,7 +77,8 @@ export const AnnouncementBanner: FC<IAnnouncementBannerProps> = ({ announcements
         {visible.map((announcement) => (
           <MessageBar
             key={announcement.id}
-            intent={announcement.severity}
+            intent={getIntent(announcement)}
+            icon={announcement.status === 'planned' ? <CalendarClock20Regular /> : undefined}
             layout='multiline'
             className={styles.message}
             role='button'
@@ -92,6 +102,7 @@ export const AnnouncementBanner: FC<IAnnouncementBannerProps> = ({ announcements
                   />
                 )}
                 {announcement.title}
+                <StatusBadge status={announcement.status} className={styles.status} />
               </MessageBarTitle>{' '}
               {preview(announcement.content)}
             </MessageBarBody>

@@ -10,7 +10,8 @@ export function useAnnouncementState() {
     loading: true,
     error: null,
     fields: [],
-    canCreate: false
+    canCreate: false,
+    canEdit: false
   })
 
   /**

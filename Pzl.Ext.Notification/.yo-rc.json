@@ -1,0 +1,19 @@
+{
+  "@microsoft/generator-sharepoint": {
+    "plusBeta": false,
+    "isCreatingSolution": true,
+    "nodeVersion": "22.14.0",
+    "version": "1.23.2",
+    "libraryName": "pzl-ext-notification",
+    "libraryId": "9652524c-773d-4e9e-876d-e32328035d3b",
+    "environment": "spo",
+    "packageManager": "npm",
+    "solutionName": "pzl-ext-notification",
+    "solutionShortDescription": "Teams-varsling for driftsmeldinger og nyheter",
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "componentType": "extension",
+    "extensionType": "ApplicationCustomizer",
+    "useGulp": false
+  }
+}

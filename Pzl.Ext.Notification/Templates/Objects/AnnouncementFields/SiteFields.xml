@@ -1,0 +1,9 @@
+<pnp:SiteFields xmlns:pnp="http://schemas.dev.office.com/PnP/2022/09/ProvisioningSchema">
+  <Field Type="Boolean" DisplayName="{resource:SiteFields_NotifyTeams_DisplayName}" Description="{resource:SiteFields_NotifyTeams_Description}" Group="Puzzlepart" ID="{3e65d1ee-5948-4a41-b295-317184aaa28f}" StaticName="PzlNotifyTeams" Name="PzlNotifyTeams">
+    <Default>0</Default>
+  </Field>
+  <Field Type="Boolean" DisplayName="{resource:SiteFields_NotifyAgain_DisplayName}" Description="{resource:SiteFields_NotifyAgain_Description}" ShowInNewForm="FALSE" Group="Puzzlepart" ID="{e2188d92-df10-40c2-85a6-c0cc93075938}" StaticName="PzlNotifyAgain" Name="PzlNotifyAgain">
+    <Default>0</Default>
+  </Field>
+  <Field Type="DateTime" DisplayName="{resource:SiteFields_NotifiedAt_DisplayName}" Description="{resource:SiteFields_NotifiedAt_Description}" Format="DateTime" ShowInNewForm="FALSE" ShowInEditForm="FALSE" Group="Puzzlepart" ID="{8f0539a0-f520-42a2-b2fb-56a56ce33d1d}" StaticName="PzlNotifiedAt" Name="PzlNotifiedAt" />
+</pnp:SiteFields>

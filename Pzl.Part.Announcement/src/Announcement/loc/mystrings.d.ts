@@ -27,6 +27,18 @@ declare interface IAnnouncementStrings {
     OpenDetails: string
     CloseButtonText: string
   }
+  Status: {
+    Planned: string
+    Ongoing: string
+    Resolved: string
+  }
+  QuickActions: {
+    MarkOngoing: string
+    MarkResolved: string
+    Edit: string
+    StatusChangedText: string
+    StatusChangeErrorText: string
+  }
   RichText: {
     ToolbarLabel: string
     Bold: string
@@ -36,12 +48,6 @@ declare interface IAnnouncementStrings {
     NumberList: string
     Link: string
     LinkPrompt: string
-  }
-  Severity: {
-    Info: string
-    Warning: string
-    Error: string
-    Success: string
   }
   /**
    * Display names of the template fields, used when the list schema cannot be read

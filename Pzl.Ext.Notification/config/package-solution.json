@@ -1,0 +1,48 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "Driftsmeldinger - Teams-varsling",
+    "id": "9652524c-773d-4e9e-876d-e32328035d3b",
+    "version": "1.0.0.0",
+    "includeClientSideAssets": true,
+    "skipFeatureDeployment": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "SoftwareOne",
+      "websiteUrl": "https://www.softwareone.com",
+      "privacyUrl": "https://privacy.microsoft.com/en-us/privacystatement",
+      "termsOfUseUrl": "https://go.microsoft.com/fwlink/?linkid=2039674",
+      "mpnId": "Undefined-1.23.2"
+    },
+    "metadata": {
+      "shortDescription": {
+        "default": "Teams-varsling for driftsmeldinger og nyheter"
+      },
+      "longDescription": {
+        "default": "Tillegg til Driftsmeldinger. Pakken inneholder customizeren som sender brukeren videre til nyhetssiden et Teams-varsel peker på. Varslingstjenesten (Azure-funksjon og Teams-app) installeres separat, se README."
+      },
+      "screenshotPaths": [],
+      "videoUrl": "",
+      "categories": []
+    },
+    "features": [
+      {
+        "title": "Driftsmeldinger - Teams-varsling, videresending",
+        "description": "Registrerer customizeren NotificationDeepLink, som sender ?driftsmelding=page:-lenker fra Teams-varsler videre til siden.",
+        "id": "e1507c37-9705-42b5-b29f-5419f987511e",
+        "version": "1.0.0.0",
+        "componentIds": [
+          "1e8a8edf-84b4-4a5e-9fcc-5ec33e34a509"
+        ],
+        "assets": {
+          "elementManifests": [
+            "elements.xml"
+          ]
+        }
+      }
+    ]
+  },
+  "paths": {
+    "zippedPackage": "solution/pzl-ext-notification.sppkg"
+  }
+}
