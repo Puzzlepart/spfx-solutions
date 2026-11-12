@@ -21,7 +21,9 @@
   then deploy the code with Publish-NotificationFunction.ps1. See ../README.md.
 
 .PARAMETER Location
-  Region for all resources. Must support Flex Consumption: az functionapp list-flexconsumption-locations
+  Region for all resources, default Norway East. Must support Flex Consumption
+  (az functionapp list-flexconsumption-locations), which is checked before anything is created.
+  Azure can refuse a region for a subscription ("not accepting new customers"): pick another one.
 
 .PARAMETER TeamsDeepLinkAppId
   Teams app ID the notifications open (Graph requires links to be Teams deep links). Usually the
@@ -40,7 +42,7 @@
 param(
   [Parameter(Mandatory = $true)] [string]$SubscriptionId,
   [Parameter(Mandatory = $true)] [string]$ResourceGroupName,
-  [string]$Location = 'westeurope',
+  [string]$Location = 'norwayeast',
   [Parameter(Mandatory = $true)] [string]$FunctionAppName,
   [Parameter(Mandatory = $true)] [ValidatePattern('^[a-z0-9]{3,24}$')] [string]$StorageAccountName,
   [string]$IdentityName = '',
@@ -87,6 +89,24 @@ Invoke-Az account set --subscription $SubscriptionId | Out-Null
 $account = Invoke-Az account show
 Write-Host "   $($account.name) ($($account.id)), tenant $($account.tenantId), user $($account.user.name)"
 & az config set extension.use_dynamic_install=yes_without_prompt -o none 2>$null
+
+# New installation: check the region before anything is created, so an unsupported one does not
+# leave half of the resources behind. Skipped when the function app exists (the region is then given).
+if (-not (Test-Az functionapp show -n $FunctionAppName -g $ResourceGroupName)) {
+  Write-Host "== Region $Location" -ForegroundColor Cyan
+  $regions = @()
+  try {
+    $regions = @(Invoke-Az functionapp list-flexconsumption-locations | ForEach-Object { ("$($_.name)" -replace '\s', '').ToLowerInvariant() } | Where-Object { $_ })
+  } catch {
+    Write-Warning "Could not list the Flex Consumption regions, continuing without the check: $($_.Exception.Message)"
+  }
+  if ($regions.Count -gt 0) {
+    if ($regions -notcontains ($Location -replace '\s', '').ToLowerInvariant()) {
+      throw "Region '$Location' does not support Flex Consumption. Pass -Location with one of: $(($regions | Sort-Object) -join ', ')"
+    }
+    Write-Host '   supports Flex Consumption'
+  }
+}
 
 Write-Host "== Resource group $ResourceGroupName ($Location)" -ForegroundColor Cyan
 if (-not (Test-Az group show -n $ResourceGroupName)) {

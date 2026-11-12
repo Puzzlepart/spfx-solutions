@@ -43,7 +43,8 @@
   Storage account name, 3-24 lower case letters and digits (created if missing).
 
 .PARAMETER Location
-  Region that supports Flex Consumption (az functionapp list-flexconsumption-locations).
+  Region for the Azure resources, default Norway East. Must support Flex Consumption
+  (az functionapp list-flexconsumption-locations), which is checked before anything is created.
 
 .PARAMETER ConfigSiteUrl
   Site with the Varslingskonfigurasjon list. Also the site the Teams tab opens.
@@ -121,7 +122,7 @@ param(
   [Parameter(Mandatory = $true)] [string]$ResourceGroupName,
   [Parameter(Mandatory = $true)] [string]$FunctionAppName,
   [Parameter(Mandatory = $true)] [ValidatePattern('^[a-z0-9]{3,24}$')] [string]$StorageAccountName,
-  [string]$Location = 'westeurope',
+  [string]$Location = 'norwayeast',
   [Parameter(Mandatory = $true)] [string]$ConfigSiteUrl,
   [string[]]$AnnouncementSiteUrls = @(),
   [string[]]$NewsSiteUrls = @(),

@@ -92,13 +92,13 @@ az login --tenant <tenant-id>
 .\scripts\Deploy-NotificationInfrastructure.ps1 `
   -SubscriptionId <abonnement> `
   -ResourceGroupName rg-intranet-notification `
-  -Location westeurope `
+  -Location norwayeast `
   -FunctionAppName func-intranet-notification `
   -StorageAccountName stintranetnotify01 `
   -ConfigSiteUrl https://<tenant>.sharepoint.com
 ```
 
-Regionen må støtte Flex Consumption (`az functionapp list-flexconsumption-locations`). Norway East gjør det ikke per oktober 2026, West Europe gjør det. Valgfrie parametere: `-TeamsDeepLinkAppId`, `-TeamsDeepLinkEntityId`, `-ConfigListTitle`, `-AnnouncementListTitle`, `-DryRun` (standard `$true`).
+Standardregionen er Norway East. Regionen må støtte Flex Consumption (`az functionapp list-flexconsumption-locations`), og skriptet sjekker det før noe opprettes. Azure kan også avvise en region for abonnementet («The selected region is currently not accepting new customers», sett i West Europe). Velg da en annen med `-Location`, f.eks. `swedencentral`. Valgfrie parametere: `-TeamsDeepLinkAppId`, `-TeamsDeepLinkEntityId`, `-ConfigListTitle`, `-AnnouncementListTitle`, `-DryRun` (standard `$true`).
 
 Scriptet skriver ut **client ID** og **principal ID** for identiteten til slutt. De brukes i de neste stegene.
 
@@ -291,6 +291,7 @@ Kopier `function/local.settings.json.example` til `local.settings.json`. Lokalt 
 
 | Symptom | Sjekk |
 |---|---|
+| `RequestDisallowedByAzure` («not accepting new customers») i steg 1 | Azure tar ikke imot nye kunder i regionen for dette abonnementet. Kjør på nytt med en annen `-Location`. Ressursgruppa som alt er opprettet, kan beholdes |
 | `401`/`403` fra SharePoint | App-rollen `Sites.Selected` på **SharePoint Online** (ikke bare Graph), og `Grant-PnPAzureADAppSitePermission` på riktig område med riktig nivå |
 | `403` fra `transitiveMembers` | `GroupMember.Read.All` tildelt, og at admin consent er gitt (scriptet tildeler app-roller direkte, consent er implisitt) |
 | `400` «Invalid 'webUrl' specified» fra `sendActivityNotificationToRecipients` | `TEAMS_DEEPLINK_APP_ID` mangler eller er ikke en Teams-app-ID. Lenken må være `https://teams.microsoft.com/l/...` |
