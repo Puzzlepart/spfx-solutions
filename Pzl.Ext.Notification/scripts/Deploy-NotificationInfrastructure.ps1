@@ -146,10 +146,21 @@ if ($newAssignments -gt 0) { Write-Host '   waiting 30 s for role assignments to
 
 Write-Host "== Function app $FunctionAppName (Flex Consumption, Node 22)" -ForegroundColor Cyan
 if (-not (Test-Az functionapp show -n $FunctionAppName -g $ResourceGroupName)) {
-  Invoke-Az functionapp create -n $FunctionAppName -g $ResourceGroupName --storage-account $StorageAccountName `
-    --flexconsumption-location $Location --runtime node --runtime-version 22 `
-    --assign-identity $identity.id --app-insights $AppInsightsName `
-    --deployment-storage-auth-type UserAssignedIdentity --deployment-storage-auth-value $identity.id | Out-Null
+  # Azure can answer "not found" for the new storage account for some minutes, most often when
+  # the resource group was deleted and created again in another region just before. Try again.
+  for ($attempt = 1; ; $attempt++) {
+    try {
+      Invoke-Az functionapp create -n $FunctionAppName -g $ResourceGroupName --storage-account $StorageAccountName `
+        --flexconsumption-location $Location --runtime node --runtime-version 22 `
+        --assign-identity $identity.id --app-insights $AppInsightsName `
+        --deployment-storage-auth-type UserAssignedIdentity --deployment-storage-auth-value $identity.id | Out-Null
+      break
+    } catch {
+      if ($attempt -ge 6 -or "$_" -notmatch 'ResourceNotFound') { throw }
+      Write-Host "   Azure does not see the new resources yet, trying again in 30 s (attempt $attempt of 5 failed)"
+      Start-Sleep -Seconds 30
+    }
+  }
   Write-Host '   created'
 } else { Write-Host '   exists' }
 
