@@ -377,8 +377,22 @@ if ($SkipTeamsApp) {
     Write-Done "Uploaded version $TeamsAppVersion of $AppName to the app catalog"
     $manualSteps.Add('Teams clients pick up the new app version within hours; sign out and in of Teams to test it at once.')
   } else {
-    Invoke-MgGraphRequest -Method POST -Uri 'v1.0/appCatalogs/teamsApps' -InputFilePath $zip.FullName -ContentType 'application/zip' | Out-Null
-    Write-Done "Published $AppName ($TeamsAppId) to the organization's app catalog"
+    $created = Invoke-MgGraphRequest -Method POST -Uri 'v1.0/appCatalogs/teamsApps' -InputFilePath $zip.FullName -ContentType 'application/zip'
+    # Graph has answered this call without an error while the app never showed up in the catalog,
+    # so look the app up afterwards instead of trusting the answer.
+    $listed = $null
+    foreach ($wait in 0, 5, 10, 15) {
+      Start-Sleep -Seconds $wait
+      $listed = @((Invoke-MgGraphRequest -Method GET -Uri "v1.0/appCatalogs/teamsApps?`$filter=externalId eq '$TeamsAppId'").value) | Select-Object -First 1
+      if ($listed) { break }
+    }
+    if ($listed) {
+      Write-Done "Published $AppName ($TeamsAppId) to the organization's app catalog (catalog ID $($listed.id))"
+    } else {
+      $answer = if ($created) { $created | ConvertTo-Json -Depth 5 -Compress } else { '(empty)' }
+      Write-Warning "Graph accepted $AppName, but the app is not in the organization's app catalog. Answer from Graph: $answer"
+      $manualSteps.Add("The upload with Graph did not put the app in the catalog. Upload $($zip.FullName) in Teams admin center (Teams apps > Manage apps > Upload new app).")
+    }
     $manualSteps.Add("Teams admin center: create an app setup policy that installs «$AppName» for the recipients (without pinning it) and assign it to the same groups as in Varslingskonfigurasjon. Start with a test group.")
   }
 }
