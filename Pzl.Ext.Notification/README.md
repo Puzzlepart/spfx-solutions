@@ -265,10 +265,10 @@ Send først et testvarsel til én bruker med test-endepunktet i Function-appen. 
 ```powershell
 $key = az functionapp keys list -g rg-intranet-notification -n func-intranet-notification --query functionKeys.default -o tsv
 $userId = az ad user show --id bruker@tenant.onmicrosoft.com --query id -o tsv
-Invoke-RestMethod -Method Post -Uri "https://func-intranet-notification.azurewebsites.net/api/test-notification?userId=$userId&type=announcement" -Headers @{ 'x-functions-key' = $key }
+Invoke-RestMethod -Method Post -Uri "https://func-intranet-notification.azurewebsites.net/api/test-notification?userId=$userId&type=announcement" -Headers @{ 'x-functions-key' = $key } | ConvertTo-Json -Depth 6
 ```
 
-Svaret inneholder `ok` og eventuell Graph-feil. Varselet skal dukke opp i bjella innen sekunder. `type=news` tester nyhetsvarianten. Legg til `&bulk=1` for å sende via masse-endepunktet.
+Svaret inneholder `ok` og eventuell Graph-feil (`graphStatus` og `graphError`). `ConvertTo-Json` trengs for å se feilteksten, ellers viser PowerShell bare `@{error=}`. `403` betyr som regel at Teams-appen ikke er installert for brukeren ennå: vent på setup policy, eller legg til appen selv i Teams (Apper > Bygd for organisasjonen). Varselet skal dukke opp i bjella innen sekunder. `type=news` tester nyhetsvarianten. Legg til `&bulk=1` for å sende via masse-endepunktet.
 
 > **Malparametere må stemme nøyaktig** med plassholderne i `templateText` i manifestet (`{title}`). Masse-endepunktet godtar ekstra parametere, men leverer da ingenting, uten feil. Per-bruker-endepunktet svarer «Incorrect template parameter arity». Endrer du `templateText`, må `templateParameters` i `announcements.ts`/`news.ts` endres tilsvarende.
 
