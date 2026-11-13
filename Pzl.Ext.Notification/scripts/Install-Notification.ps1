@@ -160,6 +160,19 @@ function Get-AzJson {
   return (($out -join "`n") | ConvertFrom-Json)
 }
 
+function Find-CatalogApp([string]$ExternalId) {
+  # Finds a Teams app in the organization's app catalog by its manifest ID. The externalId filter
+  # of the API has answered with nothing for an app that was in the catalog, so the organization's
+  # apps are listed and matched here instead.
+  $uri = "v1.0/appCatalogs/teamsApps?`$filter=distributionMethod eq 'organization'&`$expand=appDefinitions"
+  while ($uri) {
+    $page = Invoke-MgGraphRequest -Method GET -Uri $uri
+    $match = @($page.value) | Where-Object { $_.externalId -eq $ExternalId } | Select-Object -First 1
+    if ($match) { return $match }
+    $uri = $page.'@odata.nextLink'
+  }
+}
+
 #region Prerequisites
 
 Write-Step 'Prerequisites'
@@ -339,8 +352,7 @@ if ($SkipTeamsApp) {
   Write-Step '4. Teams app'
   $catalogApp = $null
   if (-not $SkipTeamsAppUpload) {
-    $found = Invoke-MgGraphRequest -Method GET -Uri "v1.0/appCatalogs/teamsApps?`$filter=externalId eq '$TeamsAppId'&`$expand=appDefinitions"
-    $catalogApp = @($found.value) | Select-Object -First 1
+    $catalogApp = Find-CatalogApp $TeamsAppId
   }
   if (-not $TeamsAppVersion) {
     if ($catalogApp) {
@@ -383,7 +395,7 @@ if ($SkipTeamsApp) {
     $listed = $null
     foreach ($wait in 0, 5, 10, 15) {
       Start-Sleep -Seconds $wait
-      $listed = @((Invoke-MgGraphRequest -Method GET -Uri "v1.0/appCatalogs/teamsApps?`$filter=externalId eq '$TeamsAppId'").value) | Select-Object -First 1
+      $listed = Find-CatalogApp $TeamsAppId
       if ($listed) { break }
     }
     if ($listed) {
