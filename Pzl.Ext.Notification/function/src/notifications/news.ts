@@ -2,7 +2,7 @@ import { InvocationContext } from '@azure/functions'
 import { Settings } from '../config'
 import { sendActivityNotification } from '../graph'
 import { odataDate, SharePointClient } from '../sharepoint'
-import { NotificationState } from '../state'
+import { BEFORE_START_NOTE, NotificationState } from '../state'
 import { SiteConfiguration } from './configuration'
 import { buildLink, toPlainText } from './deeplink'
 import { RecipientResolver } from './recipients'
@@ -40,14 +40,10 @@ export async function processNews(
   const pagesUrl = `${sp.serverRelativeUrl === '/' ? '' : sp.serverRelativeUrl}/SitePages`
   const list = SharePointClient.listByUrl(pagesUrl)
   const lookback = new Date(Date.now() - settings.newsLookbackDays * 24 * 60 * 60 * 1000)
-  // News that was there before the service was turned on for the site is not notified
-  const start = await state.newsStart(site.siteUrl)
-  const since = start.at > lookback ? start.at : lookback
-  if (!start.stored) {
-    context.log(
-      `[dry run] ${site.title}: news notifications start when DRY_RUN is turned off; news published before that is not notified`
-    )
-  }
+  // News that was there before the service was turned on for the site is not notified. A dry
+  // run before that shows what is there, to check the recipients, and says it will not be sent.
+  const start = await state.notificationStart(site.siteUrl, 'news')
+  const since = start.stored && start.at > lookback ? start.at : lookback
 
   const items = await sp.getItems<PageItem>(list, {
     select: [
@@ -110,7 +106,11 @@ export async function processNews(
         continue
       }
       if (settings.dryRun) {
-        context.log(`[dry run] ${label}: would notify ${userIds.length} users (${source})`)
+        context.log(
+          start.stored
+            ? `[dry run] ${label}: would notify ${userIds.length} users (${source})`
+            : `[dry run] ${label}: ${userIds.length} recipients (${source}). ${BEFORE_START_NOTE}`
+        )
         continue
       }
       try {

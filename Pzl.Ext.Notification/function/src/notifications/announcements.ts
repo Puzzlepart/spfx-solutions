@@ -2,6 +2,7 @@ import { InvocationContext } from '@azure/functions'
 import { Settings } from '../config'
 import { sendActivityNotification } from '../graph'
 import { odataDate, SharePointClient } from '../sharepoint'
+import { BEFORE_START_NOTE, NotificationState } from '../state'
 import { SiteConfiguration } from './configuration'
 import { buildLink, toPlainText } from './deeplink'
 import { Status, toSeverity, toStatus } from './levels'
@@ -16,6 +17,8 @@ interface AnnouncementItem {
   PzlSeverity: string | null
   PzlContent: string | null
   PzlNotifiedAt: string | null
+  Created: string
+  PzlStartDate: string
   /** Optional: lists provisioned before Driftsmeldinger 2.0 do not have it */
   PzlStatus?: string | null
   /** Optional: added by `Templates/AnnouncementFields.xml` */
@@ -58,8 +61,23 @@ export function classify(item: AnnouncementItem, site: SiteConfiguration): Notif
 }
 
 /**
+ * Whether an announcement is from before the notifications started for the site:
+ * it existed then, and its start date had passed. Such an announcement gets no
+ * first notification, so turning the service on does not notify about what is
+ * already there. One that is created later, or that becomes active later, is new.
+ */
+export function isFromBeforeStart(
+  item: Pick<AnnouncementItem, 'Created' | 'PzlStartDate'>,
+  start: Date
+): boolean {
+  return new Date(item.Created) < start && new Date(item.PzlStartDate) < start
+}
+
+/**
  * Sends notifications for active announcements (start date passed, end date
- * not passed), see `classify`.
+ * not passed), see `classify`. A first notification is only sent for
+ * announcements that are new since the notifications started for the site
+ * (`isFromBeforeStart`); «Varsle på nytt» always sends.
  *
  * The item is claimed before sending (`PzlNotifiedAt` set, `PzlNotifyAgain`
  * cleared) and the claim is undone if the send fails, so overlapping runs never
@@ -69,6 +87,7 @@ export async function processAnnouncements(
   site: SiteConfiguration,
   settings: Settings,
   recipients: RecipientResolver,
+  state: NotificationState,
   context: InvocationContext
 ): Promise<void> {
   const sp = new SharePointClient(site.siteUrl)
@@ -78,7 +97,15 @@ export async function processAnnouncements(
   // Filtered on dates only: the optional columns cannot be used in $filter on
   // lists that do not have them, and there are few active announcements.
   const items = await sp.getItems<AnnouncementItem>(list, {
-    select: ['Id', 'Title', 'PzlSeverity', 'PzlContent', 'PzlNotifiedAt'],
+    select: [
+      'Id',
+      'Title',
+      'PzlSeverity',
+      'PzlContent',
+      'PzlNotifiedAt',
+      'Created',
+      'PzlStartDate'
+    ],
     optionalSelect: [
       'PzlStatus',
       'PzlNotifyTeams',
@@ -88,16 +115,23 @@ export async function processAnnouncements(
     filter: `PzlStartDate le ${now} and PzlEndDate ge ${now}`
   })
 
-  const candidates: { item: AnnouncementItem; kind: NotificationKind }[] = []
+  // A dry run before the start shows what is there, to check the recipients, and says that it
+  // will not be sent; after the start, what is from before it is left out.
+  const start = await state.notificationStart(site.siteUrl, 'announcement')
+  const candidates: { item: AnnouncementItem; kind: NotificationKind; old: boolean }[] = []
+  let fromBefore = 0
   for (const item of items) {
     const kind = classify(item, site)
-    if (kind) candidates.push({ item, kind })
+    if (!kind) continue
+    const old = kind === 'first' && isFromBeforeStart(item, start.at)
+    if (old) fromBefore++
+    if (!old || !start.stored) candidates.push({ item, kind, old })
   }
   context.log(
-    `${site.title}: ${items.length} active announcements, ${candidates.length} to notify (levels always notified: ${site.notifySeverities.join(', ') || 'none'})`
+    `${site.title}: ${items.length} active announcements, ${candidates.filter((candidate) => !candidate.old).length} to notify, ${fromBefore} from before the notifications started (levels always notified: ${site.notifySeverities.join(', ') || 'none'})`
   )
 
-  for (const { item, kind } of candidates) {
+  for (const { item, kind, old } of candidates) {
     const label = `announcement ${item.Id} "${item.Title}" (${kind}) on ${site.siteUrl}`
     try {
       const { userIds, groupIds, source } = await recipients.resolve(
@@ -129,7 +163,11 @@ export async function processAnnouncements(
       }
 
       if (settings.dryRun) {
-        context.log(`[dry run] ${label}: would notify ${userIds.length} users (${source})`)
+        context.log(
+          old
+            ? `[dry run] ${label}: ${userIds.length} recipients (${source}). ${BEFORE_START_NOTE}`
+            : `[dry run] ${label}: would notify ${userIds.length} users (${source})`
+        )
         continue
       }
 

@@ -3,15 +3,23 @@ import { RestError, TableClient } from '@azure/data-tables'
 import { getCredential } from './auth'
 import { Settings } from './config'
 
-/** Row that holds when news notifications started for a site (see `newsStart`) */
-const NEWS_START_ROW = 'news-start'
+/** What a site is notified about; each has its own start (see `notificationStart`) */
+export type NotificationSubject = 'news' | 'announcement'
+
+/** Row that holds when the notifications about a subject started for a site */
+const startRow = (subject: NotificationSubject): string => `${subject}-start`
+
+/** Added to the dry-run log line of an item that will not be notified once sending is on */
+export const BEFORE_START_NOTE =
+  'Not notified when DRY_RUN is turned off: it is from before the notifications start'
 
 /**
- * Sent-state for news pages, stored in Azure Table Storage.
+ * State in Azure Table Storage: when the notifications started for each site, and
+ * which news pages have been sent.
  *
  * Pages are not written to (a field update on a published page creates a new
  * minor version and "unpublished changes"), so the claim lives here instead.
- * Announcements use the `PzlNotifiedAt` column and do not need this table.
+ * Announcements keep their sent-state in the `PzlNotifiedAt` column.
  */
 export class NotificationState {
   private client: TableClient | undefined
@@ -49,41 +57,45 @@ export class NotificationState {
   }
 
   /**
-   * When news notifications started for a site: the first run that could send for it. News
-   * published before that is never notified, so turning the service on, or adding a site, does
-   * not notify about the news that is already there.
+   * When the notifications about a subject started for a site: the first run that could send
+   * for it. What was there before that is never notified, so turning the service on, or adding
+   * a site, does not notify about the news and announcements that are already there.
    *
    * A dry run stores nothing: a site that has not started gets "now" on every run, with
    * `stored: false`.
    */
-  async newsStart(siteUrl: string): Promise<{ at: Date; stored: boolean }> {
+  async notificationStart(
+    siteUrl: string,
+    subject: NotificationSubject
+  ): Promise<{ at: Date; stored: boolean }> {
     const partitionKey = NotificationState.partitionKey(siteUrl)
+    const rowKey = startRow(subject)
     const now = new Date()
     if (this.settings.dryRun && !this.settings.stateStorageAccountName) {
       return { at: now, stored: false }
     }
-    const stored = await this.readNewsStart(partitionKey)
+    const stored = await this.readStart(partitionKey, rowKey)
     if (stored) return { at: stored, stored: true }
     if (this.settings.dryRun) return { at: now, stored: false }
     try {
       await (
         await this.table()
-      ).createEntity({ partitionKey, rowKey: NEWS_START_ROW, startedAt: now.toISOString() })
+      ).createEntity({ partitionKey, rowKey, startedAt: now.toISOString() })
       return { at: now, stored: true }
     } catch (error) {
       // An overlapping run stored it first
       if (error instanceof RestError && error.statusCode === 409) {
-        return { at: (await this.readNewsStart(partitionKey)) ?? now, stored: true }
+        return { at: (await this.readStart(partitionKey, rowKey)) ?? now, stored: true }
       }
       throw error
     }
   }
 
-  private async readNewsStart(partitionKey: string): Promise<Date | undefined> {
+  private async readStart(partitionKey: string, rowKey: string): Promise<Date | undefined> {
     try {
       const entity = await this.tableClient().getEntity<{ startedAt?: string }>(
         partitionKey,
-        NEWS_START_ROW
+        rowKey
       )
       const at = entity.startedAt ? new Date(entity.startedAt) : undefined
       return at && !isNaN(at.getTime()) ? at : undefined

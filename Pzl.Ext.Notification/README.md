@@ -41,7 +41,8 @@ Timer (1 min)
             ├─ Driftsmeldinger: PzlStartDate <= nå, PzlEndDate >= nå, og enten
             │     • PzlNotifyAgain = ja (nytt varsel), eller
             │     • PzlNotifiedAt tom, PzlStatus ikke Løst, og (PzlSeverity i radens
-            │       «Nivåer som alltid varsles» eller PzlNotifyTeams = ja) (første varsel)
+            │       «Nivåer som alltid varsles» eller PzlNotifyTeams = ja),
+            │       og ny siden varslingen startet for området (første varsel)
             │     → sett PzlNotifiedAt og PzlNotifyAgain = nei (claim) → send
             │     → ved feil: sett feltene tilbake
             └─ Nyheter: PromotedState = 2, FirstPublishedDate innen NEWS_LOOKBACK_DAYS
@@ -50,7 +51,10 @@ Timer (1 min)
                   → registrer i tabellen (claim) → send → ved feil: fjern raden
 ```
 
-- **Gamle nyheter varsles ikke.** Første gang tjenesten kjører for et område uten `DRY_RUN`, lagrer den tidspunktet i tabellen `NotificationState` (raden `news-start`). Bare nyheter publisert etter det varsles, så det å slå på tjenesten, eller å legge til et område senere, gir ingen varsler om nyhetene som alt ligger der. Aktive driftsmeldinger varsles derimot når tjenesten slås på, siden de gjelder nå.
+- **Det som lå der fra før, varsles ikke.** Første gang tjenesten kjører for et område uten `DRY_RUN`, lagrer den tidspunktet i tabellen `NotificationState` (radene `news-start` og `announcement-start`). Bare det som er nytt etter det varsles, så det å slå på tjenesten, eller å legge til et område senere, gir ingen varsler om nyhetene og driftsmeldingene som alt ligger der.
+  - Nyheter: publisert etter starten.
+  - Driftsmeldinger: opprettet etter starten, eller med startdato etter starten (en planlagt melding som blir aktiv senere). «Varsle på nytt» sender uansett.
+  - En testkjøring (`DRY_RUN=true`) før starten viser det som ligger der med mottakerantall, og sier at det ikke blir varslet. For å teste selve sendingen må nyheten eller driftsmeldingen opprettes etter at `DRY_RUN` er slått av.
 
 - Mottakere: `transitiveMembers` på gruppene via Graph, dedupliserte, uten deaktiverte kontoer og (som standard) uten gjester.
 - Sending: `POST /teamwork/sendActivityNotificationToRecipients` i grupper på 100, med retry ved 429/5xx.
@@ -178,7 +182,7 @@ Steg 1 til 3 under (og SPFx-pakken fra steg 4) kan gjøres med `Pzl.Part.Announc
    `Install-Notification.ps1` gjør det samme med `-NewsSiteUrls` og `-AnnouncementSiteUrls` (legg til `-SkipInfrastructure -SkipPermissions -SkipTeamsApp -SkipFunction` for bare dette steget).
 2. Legg inn en rad for området i **Varslingskonfigurasjon**.
 
-Uten tilgangen logger tjenesten `HTTP 403 … Attempted to perform an unauthorized operation` for raden hvert minutt, mens de andre områdene varsles som før. Nyheter som lå på området før raden ble lagt til, varsles ikke.
+Uten tilgangen logger tjenesten `HTTP 403 … Attempted to perform an unauthorized operation` for raden hvert minutt, mens de andre områdene varsles som før. Nyheter og driftsmeldinger som lå på området før raden ble lagt til, varsles ikke.
 
 ## Steg 4: Teams-appen
 
@@ -270,7 +274,7 @@ App-innstillingene ble satt i steg 1, bortsett fra `TEAMS_DEEPLINK_APP_ID`, som 
 | `TIMER_SCHEDULE` | `0 * * * * *` | NCRONTAB, hvert minutt |
 | `DRY_RUN` | `false` | Logg hva som ville blitt sendt, uten å sende eller skrive |
 
-Start med `DRY_RUN=true` og se i loggen at riktige elementer og mottakerantall plukkes opp. Flex Consumption har ingen logstream (`az webapp log tail` gir 404), så bruk `scripts/Get-NotificationLog.ps1`, som spør Application Insights, eller Invocations på funksjonen i portalen. Loggene kommer med ett til noen minutters forsinkelse.
+Start med `DRY_RUN=true` og se i loggen at riktige elementer og mottakerantall plukkes opp. Det loggen viser i denne testkjøringen, blir ikke varslet når `DRY_RUN` slås av («Not notified when DRY_RUN is turned off»): bare det som kommer til etterpå. Flex Consumption har ingen logstream (`az webapp log tail` gir 404), så bruk `scripts/Get-NotificationLog.ps1`, som spør Application Insights, eller Invocations på funksjonen i portalen. Loggene kommer med ett til noen minutters forsinkelse.
 
 ```powershell
 .\scripts\Get-NotificationLog.ps1 -ResourceGroupName rg-intranet-notification -FunctionAppName func-intranet-notification -Minutes 30
@@ -294,7 +298,7 @@ Svaret inneholder `ok` og eventuell Graph-feil (`graphStatus` og `graphError`). 
 
 
 1. Konfigurasjonsrad mot en testgruppe, setup policy mot samme gruppe.
-2. Test variantene: nyhet (publiser en ny, nyheter fra før tjenesten ble slått på varsles ikke), driftsmelding med et nivå fra «Nivåer som alltid varsles», driftsmelding med «Varsle i Teams», driftsmelding med status *Planlagt*, og «Varsle på nytt» på en driftsmelding som er satt til *Løst*.
+2. Test variantene, med nyheter og driftsmeldinger opprettet etter at `DRY_RUN` ble slått av (det som lå der fra før, varsles ikke): nyhet, driftsmelding med et nivå fra «Nivåer som alltid varsles», driftsmelding med «Varsle i Teams», driftsmelding med status *Planlagt*, og «Varsle på nytt» på en driftsmelding som er satt til *Løst*.
 3. Klikk varselet på desktop, web og mobil og se at riktig side/driftsmelding åpnes.
 4. Sjekk at `PzlNotifiedAt` settes på driftsmeldingen og vises i webdelens popover.
 5. Bytt standardgruppe og setup policy til produksjonsgruppene.
@@ -322,5 +326,5 @@ Kopier `function/local.settings.json.example` til `local.settings.json`. Lokalt 
 | Ingen mottakere | Gruppe-ID-ene i konfigurasjonen, og at gruppa har medlemmer som ikke er deaktivert/gjester |
 | Loggen sier «Sent … to N recipients», men ingenting i bjella | Appen var ikke installert for mottakeren da det ble sendt (setup policy tar tid), eller `templateParameters` matcher ikke `templateText`. Send et testvarsel med `/api/test-notification` til én bruker for å få feilen. |
 | Nyheter varsles ikke | `PromotedState = 2`, publisert hovedversjon, innenfor `NEWS_LOOKBACK_DAYS`, publisert etter at nyhetsvarslingen startet for området (raden `news-start` i tabellen `NotificationState`), og ikke allerede en rad i tabellen |
-| Driftsmeldinger varsles ikke | Startdato passert, sluttdato ikke passert, `PzlNotifiedAt` tom, status ikke *Løst*, og nivå/«Varsle i Teams». For nytt varsel: «Varsle på nytt» satt (kolonnen fra `AnnouncementFields.xml`) |
+| Driftsmeldinger varsles ikke | Startdato passert, sluttdato ikke passert, `PzlNotifiedAt` tom, status ikke *Løst*, nivå/«Varsle i Teams», og opprettet eller aktiv etter at varslingen startet for området (raden `announcement-start` i tabellen `NotificationState`; loggen teller dem som «from before the notifications started»). For nytt varsel: «Varsle på nytt» satt (kolonnen fra `AnnouncementFields.xml`) |
 | Dobbelt varsel | Viva Connections kan også varsle om nyheter. Skru av det ene. |

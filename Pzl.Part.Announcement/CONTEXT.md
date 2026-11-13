@@ -45,5 +45,6 @@ En rad i *Varslingskonfigurasjon*: et område med driftsmeldinger og/eller nyhet
 
 - En driftsmelding varsles første gang når den blir aktiv og har «Varsle i Teams» eller et nivå i «Nivåer som alltid varsles».
 - En driftsmelding som er *Løst* når den blir aktiv, varsles ikke.
+- En driftsmelding som fantes og var aktiv før varslingen ble slått på for området, får ikke første varsel. Bare nye varsles: opprettet etter starten, eller med startdato etter starten.
 - Tittelen i varselet: *Pågår* → «Driftsmelding: <tittel>», *Planlagt* → «Planlagt: <tittel>».
 - «Varsle på nytt» sender et nytt varsel («Oppdatert: <tittel>», eller «Løst: <tittel>» når status er *Løst*). Tjenesten setter feltet tilbake til *Nei*. Det finnes ingen automatisk ny varsling.

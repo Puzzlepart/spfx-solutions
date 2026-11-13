@@ -36,7 +36,7 @@ export async function notify(timer: Timer, context: InvocationContext): Promise<
     }
     if (site.notifyAnnouncements) {
       try {
-        await processAnnouncements(site, settings, recipients, context)
+        await processAnnouncements(site, settings, recipients, state, context)
       } catch (error) {
         context.error(`${site.title}: announcements failed: ${error}`)
       }
