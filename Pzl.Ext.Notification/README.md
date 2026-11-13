@@ -223,7 +223,9 @@ Aktivitetsvarsler må sendes fra en Teams-app der `webApplicationInfo.id` er cli
 
 5. Ved oppdatering av manifestet (ny versjon lastet opp i admin center): Teams-klientene beholder den gamle app-definisjonen til de henter på nytt, som kan ta timer. Logg ut og inn av Teams for å tvinge det fram under test.
 
-> **Ikke verifisert i alle tenanter:** at en managed identity aksepteres som `webApplicationInfo.id`. Test tidlig med én mottaker. Alternativet er en app-registrering med managed identity som federated identity credential; Function-koden er den samme (`AZURE_CLIENT_ID` settes til app-registreringens client ID).
+> **Managed identity som avsender** (`webApplicationInfo.id`) er verifisert med per-bruker-endepunktet i én tenant (november 2026). Test likevel tidlig med én mottaker.
+>
+> **Vent etter installasjon.** Graph svarer `403` «Ensure that the expected Teams app is installed» en stund etter at appen er installert for brukeren, også når `installedApps` viser den. I testen gikk det rundt 13 minutter fra installasjonen var synlig til varselet ble godtatt. Masse-endepunktet svarer `ok` i mellomtiden uten å levere.
 
 ## Steg 5: Deploy Function-appen
 
@@ -269,7 +271,7 @@ $userId = az ad user show --id bruker@tenant.onmicrosoft.com --query id -o tsv
 Invoke-RestMethod -Method Post -Uri "https://func-intranet-notification.azurewebsites.net/api/test-notification?userId=$userId&type=announcement" -Headers @{ 'x-functions-key' = $key } | ConvertTo-Json -Depth 6
 ```
 
-Svaret inneholder `ok` og eventuell Graph-feil (`graphStatus` og `graphError`). `ConvertTo-Json` trengs for å se feilteksten, ellers viser PowerShell bare `@{error=}`. `403` betyr som regel at Teams-appen ikke er installert for brukeren ennå: vent på setup policy, eller legg til appen selv i Teams (Apper > Bygd for organisasjonen). Varselet skal dukke opp i bjella innen sekunder. `type=news` tester nyhetsvarianten. Legg til `&bulk=1` for å sende via masse-endepunktet, og `&teamsAppId=<id>` for å sende en Teams-app-ID til Graph (se `TEAMS_NOTIFICATION_APP_ID`). Et mislykket kall viser også hvilken app-ID, tenant og hvilke roller Graph-tokenet har (`token`). `&installationId=<id>` bruker brukerens installasjon av appen som emne i stedet for tekst og lenke (ID-en fra `GET /users/{id}/teamwork/installedApps`), for å skille feil i installasjonen fra feil i lenken.
+Svaret inneholder `ok` og eventuell Graph-feil (`graphStatus` og `graphError`). `ConvertTo-Json` trengs for å se feilteksten, ellers viser PowerShell bare `@{error=}`. `403` betyr som regel at Teams-appen ikke er installert for brukeren ennå, eller at den nettopp ble det (se «Vent etter installasjon» i steg 4): vent på setup policy, eller legg til appen selv i Teams (Apper > Bygd for organisasjonen). Varselet skal dukke opp i bjella innen sekunder. `type=news` tester nyhetsvarianten. Legg til `&bulk=1` for å sende via masse-endepunktet, og `&teamsAppId=<id>` for å sende en Teams-app-ID til Graph (se `TEAMS_NOTIFICATION_APP_ID`). Et mislykket kall viser også hvilken app-ID, tenant og hvilke roller Graph-tokenet har (`token`). `&installationId=<id>` bruker brukerens installasjon av appen som emne i stedet for tekst og lenke (ID-en fra `GET /users/{id}/teamwork/installedApps`), for å skille feil i installasjonen fra feil i lenken.
 
 > **Malparametere må stemme nøyaktig** med plassholderne i `templateText` i manifestet (`{title}`). Masse-endepunktet godtar ekstra parametere, men leverer da ingenting, uten feil. Per-bruker-endepunktet svarer «Incorrect template parameter arity». Endrer du `templateText`, må `templateParameters` i `announcements.ts`/`news.ts` endres tilsvarende.
 
