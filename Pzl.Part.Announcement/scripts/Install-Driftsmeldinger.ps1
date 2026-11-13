@@ -352,7 +352,29 @@ if ($bannerTargeting) {
   $properties['listSiteUrl'] = $SiteUrl
   $properties['targetAudience'] = [bool]$BannerTargetAudience
   if ($BannerSiteUrls.Count) { $properties['siteUrls'] = @($BannerSiteUrls | ForEach-Object { $_.TrimEnd('/') }) }
-  if ($BannerHubSiteUrls.Count) { $properties['hubSiteUrls'] = @($BannerHubSiteUrls | ForEach-Object { $_.TrimEnd('/') }) }
+  if ($BannerHubSiteUrls.Count) {
+    # The banner matches a hub on its URL or on its hub site ID. Pages are matched most reliably
+    # on the ID, so it is looked up here and stored next to the URL. The lookup also tells
+    # whether the site is a hub at all.
+    $hubEntries = [System.Collections.Generic.List[string]]::new()
+    foreach ($entry in $BannerHubSiteUrls) {
+      $hub = $entry.TrimEnd('/')
+      $hubEntries.Add($hub)
+      if ($hub -notmatch '^https?://') { continue }
+      try {
+        $hubSite = Get-PnPSite -Includes HubSiteId, IsHubSite -Connection (Get-Connection $hub)
+        if ($hubSite.IsHubSite) {
+          $hubEntries.Add("$($hubSite.HubSiteId)")
+          Write-Info "Hub $hub has hub site ID $($hubSite.HubSiteId)"
+        } else {
+          Write-Warning "$hub is not registered as a hub site, so no site is associated with it and the banner will not be shown on other sites. Register it as a hub in the SharePoint admin center (Active sites > Hub > Register as hub site) and associate the sites with it."
+        }
+      } catch {
+        Write-Warning "Could not read the hub site ID of $hub ($($_.Exception.Message)). Only the hub URL is stored."
+      }
+    }
+    $properties['hubSiteUrls'] = @($hubEntries | Select-Object -Unique)
+  }
   if ($BannerEverywhere) { $properties['everywhere'] = $true }
   $json = $properties | ConvertTo-Json -Compress -Depth 5
 
