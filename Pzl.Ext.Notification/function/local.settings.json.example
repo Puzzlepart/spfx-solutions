@@ -17,6 +17,7 @@
 
     "TEAMS_DEEPLINK_APP_ID": "<Teams app id of the notification app (or the intranet app), required>",
     "TEAMS_DEEPLINK_ENTITY_ID": "intranet",
+    "TEAMS_NOTIFICATION_APP_ID": "",
 
     "STATE_STORAGE_ACCOUNT_NAME": "",
     "STATE_TABLE_NAME": "NotificationState",

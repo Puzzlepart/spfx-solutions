@@ -7,7 +7,7 @@ import { buildLink } from '../notifications/deeplink'
 const GRAPH = 'https://graph.microsoft.com/v1.0'
 
 /**
- * POST /api/test-notification?userId=<Entra user id>[&type=announcement|news][&bulk=1][&extra=1]
+ * POST /api/test-notification?userId=<Entra user id>[&type=announcement|news][&bulk=1][&extra=1][&teamsAppId=<id>]
  *
  * Sends one activity notification to a single user. By default it uses the
  * per-user Graph endpoint, which returns delivery errors synchronously, unlike
@@ -16,6 +16,8 @@ const GRAPH = 'https://graph.microsoft.com/v1.0'
  *
  * bulk=1  uses sendActivityNotificationToRecipients (the timer's endpoint)
  * extra=1 adds a template parameter that is not in the manifest's templateText
+ * teamsAppId=<id> sends that Teams app ID to Graph (default: setting TEAMS_NOTIFICATION_APP_ID),
+ *         to try a value before it is stored in the setting
  */
 export async function testNotification(
   req: HttpRequest,
@@ -26,6 +28,7 @@ export async function testNotification(
   const type = req.query.get('type') === 'news' ? 'news' : 'announcement'
   const bulk = req.query.get('bulk') === '1'
   const extra = req.query.get('extra') === '1'
+  const teamsAppId = req.query.get('teamsAppId') || settings.notificationTeamsAppId
   if (!userId) return { status: 400, jsonBody: { error: 'userId query parameter is required' } }
 
   // Both types open the tab. news: `page:<server-relative path>` of pageUrl (defaults to the
@@ -48,6 +51,7 @@ export async function testNotification(
       ...(extra ? [{ name: 'severity', value: 'Varsel' }] : [])
     ]
   }
+  if (teamsAppId) body.teamsAppId = teamsAppId
   if (bulk) {
     body.recipients = [{ '@odata.type': 'microsoft.graph.aadUserNotificationRecipient', userId }]
   }
@@ -58,7 +62,7 @@ export async function testNotification(
     `Test notification (${type}, bulk=${bulk}, extra=${extra}) to ${userId}: ${JSON.stringify(body)}`
   )
 
-  const result = { userId, type, bulk, extra, webUrl, stamp }
+  const result = { userId, type, bulk, extra, teamsAppId, webUrl, stamp }
   try {
     await request(url, {
       method: 'POST',

@@ -20,6 +20,12 @@ export interface Settings {
    */
   teamsDeepLinkAppId: string
   teamsDeepLinkEntityId: string
+  /**
+   * Optional. Sent to Graph as `teamsAppId`, to tell which Teams app the notification belongs to
+   * when a recipient has several Teams apps with the sending identity in `webApplicationInfo.id`
+   * (Graph then answers 409 "Found multiple applications with the same AAD App ID").
+   */
+  notificationTeamsAppId: string
   /** Storage account used for the state table. Defaults to the function app's own storage account */
   stateStorageAccountName: string
   stateTableName: string
@@ -46,6 +52,7 @@ export function getSettings(): Settings {
     includeGuests: bool(env('INCLUDE_GUESTS', 'false')),
     teamsDeepLinkAppId: env('TEAMS_DEEPLINK_APP_ID'),
     teamsDeepLinkEntityId: env('TEAMS_DEEPLINK_ENTITY_ID', 'intranet'),
+    notificationTeamsAppId: env('TEAMS_NOTIFICATION_APP_ID'),
     stateStorageAccountName: env(
       'STATE_STORAGE_ACCOUNT_NAME',
       env('AzureWebJobsStorage__accountName')

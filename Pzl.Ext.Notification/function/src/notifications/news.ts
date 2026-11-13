@@ -105,7 +105,12 @@ export async function processNews(
         continue
       }
       try {
-        const count = await sendActivityNotification(notification, userIds, context)
+        const count = await sendActivityNotification(
+          notification,
+          userIds,
+          context,
+          settings.notificationTeamsAppId
+        )
         await state.markSent(site.siteUrl, rowKey, count)
         context.log(`${label}: notified ${count} users (${source} groups: ${groupIds.join(', ')})`)
       } catch (error) {

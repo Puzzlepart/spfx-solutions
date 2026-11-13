@@ -245,6 +245,7 @@ App-innstillingene ble satt i steg 1, bortsett fra `TEAMS_DEEPLINK_APP_ID`, som 
 | `INCLUDE_GUESTS` | `false` | Ta med gjestebrukere som mottakere |
 | `TEAMS_DEEPLINK_APP_ID` | *(påkrevd)* | Teams-app som varslene åpner: varsel-appen selv (steg 4) eller intranett-appen. Uten denne sendes ingenting, og loggen sier hvorfor. |
 | `TEAMS_DEEPLINK_ENTITY_ID` | `intranet` | `entityId` for fanen i den appen. `intranet` er varsel-appens fane. |
+| `TEAMS_NOTIFICATION_APP_ID` | *(tom)* | Sendes til Graph som `teamsAppId`. Trengs bare når en mottaker har flere Teams-apper med samme avsender-identitet (`409` «Found multiple applications with the same AAD App ID»). Prøv verdien med `&teamsAppId=` på test-endepunktet før den settes. |
 | `STATE_STORAGE_ACCOUNT_NAME` | Function-appens konto | Lagringskonto for sendt-status for sider |
 | `STATE_TABLE_NAME` | `NotificationState` | Tabellnavn |
 | `TIMER_SCHEDULE` | `0 * * * * *` | NCRONTAB, hvert minutt |
@@ -268,7 +269,7 @@ $userId = az ad user show --id bruker@tenant.onmicrosoft.com --query id -o tsv
 Invoke-RestMethod -Method Post -Uri "https://func-intranet-notification.azurewebsites.net/api/test-notification?userId=$userId&type=announcement" -Headers @{ 'x-functions-key' = $key } | ConvertTo-Json -Depth 6
 ```
 
-Svaret inneholder `ok` og eventuell Graph-feil (`graphStatus` og `graphError`). `ConvertTo-Json` trengs for å se feilteksten, ellers viser PowerShell bare `@{error=}`. `403` betyr som regel at Teams-appen ikke er installert for brukeren ennå: vent på setup policy, eller legg til appen selv i Teams (Apper > Bygd for organisasjonen). Varselet skal dukke opp i bjella innen sekunder. `type=news` tester nyhetsvarianten. Legg til `&bulk=1` for å sende via masse-endepunktet.
+Svaret inneholder `ok` og eventuell Graph-feil (`graphStatus` og `graphError`). `ConvertTo-Json` trengs for å se feilteksten, ellers viser PowerShell bare `@{error=}`. `403` betyr som regel at Teams-appen ikke er installert for brukeren ennå: vent på setup policy, eller legg til appen selv i Teams (Apper > Bygd for organisasjonen). Varselet skal dukke opp i bjella innen sekunder. `type=news` tester nyhetsvarianten. Legg til `&bulk=1` for å sende via masse-endepunktet, og `&teamsAppId=<id>` for å sende en Teams-app-ID til Graph (se `TEAMS_NOTIFICATION_APP_ID`).
 
 > **Malparametere må stemme nøyaktig** med plassholderne i `templateText` i manifestet (`{title}`). Masse-endepunktet godtar ekstra parametere, men leverer da ingenting, uten feil. Per-bruker-endepunktet svarer «Incorrect template parameter arity». Endrer du `templateText`, må `templateParameters` i `announcements.ts`/`news.ts` endres tilsvarende.
 
@@ -296,6 +297,7 @@ Kopier `function/local.settings.json.example` til `local.settings.json`. Lokalt 
 | `403` fra `transitiveMembers` | `GroupMember.Read.All` tildelt, og at admin consent er gitt (scriptet tildeler app-roller direkte, consent er implisitt) |
 | `400` «Invalid 'webUrl' specified» fra `sendActivityNotificationToRecipients` | `TEAMS_DEEPLINK_APP_ID` mangler eller er ikke en Teams-app-ID. Lenken må være `https://teams.microsoft.com/l/...` |
 | `400`/`403` ellers fra `sendActivityNotificationToRecipients` | `TeamsActivity.Send`, at Teams-appen er installert for mottakeren (setup policy), og at `webApplicationInfo.id` i manifestet er client ID til identiteten som sender |
+| `409` «Found multiple applications with the same AAD App ID» | Mottakeren har flere Teams-apper med avsender-identiteten i `webApplicationInfo.id`, typisk en eldre eller personlig opplastet utgave av varsel-appen. Fjern den gamle appen hos mottakeren (Teams > Apper > Administrer appene dine), eller sett `TEAMS_NOTIFICATION_APP_ID` |
 | Ingen mottakere | Gruppe-ID-ene i konfigurasjonen, og at gruppa har medlemmer som ikke er deaktivert/gjester |
 | Loggen sier «Sent … to N recipients», men ingenting i bjella | Appen var ikke installert for mottakeren da det ble sendt (setup policy tar tid), eller `templateParameters` matcher ikke `templateText`. Send et testvarsel med `/api/test-notification` til én bruker for å få feilen. |
 | Nyheter varsles ikke | `PromotedState = 2`, publisert hovedversjon, innenfor `NEWS_LOOKBACK_DAYS`, og ikke allerede en rad i tabellen `NotificationState` |

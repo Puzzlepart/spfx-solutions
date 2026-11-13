@@ -142,7 +142,12 @@ export async function processAnnouncements(
       }
       await sp.updateItem(list, item.Id, claim)
       try {
-        const count = await sendActivityNotification(notification, userIds, context)
+        const count = await sendActivityNotification(
+          notification,
+          userIds,
+          context,
+          settings.notificationTeamsAppId
+        )
         context.log(`${label}: notified ${count} users (${source} groups: ${groupIds.join(', ')})`)
       } catch (error) {
         await sp.updateItem(list, item.Id, undo)

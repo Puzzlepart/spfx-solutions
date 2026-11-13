@@ -66,11 +66,15 @@ export interface ActivityNotification {
 /**
  * Sends an activity notification to a set of users, in batches of 100.
  * Returns the number of recipients the notification was sent to.
+ *
+ * @param teamsAppId Optional Teams app the notification belongs to (setting
+ *   `TEAMS_NOTIFICATION_APP_ID`), for recipients with several apps for the sending identity.
  */
 export async function sendActivityNotification(
   notification: ActivityNotification,
   userIds: string[],
-  context: InvocationContext
+  context: InvocationContext,
+  teamsAppId?: string
 ): Promise<number> {
   const recipients = Array.from(new Set(userIds))
   for (let i = 0; i < recipients.length; i += RECIPIENT_BATCH_SIZE) {
@@ -92,7 +96,8 @@ export async function sendActivityNotification(
         })),
         templateParameters: Object.entries(notification.templateParameters ?? {}).map(
           ([name, value]) => ({ name, value })
-        )
+        ),
+        ...(teamsAppId ? { teamsAppId } : {})
       }
     })
     context.log(
