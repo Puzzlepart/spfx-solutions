@@ -24,9 +24,10 @@ interface PageItem {
 
 /**
  * Sends notifications for news pages (`PromotedState = 2`) that were first
- * published within the lookback window, are published (major version, approved)
- * and have not been notified before. State is kept in Table Storage, because
- * writing to a published page would create a new version.
+ * published within the lookback window and after news notifications started for
+ * the site, are published (major version, approved) and have not been notified
+ * before. State is kept in Table Storage, because writing to a published page
+ * would create a new version.
  */
 export async function processNews(
   site: SiteConfiguration,
@@ -38,7 +39,15 @@ export async function processNews(
   const sp = new SharePointClient(site.siteUrl)
   const pagesUrl = `${sp.serverRelativeUrl === '/' ? '' : sp.serverRelativeUrl}/SitePages`
   const list = SharePointClient.listByUrl(pagesUrl)
-  const since = new Date(Date.now() - settings.newsLookbackDays * 24 * 60 * 60 * 1000)
+  const lookback = new Date(Date.now() - settings.newsLookbackDays * 24 * 60 * 60 * 1000)
+  // News that was there before the service was turned on for the site is not notified
+  const start = await state.newsStart(site.siteUrl)
+  const since = start.at > lookback ? start.at : lookback
+  if (!start.stored) {
+    context.log(
+      `[dry run] ${site.title}: news notifications start when DRY_RUN is turned off; news published before that is not notified`
+    )
+  }
 
   const items = await sp.getItems<PageItem>(list, {
     select: [

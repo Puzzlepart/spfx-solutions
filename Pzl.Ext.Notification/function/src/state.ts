@@ -3,6 +3,9 @@ import { RestError, TableClient } from '@azure/data-tables'
 import { getCredential } from './auth'
 import { Settings } from './config'
 
+/** Row that holds when news notifications started for a site (see `newsStart`) */
+const NEWS_START_ROW = 'news-start'
+
 /**
  * Sent-state for news pages, stored in Azure Table Storage.
  *
@@ -19,7 +22,8 @@ export class NotificationState {
     private readonly context: InvocationContext
   ) {}
 
-  private async table(): Promise<TableClient> {
+  /** The table client, without creating the table (for reads, also in a dry run) */
+  private tableClient(): TableClient {
     if (!this.client) {
       if (!this.settings.stateStorageAccountName) {
         throw new Error(
@@ -32,11 +36,62 @@ export class NotificationState {
         getCredential()
       )
     }
+    return this.client
+  }
+
+  private async table(): Promise<TableClient> {
+    const client = this.tableClient()
     if (!this.ready) {
-      await this.client.createTable()
+      await client.createTable()
       this.ready = true
     }
-    return this.client
+    return client
+  }
+
+  /**
+   * When news notifications started for a site: the first run that could send for it. News
+   * published before that is never notified, so turning the service on, or adding a site, does
+   * not notify about the news that is already there.
+   *
+   * A dry run stores nothing: a site that has not started gets "now" on every run, with
+   * `stored: false`.
+   */
+  async newsStart(siteUrl: string): Promise<{ at: Date; stored: boolean }> {
+    const partitionKey = NotificationState.partitionKey(siteUrl)
+    const now = new Date()
+    if (this.settings.dryRun && !this.settings.stateStorageAccountName) {
+      return { at: now, stored: false }
+    }
+    const stored = await this.readNewsStart(partitionKey)
+    if (stored) return { at: stored, stored: true }
+    if (this.settings.dryRun) return { at: now, stored: false }
+    try {
+      await (
+        await this.table()
+      ).createEntity({ partitionKey, rowKey: NEWS_START_ROW, startedAt: now.toISOString() })
+      return { at: now, stored: true }
+    } catch (error) {
+      // An overlapping run stored it first
+      if (error instanceof RestError && error.statusCode === 409) {
+        return { at: (await this.readNewsStart(partitionKey)) ?? now, stored: true }
+      }
+      throw error
+    }
+  }
+
+  private async readNewsStart(partitionKey: string): Promise<Date | undefined> {
+    try {
+      const entity = await this.tableClient().getEntity<{ startedAt?: string }>(
+        partitionKey,
+        NEWS_START_ROW
+      )
+      const at = entity.startedAt ? new Date(entity.startedAt) : undefined
+      return at && !isNaN(at.getTime()) ? at : undefined
+    } catch (error) {
+      // No row yet, or no table yet
+      if (error instanceof RestError && error.statusCode === 404) return undefined
+      throw error
+    }
   }
 
   /** Table keys cannot contain / \ # ? */

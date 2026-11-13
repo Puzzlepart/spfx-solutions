@@ -44,10 +44,13 @@ Timer (1 min)
             │       «Nivåer som alltid varsles» eller PzlNotifyTeams = ja) (første varsel)
             │     → sett PzlNotifiedAt og PzlNotifyAgain = nei (claim) → send
             │     → ved feil: sett feltene tilbake
-            └─ Nyheter: PromotedState = 2, FirstPublishedDate innen NEWS_LOOKBACK_DAYS,
+            └─ Nyheter: PromotedState = 2, FirstPublishedDate innen NEWS_LOOKBACK_DAYS
+                  og etter at nyhetsvarslingen startet for området,
                   publisert (hovedversjon, godkjent), ikke registrert i Table Storage
                   → registrer i tabellen (claim) → send → ved feil: fjern raden
 ```
+
+- **Gamle nyheter varsles ikke.** Første gang tjenesten kjører for et område uten `DRY_RUN`, lagrer den tidspunktet i tabellen `NotificationState` (raden `news-start`). Bare nyheter publisert etter det varsles, så det å slå på tjenesten, eller å legge til et område senere, gir ingen varsler om nyhetene som alt ligger der. Aktive driftsmeldinger varsles derimot når tjenesten slås på, siden de gjelder nå.
 
 - Mottakere: `transitiveMembers` på gruppene via Graph, dedupliserte, uten deaktiverte kontoer og (som standard) uten gjester.
 - Sending: `POST /teamwork/sendActivityNotificationToRecipients` i grupper på 100, med retry ved 429/5xx.
@@ -163,6 +166,20 @@ Steg 1 til 3 under (og SPFx-pakken fra steg 4) kan gjøres med `Pzl.Part.Announc
 
 4. Aktiver målgruppestyring på Site Pages-biblioteket og driftsmeldingslista der målgrupper skal brukes. Uten målgruppestyring brukes alltid standardgruppene.
 
+### Legge til et område senere
+
+1. Gi tjenesteidentiteten tilgang til området: `Read` for bare nyheter, `Write` hvis området har egen driftsmeldingsliste. Client ID-en er `IdentityClientId` fra steg 1, og står også som `AZURE_CLIENT_ID` i Function-appens innstillinger.
+
+   ```powershell
+   Connect-PnPOnline -Url https://<tenant>.sharepoint.com -Interactive -ClientId <pnp-client-id> -Tenant <tenant-id>
+   Grant-PnPAzureADAppSitePermission -AppId <MI_CLIENT> -DisplayName "Intranett-varsling" -Site https://<tenant>.sharepoint.com/sites/<omraade> -Permissions Read
+   ```
+
+   `Install-Notification.ps1` gjør det samme med `-NewsSiteUrls` og `-AnnouncementSiteUrls` (legg til `-SkipInfrastructure -SkipPermissions -SkipTeamsApp -SkipFunction` for bare dette steget).
+2. Legg inn en rad for området i **Varslingskonfigurasjon**.
+
+Uten tilgangen logger tjenesten `HTTP 403 … Attempted to perform an unauthorized operation` for raden hvert minutt, mens de andre områdene varsles som før. Nyheter som lå på området før raden ble lagt til, varsles ikke.
+
 ## Steg 4: Teams-appen
 
 Aktivitetsvarsler må sendes fra en Teams-app der `webApplicationInfo.id` er client ID til avsenderen. Intranett-appen som bruker SharePoint-SSO kan ikke endre det feltet, derfor en egen, minimal app.
@@ -243,7 +260,7 @@ App-innstillingene ble satt i steg 1, bortsett fra `TEAMS_DEEPLINK_APP_ID`, som 
 | `CONFIG_SITE_URL` | *(påkrevd)* | Område med konfigurasjonslista |
 | `CONFIG_LIST_TITLE` | `Varslingskonfigurasjon` | Tittel på konfigurasjonslista |
 | `ANNOUNCEMENT_LIST_TITLE` | `Driftsmeldinger` | Standard tittel på driftsmeldingslista |
-| `NEWS_LOOKBACK_DAYS` | `7` | Hvor langt tilbake nye nyheter hentes |
+| `NEWS_LOOKBACK_DAYS` | `7` | Hvor langt tilbake nye nyheter hentes, men aldri lenger tilbake enn til nyhetsvarslingen startet for området |
 | `INCLUDE_GUESTS` | `false` | Ta med gjestebrukere som mottakere |
 | `TEAMS_DEEPLINK_APP_ID` | *(påkrevd)* | Teams-app som varslene åpner: varsel-appen selv (steg 4) eller intranett-appen. Uten denne sendes ingenting, og loggen sier hvorfor. |
 | `TEAMS_DEEPLINK_ENTITY_ID` | `intranet` | `entityId` for fanen i den appen. `intranet` er varsel-appens fane. |
@@ -277,7 +294,7 @@ Svaret inneholder `ok` og eventuell Graph-feil (`graphStatus` og `graphError`). 
 
 
 1. Konfigurasjonsrad mot en testgruppe, setup policy mot samme gruppe.
-2. Test variantene: nyhet, driftsmelding med et nivå fra «Nivåer som alltid varsles», driftsmelding med «Varsle i Teams», driftsmelding med status *Planlagt*, og «Varsle på nytt» på en driftsmelding som er satt til *Løst*.
+2. Test variantene: nyhet (publiser en ny, nyheter fra før tjenesten ble slått på varsles ikke), driftsmelding med et nivå fra «Nivåer som alltid varsles», driftsmelding med «Varsle i Teams», driftsmelding med status *Planlagt*, og «Varsle på nytt» på en driftsmelding som er satt til *Løst*.
 3. Klikk varselet på desktop, web og mobil og se at riktig side/driftsmelding åpnes.
 4. Sjekk at `PzlNotifiedAt` settes på driftsmeldingen og vises i webdelens popover.
 5. Bytt standardgruppe og setup policy til produksjonsgruppene.
@@ -304,6 +321,6 @@ Kopier `function/local.settings.json.example` til `local.settings.json`. Lokalt 
 | Klikk på varselet gir «Finner ikke denne appen» | Teams-klienten har ikke fått med seg at appen er installert, selv om varselet kom fram. Åpne appen fra Apper i Teams og velg Legg til, eller logg ut og inn. Deretter åpner lenken fanen |
 | Ingen mottakere | Gruppe-ID-ene i konfigurasjonen, og at gruppa har medlemmer som ikke er deaktivert/gjester |
 | Loggen sier «Sent … to N recipients», men ingenting i bjella | Appen var ikke installert for mottakeren da det ble sendt (setup policy tar tid), eller `templateParameters` matcher ikke `templateText`. Send et testvarsel med `/api/test-notification` til én bruker for å få feilen. |
-| Nyheter varsles ikke | `PromotedState = 2`, publisert hovedversjon, innenfor `NEWS_LOOKBACK_DAYS`, og ikke allerede en rad i tabellen `NotificationState` |
+| Nyheter varsles ikke | `PromotedState = 2`, publisert hovedversjon, innenfor `NEWS_LOOKBACK_DAYS`, publisert etter at nyhetsvarslingen startet for området (raden `news-start` i tabellen `NotificationState`), og ikke allerede en rad i tabellen |
 | Driftsmeldinger varsles ikke | Startdato passert, sluttdato ikke passert, `PzlNotifiedAt` tom, status ikke *Løst*, og nivå/«Varsle i Teams». For nytt varsel: «Varsle på nytt» satt (kolonnen fra `AnnouncementFields.xml`) |
 | Dobbelt varsel | Viva Connections kan også varsle om nyheter. Skru av det ene. |
