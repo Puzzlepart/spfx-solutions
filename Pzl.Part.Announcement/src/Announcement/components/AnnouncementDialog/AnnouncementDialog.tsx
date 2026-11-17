@@ -28,10 +28,14 @@ export interface IAnnouncementDialogProps {
   fields: IListField[]
   onClose: () => void
   /**
-   * Buttons for users who may edit the list (status, edit), shown to the left
-   * of the close button
+   * Secondary action at the start (left) of the actions, e.g. «Rediger»
    */
-  actions?: ReactNode
+  startActions?: ReactNode
+  /**
+   * Actions after the close button, at the end (right), e.g. the status
+   * buttons. The primary button comes last, as in other Fluent dialogs.
+   */
+  endActions?: ReactNode
   /**
    * Error from an action, shown at the bottom of the content
    */
@@ -50,7 +54,8 @@ export const AnnouncementDialog: FC<IAnnouncementDialogProps> = ({
   announcement,
   fields,
   onClose,
-  actions,
+  startActions,
+  endActions,
   error,
   children
 }) => (
@@ -79,11 +84,16 @@ export const AnnouncementDialog: FC<IAnnouncementDialogProps> = ({
               </MessageBar>
             )}
           </DialogContent>
-          {actions && <DialogActions position='start'>{actions}</DialogActions>}
-          <DialogActions position='end'>
-            <DialogTrigger action='close'>
+          {startActions && (
+            <DialogActions position='start' className={styles.actions}>
+              {startActions}
+            </DialogActions>
+          )}
+          <DialogActions position='end' className={styles.actions}>
+            <DialogTrigger action='close' disableButtonEnhancement>
               <Button appearance='secondary'>{strings.CloseButtonText}</Button>
             </DialogTrigger>
+            {endActions}
           </DialogActions>
         </DialogBody>
       )}

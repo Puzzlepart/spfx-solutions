@@ -1,32 +1,24 @@
 import React, { FC, useState } from 'react'
 import { Button, Spinner } from '@fluentui/react-components'
-import { Checkmark16Regular, Edit16Regular, Play16Regular } from '@fluentui/react-icons'
+import { EditRegular } from '@fluentui/react-icons'
 import strings from 'AnnouncementStrings'
 import { Status } from '../../model'
 import { IAnnouncement } from '../types'
 
-export interface IQuickActionsProps {
+export interface IStatusActionsProps {
   announcement: IAnnouncement
   /**
    * Changes the status of the announcement. Rejects on failure.
    */
   onSetStatus: (announcement: IAnnouncement, status: Status) => Promise<void>
-  /**
-   * Returns the URL of the list's edit form for the announcement
-   */
-  getEditFormUrl: (announcement: IAnnouncement) => Promise<string | null>
 }
 
 /**
- * Quick actions in the details dialog for users who may edit the list: move a
- * planned announcement to ongoing, mark it as resolved, or open the list's
- * edit form. The list's own form is used for anything else.
+ * Status buttons in the details dialog for users who may edit the list: move
+ * a planned announcement to ongoing, or mark it as resolved. Placed at the end
+ * of the dialog's actions, with the primary button («Marker som løst») last.
  */
-export const QuickActions: FC<IQuickActionsProps> = ({
-  announcement,
-  onSetStatus,
-  getEditFormUrl
-}) => {
+export const StatusActions: FC<IStatusActionsProps> = ({ announcement, onSetStatus }) => {
   const [busy, setBusy] = useState<Status>(null)
 
   const setStatus = (status: Status) => {
@@ -38,6 +30,46 @@ export const QuickActions: FC<IQuickActionsProps> = ({
       .finally(() => setBusy(null))
   }
 
+  const spinner = (status: Status) => (busy === status ? <Spinner size='tiny' /> : undefined)
+
+  return (
+    <>
+      {announcement.status === 'planned' && (
+        <Button
+          appearance='secondary'
+          disabled={!!busy}
+          icon={spinner('ongoing')}
+          onClick={() => setStatus('ongoing')}>
+          {strings.QuickActions.MarkOngoing}
+        </Button>
+      )}
+      {announcement.status !== 'resolved' && (
+        <Button
+          appearance='primary'
+          disabled={!!busy}
+          icon={spinner('resolved')}
+          onClick={() => setStatus('resolved')}>
+          {strings.QuickActions.MarkResolved}
+        </Button>
+      )}
+    </>
+  )
+}
+
+export interface IEditActionProps {
+  announcement: IAnnouncement
+  /**
+   * Returns the URL of the list's edit form for the announcement
+   */
+  getEditFormUrl: (announcement: IAnnouncement) => Promise<string | null>
+}
+
+/**
+ * «Rediger» in the details dialog: opens the list's edit form, which is used
+ * for anything but the status and the notification. Placed at the start of
+ * the dialog's actions.
+ */
+export const EditAction: FC<IEditActionProps> = ({ announcement, getEditFormUrl }) => {
   const openEditForm = () => {
     getEditFormUrl(announcement)
       .then((url) => {
@@ -48,32 +80,9 @@ export const QuickActions: FC<IQuickActionsProps> = ({
       })
   }
 
-  const icon = (status: Status, fallback: JSX.Element) =>
-    busy === status ? <Spinner size='extra-tiny' /> : fallback
-
   return (
-    <>
-      {announcement.status !== 'resolved' && (
-        <Button
-          appearance='primary'
-          disabled={!!busy}
-          icon={icon('resolved', <Checkmark16Regular />)}
-          onClick={() => setStatus('resolved')}>
-          {strings.QuickActions.MarkResolved}
-        </Button>
-      )}
-      {announcement.status === 'planned' && (
-        <Button
-          appearance='secondary'
-          disabled={!!busy}
-          icon={icon('ongoing', <Play16Regular />)}
-          onClick={() => setStatus('ongoing')}>
-          {strings.QuickActions.MarkOngoing}
-        </Button>
-      )}
-      <Button appearance='subtle' disabled={!!busy} icon={<Edit16Regular />} onClick={openEditForm}>
-        {strings.QuickActions.Edit}
-      </Button>
-    </>
+    <Button appearance='subtle' icon={<EditRegular />} onClick={openEditForm}>
+      {strings.QuickActions.Edit}
+    </Button>
   )
 }

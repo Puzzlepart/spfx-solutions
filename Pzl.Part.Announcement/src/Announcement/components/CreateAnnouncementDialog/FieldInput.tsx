@@ -90,6 +90,7 @@ export const FieldInput: FC<IFieldInputProps> = (props) => {
       case 'Boolean':
         return (
           <Switch
+            label={field.title}
             checked={value === true}
             disabled={disabled}
             onChange={(_, data) => onChange(data.checked)}
@@ -138,7 +139,8 @@ export const FieldInput: FC<IFieldInputProps> = (props) => {
 
   return (
     <Field
-      label={field.title}
+      // A switch carries its own label, beside it
+      label={field.type === 'Boolean' ? undefined : field.title}
       required={field.required}
       hint={props.hint || field.description || undefined}
       validationMessage={props.error}

@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react'
-import { Text } from '@fluentui/react-components'
+import { Divider, Text } from '@fluentui/react-components'
 import { format } from '@fluentui/react'
 import strings from 'AnnouncementStrings'
 import { IAnnouncement, IListField } from '../types'
@@ -77,6 +77,7 @@ export const NotificationSettings: FC<INotificationSettingsProps> = ({
 
   return (
     <div className={styles.notificationSettings}>
+      <Divider />
       <Text weight='semibold' block>
         {strings.Notification.SectionTitle}
       </Text>

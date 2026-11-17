@@ -1,6 +1,7 @@
 import React, { FC, useRef, useState } from 'react'
 import {
   Button,
+  Divider,
   Input,
   Label,
   Popover,
@@ -9,7 +10,7 @@ import {
   useId
 } from '@fluentui/react-components'
 import { Calendar, CalendarStrings, DayOfWeek } from '@fluentui/react-calendar-compat'
-import { CalendarLtrRegular } from '@fluentui/react-icons'
+import { CalendarMonthRegular } from '@fluentui/react-icons'
 import strings from 'AnnouncementStrings'
 import styles from './CreateAnnouncementDialog.module.scss'
 import { formatDateInputValue, parseDateInputValue, toDateInputValue } from '../../util/fieldValue'
@@ -122,7 +123,7 @@ export const DateTimePicker: FC<IDateTimePickerProps> = ({
         value={formatDateInputValue(value)}
         placeholder={strings.DatePicker.Placeholder}
         disabled={disabled}
-        contentAfter={<CalendarLtrRegular />}
+        contentAfter={<CalendarMonthRegular />}
         aria-haspopup='dialog'
         aria-expanded={open}
         title={strings.DatePicker.OpenTitle}
@@ -189,6 +190,7 @@ export const DateTimePicker: FC<IDateTimePickerProps> = ({
               </Select>
             </div>
           )}
+          <Divider />
           <div className={styles.datePickerActions}>
             {!required && (
               <Button appearance='subtle' disabled={!value} onClick={() => onChange('')}>

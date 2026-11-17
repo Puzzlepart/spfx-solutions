@@ -56,7 +56,7 @@ The **New announcement** button is shown only to users who have the *Add items* 
 
 A click on an announcement (or Enter/Space) opens a modal dialog at the centre of the page with the details. The banner opens the same dialog.
 
-Users with the *Edit items* permission on the list get buttons at the bottom of the dialog: **Marker som løst** (planned and ongoing announcements), **Marker som pågår** (planned) and **Rediger**, which opens the list's edit form and returns to the page. The status is written with the list's own choice value, so a list provisioned in English gets *Resolved*. The quick actions are shown only when the list has the *Status* column, and only in the web part, not in the dialog opened from the banner.
+Users with the *Edit items* permission on the list get buttons at the bottom of the dialog: **Rediger** to the left, which opens the list's edit form and returns to the page, and to the right, after **Lukk**, **Marker som pågår** (planned announcements) and the primary button **Marker som løst** (planned and ongoing). The status is written with the list's own choice value, so a list provisioned in English gets *Resolved*. The quick actions are shown only when the list has the *Status* column, and only in the web part, not in the dialog opened from the banner.
 
 ### Teams notifications in the dialogs
 

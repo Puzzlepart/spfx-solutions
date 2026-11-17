@@ -13,7 +13,7 @@ import {
   ToastTitle,
   useToastController
 } from '@fluentui/react-components'
-import { Add16Regular } from '@fluentui/react-icons'
+import { AddRegular } from '@fluentui/react-icons'
 import styles from './Announcement.module.scss'
 import { IAnnouncementProps } from './types'
 import { AnnouncementContext } from './context'
@@ -23,7 +23,7 @@ import { AnnouncementDialog } from './AnnouncementDialog'
 import { NotificationSettings } from './NotificationSettings'
 import { CreateAnnouncementDialog } from './CreateAnnouncementDialog'
 import { getIntent } from './intent'
-import { QuickActions } from './QuickActions'
+import { EditAction, StatusActions } from './QuickActions'
 import { statusText } from './StatusBadge'
 import { IAnnouncement } from './types'
 import { Status } from '../model'
@@ -126,7 +126,7 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                   <Button
                     className={styles.createButton}
                     appearance='outline'
-                    icon={<Add16Regular />}
+                    icon={<AddRegular />}
                     onClick={() => setCreateDialogOpen(true)}>
                     {strings.CreateButtonText}
                   </Button>
@@ -179,14 +179,16 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
             fields={popoverFields}
             error={dialogError}
             onClose={() => setOpenAnnouncementId(null)}
-            actions={
+            startActions={
               showQuickActions &&
               openAnnouncement && (
-                <QuickActions
-                  announcement={openAnnouncement}
-                  onSetStatus={onSetStatus}
-                  getEditFormUrl={getEditFormUrl}
-                />
+                <EditAction announcement={openAnnouncement} getEditFormUrl={getEditFormUrl} />
+              )
+            }
+            endActions={
+              showQuickActions &&
+              openAnnouncement && (
+                <StatusActions announcement={openAnnouncement} onSetStatus={onSetStatus} />
               )
             }>
             {showNotificationSettings && openAnnouncement && (
