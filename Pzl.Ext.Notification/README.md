@@ -143,7 +143,9 @@ Steg 1 til 3 under (og SPFx-pakken fra steg 4) kan gjøres med `Pzl.Part.Announc
    Invoke-PnPSiteTemplate -Path .\Templates\AnnouncementFields.xml
    ```
 
-   Slå deretter på «Varsle i Teams» under «Felter i skjema for ny driftsmelding» i egenskapene til webdelen, hvis redaktørene registrerer driftsmeldinger der. Feltet er skjult i webdelens skjema som standard. «Varsle på nytt» vises bare i listeskjemaet når et element redigeres. Legg gjerne kolonnene til visningen av lista.
+   Webdelen (fra 2.1.0) viser da «Varsle i Teams» i skjemaet for ny driftsmelding, og «Varsle i Teams» og «Varsle på nytt» for redaktører i dialogen som åpnes ved klikk på en driftsmelding. En endring i dialogen lagres med en gang og plukkes opp ved neste kjøring. I listeskjemaet vises «Varsle på nytt» bare når et element redigeres. Legg gjerne kolonnene til visningen av lista.
+
+   Webdelen leser «Nivåer som alltid varsles» fra **Varslingskonfigurasjon** (se punkt 3) og viser «Varsle i Teams» som valgt og låst for disse nivåene, siden tjenesten varsler om dem uansett. Lista letes etter på området med driftsmeldingene og deretter på rotområdet. Ligger den et annet sted, settes «Område for varslingskonfigurasjon» i egenskapene til webdelen. Redaktørene må ha lesetilgang til lista.
 2. Opprett konfigurasjonslista på området som skal eie konfigurasjonen (typisk rot- eller hub-området):
 
    ```powershell

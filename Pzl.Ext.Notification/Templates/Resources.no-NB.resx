@@ -140,7 +140,7 @@
     <value>Varsle på nytt</value>
   </data>
   <data name="SiteFields_NotifyAgain_Description" xml:space="preserve">
-    <value>Send et nytt varsel i Teams når du lagrer. Bruk det bare ved vesentlige endringer, for eksempel ny forventet løsningstid eller at saken er løst. Settes tilbake til Nei når varselet er sendt.</value>
+    <value>Send et nytt varsel i Teams. Bruk det bare ved vesentlige endringer, for eksempel ny forventet løsningstid eller at saken er løst. Settes tilbake til Nei når varselet er sendt.</value>
   </data>
   <data name="SiteFields_NotifiedAt_DisplayName" xml:space="preserve">
     <value>Varslet i Teams</value>
