@@ -26,15 +26,28 @@ export function looksLikeHtml(value: any): boolean {
 }
 
 /**
- * Text content of an HTML string (tags and entities removed), used to check
+ * Decodes character references (`&#58;`, `&amp;`, `&aring;` …) in a text
+ * without tags. SharePoint stores rich text with such references, also for
+ * plain characters like the colon.
+ *
+ * @param text Text without HTML tags
+ */
+function decodeEntities(text: string): string {
+  if (!/&[#\w]+;/.test(text)) return text
+  // Parsed as a document and read back as text: nothing is rendered or run
+  return new DOMParser().parseFromString(text, 'text/html').documentElement.textContent ?? text
+}
+
+/**
+ * Text content of an HTML string: tags removed, character references decoded
+ * and whitespace collapsed. Used for the banner's preview and to check
  * whether a rich text value is empty.
  *
  * @param html HTML
  */
 export function htmlToText(html: string): string {
-  return (html ?? '')
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/&nbsp;|&#160;/gi, ' ')
+  return decodeEntities((html ?? '').replace(/<[^>]*>/g, ' '))
+    .replace(/[\u200b\ufeff]/g, '')
     .replace(/\s+/g, ' ')
     .trim()
 }

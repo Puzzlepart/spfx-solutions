@@ -1,5 +1,6 @@
 import {
   dateInputValueToIso,
+  htmlToText,
   formatDateInputValue,
   parseDateInputValue,
   toDateInputValue
@@ -28,5 +29,21 @@ describe('date form values', () => {
     expect(formatDateInputValue('')).toBe('')
     expect(dateInputValueToIso('')).toBeNull()
     expect(dateInputValueToIso('2026-11-17T09:05')).toBe(new Date(2026, 10, 17, 9, 5).toISOString())
+  })
+})
+
+describe('htmlToText', () => {
+  it('removes tags and decodes the character references SharePoint stores in rich text', () => {
+    expect(
+      htmlToText(
+        '<div class="ExternalClass"><p>E-post&#58; nede &amp; treg&#160;&quot;i dag&quot;&#8203;</p><p>Bl&aring;b&#xE6;r &lt;ikke en tagg&gt;</p></div>'
+      )
+    ).toBe('E-post: nede & treg "i dag" Blåbær <ikke en tagg>')
+  })
+
+  it('leaves plain text alone and treats markup without text as empty', () => {
+    expect(htmlToText('Tom & Jerry 100 %')).toBe('Tom & Jerry 100 %')
+    expect(htmlToText('<p>&nbsp;</p><br>')).toBe('')
+    expect(htmlToText(null)).toBe('')
   })
 })
