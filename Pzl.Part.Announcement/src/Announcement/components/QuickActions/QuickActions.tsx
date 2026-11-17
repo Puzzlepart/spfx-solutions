@@ -1,10 +1,9 @@
 import React, { FC, useState } from 'react'
-import { Button, Link, Spinner } from '@fluentui/react-components'
+import { Button, Spinner } from '@fluentui/react-components'
 import { Checkmark16Regular, Edit16Regular, Play16Regular } from '@fluentui/react-icons'
 import strings from 'AnnouncementStrings'
 import { Status } from '../../model'
 import { IAnnouncement } from '../types'
-import styles from './QuickActions.module.scss'
 
 export interface IQuickActionsProps {
   announcement: IAnnouncement
@@ -19,7 +18,7 @@ export interface IQuickActionsProps {
 }
 
 /**
- * Quick actions in the popover for users who may edit the list: move a
+ * Quick actions in the details dialog for users who may edit the list: move a
  * planned announcement to ongoing, mark it as resolved, or open the list's
  * edit form. The list's own form is used for anything else.
  */
@@ -39,8 +38,7 @@ export const QuickActions: FC<IQuickActionsProps> = ({
       .finally(() => setBusy(null))
   }
 
-  const openEditForm = (event: React.MouseEvent) => {
-    event.preventDefault()
+  const openEditForm = () => {
     getEditFormUrl(announcement)
       .then((url) => {
         if (url) window.location.href = url
@@ -54,20 +52,9 @@ export const QuickActions: FC<IQuickActionsProps> = ({
     busy === status ? <Spinner size='extra-tiny' /> : fallback
 
   return (
-    <div className={styles.quickActions}>
-      {announcement.status === 'planned' && (
-        <Button
-          size='small'
-          appearance='secondary'
-          disabled={!!busy}
-          icon={icon('ongoing', <Play16Regular />)}
-          onClick={() => setStatus('ongoing')}>
-          {strings.QuickActions.MarkOngoing}
-        </Button>
-      )}
+    <>
       {announcement.status !== 'resolved' && (
         <Button
-          size='small'
           appearance='primary'
           disabled={!!busy}
           icon={icon('resolved', <Checkmark16Regular />)}
@@ -75,10 +62,18 @@ export const QuickActions: FC<IQuickActionsProps> = ({
           {strings.QuickActions.MarkResolved}
         </Button>
       )}
-      <Link className={styles.edit} href='#' onClick={openEditForm}>
-        <Edit16Regular />
+      {announcement.status === 'planned' && (
+        <Button
+          appearance='secondary'
+          disabled={!!busy}
+          icon={icon('ongoing', <Play16Regular />)}
+          onClick={() => setStatus('ongoing')}>
+          {strings.QuickActions.MarkOngoing}
+        </Button>
+      )}
+      <Button appearance='subtle' disabled={!!busy} icon={<Edit16Regular />} onClick={openEditForm}>
         {strings.QuickActions.Edit}
-      </Link>
-    </div>
+      </Button>
+    </>
   )
 }

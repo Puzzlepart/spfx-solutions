@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { IAnnouncementProps, IAnnouncementState } from './types'
 import { fetchAnnouncements } from '../services/fetchAnnouncements'
+import { NOTIFY_TEAMS_FIELD } from '../constants'
 
 /**
  * Component data fetch hook for `Announcement`. This hook is responsible for
@@ -29,6 +30,15 @@ export function useAnnouncementDataFetch(
       service.canEditItems()
     ])
     setState({ fields, canCreate, canEdit })
+    // Only editors see «Varsle i Teams», and only on lists with the add-on's fields
+    if ((canCreate || canEdit) && fields.some((f) => f.internalName === NOTIFY_TEAMS_FIELD)) {
+      service
+        .getAlwaysNotifiedSeverities()
+        .then((alwaysNotified) => setState({ alwaysNotified }))
+        .catch(() => {
+          // Never rejects (falls back to no levels)
+        })
+    }
     try {
       const announcements = await fetchAnnouncements(
         service,

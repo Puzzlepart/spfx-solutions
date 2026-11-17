@@ -1,9 +1,11 @@
 import {
   compareAnnouncements,
+  isAlwaysNotified,
   isCriticalValue,
   Severity,
   Status,
   statusChoiceValue,
+  toKnownSeverity,
   toSeverity,
   toStatus
 } from './model'
@@ -90,5 +92,30 @@ describe('compareAnnouncements', () => {
       'planned-info',
       'resolved-critical'
     ])
+  })
+})
+
+describe('isAlwaysNotified', () => {
+  it('is true for a level in «Nivåer som alltid varsles», in any language', () => {
+    expect(isAlwaysNotified('Kritisk', ['critical'])).toBe(true)
+    expect(isAlwaysNotified('Critical', ['critical', 'warning'])).toBe(true)
+    expect(isAlwaysNotified('Varsel', ['critical'])).toBe(true)
+  })
+
+  it('is false for other levels, no level and no configuration', () => {
+    expect(isAlwaysNotified('Advarsel', ['critical'])).toBe(false)
+    expect(isAlwaysNotified('', ['info'])).toBe(false)
+    expect(isAlwaysNotified(null, ['info'])).toBe(false)
+    expect(isAlwaysNotified('Kritisk', [])).toBe(false)
+    expect(isAlwaysNotified('Kritisk', undefined)).toBe(false)
+  })
+})
+
+describe('toKnownSeverity', () => {
+  it('maps known values and leaves out free text', () => {
+    expect(toKnownSeverity('Kritisk')).toBe('critical')
+    expect(toKnownSeverity('Varsel')).toBe('critical')
+    expect(toKnownSeverity('Alle')).toBeNull()
+    expect(toKnownSeverity(null)).toBeNull()
   })
 })

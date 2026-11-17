@@ -16,6 +16,7 @@ import { Dismiss24Regular } from '@fluentui/react-icons'
 import strings from 'AnnouncementStrings'
 import styles from './CreateAnnouncementDialog.module.scss'
 import { IListField } from '../types'
+import { Severity } from '../../model'
 import { AnnouncementListService } from '../../services/AnnouncementListService'
 import { useCreateAnnouncementForm } from './useCreateAnnouncementForm'
 import { FieldInput } from './FieldInput'
@@ -30,6 +31,11 @@ export interface ICreateAnnouncementDialogProps {
    * Fields hidden from the form in the web part properties (`false` = hidden)
    */
   hiddenFormFields?: Record<string, boolean>
+  /**
+   * Levels the notification add-on always notifies about: «Varsle i Teams» is
+   * selected and locked for them
+   */
+  alwaysNotified?: Severity[]
   service: AnnouncementListService
   onOpenChange: (open: boolean) => void
   /**
@@ -43,11 +49,12 @@ export interface ICreateAnnouncementDialogProps {
  * fields of the announcement list.
  */
 export const CreateAnnouncementDialog: FC<ICreateAnnouncementDialogProps> = (props) => {
-  const { formFields, values, errors, saving, saveError, setValue, submit } =
+  const { formFields, values, lockedFields, errors, saving, saveError, setValue, submit } =
     useCreateAnnouncementForm(
       props.open,
       props.fields,
       props.hiddenFormFields,
+      props.alwaysNotified ?? [],
       props.service,
       props.onCreated
     )
@@ -86,7 +93,8 @@ export const CreateAnnouncementDialog: FC<ICreateAnnouncementDialogProps> = (pro
                   field={field}
                   value={values[field.internalName]}
                   error={errors[field.internalName]}
-                  disabled={saving}
+                  disabled={saving || field.internalName in lockedFields}
+                  hint={lockedFields[field.internalName]}
                   onChange={(value) => setValue(field.internalName, value)}
                   searchPeople={searchPeople}
                 />

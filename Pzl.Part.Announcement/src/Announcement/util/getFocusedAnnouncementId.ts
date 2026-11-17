@@ -69,7 +69,7 @@ function getUrlAnnouncementId(): string | null {
 }
 
 /**
- * Resolves the announcement ID that should be focused (popover opened) on load.
+ * Resolves the announcement ID that should be focused (details dialog opened) on load.
  * The `driftsmelding` query parameter is checked first (synchronous, and what
  * the Teams tab passes), then the Teams deep link context (`subPageId`).
  *

@@ -42,8 +42,8 @@ export function htmlToText(html: string): string {
 const pad = (n: number) => (n < 10 ? `0${n}` : `${n}`)
 
 /**
- * Formats a date for an `<input type="date">` (`yyyy-mm-dd`) or
- * `<input type="datetime-local">` (`yyyy-mm-ddThh:mm`) in local time.
+ * Formats a date as a form value: `yyyy-mm-dd` (date only) or
+ * `yyyy-mm-ddThh:mm`, in local time.
  *
  * @param date Date
  * @param dateOnly Date only
@@ -54,15 +54,38 @@ export function toDateInputValue(date: Date, dateOnly: boolean): string {
 }
 
 /**
+ * Parses a form value for a date field (local time). `undefined` for
+ * empty/invalid input.
+ *
+ * @param value Form value (`yyyy-mm-dd` or `yyyy-mm-ddThh:mm`)
+ */
+export function parseDateInputValue(value: string): Date | undefined {
+  if (!value) return undefined
+  const date = new Date(value.length === 10 ? `${value}T00:00` : value)
+  return isNaN(date.getTime()) ? undefined : date
+}
+
+/**
+ * Formats a form value for a date field for display: `dd.mm.yyyy`, with
+ * `kl. hh:mm` when the value has a time part. Empty for empty/invalid input.
+ *
+ * @param value Form value (`yyyy-mm-dd` or `yyyy-mm-ddThh:mm`)
+ */
+export function formatDateInputValue(value: string): string {
+  const date = parseDateInputValue(value)
+  if (!date) return ''
+  const day = `${pad(date.getDate())}.${pad(date.getMonth() + 1)}.${date.getFullYear()}`
+  return value.length === 10 ? day : `${day} kl. ${pad(date.getHours())}:${pad(date.getMinutes())}`
+}
+
+/**
  * Converts a date input value (local time) to an ISO string for the REST API.
  * Returns `null` for empty/invalid input.
  *
  * @param value Input value (`yyyy-mm-dd` or `yyyy-mm-ddThh:mm`)
  */
 export function dateInputValueToIso(value: string): string | null {
-  if (!value) return null
-  const date = new Date(value.length === 10 ? `${value}T00:00` : value)
-  return isNaN(date.getTime()) ? null : date.toISOString()
+  return parseDateInputValue(value)?.toISOString() ?? null
 }
 
 /**

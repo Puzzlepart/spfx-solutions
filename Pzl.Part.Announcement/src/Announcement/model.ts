@@ -75,6 +75,30 @@ export function toSeverity(value: string | null | undefined): Severity {
 }
 
 /**
+ * Maps a level from «Nivåer som alltid varsles» in the notification
+ * configuration. Unknown values (free text) are left out instead of counting
+ * as information, like in the notification service.
+ */
+export function toKnownSeverity(value: string | null | undefined): Severity | null {
+  return SEVERITY_BY_VALUE[(value ?? '').trim().toLowerCase()] ?? null
+}
+
+/**
+ * Whether a choice value of `PzlSeverity` is one of the levels the
+ * notification service always notifies about («Nivåer som alltid varsles»).
+ * An empty value (no level chosen yet) is not.
+ *
+ * @param value Choice value of `PzlSeverity`
+ * @param alwaysNotified Levels from the notification configuration
+ */
+export function isAlwaysNotified(
+  value: string | null | undefined,
+  alwaysNotified: Severity[] | undefined
+): boolean {
+  return !!value && !!alwaysNotified?.includes(toSeverity(value))
+}
+
+/**
  * Maps a `PzlStatus` value to a status. Empty values (announcements created
  * before the column existed) and unknown values count as ongoing.
  */
