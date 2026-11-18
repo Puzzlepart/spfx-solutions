@@ -21,6 +21,11 @@
        AnnouncementFields.xml (list site), NotificationConfig.xml and DeepLinkCustomAction.xml
        (notification site). The Azure, Entra and Teams part of the add-on is not covered, see
        Pzl.Ext.Notification/README.md.
+    7. Creates the page Driftsmeldinger.aspx on the list site (unless -SkipInfoPage): an
+       overview of all announcements (the web part with upcoming and past announcements in a
+       compact table) and a guide to how the solution works, with a section on Teams
+       notifications when -EnableTeamsNotifications is given. An existing page is left as it
+       is, unless -OverwriteInfoPage is given.
 
   Requires PnP.PowerShell (not installed by this script) and SharePoint Administrator rights
   (tenant app catalog). Build the packages first with `npm run package` in each project.
@@ -65,6 +70,16 @@
 .PARAMETER NotificationPackagePath
   Path to pzl-ext-notification.sppkg. Defaults to the build output of Pzl.Ext.Notification.
 
+.PARAMETER SkipInfoPage
+  Do not create the page with the overview and the guide.
+
+.PARAMETER InfoPageName
+  File name of the page, without .aspx. Defaults to Driftsmeldinger.
+
+.PARAMETER OverwriteInfoPage
+  Delete an existing page with that name and create it again, for example to add the section on
+  Teams notifications. Changes made to the page by hand are lost.
+
 .EXAMPLE
   .\Install-Driftsmeldinger.ps1 -SiteUrl https://contoso.sharepoint.com
 
@@ -85,13 +100,17 @@ param(
   [switch]$BannerTargetAudience,
   [switch]$EnableTeamsNotifications,
   [string]$NotificationSiteUrl = '',
-  [string]$NotificationPackagePath = (Join-Path $PSScriptRoot '..\..\Pzl.Ext.Notification\sharepoint\solution\pzl-ext-notification.sppkg')
+  [string]$NotificationPackagePath = (Join-Path $PSScriptRoot '..\..\Pzl.Ext.Notification\sharepoint\solution\pzl-ext-notification.sppkg'),
+  [switch]$SkipInfoPage,
+  [string]$InfoPageName = 'Driftsmeldinger',
+  [switch]$OverwriteInfoPage
 )
 
 $ErrorActionPreference = 'Stop'
 
 # Component IDs (unchanged since 1.x, except the deep link customizer)
 $BannerComponentId = 'c0d1edf4-db39-4feb-8052-a4c27ffe1954'
+$WebPartComponentId = 'ddfa2478-1872-408c-8f8f-a1c704f93d66'
 $OldDeepLinkComponentId = '9f3d6a2c-7b14-4e8f-a5c0-3d2e1f6b8a47'
 $TenantWideExtensionsList = 'Tenant Wide Extensions'
 
@@ -416,8 +435,94 @@ if ($EnableTeamsNotifications) {
   Invoke-Template (Join-Path $NotificationTemplateFolder 'NotificationConfig.xml') $NotificationSiteUrl
   Invoke-Template (Join-Path $NotificationTemplateFolder 'DeepLinkCustomAction.xml') $NotificationSiteUrl
   $manualSteps.Add("Add one row per site to Varslingskonfigurasjon on $NotificationSiteUrl.")
-  $manualSteps.Add('Turn on «Varsle i Teams» under «Felter i skjema for ny driftsmelding» in the web part properties if editors register announcements there.')
   $manualSteps.Add('Azure, Entra and Teams part of the notification add-on: Pzl.Ext.Notification/scripts/Install-Notification.ps1.')
+}
+
+#endregion
+
+#region Information page
+
+# The guide texts are HTML files with placeholders for the links to the lists
+function Get-InfoPageText([string]$FileName, [hashtable]$Values) {
+  $path = Join-Path (Join-Path $TemplateFolder 'InfoPage') $FileName
+  if (-not (Test-Path $path)) { throw "Guide text not found: $path" }
+  $text = Get-Content -Path $path -Raw -Encoding UTF8
+  foreach ($key in $Values.Keys) { $text = $text.Replace("{{$key}}", $Values[$key]) }
+  return $text
+}
+
+$infoPageFile = "$InfoPageName.aspx"
+$infoPageUrl = "$SiteUrl/SitePages/$infoPageFile"
+if ($SkipInfoPage) {
+  Write-Step 'Information page (skipped)'
+} else {
+  Write-Step 'Information page'
+  $existingPage = $null
+  try {
+    $existingPage = Get-PnPPage -Identity $infoPageFile -Connection $siteConnection -ErrorAction Stop
+  } catch {
+    # No such page
+  }
+  if ($existingPage -and -not $OverwriteInfoPage) {
+    Write-Info "$infoPageUrl exists and is left as it is (pass -OverwriteInfoPage to create it again)"
+  } elseif ($PSCmdlet.ShouldProcess($infoPageUrl, $(if ($existingPage) { 'Delete and create the information page' } else { 'Create the information page' }))) {
+    if ($existingPage) {
+      Remove-PnPPage -Identity $infoPageFile -Force -Connection $siteConnection
+      Write-Info "Deleted the existing $infoPageFile"
+    }
+    $links = @{
+      ListUrl       = "$SiteUrl/Lists/Driftsmeldinger"
+      ConfigListUrl = "$NotificationSiteUrl/Lists/Varslingskonfigurasjon"
+    }
+    $page = Add-PnPPage -Name $InfoPageName -Title 'Driftsmeldinger' -LayoutType Article -HeaderLayoutType NoImage -CommentsEnabled:$false -Connection $siteConnection
+
+    # Section 1: every announcement (active, upcoming and past) in a compact table
+    $webPartProperties = @{
+      title         = 'Alle driftsmeldinger'
+      description   = 'Driftsmeldinger som gjelder nå, som kommer og som er over. Klikk på en rad for detaljer.'
+      listSiteUrl   = ''
+      showUpcoming  = $true
+      showPast      = $true
+      compactTable  = $true
+      popoverFields = @{
+        PzlContent         = $true
+        PzlStartDate       = $true
+        PzlEndDate         = $true
+        PzlAffectedSystems = $true
+        PzlConsequences    = $true
+        PzlResponsible     = $true
+      }
+      formFields    = @{}
+    } | ConvertTo-Json -Compress -Depth 5
+    Add-PnPPageSection -Page $page -SectionTemplate OneColumn -Order 1 -Connection $siteConnection | Out-Null
+    $webPartAdded = $false
+    try {
+      Add-PnPPageWebPart -Page $page -Component $WebPartComponentId -Section 1 -Column 1 -WebPartProperties $webPartProperties -Connection $siteConnection -ErrorAction Stop | Out-Null
+      $webPartAdded = $true
+    } catch {
+      # A package published a moment ago may not be available to the site yet
+      Write-Warning "Could not add the Driftsmeldinger web part to the page ($($_.Exception.Message))."
+      $manualSteps.Add("Add the Driftsmeldinger web part to the top section of $infoPageUrl and turn on «Vis kommende driftsmeldinger», «Vis tidligere driftsmeldinger» and «Kompakt tabellvisning». Or run the script again with -SkipPackage -OverwriteInfoPage in a few minutes.")
+    }
+
+    # Section 2: how the solution works
+    Add-PnPPageSection -Page $page -SectionTemplate OneColumn -Order 2 -Connection $siteConnection | Out-Null
+    Add-PnPPageTextPart -Page $page -Section 2 -Column 1 -Text (Get-InfoPageText 'Standard.html' $links) -Connection $siteConnection | Out-Null
+
+    # Section 3: Teams notifications, for tenants with the add-on
+    if ($EnableTeamsNotifications) {
+      Add-PnPPageSection -Page $page -SectionTemplate OneColumn -Order 3 -Connection $siteConnection | Out-Null
+      Add-PnPPageTextPart -Page $page -Section 3 -Column 1 -Text (Get-InfoPageText 'Varsling.html' $links) -Connection $siteConnection | Out-Null
+    }
+
+    Set-PnPPage -Identity $infoPageFile -Publish -Connection $siteConnection | Out-Null
+    $sections = if ($EnableTeamsNotifications) { 'overview, guide and Teams notifications' } else { 'overview and guide' }
+    Write-Done "Created $infoPageUrl ($sections)$(if (-not $webPartAdded) { ', without the web part' })"
+    $manualSteps.Add("Link to $infoPageUrl from the navigation, so editors find the overview and the guide.")
+  }
+  if ($existingPage -and -not $OverwriteInfoPage -and $EnableTeamsNotifications) {
+    $manualSteps.Add("$infoPageUrl was not changed. If it has no section on Teams notifications, run again with -OverwriteInfoPage (changes made to the page by hand are lost).")
+  }
 }
 
 #endregion
