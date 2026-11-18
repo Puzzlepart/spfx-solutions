@@ -42,6 +42,9 @@ define([], function () {
       StatusChangedText: 'Driftsmeldingen er markert som {0}.',
       StatusChangeErrorText: 'Kunne ikke endre status. Prøv igjen.'
     },
+    Editor: {
+      SectionTitle: 'For redaktører'
+    },
     Notification: {
       SectionTitle: 'Varsling i Teams',
       AlwaysNotifiedHint:

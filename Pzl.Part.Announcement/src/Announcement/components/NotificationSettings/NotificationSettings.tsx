@@ -1,5 +1,5 @@
 import React, { FC, useState } from 'react'
-import { Divider, Text } from '@fluentui/react-components'
+import { Text } from '@fluentui/react-components'
 import { format } from '@fluentui/react'
 import strings from 'AnnouncementStrings'
 import { IAnnouncement, IListField } from '../types'
@@ -30,8 +30,8 @@ export interface INotificationSettingsProps {
 }
 
 /**
- * The switches of the notification add-on in the details dialog, for users
- * who may edit the list: «Varsle i Teams» and «Varsle på nytt». A change is
+ * The switches of the notification add-on in «For redaktører» in the details
+ * dialog: «Varsle i Teams» and «Varsle på nytt». A change is
  * saved at once; the notification service picks it up on its next run.
  */
 export const NotificationSettings: FC<INotificationSettingsProps> = ({
@@ -77,7 +77,6 @@ export const NotificationSettings: FC<INotificationSettingsProps> = ({
 
   return (
     <div className={styles.notificationSettings}>
-      <Divider />
       <Text weight='semibold' block>
         {strings.Notification.SectionTitle}
       </Text>

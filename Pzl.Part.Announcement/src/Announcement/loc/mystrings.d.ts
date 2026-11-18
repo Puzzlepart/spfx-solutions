@@ -41,6 +41,9 @@ declare interface IAnnouncementStrings {
     StatusChangedText: string
     StatusChangeErrorText: string
   }
+  Editor: {
+    SectionTitle: string
+  }
   Notification: {
     SectionTitle: string
     AlwaysNotifiedHint: string

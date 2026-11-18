@@ -6,12 +6,6 @@
   overflow-y: auto;
 }
 
-// Keeps each button on one line, so the row of actions gets the width it
-// needs instead of wrapping the labels (below 480px Fluent stacks the buttons)
-.actions button {
-  white-space: nowrap;
-}
-
 .title {
   display: flex;
   align-items: flex-start;

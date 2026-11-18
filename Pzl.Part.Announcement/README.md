@@ -54,9 +54,11 @@ The **New announcement** button is shown only to users who have the *Add items* 
 
 ### Quick actions
 
-A click on an announcement (or Enter/Space) opens a modal dialog at the centre of the page with the details. The banner opens the same dialog.
+A click on an announcement (or Enter/Space) opens a modal dialog at the centre of the page with the details. The dialog is the same whether it is opened from the web part or from the banner.
 
-Users with the *Edit items* permission on the list get buttons at the bottom of the dialog: **Rediger** to the left, which opens the announcement in the same form as for new announcements (see [Editing](#editing)), and to the right, after **Lukk**, **Marker som pågår** (planned announcements) and the primary button **Marker som løst** (planned and ongoing). The status is written with the list's own choice value, so a list provisioned in English gets *Resolved*. The status buttons are shown only when the list has the *Status* column. The editor functions are only in the web part, not in the dialog opened from the banner.
+Users with the *Edit items* permission on the list get a collapsed section **For redaktører** at the bottom of the dialog. It holds **Marker som løst** (planned and ongoing announcements), **Marker som pågår** (planned), **Rediger** (see [Editing](#editing)) and the Teams notification switches. The status is written with the list's own choice value, so a list provisioned in English gets *Resolved*. The status buttons are shown only when the list has the *Status* column. Other users do not see the section.
+
+When the web part and the banner are on the same page, a change made in one is shown in the other at once.
 
 ### Editing
 
@@ -64,7 +66,7 @@ Users with the *Edit items* permission on the list get buttons at the bottom of 
 
 ### Teams notifications in the dialogs
 
-With the notification add-on's columns on the list, editors get the switches **Varsle i Teams** and **Varsle på nytt** in the details dialog. A change is saved at once, and the notification service picks it up on its next run. **Varsle i Teams** is also in the form for new announcements.
+With the notification add-on's columns on the list, editors get the switches **Varsle i Teams** and **Varsle på nytt** under **For redaktører** in the details dialog. A change is saved at once, and the notification service picks it up on its next run. **Varsle i Teams** is also in the form for new announcements.
 
 The web part reads «Nivåer som alltid varsles» from the add-on's *Varslingskonfigurasjon* list (the active row for the site of the Driftsmeldinger list, with driftsmeldinger turned on). For those levels **Varsle i Teams** is shown as selected and cannot be turned off, because the service notifies about them whatever the switch says. The list is looked for on the site of the Driftsmeldinger list and then on the root site; set **Område for varslingskonfigurasjon** if it is somewhere else. Editors need read access to it. Without it, the switch just shows the value stored on the announcement.
 
@@ -86,7 +88,7 @@ Lists provisioned with an older template still work: the web part falls back to 
 The package also contains the application customizer **AnnouncementBanner** (component ID `c0d1edf4-db39-4feb-8052-a4c27ffe1954`). On every page of a site where it is registered it reads the announcement list and shows the active announcements with **Vis som banner** (`PzlShowAsBanner`) set as message bars in the page's top placeholder:
 
 * Colour and icon follow the announcement's level and status, like in the web part: *Løst* is green with the label «Løst», *Planlagt* has a calendar icon and the label «Planlagt». Pinned announcements come first and get the pin icon.
-* The banner shows the title and the first 160 characters of the content. Clicking it (or Enter/Space) opens the same details dialog as the web part, without the editor functions: the fields in `popoverFields` (default: the web part's default fields) and the "notified in Teams" footer.
+* The banner shows the title and the first 160 characters of the content. Clicking it (or Enter/Space) opens the same details dialog as the web part, with **For redaktører** for users who may edit the list (their code is fetched only for those users): the fields in `popoverFields` (default: the web part's default fields) and the "notified in Teams" footer.
 * The close button dismisses the banner for the user. The dismissal is kept in `localStorage` (`pzl-announcement-banner-dismissed`) per announcement and version (`Modified`), so an edited announcement comes back. That is how users who dismissed a critical banner see it once more, green, when it is marked as resolved. Dismissals for announcements that are no longer active are pruned.
 * Audience targeting is honoured when `targetAudience` is set, with the same rules as the web part.
 * The customizer decides from the page context alone whether the page is targeted (see below). Only on targeted pages is the list code loaded and the list read, and the UI is loaded only when there is a banner to show. Pages outside the targeting cost a few KB of script, which is what makes the tenant-wide registration affordable.
@@ -243,13 +245,15 @@ The package is written to `sharepoint/solution/pzl-announcement.sppkg`.
 
 ### 2.1.0
 
-* One dialog: a click on an announcement in the web part opens the same modal dialog as the banner, at the centre of the page. The popover is removed, and the quick actions (**Marker som løst**, **Marker som pågår**, **Rediger**) moved into the dialog. A failed action is shown in the dialog.
+* One dialog: a click on an announcement in the web part opens the same modal dialog as the banner, at the centre of the page. The popover is removed, and the quick actions (**Marker som løst**, **Marker som pågår**, **Rediger**) moved into the dialog.
 * Teams notification in the dialog, for editors: the switches **Varsle i Teams** and **Varsle på nytt**, saved at once.
 * **Varsle i Teams** is shown in the form for new announcements when the list has the column (was off by default).
 * **Varsle i Teams** is selected and locked for the levels in «Nivåer som alltid varsles», read from *Varslingskonfigurasjon*. New web part property **Område for varslingskonfigurasjon** (`notificationConfigSiteUrl`).
 * Start and end date: a date picker with a calendar, the time of day and an **OK** button, instead of the browser's own picker.
 * A link in the content of an announcement opens the link, not the dialog.
 * **Rediger** edits the announcement in the web part's own form dialog instead of opening the list's edit form.
+* The editor functions are gathered in a collapsed section **For redaktører** at the bottom of the dialog, shown only to users who may edit the list. The dialog is the same from the web part and the banner, so editors can mark as resolved, edit and notify from the banner too.
+* A change made in the web part is shown in the banner on the same page at once, and the other way round.
 * Section backgrounds: on a section with a dark background the header, the info icon, the **New announcement** button and the "no announcements" text use the section's text colour. They were dark on dark.
 * The dialog shows the announcement's icon beside the title, with the same icon and colour as in the list and the banner.
 

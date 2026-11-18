@@ -19,15 +19,11 @@ import { IAnnouncementProps } from './types'
 import { AnnouncementContext } from './context'
 import { useAnnouncement } from './useAnnouncement'
 import { UserMessage } from './UserMessage'
-import { AnnouncementDialog } from './AnnouncementDialog'
+import { AnnouncementDialogs } from './AnnouncementDialogs'
 import { getSectionTheme, SectionTheme } from './SectionTheme'
-import { NotificationSettings } from './NotificationSettings'
 import { CreateAnnouncementDialog } from './CreateAnnouncementDialog'
 import { getIntent } from './intent'
-import { EditAction, StatusActions } from './QuickActions'
-import { statusText } from './StatusBadge'
-import { IAnnouncement } from './types'
-import { Status } from '../model'
+import { notifyAnnouncementChanged } from '../util/announcementChanged'
 import { format } from '@fluentui/react'
 import strings from 'AnnouncementStrings'
 
@@ -36,58 +32,39 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
     state,
     setState,
     refresh,
+    partId,
     fluentProviderId,
     toasterId,
     openAnnouncement,
     setOpenAnnouncementId,
-    dialogError,
     setAnnouncementRef,
     popoverFields,
     showCreateButton,
-    showQuickActions,
-    setStatus,
-    editAnnouncement,
-    openCreateDialog,
-    openEditDialog,
-    showNotificationSettings,
-    notifyTeamsField,
-    notifyAgainField,
-    openAlwaysNotified,
-    setNotification,
+    editor,
     createDialogOpen,
     setCreateDialogOpen
   } = useAnnouncement(props)
   const { dispatchToast } = useToastController(toasterId)
 
-  const onSaved = () => {
+  /**
+   * Reads the list again after a change, and tells the banner on the page
+   */
+  const onChanged = async () => {
+    await refresh()
+    notifyAnnouncementChanged(partId)
+  }
+
+  const onCreated = () => {
     setCreateDialogOpen(false)
     dispatchToast(
       <Toast>
-        <ToastTitle>
-          {editAnnouncement ? strings.EditSuccessText : strings.CreateSuccessText}
-        </ToastTitle>
+        <ToastTitle>{strings.CreateSuccessText}</ToastTitle>
       </Toast>,
       { intent: 'success' }
     )
-    refresh().catch(() => {
+    onChanged().catch(() => {
       // Ignore, the list is shown as it was
     })
-  }
-
-  /**
-   * Changes the status. The dialog closes on success; a failure is shown in
-   * the dialog.
-   */
-  const onSetStatus = async (announcement: IAnnouncement, status: Status) => {
-    await setStatus(announcement, status)
-    dispatchToast(
-      <Toast>
-        <ToastTitle>
-          {format(strings.QuickActions.StatusChangedText, statusText(status).toLowerCase())}
-        </ToastTitle>
-      </Toast>,
-      { intent: 'success' }
-    )
   }
 
   if (state.loading) {
@@ -132,7 +109,7 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                     className={styles.createButton}
                     appearance='outline'
                     icon={<AddRegular />}
-                    onClick={openCreateDialog}>
+                    onClick={() => setCreateDialogOpen(true)}>
                     {strings.CreateButtonText}
                   </Button>
                 )}
@@ -188,32 +165,14 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
               )}
             </div>
           </div>
-          <AnnouncementDialog
+          <AnnouncementDialogs
             announcement={openAnnouncement}
             fields={popoverFields}
-            error={dialogError}
+            editor={editor}
             onClose={() => setOpenAnnouncementId(null)}
-            startActions={
-              state.canEdit &&
-              openAnnouncement && <EditAction onEdit={() => openEditDialog(openAnnouncement)} />
-            }
-            endActions={
-              showQuickActions &&
-              openAnnouncement && (
-                <StatusActions announcement={openAnnouncement} onSetStatus={onSetStatus} />
-              )
-            }>
-            {showNotificationSettings && openAnnouncement && (
-              <NotificationSettings
-                announcement={openAnnouncement}
-                notifyTeamsField={notifyTeamsField}
-                notifyAgainField={notifyAgainField}
-                alwaysNotified={openAlwaysNotified}
-                onChange={setNotification}
-              />
-            )}
-          </AnnouncementDialog>
-          {(showCreateButton || state.canEdit) && (
+            onChanged={onChanged}
+          />
+          {showCreateButton && (
             <CreateAnnouncementDialog
               open={createDialogOpen}
               fields={state.fields}
@@ -221,8 +180,7 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
               alwaysNotified={state.alwaysNotified}
               service={props.service}
               onOpenChange={setCreateDialogOpen}
-              announcement={editAnnouncement ?? undefined}
-              onSaved={onSaved}
+              onSaved={onCreated}
             />
           )}
           <Toaster toasterId={toasterId} position='bottom-end' />
