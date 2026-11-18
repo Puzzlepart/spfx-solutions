@@ -515,6 +515,18 @@ if ($SkipInfoPage) {
       Add-PnPPageTextPart -Page $page -Section 3 -Column 1 -Text (Get-InfoPageText 'Varsling.html' $links) -Connection $siteConnection | Out-Null
     }
 
+    # Add-PnPPageWebPart can return without an error and still leave no web part on the page,
+    # so the saved page is read back before it is reported as done
+    if ($webPartAdded) {
+      $onPage = @(Get-PnPPageComponent -Page $infoPageFile -Connection $siteConnection |
+          Where-Object { "$($_.WebPartId)" -like "*$WebPartComponentId*" })
+      if (-not $onPage.Count) {
+        $webPartAdded = $false
+        Write-Warning "The Driftsmeldinger web part was added without an error, but it is not on the saved page."
+        $manualSteps.Add("Add the Driftsmeldinger web part to the top section of $infoPageUrl and turn on «Vis kommende driftsmeldinger», «Vis tidligere driftsmeldinger» and «Kompakt tabellvisning».")
+      }
+    }
+
     Set-PnPPage -Identity $infoPageFile -Publish -Connection $siteConnection | Out-Null
     $sections = if ($EnableTeamsNotifications) { 'overview, guide and Teams notifications' } else { 'overview and guide' }
     Write-Done "Created $infoPageUrl ($sections)$(if (-not $webPartAdded) { ', without the web part' })"
