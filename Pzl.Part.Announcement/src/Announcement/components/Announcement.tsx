@@ -45,7 +45,9 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
     showCreateButton,
     showQuickActions,
     setStatus,
-    getEditFormUrl,
+    editAnnouncement,
+    openCreateDialog,
+    openEditDialog,
     showNotificationSettings,
     notifyTeamsField,
     notifyAgainField,
@@ -56,11 +58,13 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
   } = useAnnouncement(props)
   const { dispatchToast } = useToastController(toasterId)
 
-  const onCreated = () => {
+  const onSaved = () => {
     setCreateDialogOpen(false)
     dispatchToast(
       <Toast>
-        <ToastTitle>{strings.CreateSuccessText}</ToastTitle>
+        <ToastTitle>
+          {editAnnouncement ? strings.EditSuccessText : strings.CreateSuccessText}
+        </ToastTitle>
       </Toast>,
       { intent: 'success' }
     )
@@ -127,7 +131,7 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                     className={styles.createButton}
                     appearance='outline'
                     icon={<AddRegular />}
-                    onClick={() => setCreateDialogOpen(true)}>
+                    onClick={openCreateDialog}>
                     {strings.CreateButtonText}
                   </Button>
                 )}
@@ -180,10 +184,8 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
             error={dialogError}
             onClose={() => setOpenAnnouncementId(null)}
             startActions={
-              showQuickActions &&
-              openAnnouncement && (
-                <EditAction announcement={openAnnouncement} getEditFormUrl={getEditFormUrl} />
-              )
+              state.canEdit &&
+              openAnnouncement && <EditAction onEdit={() => openEditDialog(openAnnouncement)} />
             }
             endActions={
               showQuickActions &&
@@ -201,7 +203,7 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
               />
             )}
           </AnnouncementDialog>
-          {showCreateButton && (
+          {(showCreateButton || state.canEdit) && (
             <CreateAnnouncementDialog
               open={createDialogOpen}
               fields={state.fields}
@@ -209,7 +211,8 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
               alwaysNotified={state.alwaysNotified}
               service={props.service}
               onOpenChange={setCreateDialogOpen}
-              onCreated={onCreated}
+              announcement={editAnnouncement ?? undefined}
+              onSaved={onSaved}
             />
           )}
           <Toaster toasterId={toasterId} position='bottom-end' />

@@ -13,11 +13,13 @@ declare interface IAnnouncementStrings {
   NoText: string
   CreateButtonText: string
   CreateDialogTitle: string
+  EditDialogTitle: string
   SaveButtonText: string
   CancelButtonText: string
   CloseButtonText: string
   RequiredFieldText: string
   CreateSuccessText: string
+  EditSuccessText: string
   CreateErrorText: string
   ChoicePlaceholder: string
   PeoplePickerPlaceholder: string

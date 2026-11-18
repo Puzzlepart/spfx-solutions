@@ -2,9 +2,11 @@ import {
   dateInputValueToIso,
   htmlToText,
   formatDateInputValue,
+  getFormValueFromItem,
   parseDateInputValue,
   toDateInputValue
 } from './fieldValue'
+import { IListField } from '../components/types'
 
 describe('date form values', () => {
   it('round-trips a date and time in local time', () => {
@@ -45,5 +47,35 @@ describe('htmlToText', () => {
     expect(htmlToText('Tom & Jerry 100 %')).toBe('Tom & Jerry 100 %')
     expect(htmlToText('<p>&nbsp;</p><br>')).toBe('')
     expect(htmlToText(null)).toBe('')
+  })
+})
+
+describe('getFormValueFromItem', () => {
+  const field = (type: string, extra: Partial<IListField> = {}): IListField =>
+    ({ internalName: 'F', entityPropertyName: 'F', type, dateOnly: false, ...extra }) as IListField
+
+  it('maps the values of an existing item to form values', () => {
+    expect(getFormValueFromItem(field('Text'), 'E-post')).toBe('E-post')
+    expect(getFormValueFromItem(field('Boolean'), true)).toBe(true)
+    expect(getFormValueFromItem(field('Number'), 0)).toBe('0')
+    expect(getFormValueFromItem(field('URL'), { Url: 'https://a', Description: 'A' })).toBe(
+      'https://a'
+    )
+    expect(getFormValueFromItem(field('MultiChoice'), ['A', 'B'])).toEqual(['A', 'B'])
+    expect(
+      getFormValueFromItem(field('DateTime'), new Date(2026, 10, 17, 9, 5).toISOString())
+    ).toBe('2026-11-17T09:05')
+    expect(getFormValueFromItem(field('User'), { Id: 7, Title: 'Kari', EMail: 'k@x.no' })).toEqual([
+      { key: 'id:7', id: 7, text: 'Kari', email: 'k@x.no', isGroup: false }
+    ])
+  })
+
+  it('maps missing values to empty form values', () => {
+    expect(getFormValueFromItem(field('Text'), null)).toBe('')
+    expect(getFormValueFromItem(field('Boolean'), null)).toBe(false)
+    expect(getFormValueFromItem(field('DateTime'), null)).toBe('')
+    expect(getFormValueFromItem(field('User'), null)).toEqual([])
+    expect(getFormValueFromItem(field('UserMulti'), null)).toEqual([])
+    expect(getFormValueFromItem(field('URL'), null)).toBe('')
   })
 })

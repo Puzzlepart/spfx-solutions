@@ -25,9 +25,14 @@ import { FALLBACK_FIELDS } from './fallbackFields'
  */
 export interface IPersonOption {
   /**
-   * Claims key (login name) used with `ensureUser`
+   * Claims key (login name) used with `ensureUser`. For a person read from
+   * an existing item it is only a unique key; `id` is used instead.
    */
   key: string
+  /**
+   * ID of the user on the site, when known (people already on an item)
+   */
+  id?: number
   text: string
   email?: string
   isGroup: boolean
@@ -174,7 +179,6 @@ export function alwaysNotifiedSeverities(
 export class AnnouncementListService {
   private _sp: SPFI
   private _fields: Promise<IListField[]>
-  private _editFormUrl: string | null | undefined
   private _siteUrl: string
   private _siteOrigin: string
   private _alwaysNotified: Promise<Severity[]>
@@ -306,24 +310,6 @@ export class AnnouncementListService {
    */
   public canEditItems(): Promise<boolean> {
     return this.list.currentUserHasPermissions(PermissionKind.EditListItems).catch(() => false)
-  }
-
-  /**
-   * Absolute URL of the list's edit form for an item, returning to the
-   * current page after save. `null` if the list's form URL cannot be read.
-   *
-   * @param id Item ID
-   */
-  public async getEditFormUrl(id: string): Promise<string | null> {
-    if (this._editFormUrl === undefined) {
-      this._editFormUrl = await this.list
-        .select('DefaultEditFormUrl')()
-        .then((list) => list.DefaultEditFormUrl || null)
-        .catch((): string => null)
-    }
-    if (!this._editFormUrl) return null
-    const source = encodeURIComponent(window.location.href)
-    return `${new URL(this._editFormUrl, this._siteOrigin).href}?ID=${id}&Source=${source}`
   }
 
   /**

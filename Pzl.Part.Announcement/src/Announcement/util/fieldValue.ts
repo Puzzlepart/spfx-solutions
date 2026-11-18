@@ -124,3 +124,40 @@ export function getInitialFormValue(field: IListField): any {
       return defaultValue ?? ''
   }
 }
+
+/**
+ * Form value for a field from the value on an existing item (edit form)
+ *
+ * @param field Field
+ * @param value Item value (user fields expanded with `Id`, `Title` and `EMail`)
+ */
+export function getFormValueFromItem(field: IListField, value: any): any {
+  const person = (user: any) => ({
+    key: `id:${user.Id}`,
+    id: user.Id,
+    text: user.Title,
+    email: user.EMail,
+    isGroup: false
+  })
+  switch (field.type) {
+    case 'Boolean':
+      return value === true
+    case 'DateTime': {
+      const date = value ? new Date(value) : undefined
+      return date && !isNaN(date.getTime()) ? toDateInputValue(date, field.dateOnly) : ''
+    }
+    case 'MultiChoice':
+      return Array.isArray(value) ? value : []
+    case 'User':
+      return value?.Id ? [person(value)] : []
+    case 'UserMulti':
+      return Array.isArray(value) ? value.filter((user) => user?.Id).map(person) : []
+    case 'URL':
+      return value?.Url ?? ''
+    case 'Number':
+    case 'Currency':
+      return value === null || value === undefined ? '' : String(value)
+    default:
+      return value ?? ''
+  }
+}

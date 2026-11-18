@@ -57,32 +57,18 @@ export const StatusActions: FC<IStatusActionsProps> = ({ announcement, onSetStat
 }
 
 export interface IEditActionProps {
-  announcement: IAnnouncement
   /**
-   * Returns the URL of the list's edit form for the announcement
+   * Opens the form with the announcement
    */
-  getEditFormUrl: (announcement: IAnnouncement) => Promise<string | null>
+  onEdit: () => void
 }
 
 /**
- * «Rediger» in the details dialog: opens the list's edit form, which is used
- * for anything but the status and the notification. Placed at the start of
- * the dialog's actions.
+ * «Rediger» in the details dialog: opens the announcement in the form, in the
+ * same kind of dialog. Placed at the start of the dialog's actions.
  */
-export const EditAction: FC<IEditActionProps> = ({ announcement, getEditFormUrl }) => {
-  const openEditForm = () => {
-    getEditFormUrl(announcement)
-      .then((url) => {
-        if (url) window.location.href = url
-      })
-      .catch(() => {
-        // No edit form URL, nothing to open
-      })
-  }
-
-  return (
-    <Button appearance='subtle' icon={<EditRegular />} onClick={openEditForm}>
-      {strings.QuickActions.Edit}
-    </Button>
-  )
-}
+export const EditAction: FC<IEditActionProps> = ({ onEdit }) => (
+  <Button appearance='subtle' icon={<EditRegular />} onClick={onEdit}>
+    {strings.QuickActions.Edit}
+  </Button>
+)

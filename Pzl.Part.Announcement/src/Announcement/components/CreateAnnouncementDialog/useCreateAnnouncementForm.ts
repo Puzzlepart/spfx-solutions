@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import strings from 'AnnouncementStrings'
-import { IListField } from '../types'
+import { IAnnouncement, IListField } from '../types'
 import { AnnouncementListService, isFormField } from '../../services/AnnouncementListService'
 import { format } from '@fluentui/react'
 import {
@@ -12,6 +12,7 @@ import {
 import { isAlwaysNotified, isCriticalValue, Severity } from '../../model'
 import {
   dateInputValueToIso,
+  getFormValueFromItem,
   getInitialFormValue,
   htmlToText,
   isEmptyValue
@@ -28,17 +29,33 @@ function hasValue(field: IListField, value: any): boolean {
 }
 
 /**
- * Converts the form values to the REST payload for `items.add`
+ * Converts the form values to the REST payload for `items.add`, or for
+ * `update` when the values of the existing item are given: empty fields are
+ * then cleared on the item instead of left out.
+ *
+ * @param fields Fields in the form
+ * @param values Form values keyed by internal name
+ * @param service List service
+ * @param original Values of the item being edited, keyed by entity property name
  */
 async function buildPayload(
   fields: IListField[],
   values: Record<string, any>,
-  service: AnnouncementListService
+  service: AnnouncementListService,
+  original?: Record<string, any>
 ): Promise<Record<string, any>> {
   const payload: Record<string, any> = {}
+  const userId = (person: { key: string; id?: number }) =>
+    person.id ? Promise.resolve(person.id) : service.ensureUserId(person.key)
   for (const field of fields) {
     const value = values[field.internalName]
     const name = field.entityPropertyName
+    const filled = hasValue(field, value)
+    /** Sets the field, or clears it when an existing item is edited */
+    const set = (key: string, filledValue: () => any, emptyValue: any = null) => {
+      if (filled) payload[key] = filledValue()
+      else if (original) payload[key] = emptyValue
+    }
     switch (field.type) {
       case 'Boolean':
         payload[name] = value === true
@@ -46,34 +63,33 @@ async function buildPayload(
       case 'DateTime': {
         const iso = dateInputValueToIso(value)
         if (iso) payload[name] = iso
+        else if (original) payload[name] = null
         break
       }
       case 'Number':
       case 'Currency':
-        if (hasValue(field, value)) payload[name] = Number(value)
+        set(name, () => Number(value))
         break
       case 'URL':
-        if (hasValue(field, value)) payload[name] = { Url: value, Description: value }
+        // The description of an unchanged link is kept
+        set(name, () => ({
+          Url: value,
+          Description: original?.[name]?.Url === value ? original[name].Description : value
+        }))
         break
       case 'MultiChoice':
-        if (hasValue(field, value)) payload[name] = value
+        set(name, () => value, [])
         break
-      case 'User': {
-        if (hasValue(field, value)) {
-          payload[`${name}Id`] = await service.ensureUserId(value[0].key)
-        }
+      case 'User':
+        if (filled) payload[`${name}Id`] = await userId(value[0])
+        else if (original) payload[`${name}Id`] = null
         break
-      }
-      case 'UserMulti': {
-        if (hasValue(field, value)) {
-          payload[`${name}Id`] = await Promise.all(
-            value.map((person: { key: string }) => service.ensureUserId(person.key))
-          )
-        }
+      case 'UserMulti':
+        if (filled) payload[`${name}Id`] = await Promise.all(value.map(userId))
+        else if (original) payload[`${name}Id`] = []
         break
-      }
       default:
-        if (hasValue(field, value)) payload[name] = value
+        set(name, () => value)
     }
   }
   return payload
@@ -81,13 +97,15 @@ async function buildPayload(
 
 /**
  * Form logic for `CreateAnnouncementDialog`: values, validation and save.
+ * Creates a new announcement, or updates the one given in `announcement`.
  *
  * @param open Whether the dialog is open (the form is reset when it opens)
  * @param allFields All list fields
  * @param hiddenFormFields Fields hidden in the web part properties (`false` = hidden)
  * @param alwaysNotified Levels the notification add-on always notifies about
  * @param service List service
- * @param onCreated Called after the item has been created
+ * @param onSaved Called after the item has been created or updated
+ * @param announcement The announcement to edit. Without it a new one is created.
  */
 export function useCreateAnnouncementForm(
   open: boolean,
@@ -95,7 +113,8 @@ export function useCreateAnnouncementForm(
   hiddenFormFields: Record<string, boolean> | undefined,
   alwaysNotified: Severity[],
   service: AnnouncementListService,
-  onCreated: () => void
+  onSaved: () => void,
+  announcement?: IAnnouncement
 ) {
   const formFields = allFields.filter(
     (field) =>
@@ -118,17 +137,20 @@ export function useCreateAnnouncementForm(
     if (!open) return
     const initial: Record<string, any> = {}
     formFields.forEach((field) => {
-      initial[field.internalName] = getInitialFormValue(field)
+      initial[field.internalName] = announcement
+        ? getFormValueFromItem(field, announcement.values[field.entityPropertyName])
+        : getInitialFormValue(field)
     })
-    bannerTouched.current = false
-    if (hasBannerField && isCriticalValue(initial[SEVERITY_FIELD])) {
+    // An existing announcement keeps its own «Vis som banner»
+    bannerTouched.current = !!announcement
+    if (!announcement && hasBannerField && isCriticalValue(initial[SEVERITY_FIELD])) {
       initial[SHOW_AS_BANNER_FIELD] = true
     }
     setValues(initial)
     setErrors({})
     setSaveError(null)
     setSaving(false)
-  }, [open, allFields])
+  }, [open, allFields, announcement?.id])
 
   /**
    * «Varsle i Teams» is selected and locked while the chosen level is one of
@@ -184,9 +206,10 @@ export function useCreateAnnouncementForm(
     setSaving(true)
     setSaveError(null)
     try {
-      const payload = await buildPayload(formFields, shownValues, service)
-      await service.addItem(payload)
-      onCreated()
+      const payload = await buildPayload(formFields, shownValues, service, announcement?.values)
+      if (announcement) await service.updateItem(announcement.id, payload)
+      else await service.addItem(payload)
+      onSaved()
     } catch {
       setSaveError(strings.CreateErrorText)
     } finally {
