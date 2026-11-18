@@ -10,6 +10,7 @@ import { statusText } from '../StatusBadge'
 import { AnnouncementListService } from '../../services/AnnouncementListService'
 import { isAlwaysNotified, Severity, Status, statusChoiceValue } from '../../model'
 import {
+  END_DATE_FIELD,
   NOTIFY_AGAIN_FIELD,
   NOTIFY_TEAMS_FIELD,
   SEVERITY_FIELD,
@@ -107,6 +108,37 @@ export const AnnouncementDialogs: FC<IAnnouncementDialogsProps> = ({
   }
 
   /**
+   * What «Avslutt melding» does: an announcement that is shown now gets its
+   * end date set to now, so it is no longer shown, and it is set to resolved
+   * if it is not already. One whose period is over is only set to resolved.
+   * An upcoming one cannot be ended (its start date is edited instead).
+   */
+  const endEffect = (item: IAnnouncement) => {
+    const setsEndDate = item.period === 'active'
+    const setsResolved = !!statusField && item.status !== 'resolved' && item.period !== 'upcoming'
+    return setsEndDate || setsResolved ? { setsResolved, setsEndDate } : undefined
+  }
+
+  /**
+   * Ends the announcement (see `endEffect`), closes the dialog and reads the
+   * announcements again
+   */
+  const endAnnouncement = async (item: IAnnouncement): Promise<void> => {
+    const effect = endEffect(item)
+    const values: Record<string, any> = {}
+    if (effect?.setsResolved) {
+      values[statusField.entityPropertyName] = statusChoiceValue('resolved', statusField.choices)
+    }
+    if (effect?.setsEndDate) {
+      values[field(END_DATE_FIELD)?.entityPropertyName ?? END_DATE_FIELD] = new Date().toISOString()
+    }
+    await editor.service.updateItem(item.id, values)
+    onClose()
+    toast(strings.Editor.EndSuccessText)
+    await refresh()
+  }
+
+  /**
    * Saves «Varsle i Teams» or «Varsle på nytt». The dialog stays open.
    */
   const setNotification = async (
@@ -141,6 +173,8 @@ export const AnnouncementDialogs: FC<IAnnouncementDialogsProps> = ({
             announcement={announcement}
             showStatusActions={!!statusField}
             onSetStatus={setStatus}
+            endEffect={endEffect(announcement)}
+            onEnd={endAnnouncement}
             onEdit={edit}
             notifyTeamsField={field(NOTIFY_TEAMS_FIELD)}
             notifyAgainField={field(NOTIFY_AGAIN_FIELD)}
