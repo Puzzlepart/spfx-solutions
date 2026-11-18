@@ -41,6 +41,18 @@ declare interface IAnnouncementStrings {
     StatusChangedText: string
     StatusChangeErrorText: string
   }
+  Periods: {
+    Active: string
+    Upcoming: string
+    Past: string
+  }
+  Table: {
+    Title: string
+    Status: string
+    Level: string
+    From: string
+    To: string
+  }
   Editor: {
     SectionTitle: string
   }

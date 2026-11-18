@@ -45,12 +45,21 @@ Announcements are sorted: pinned first, then status (*Pågår*, *Planlagt*, *Lø
 | Generelt | Aktiver målgruppeangivelse | Filter announcements on the list's audience targeting column. |
 | Felter i detaljvisning | One toggle per list field | Which fields are shown in the details dialog (on click). The toggles are read from the default content type of the list, so columns added to the list show up here. Title is always shown. Defaults: content, start/end date, affected systems, consequences and responsible. «Varslet i Teams» has no toggle: it is shown under **Handlinger og varsling**, for users who may edit the list. |
 | Felter i skjema for ny driftsmelding | One toggle per editable list field | Which fields are shown in the form for new announcements. Required fields and fields hidden in the list cannot be changed here. «Varsle i Teams» (notification add-on) is shown when the list has the column. |
+| Oversikt og arkiv | Vis kommende driftsmeldinger | Also list announcements whose start date has not passed. |
+| Oversikt og arkiv | Vis tidligere driftsmeldinger | Also list announcements whose end date has passed (the 200 newest by start date). |
+| Oversikt og arkiv | Kompakt tabellvisning | List the announcements as a table with title, status, level and display period, without the content. A click on a row opens the details. |
 | Skjul/vis | Skjul header | Hide the header (the button for new announcements is still shown). |
 | Skjul/vis | Skjul knapp for ny driftsmelding | Hide the **New announcement** button for everyone. |
 
 ### Registering announcements from the web part
 
 The **New announcement** button is shown only to users who have the *Add items* permission on the list (checked with `currentUserHasPermissions`), and only if it is not hidden in the web part properties. It opens a dialog with a form generated from the fields of the list's default content type (fields that are hidden in the column or in the content type, read-only or have `ShowInNewForm="FALSE"` on the site or list column are left out). Supported column types: single/multiple lines of text, choice (single and multi), date/time, yes/no, person or group (single and multi), number, currency and hyperlink. Other column types are not shown in the form and get their default value from the list. Required columns are validated before saving. Date columns get a picker with a calendar, the time of day (for *Date & Time* columns) and an **OK** button that closes it. Rich text columns (such as *Innhold*) get a small formatting toolbar (bold, italic, underline, lists, link) and are stored as HTML, like in the list form. «Vis som banner» follows the level until the user changes it: on for *Kritisk*, off otherwise. `PzlNotifiedAt` and `PzlNotifyAgain` (notification add-on) are never shown in the form; «Varsle på nytt» is set from the details dialog.
+
+### Overview and archive
+
+The web part normally shows only the announcements that apply now. With **Vis kommende driftsmeldinger** and/or **Vis tidligere driftsmeldinger** it also lists announcements outside their display period, grouped under the headings *Aktive*, *Kommende* and *Tidligere*. **Kompakt tabellvisning** replaces the cards with a table. Together they make an overview page for editors: everything in the list, with the same details dialog and **Handlinger og varsling** as elsewhere. The banner always shows active announcements only.
+
+The install script creates such a page, see [Information page](#information-page).
 
 ### Quick actions
 
@@ -163,6 +172,7 @@ Application customizers are not rendered in the Viva Connections mobile app, and
 | Cleanup | Removes the 1.x `AnnouncementDeepLink` custom action from the list site and the notification site. |
 | Banner | With `-BannerSiteUrls`, `-BannerHubSiteUrls` or `-BannerEverywhere` (and `-BannerTargetAudience`): creates or updates the banner's row in Tenant Wide Extensions. Properties not given, such as `popoverFields`, are kept. |
 | Teams notifications | With `-EnableTeamsNotifications`: uploads `pzl-ext-notification.sppkg` and applies `AnnouncementFields.xml` (list site), `NotificationConfig.xml` and `DeepLinkCustomAction.xml` (`-NotificationSiteUrl`, default the list site). The Azure, Entra and Teams part is installed with `Pzl.Ext.Notification/scripts/Install-Notification.ps1`, see [Pzl.Ext.Notification](../Pzl.Ext.Notification/README.md#installer-med-skript). |
+| Information page | Creates `SitePages/Driftsmeldinger.aspx` on the list site, unless `-SkipInfoPage` is given. An existing page is left as it is; `-OverwriteInfoPage` deletes and creates it again. `-InfoPageName` gives another file name. |
 
 The script ends with the manual steps that are left, such as adding the web part to a page and setting **Område for driftsmeldinger** on other sites.
 
@@ -241,6 +251,16 @@ npm run package
 
 The package is written to `sharepoint/solution/pzl-announcement.sppkg`.
 
+### Information page
+
+The script creates the page **Driftsmeldinger** (`SitePages/Driftsmeldinger.aspx`) on the site with the list. It is both a guide and an editor's overview:
+
+1. The web part with **Vis kommende driftsmeldinger**, **Vis tidligere driftsmeldinger** and **Kompakt tabellvisning** turned on: every announcement in the list.
+2. A guide in Norwegian to how the solution works: where announcements are shown, levels, status, the display period, how to register and follow up an announcement, and who can do what. The text is in `Templates/InfoPage/Standard.html`.
+3. With `-EnableTeamsNotifications`: a section on Teams notifications (when a notification is sent, «Varsle på nytt», what the notification says and who gets it), from `Templates/InfoPage/Varsling.html`.
+
+The page is published but not added to the navigation. It is an ordinary page: edit the text to fit the organisation. Running the script again does not touch an existing page. To get the notification section on a page created without it, run the script with `-OverwriteInfoPage` (changes made by hand are lost) or copy the text from the HTML file.
+
 ## Changelog
 
 ### 2.1.0
@@ -256,6 +276,8 @@ The package is written to `sharepoint/solution/pzl-announcement.sppkg`.
 * A change made in the web part is shown in the banner on the same page at once, and the other way round.
 * Section backgrounds: on a section with a dark background the header, the info icon, the **New announcement** button and the "no announcements" text use the section's text colour. They were dark on dark.
 * The form for new and edited announcements has two columns on wide screens: the title and text fields to the left, and level, status, dates, people and switches to the right. One column below 720px.
+* New web part properties **Vis kommende driftsmeldinger**, **Vis tidligere driftsmeldinger** and **Kompakt tabellvisning**, for an overview page with every announcement in the list.
+* The install script creates the page **Driftsmeldinger** with that overview and a guide in Norwegian, with a section on Teams notifications when the add-on is installed.
 * The dialog shows the announcement's icon beside the title, with the same icon and colour as in the list and the banner.
 
 ### 2.0.0

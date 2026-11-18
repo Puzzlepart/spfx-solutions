@@ -42,3 +42,19 @@ export function formatShortDateTime(date: string | Date, fallback: string = ''):
   const pad = (n: number) => (n < 10 ? `0${n}` : `${n}`)
   return `${pad(d.getDate())}.${pad(d.getMonth() + 1)}. kl. ${pad(d.getHours())}:${pad(d.getMinutes())}`
 }
+
+/**
+ * Format date as `dd.mm.yy`, with ` hh:mm` when `includeTime`. Used in the
+ * compact table, where the columns are narrow.
+ *
+ * @param date Date string or object
+ * @param includeTime Include the time of day
+ */
+export function formatNumericDate(date: string | Date, includeTime: boolean = false): string {
+  if (!date) return ''
+  const d = typeof date === 'string' ? new Date(date) : date
+  if (isNaN(d.getTime())) return ''
+  const pad = (n: number) => (n < 10 ? `0${n}` : `${n}`)
+  const day = `${pad(d.getDate())}.${pad(d.getMonth() + 1)}.${pad(d.getFullYear() % 100)}`
+  return includeTime ? `${day} ${pad(d.getHours())}:${pad(d.getMinutes())}` : day
+}

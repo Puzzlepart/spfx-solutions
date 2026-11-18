@@ -10,7 +10,14 @@ import '@pnp/sp/site-users/web'
 import strings from 'AnnouncementStrings'
 import { IAnnouncement, IListField } from '../components/types'
 import { OPTIONAL_FIELDS } from '../constants'
-import { compareAnnouncements, toSeverity, toStatus } from '../model'
+import {
+  compareWithPeriods,
+  IPeriodOptions,
+  periodFilter,
+  toPeriod,
+  toSeverity,
+  toStatus
+} from '../model'
 import type { AnnouncementListService } from './AnnouncementListService'
 
 /**
@@ -44,29 +51,41 @@ function buildQuery(fields: IListField[], targetAudience: boolean) {
 }
 
 /**
+ * The most items fetched when past or upcoming announcements are included
+ * (the newest by start date)
+ */
+export const ARCHIVE_LIMIT = 200
+
+/**
  * Fetches the active announcements (start date passed, end date not passed)
- * the current user may see, sorted with `compareAnnouncements`. Shared by the web part and the
+ * the current user may see, and with `periods` also past and upcoming ones.
+ * Sorted with `compareWithPeriods`. Shared by the web part and the
  * AnnouncementBanner application customizer.
  *
  * @param service List service
  * @param context Component context (for the Graph client)
  * @param fields Fields to select (see `AnnouncementListService.getFields`)
  * @param targetAudience Filter on the list's audience targeting column
+ * @param periods Periods to include besides the active one
  */
 export async function fetchAnnouncements(
   service: AnnouncementListService,
   context: BaseComponentContext,
   fields: IListField[],
-  targetAudience: boolean
+  targetAudience: boolean,
+  periods: IPeriodOptions = {}
 ): Promise<IAnnouncement[]> {
   const sp = service.sp
 
   const fetchItems = (selectFields: IListField[]): Promise<any[]> => {
     const now = new Date().toISOString()
     const { select, expand } = buildQuery(selectFields, targetAudience)
-    let query = service.list.items
-      .select(...select)
-      .filter(`PzlStartDate le datetime'${now}' and PzlEndDate ge datetime'${now}'`)
+    let query = service.list.items.select(...select)
+    const filter = periodFilter(now, periods)
+    if (filter) query = query.filter(filter)
+    if (periods.past || periods.upcoming) {
+      query = query.orderBy('PzlStartDate', false).top(ARCHIVE_LIMIT)
+    }
     if (expand.length > 0) query = query.expand(...expand)
     return query()
   }
@@ -107,6 +126,8 @@ export async function fetchAnnouncements(
           severity: toSeverity(item.PzlSeverity),
           status: toStatus(item.PzlStatus),
           startDate: item.PzlStartDate ?? undefined,
+          endDate: item.PzlEndDate ?? undefined,
+          period: toPeriod(item.PzlStartDate, item.PzlEndDate),
           content: item.PzlContent,
           hasAccess,
           pinned: item.PzlPinned === true,
@@ -116,7 +137,7 @@ export async function fetchAnnouncements(
         }
       })
     )
-    return announcements.filter((announcement) => announcement.hasAccess).sort(compareAnnouncements)
+    return announcements.filter((announcement) => announcement.hasAccess).sort(compareWithPeriods)
   } catch {
     throw new Error(strings.AnnouncementFetchErrorText)
   }

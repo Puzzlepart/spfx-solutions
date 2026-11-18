@@ -114,6 +114,63 @@ export function isCriticalValue(value: string | null | undefined): boolean {
   return !!value && toSeverity(value) === 'critical'
 }
 
+/**
+ * Where an announcement is in its display period (`PzlStartDate`–`PzlEndDate`):
+ * not shown yet, shown now, or no longer shown
+ */
+export type Period = 'active' | 'upcoming' | 'past'
+
+/**
+ * The period of an announcement at a point in time. An announcement without
+ * dates counts as active.
+ *
+ * @param startDate Start date (ISO)
+ * @param endDate End date (ISO)
+ * @param now The time to compare with
+ */
+export function toPeriod(
+  startDate: string | null | undefined,
+  endDate: string | null | undefined,
+  now: Date = new Date()
+): Period {
+  const start = Date.parse(startDate ?? '')
+  const end = Date.parse(endDate ?? '')
+  if (!isNaN(start) && start > now.getTime()) return 'upcoming'
+  if (!isNaN(end) && end < now.getTime()) return 'past'
+  return 'active'
+}
+
+/**
+ * Which announcements to fetch besides the active ones
+ */
+export interface IPeriodOptions {
+  /**
+   * Announcements whose end date has passed
+   */
+  past?: boolean
+  /**
+   * Announcements whose start date has not passed
+   */
+  upcoming?: boolean
+}
+
+/**
+ * OData filter on the display period
+ *
+ * @param now Now, ISO
+ * @param periods Periods besides the active one
+ */
+export function periodFilter(now: string, periods: IPeriodOptions = {}): string {
+  const started = `PzlStartDate le datetime'${now}'`
+  const notEnded = `PzlEndDate ge datetime'${now}'`
+  if (periods.past && periods.upcoming) return ''
+  if (periods.past) return started
+  if (periods.upcoming) return notEnded
+  return `${started} and ${notEnded}`
+}
+
+const PERIOD_ORDER: Record<Period, number> = { active: 0, upcoming: 1, past: 2 }
+
 const STATUS_ORDER: Record<Status, number> = { ongoing: 0, planned: 1, resolved: 2 }
 
 const SEVERITY_ORDER: Record<Severity, number> = { critical: 0, warning: 1, info: 2 }
@@ -144,4 +201,20 @@ export function compareAnnouncements(
  */
 export function statusChoiceValue(status: Status, choices?: string[]): string {
   return choices?.find((choice) => toStatus(choice) === status) ?? STATUS_VALUES[status]
+}
+
+/**
+ * Sort order when upcoming and past announcements are shown too: active first
+ * (sorted with `compareAnnouncements`), then upcoming with the one that starts
+ * first on top, then past with the one that ended last on top.
+ */
+export function compareWithPeriods(
+  a: Parameters<typeof compareAnnouncements>[0] & { period: Period; endDate?: string },
+  b: Parameters<typeof compareAnnouncements>[0] & { period: Period; endDate?: string }
+): number {
+  const time = (value?: string) => Date.parse(value ?? '') || 0
+  if (a.period !== b.period) return PERIOD_ORDER[a.period] - PERIOD_ORDER[b.period]
+  if (a.period === 'upcoming') return time(a.startDate) - time(b.startDate)
+  if (a.period === 'past') return time(b.endDate) - time(a.endDate)
+  return compareAnnouncements(a, b)
 }

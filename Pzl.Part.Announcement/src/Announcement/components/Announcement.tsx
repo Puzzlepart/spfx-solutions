@@ -23,6 +23,9 @@ import { AnnouncementDialogs } from './AnnouncementDialogs'
 import { getSectionTheme, SectionTheme } from './SectionTheme'
 import { CreateAnnouncementDialog } from './CreateAnnouncementDialog'
 import { getIntent } from './intent'
+import { AnnouncementTable } from './AnnouncementTable'
+import { IAnnouncement } from './types'
+import { Period } from '../model'
 import { notifyAnnouncementChanged } from '../util/announcementChanged'
 import { format } from '@fluentui/react'
 import strings from 'AnnouncementStrings'
@@ -66,6 +69,60 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
       // Ignore, the list is shown as it was
     })
   }
+
+  /**
+   * An announcement as a card with its content
+   */
+  const renderCard = (announcement: IAnnouncement) => (
+    <div
+      key={announcement.id}
+      className={styles.message}
+      ref={setAnnouncementRef(announcement.id)}
+      data-announcement-id={announcement.id}
+      role='button'
+      tabIndex={0}
+      aria-haspopup='dialog'
+      aria-label={format(strings.Aria.OpenDetails, announcement.title)}
+      onClick={(event) => {
+        // A link in the content opens the link, not the dialog
+        if ((event.target as HTMLElement).closest?.('a')) return
+        setOpenAnnouncementId(announcement.id)
+      }}
+      onKeyDown={(event) => {
+        if (event.target !== event.currentTarget) return
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
+          setOpenAnnouncementId(announcement.id)
+        }
+      }}>
+      <UserMessage
+        title={announcement.title}
+        text={announcement.content}
+        intent={getIntent(announcement)}
+        pinned={announcement.pinned}
+        pinnedTitle={strings.Aria.PinnedTitle}
+        status={announcement.status}
+      />
+    </div>
+  )
+
+  /**
+   * The announcements by period, in the order they are listed. Headings are
+   * shown only when the web part lists more than the active ones.
+   */
+  const showPeriods = !!props.showPast || !!props.showUpcoming
+  const groups = (
+    [
+      { period: 'active', label: strings.Periods.Active },
+      { period: 'upcoming', label: strings.Periods.Upcoming },
+      { period: 'past', label: strings.Periods.Past }
+    ] as { period: Period; label: string }[]
+  )
+    .map((group) => ({
+      ...group,
+      announcements: state.announcements.filter((a) => a.period === group.period)
+    }))
+    .filter((group) => group.announcements.length > 0)
 
   if (state.loading) {
     return (
@@ -124,37 +181,27 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                 } as React.CSSProperties
               }>
               {state.announcements.length > 0 ? (
-                state.announcements.map((announcement) => (
-                  <div
-                    key={announcement.id}
-                    className={styles.message}
-                    ref={setAnnouncementRef(announcement.id)}
-                    data-announcement-id={announcement.id}
-                    role='button'
-                    tabIndex={0}
-                    aria-haspopup='dialog'
-                    aria-label={format(strings.Aria.OpenDetails, announcement.title)}
-                    onClick={(event) => {
-                      // A link in the content opens the link, not the dialog
-                      if ((event.target as HTMLElement).closest?.('a')) return
-                      setOpenAnnouncementId(announcement.id)
-                    }}
-                    onKeyDown={(event) => {
-                      if (event.target !== event.currentTarget) return
-                      if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault()
-                        setOpenAnnouncementId(announcement.id)
-                      }
-                    }}>
-                    <UserMessage
-                      title={announcement.title}
-                      text={announcement.content}
-                      intent={getIntent(announcement)}
-                      pinned={announcement.pinned}
-                      pinnedTitle={strings.Aria.PinnedTitle}
-                      status={announcement.status}
-                    />
-                  </div>
+                groups.map((group) => (
+                  <React.Fragment key={group.period}>
+                    {showPeriods && (
+                      <SectionTheme themeVariant={props.themeVariant}>
+                        <Text as='h3' weight='semibold' size={400} block className={styles.period}>
+                          {group.label} ({group.announcements.length})
+                        </Text>
+                      </SectionTheme>
+                    )}
+                    {props.compactTable ? (
+                      <AnnouncementTable
+                        announcements={group.announcements}
+                        fields={state.fields}
+                        label={group.label}
+                        onOpen={(announcement) => setOpenAnnouncementId(announcement.id)}
+                        setRowRef={setAnnouncementRef}
+                      />
+                    ) : (
+                      group.announcements.map(renderCard)
+                    )}
+                  </React.Fragment>
                 ))
               ) : (
                 <SectionTheme themeVariant={props.themeVariant}>
