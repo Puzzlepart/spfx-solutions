@@ -1,7 +1,26 @@
-.form {
+.formSingle,
+.column {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  min-width: 0;
+}
+
+// Content fields to the left, metadata to the right
+.form {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  gap: 12px 32px;
+  align-items: start;
+
+  .saveError {
+    grid-column: 1 / -1;
+  }
+
+  // One column when there is not room for two
+  @media (max-width: 720px) {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .peoplePicker {
@@ -21,7 +40,7 @@
   gap: 4px;
 
   .editor {
-    min-height: 120px;
+    min-height: 160px;
     padding: 8px 12px;
     box-sizing: border-box;
     border: 1px solid var(--colorNeutralStroke1);
