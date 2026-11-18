@@ -23,6 +23,11 @@ import { IAnnouncement, IListField } from '../types'
 import { NotificationSettings } from '../NotificationSettings'
 import styles from './EditorSection.module.scss'
 
+/**
+ * Width of the confirmation for «Avslutt melding» (the details dialog is 600px)
+ */
+const CONFIRM_MAX_WIDTH = 440
+
 export interface IEditorSectionProps {
   announcement: IAnnouncement
   /**
@@ -170,7 +175,11 @@ export const EditorSection: FC<IEditorSectionProps> = (props) => {
         modalType='alert'
         open={confirmEnd}
         onOpenChange={(_, data) => !ending && setConfirmEnd(data.open)}>
-        <DialogSurface>
+        <DialogSurface
+          // Narrower than the details dialog behind it, which is dimmed, so the
+          // confirmation reads as a dialog of its own
+          style={{ maxWidth: CONFIRM_MAX_WIDTH }}
+          backdrop={{ style: { backgroundColor: 'rgba(0, 0, 0, 0.4)' } }}>
           <DialogBody>
             <DialogTitle>{strings.Editor.EndDialogTitle}</DialogTitle>
             <DialogContent>
@@ -188,7 +197,7 @@ export const EditorSection: FC<IEditorSectionProps> = (props) => {
                 </MessageBar>
               )}
             </DialogContent>
-            <DialogActions>
+            <DialogActions className={styles.confirmActions}>
               <Button appearance='secondary' disabled={ending} onClick={() => setConfirmEnd(false)}>
                 {strings.CancelButtonText}
               </Button>

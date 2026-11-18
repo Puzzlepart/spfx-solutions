@@ -21,3 +21,8 @@
 .confirmText {
   margin: 0 0 12px;
 }
+
+// Keeps «Avslutt melding» on one line in the narrow confirmation
+.confirmActions button {
+  white-space: nowrap;
+}
