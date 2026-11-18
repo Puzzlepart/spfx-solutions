@@ -42,6 +42,18 @@ define([], function () {
       StatusChangedText: 'Driftsmeldingen er markert som {0}.',
       StatusChangeErrorText: 'Kunne ikke endre status. Prøv igjen.'
     },
+    Periods: {
+      Active: 'Aktive',
+      Upcoming: 'Kommende',
+      Past: 'Tidligere'
+    },
+    Table: {
+      Title: 'Tittel',
+      Status: 'Status',
+      Level: 'Nivå',
+      From: 'Vises fra',
+      To: 'Vises til'
+    },
     Editor: {
       SectionTitle: 'Handlinger og varsling'
     },

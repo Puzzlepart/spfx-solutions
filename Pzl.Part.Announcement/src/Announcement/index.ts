@@ -255,6 +255,32 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
               ]
             },
             {
+              groupName: 'Oversikt og arkiv',
+              groupFields: [
+                PropertyPaneLabel('archiveDescription', {
+                  text: 'Webdelen viser vanligvis bare driftsmeldingene som gjelder nå. Slå på valgene under for en oversiktsside med alle driftsmeldinger.'
+                }),
+                PropertyPaneToggle('showUpcoming', {
+                  label: 'Vis kommende driftsmeldinger',
+                  onText: 'På',
+                  offText: 'Av'
+                }),
+                PropertyPaneToggle('showPast', {
+                  label: 'Vis tidligere driftsmeldinger',
+                  onText: 'På',
+                  offText: 'Av'
+                }),
+                PropertyPaneToggle('compactTable', {
+                  label: 'Kompakt tabellvisning',
+                  onText: 'På',
+                  offText: 'Av'
+                }),
+                PropertyPaneLabel('compactTableDescription', {
+                  text: 'Tabellen viser tittel, status, nivå og visningsperiode, uten beskrivelsen. Klikk på en rad åpner detaljene.'
+                })
+              ]
+            },
+            {
               groupName: 'Skjul/vis',
               groupFields: [
                 PropertyPaneToggle('hideHeader', {

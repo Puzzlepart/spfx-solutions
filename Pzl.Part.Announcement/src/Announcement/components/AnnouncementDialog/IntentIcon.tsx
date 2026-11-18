@@ -26,14 +26,19 @@ const ICONS: Record<MessageBarIntent, typeof InfoFilled> = {
 
 export interface IIntentIconProps {
   announcement: IAnnouncement
+  /**
+   * Size in pixels. Defaults to the size beside the dialog's title (24).
+   */
+  size?: number
 }
 
 /**
- * Icon for the level of an announcement, beside the dialog's title: the same
+ * Icon for the level of an announcement, beside the dialog's title and in the
+ * compact table: the same
  * icon and colour as in the list. A resolved announcement gets the green check
  * mark and a planned one the calendar, as in the list.
  */
-export const IntentIcon: FC<IIntentIconProps> = ({ announcement }) => {
+export const IntentIcon: FC<IIntentIconProps> = ({ announcement, size }) => {
   const intent = getIntent(announcement)
   const Icon = announcement.status === 'planned' ? CalendarClockRegular : ICONS[intent]
   // What the icon says: the status when it decides the icon, otherwise the level
@@ -44,6 +49,7 @@ export const IntentIcon: FC<IIntentIconProps> = ({ announcement }) => {
   return (
     <Icon
       className={`${styles.intentIcon} ${styles[intent]}`}
+      style={size ? { fontSize: size, marginTop: 0 } : undefined}
       title={label || undefined}
       aria-label={label || undefined}
       aria-hidden={label ? undefined : true}

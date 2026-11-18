@@ -1,11 +1,15 @@
 import {
   compareAnnouncements,
+  compareWithPeriods,
   isAlwaysNotified,
   isCriticalValue,
+  Period,
+  periodFilter,
   Severity,
   Status,
   statusChoiceValue,
   toKnownSeverity,
+  toPeriod,
   toSeverity,
   toStatus
 } from './model'
@@ -117,5 +121,65 @@ describe('toKnownSeverity', () => {
     expect(toKnownSeverity('Varsel')).toBe('critical')
     expect(toKnownSeverity('Alle')).toBeNull()
     expect(toKnownSeverity(null)).toBeNull()
+  })
+})
+
+describe('toPeriod', () => {
+  const now = new Date('2026-11-18T12:00:00Z')
+
+  it('tells upcoming, active and past apart on the display period', () => {
+    expect(toPeriod('2026-11-19T00:00:00Z', '2026-11-20T00:00:00Z', now)).toBe('upcoming')
+    expect(toPeriod('2026-11-17T00:00:00Z', '2026-11-20T00:00:00Z', now)).toBe('active')
+    expect(toPeriod('2026-11-10T00:00:00Z', '2026-11-17T00:00:00Z', now)).toBe('past')
+  })
+
+  it('counts an announcement without dates as active', () => {
+    expect(toPeriod(null, undefined, now)).toBe('active')
+  })
+})
+
+describe('compareWithPeriods', () => {
+  const item = (id: string, period: Period, startDate: string, endDate: string) => ({
+    id,
+    period,
+    startDate,
+    endDate,
+    pinned: false,
+    status: 'ongoing' as Status,
+    severity: 'info' as Severity
+  })
+
+  it('lists active first, then upcoming by start, then past by latest end', () => {
+    const sorted = [
+      item('past-old', 'past', '2026-01-01', '2026-01-02'),
+      item('upcoming-late', 'upcoming', '2026-12-10', '2026-12-11'),
+      item('active', 'active', '2026-11-17', '2026-11-20'),
+      item('past-new', 'past', '2026-11-01', '2026-11-02'),
+      item('upcoming-soon', 'upcoming', '2026-11-25', '2026-11-26')
+    ].sort(compareWithPeriods)
+    expect(sorted.map((a) => a.id)).toEqual([
+      'active',
+      'upcoming-soon',
+      'upcoming-late',
+      'past-new',
+      'past-old'
+    ])
+  })
+})
+
+describe('periodFilter', () => {
+  const now = '2026-11-18T12:00:00.000Z'
+  const started = `PzlStartDate le datetime'${now}'`
+  const notEnded = `PzlEndDate ge datetime'${now}'`
+
+  it('fetches only active announcements by default', () => {
+    expect(periodFilter(now)).toBe(`${started} and ${notEnded}`)
+    expect(periodFilter(now, {})).toBe(`${started} and ${notEnded}`)
+  })
+
+  it('drops the end date limit for past and the start date limit for upcoming', () => {
+    expect(periodFilter(now, { past: true })).toBe(started)
+    expect(periodFilter(now, { upcoming: true })).toBe(notEnded)
+    expect(periodFilter(now, { past: true, upcoming: true })).toBe('')
   })
 })

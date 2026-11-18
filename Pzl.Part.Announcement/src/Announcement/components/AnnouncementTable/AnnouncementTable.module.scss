@@ -1,0 +1,46 @@
+// The table has its own light surface, like the cards, so it reads the same on
+// any page section background
+.table {
+  width: 100%;
+  overflow-x: auto;
+  background-color: var(--colorNeutralBackground1);
+  border: 1px solid var(--colorNeutralStroke2);
+  border-radius: var(--borderRadiusMedium);
+
+  .row {
+    cursor: pointer;
+  }
+
+  // The title takes the room that is left; below this width the table scrolls sideways
+  .grid {
+    min-width: 640px;
+  }
+
+  .narrow,
+  .dateColumn {
+    box-sizing: border-box;
+  }
+
+  .narrow {
+    width: 104px;
+  }
+
+  .dateColumn {
+    width: 128px;
+  }
+
+  .title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+  }
+
+  .pin {
+    flex-shrink: 0;
+  }
+
+  .date {
+    white-space: nowrap;
+  }
+}

@@ -2,7 +2,7 @@ import { SPUser } from '@microsoft/sp-page-context'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
 import type { IReadonlyTheme } from '@microsoft/sp-component-base'
 import type { AnnouncementListService } from '../services/AnnouncementListService'
-import type { Severity, Status } from '../model'
+import type { Period, Severity, Status } from '../model'
 
 export interface IAnnouncementProps {
   // General
@@ -33,6 +33,20 @@ export interface IAnnouncementProps {
    * allows it. Required fields are always shown.
    */
   formFields: Record<string, boolean>
+
+  /**
+   * Also list announcements whose display period is over
+   */
+  showPast?: boolean
+  /**
+   * Also list announcements whose display period has not started
+   */
+  showUpcoming?: boolean
+  /**
+   * List the announcements as a compact table (title, status, level and
+   * display period) instead of cards with the content
+   */
+  compactTable?: boolean
 
   // Hide/show
   hideHeader: boolean
@@ -100,6 +114,15 @@ export interface IAnnouncement {
    * Start date (`PzlStartDate`), ISO string. Used for sorting.
    */
   startDate?: string
+  /**
+   * End date (`PzlEndDate`), ISO string
+   */
+  endDate?: string
+  /**
+   * Whether the announcement is shown now, later or no longer. The web part
+   * lists other than active ones only with «Vis tidligere»/«Vis kommende».
+   */
+  period: Period
   content: string
   hasAccess?: boolean
   /**

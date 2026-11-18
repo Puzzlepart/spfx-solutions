@@ -55,9 +55,9 @@ export const useAnnouncement = (props: IAnnouncementProps) => {
   /**
    * Refs to the announcement elements, used to scroll the focused one into view
    */
-  const announcementRefs = useRef<Record<string, HTMLDivElement>>({})
+  const announcementRefs = useRef<Record<string, HTMLElement>>({})
 
-  const setAnnouncementRef = (id: string) => (element: HTMLDivElement) => {
+  const setAnnouncementRef = (id: string) => (element: HTMLElement) => {
     announcementRefs.current[id] = element
   }
 

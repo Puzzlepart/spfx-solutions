@@ -44,7 +44,8 @@ export function useAnnouncementDataFetch(
         service,
         props.context,
         fields,
-        props.targetAudience
+        props.targetAudience,
+        { past: props.showPast, upcoming: props.showUpcoming }
       )
       setState({ announcements, loading: false })
     } catch (error) {
@@ -55,9 +56,10 @@ export function useAnnouncementDataFetch(
     }
   }
 
+  // Read again when the periods to list are changed in the property pane
   useEffect(() => {
     fetchData()
-  }, [])
+  }, [props.showPast, props.showUpcoming])
 
   return { refresh: fetchData }
 }
