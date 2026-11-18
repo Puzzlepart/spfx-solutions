@@ -91,8 +91,8 @@ export const useAnnouncement = (props: IAnnouncementProps) => {
   const showCreateButton = state.canCreate && !props.hideCreateButton
 
   /**
-   * Quick actions (status, edit) are shown to users who may edit items, when
-   * the list has the status column
+   * The status buttons are shown to users who may edit items, when the list
+   * has the status column. «Rediger» is shown to all who may edit items.
    */
   const statusField = state.fields.find((field) => field.internalName === STATUS_FIELD)
   const showQuickActions = state.canEdit && !!statusField
@@ -155,8 +155,28 @@ export const useAnnouncement = (props: IAnnouncementProps) => {
     })
   }
 
-  const getEditFormUrl = (announcement: IAnnouncement) =>
-    props.service.getEditFormUrl(announcement.id)
+  /**
+   * The announcement shown in the form dialog: set when «Rediger» opened it,
+   * empty when it registers a new announcement
+   */
+  const [editAnnouncement, setEditAnnouncement] = useState<IAnnouncement>(null)
+
+  /**
+   * Opens the form for a new announcement
+   */
+  const openCreateDialog = () => {
+    setEditAnnouncement(null)
+    setCreateDialogOpen(true)
+  }
+
+  /**
+   * Closes the details dialog and opens the announcement in the form
+   */
+  const openEditDialog = (announcement: IAnnouncement) => {
+    setOpenAnnouncementId(null)
+    setEditAnnouncement(announcement)
+    setCreateDialogOpen(true)
+  }
 
   return {
     state,
@@ -172,7 +192,9 @@ export const useAnnouncement = (props: IAnnouncementProps) => {
     showCreateButton,
     showQuickActions,
     setStatus,
-    getEditFormUrl,
+    editAnnouncement,
+    openCreateDialog,
+    openEditDialog,
     showNotificationSettings,
     notifyTeamsField,
     notifyAgainField,

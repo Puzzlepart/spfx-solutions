@@ -15,6 +15,7 @@ import { Dismiss24Regular } from '@fluentui/react-icons'
 import strings from 'AnnouncementStrings'
 import { IAnnouncement, IListField } from '../types'
 import { AnnouncementDetails } from '../AnnouncementDetails'
+import { IntentIcon } from './IntentIcon'
 import styles from './AnnouncementDialog.module.scss'
 
 export interface IAnnouncementDialogProps {
@@ -73,7 +74,10 @@ export const AnnouncementDialog: FC<IAnnouncementDialogProps> = ({
                 />
               </DialogTrigger>
             }>
-            {announcement.title}
+            <span className={styles.title}>
+              <IntentIcon announcement={announcement} />
+              <span>{announcement.title}</span>
+            </span>
           </DialogTitle>
           <DialogContent className={styles.content}>
             <AnnouncementDetails announcement={announcement} fields={fields} />

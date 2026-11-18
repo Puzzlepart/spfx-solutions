@@ -56,7 +56,11 @@ The **New announcement** button is shown only to users who have the *Add items* 
 
 A click on an announcement (or Enter/Space) opens a modal dialog at the centre of the page with the details. The banner opens the same dialog.
 
-Users with the *Edit items* permission on the list get buttons at the bottom of the dialog: **Rediger** to the left, which opens the list's edit form and returns to the page, and to the right, after **Lukk**, **Marker som pågår** (planned announcements) and the primary button **Marker som løst** (planned and ongoing). The status is written with the list's own choice value, so a list provisioned in English gets *Resolved*. The quick actions are shown only when the list has the *Status* column, and only in the web part, not in the dialog opened from the banner.
+Users with the *Edit items* permission on the list get buttons at the bottom of the dialog: **Rediger** to the left, which opens the announcement in the same form as for new announcements (see [Editing](#editing)), and to the right, after **Lukk**, **Marker som pågår** (planned announcements) and the primary button **Marker som løst** (planned and ongoing). The status is written with the list's own choice value, so a list provisioned in English gets *Resolved*. The status buttons are shown only when the list has the *Status* column. The editor functions are only in the web part, not in the dialog opened from the banner.
+
+### Editing
+
+**Rediger** closes the details and opens the form with the announcement's values, in the same kind of dialog. The form has the fields chosen under **Felter i skjema for ny driftsmelding**; fields that are not in the form (for example column types the form does not support, and audience targeting) are left as they are on the item. A field that is emptied is cleared on the item. The list's own edit form is no longer used.
 
 ### Teams notifications in the dialogs
 
@@ -245,6 +249,8 @@ The package is written to `sharepoint/solution/pzl-announcement.sppkg`.
 * **Varsle i Teams** is selected and locked for the levels in «Nivåer som alltid varsles», read from *Varslingskonfigurasjon*. New web part property **Område for varslingskonfigurasjon** (`notificationConfigSiteUrl`).
 * Start and end date: a date picker with a calendar, the time of day and an **OK** button, instead of the browser's own picker.
 * A link in the content of an announcement opens the link, not the dialog.
+* **Rediger** edits the announcement in the web part's own form dialog instead of opening the list's edit form.
+* The dialog shows the announcement's icon beside the title, with the same icon and colour as in the list and the banner.
 
 ### 2.0.0
 

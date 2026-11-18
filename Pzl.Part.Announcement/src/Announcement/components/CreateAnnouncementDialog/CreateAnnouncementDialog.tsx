@@ -15,7 +15,7 @@ import {
 import { Dismiss24Regular } from '@fluentui/react-icons'
 import strings from 'AnnouncementStrings'
 import styles from './CreateAnnouncementDialog.module.scss'
-import { IListField } from '../types'
+import { IAnnouncement, IListField } from '../types'
 import { Severity } from '../../model'
 import { AnnouncementListService } from '../../services/AnnouncementListService'
 import { useCreateAnnouncementForm } from './useCreateAnnouncementForm'
@@ -39,14 +39,18 @@ export interface ICreateAnnouncementDialogProps {
   service: AnnouncementListService
   onOpenChange: (open: boolean) => void
   /**
-   * Called after the announcement has been created
+   * The announcement to edit. Without it the form registers a new one.
    */
-  onCreated: () => void
+  announcement?: IAnnouncement
+  /**
+   * Called after the announcement has been created or updated
+   */
+  onSaved: () => void
 }
 
 /**
- * Dialog for registering a new announcement. The form is built from the
- * fields of the announcement list.
+ * Dialog for registering a new announcement, or editing an existing one. The
+ * form is built from the fields of the announcement list.
  */
 export const CreateAnnouncementDialog: FC<ICreateAnnouncementDialogProps> = (props) => {
   const { formFields, values, lockedFields, errors, saving, saveError, setValue, submit } =
@@ -56,7 +60,8 @@ export const CreateAnnouncementDialog: FC<ICreateAnnouncementDialogProps> = (pro
       props.hiddenFormFields,
       props.alwaysNotified ?? [],
       props.service,
-      props.onCreated
+      props.onSaved,
+      props.announcement
     )
 
   const searchPeople = (query: string, allowGroups: boolean) =>
@@ -84,7 +89,7 @@ export const CreateAnnouncementDialog: FC<ICreateAnnouncementDialogProps> = (pro
                   />
                 </DialogTrigger>
               }>
-              {strings.CreateDialogTitle}
+              {props.announcement ? strings.EditDialogTitle : strings.CreateDialogTitle}
             </DialogTitle>
             <DialogContent className={styles.form}>
               {formFields.map((field) => (

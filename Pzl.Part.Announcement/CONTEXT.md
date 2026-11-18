@@ -26,7 +26,7 @@ Driftsmeldingen sorteres øverst, foran status og nivå.
 Driftsmeldingen vises også øverst på sidene, via customizeren *AnnouncementBanner*. Valget gjøres manuelt per melding. I webdelens skjema er det forhåndsvalgt når nivået er *Kritisk*. Brukeren kan lukke et banner, men det kommer tilbake når meldingen endres. Det er slik brukerne får se at en melding er satt til *Løst*.
 
 **Hurtighandling**
-Knappene «Marker som løst», «Marker som pågår» og «Rediger» i detaljdialogen. De vises for brukere med redigeringsrett på den sentrale lista.
+Knappene «Marker som løst», «Marker som pågår» og «Rediger» i detaljdialogen. De vises for brukere med redigeringsrett på den sentrale lista. «Rediger» åpner driftsmeldingen i webdelens eget skjema (samme som for ny driftsmelding), ikke i listeskjemaet.
 
 **Detaljdialog**
 Modaldialogen midt på siden som åpnes ved klikk på en driftsmelding, både fra webdelen og fra banneret. Den viser feltene som er valgt under «Felter i detaljvisning». I webdelen får redaktører også hurtighandlingene og varslingsvalgene her. Det finnes ingen popover lenger.
