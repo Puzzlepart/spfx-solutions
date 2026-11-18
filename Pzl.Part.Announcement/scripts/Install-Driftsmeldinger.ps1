@@ -497,7 +497,13 @@ if ($SkipInfoPage) {
     Add-PnPPageSection -Page $page -SectionTemplate OneColumn -Order 1 -Connection $siteConnection | Out-Null
     $webPartAdded = $false
     try {
-      Add-PnPPageWebPart -Page $page -Component $WebPartComponentId -Section 1 -Column 1 -WebPartProperties $webPartProperties -Connection $siteConnection -ErrorAction Stop | Out-Null
+      # Add-PnPPageWebPart does not find a custom web part when it is given the component ID as
+      # text: it then adds an empty web part without an error. So the component is looked up
+      # among the ones available on the site, and the component itself is passed on.
+      $component = Get-PnPPageComponent -Page $page -ListAvailable -Connection $siteConnection |
+        Where-Object { "$($_.Id)" -like "*$WebPartComponentId*" } | Select-Object -First 1
+      if (-not $component) { throw 'the web part is not among the components available on the site' }
+      Add-PnPPageWebPart -Page $page -Component $component -Section 1 -Column 1 -WebPartProperties $webPartProperties -Connection $siteConnection -ErrorAction Stop | Out-Null
       $webPartAdded = $true
     } catch {
       # A package published a moment ago may not be available to the site yet
@@ -513,6 +519,18 @@ if ($SkipInfoPage) {
     if ($EnableTeamsNotifications) {
       Add-PnPPageSection -Page $page -SectionTemplate OneColumn -Order 3 -Connection $siteConnection | Out-Null
       Add-PnPPageTextPart -Page $page -Section 3 -Column 1 -Text (Get-InfoPageText 'Varsling.html' $links) -Connection $siteConnection | Out-Null
+    }
+
+    # The saved page is read back before it is reported as done: a web part without a
+    # component ID is an empty one
+    if ($webPartAdded) {
+      $onPage = @(Get-PnPPageComponent -Page $infoPageFile -Connection $siteConnection |
+          Where-Object { "$($_.WebPartId)" -like "*$WebPartComponentId*" })
+      if (-not $onPage.Count) {
+        $webPartAdded = $false
+        Write-Warning "The Driftsmeldinger web part was added without an error, but it is not on the saved page."
+        $manualSteps.Add("Add the Driftsmeldinger web part to the top section of $infoPageUrl and turn on «Vis kommende driftsmeldinger», «Vis tidligere driftsmeldinger» and «Kompakt tabellvisning».")
+      }
     }
 
     Set-PnPPage -Identity $infoPageFile -Publish -Connection $siteConnection | Out-Null
