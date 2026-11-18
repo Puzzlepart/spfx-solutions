@@ -2,8 +2,14 @@ import { useEffect, useRef, useState } from 'react'
 import strings from 'AnnouncementStrings'
 import { IListField } from '../types'
 import { AnnouncementListService, isFormField } from '../../services/AnnouncementListService'
-import { isFormFieldEnabled, SEVERITY_FIELD, SHOW_AS_BANNER_FIELD } from '../../constants'
-import { isCriticalValue } from '../../model'
+import { format } from '@fluentui/react'
+import {
+  isFormFieldEnabled,
+  NOTIFY_TEAMS_FIELD,
+  SEVERITY_FIELD,
+  SHOW_AS_BANNER_FIELD
+} from '../../constants'
+import { isAlwaysNotified, isCriticalValue, Severity } from '../../model'
 import {
   dateInputValueToIso,
   getInitialFormValue,
@@ -79,6 +85,7 @@ async function buildPayload(
  * @param open Whether the dialog is open (the form is reset when it opens)
  * @param allFields All list fields
  * @param hiddenFormFields Fields hidden in the web part properties (`false` = hidden)
+ * @param alwaysNotified Levels the notification add-on always notifies about
  * @param service List service
  * @param onCreated Called after the item has been created
  */
@@ -86,6 +93,7 @@ export function useCreateAnnouncementForm(
   open: boolean,
   allFields: IListField[],
   hiddenFormFields: Record<string, boolean> | undefined,
+  alwaysNotified: Severity[],
   service: AnnouncementListService,
   onCreated: () => void
 ) {
@@ -122,6 +130,27 @@ export function useCreateAnnouncementForm(
     setSaving(false)
   }, [open, allFields])
 
+  /**
+   * «Varsle i Teams» is selected and locked while the chosen level is one of
+   * «Nivåer som alltid varsles»: the service notifies about it anyway. The
+   * user's own choice is kept in `values` and comes back for other levels.
+   */
+  const notifyLocked =
+    formFields.some((field) => field.internalName === NOTIFY_TEAMS_FIELD) &&
+    isAlwaysNotified(values[SEVERITY_FIELD], alwaysNotified)
+  const shownValues = notifyLocked ? { ...values, [NOTIFY_TEAMS_FIELD]: true } : values
+  /**
+   * Fields that cannot be changed, with the explanation shown under them
+   */
+  const lockedFields: Record<string, string> = notifyLocked
+    ? {
+        [NOTIFY_TEAMS_FIELD]: format(
+          strings.Notification.AlwaysNotifiedHint,
+          values[SEVERITY_FIELD]
+        )
+      }
+    : {}
+
   const setValue = (internalName: string, value: any) => {
     if (internalName === SHOW_AS_BANNER_FIELD) bannerTouched.current = true
     const preselectBanner =
@@ -155,7 +184,7 @@ export function useCreateAnnouncementForm(
     setSaving(true)
     setSaveError(null)
     try {
-      const payload = await buildPayload(formFields, values, service)
+      const payload = await buildPayload(formFields, shownValues, service)
       await service.addItem(payload)
       onCreated()
     } catch {
@@ -165,5 +194,14 @@ export function useCreateAnnouncementForm(
     }
   }
 
-  return { formFields, values, errors, saving, saveError, setValue, submit } as const
+  return {
+    formFields,
+    values: shownValues,
+    lockedFields,
+    errors,
+    saving,
+    saveError,
+    setValue,
+    submit
+  } as const
 }

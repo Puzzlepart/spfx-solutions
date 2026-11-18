@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC, ReactNode } from 'react'
+import React, { FC } from 'react'
 import { Avatar, Link, Text } from '@fluentui/react-components'
 import { Alert16Regular } from '@fluentui/react-icons'
 import { format } from '@fluentui/react'
@@ -95,41 +95,18 @@ export interface IAnnouncementDetailsProps {
    * Fields to show, in order
    */
   fields: IListField[]
-  /**
-   * Hide the title (e.g. when the host already shows it as a dialog title)
-   */
-  hideTitle?: boolean
-  /**
-   * Style for the root element (e.g. to lift the popover's max width in a dialog)
-   */
-  style?: CSSProperties
-  /**
-   * Shown at the bottom, e.g. the web part's quick actions
-   */
-  footer?: ReactNode
 }
 
 /**
- * Popover content for an announcement: title, the selected fields and the
- * "notified in Teams" footer. Also used by the banner's dialog.
+ * The details of an announcement in the dialog: status, the selected fields
+ * and the "notified in Teams" footer. The title is the dialog's title.
  */
-export const AnnouncementDetails: FC<IAnnouncementDetailsProps> = ({
-  announcement,
-  fields,
-  hideTitle,
-  style,
-  footer
-}) => {
+export const AnnouncementDetails: FC<IAnnouncementDetailsProps> = ({ announcement, fields }) => {
   const showNotifiedAt = fields.some((field) => field.internalName === NOTIFIED_AT_FIELD)
   const bodyFields = fields.filter((field) => field.internalName !== NOTIFIED_AT_FIELD)
 
   return (
-    <div className={styles.popover} style={style}>
-      {!hideTitle && (
-        <Text weight='semibold' size={400} block>
-          {announcement.title}
-        </Text>
-      )}
+    <div className={styles.details}>
       {announcement.status !== 'ongoing' && (
         <div>
           <StatusBadge status={announcement.status} />
@@ -157,7 +134,6 @@ export const AnnouncementDetails: FC<IAnnouncementDetailsProps> = ({
           </Text>
         </div>
       )}
-      {footer}
     </div>
   )
 }

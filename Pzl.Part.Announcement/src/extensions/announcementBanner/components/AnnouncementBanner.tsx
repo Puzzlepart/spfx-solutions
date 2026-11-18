@@ -1,13 +1,6 @@
 import React, { FC, useState } from 'react'
 import {
   Button,
-  Dialog,
-  DialogActions,
-  DialogBody,
-  DialogContent,
-  DialogSurface,
-  DialogTitle,
-  DialogTrigger,
   FluentProvider,
   IdPrefixProvider,
   MessageBar,
@@ -17,16 +10,11 @@ import {
   useId,
   webLightTheme
 } from '@fluentui/react-components'
-import {
-  CalendarClock20Regular,
-  Dismiss24Regular,
-  DismissRegular,
-  Pin16Filled
-} from '@fluentui/react-icons'
+import { CalendarClock20Regular, DismissRegular, Pin16Filled } from '@fluentui/react-icons'
 import { format } from '@fluentui/react'
 import strings from 'AnnouncementStrings'
 import { IAnnouncement, IListField } from '../../../Announcement/components/types'
-import { AnnouncementDetails } from '../../../Announcement/components/AnnouncementDetails'
+import { AnnouncementDialog } from '../../../Announcement/components/AnnouncementDialog'
 import { htmlToText } from '../../../Announcement/util/fieldValue'
 import { getIntent } from '../../../Announcement/components/intent'
 import { StatusBadge } from '../../../Announcement/components/StatusBadge'
@@ -58,9 +46,9 @@ function preview(content: string): string {
  * Message bars at the top of the page, one per announcement. Colour and icon
  * follow the announcement's level and status (see `getIntent`): a resolved
  * announcement is green. Editing an announcement (for example marking it as
- * resolved) changes `Modified`, so a dismissed banner is shown once more. Click opens a
- * dialog with the same content as the web part's popover; the close button
- * dismisses the banner for this user.
+ * resolved) changes `Modified`, so a dismissed banner is shown once more. Click opens
+ * the same details dialog as the web part (without the editor functions); the
+ * close button dismisses the banner for this user.
  */
 export const AnnouncementBanner: FC<IAnnouncementBannerProps> = ({ announcements, fields }) => {
   const fluentProviderId = useId('fp-announcement-banner')
@@ -123,39 +111,7 @@ export const AnnouncementBanner: FC<IAnnouncementBannerProps> = ({ announcements
             />
           </MessageBar>
         ))}
-        <Dialog open={!!open} onOpenChange={(_, data) => !data.open && setOpenId(null)}>
-          <DialogSurface>
-            {open && (
-              <DialogBody>
-                <DialogTitle
-                  action={
-                    <DialogTrigger action='close'>
-                      <Button
-                        appearance='subtle'
-                        icon={<Dismiss24Regular />}
-                        aria-label={strings.Aria.CloseDialog}
-                      />
-                    </DialogTrigger>
-                  }>
-                  {open.title}
-                </DialogTitle>
-                <DialogContent className={styles.dialogBody}>
-                  <AnnouncementDetails
-                    announcement={open}
-                    fields={fields}
-                    hideTitle
-                    style={{ maxWidth: 'none' }}
-                  />
-                </DialogContent>
-                <DialogActions>
-                  <DialogTrigger action='close'>
-                    <Button appearance='secondary'>{strings.Banner.CloseButtonText}</Button>
-                  </DialogTrigger>
-                </DialogActions>
-              </DialogBody>
-            )}
-          </DialogSurface>
-        </Dialog>
+        <AnnouncementDialog announcement={open} fields={fields} onClose={() => setOpenId(null)} />
       </FluentProvider>
     </IdPrefixProvider>
   )

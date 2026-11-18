@@ -48,11 +48,10 @@
   }
 }
 
-.popover {
+.details {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-width: 320px;
 
   .content {
     display: flex;

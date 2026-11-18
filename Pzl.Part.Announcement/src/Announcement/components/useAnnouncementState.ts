@@ -11,7 +11,8 @@ export function useAnnouncementState() {
     error: null,
     fields: [],
     canCreate: false,
-    canEdit: false
+    canEdit: false,
+    alwaysNotified: []
   })
 
   /**

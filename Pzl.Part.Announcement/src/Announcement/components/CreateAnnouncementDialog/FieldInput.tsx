@@ -5,14 +5,22 @@ import { IListField } from '../types'
 import { IPersonOption } from '../../services/AnnouncementListService'
 import { PeoplePicker } from './PeoplePicker'
 import { RichTextEditor } from './RichTextEditor'
+import { DateTimePicker } from './DateTimePicker'
 
 export interface IFieldInputProps {
   field: IListField
   value: any
   error?: string
   disabled?: boolean
+  /**
+   * Shown under the input instead of the field's description
+   */
+  hint?: string
   onChange: (value: any) => void
-  searchPeople: (query: string, allowGroups: boolean) => Promise<IPersonOption[]>
+  /**
+   * Needed for person fields
+   */
+  searchPeople?: (query: string, allowGroups: boolean) => Promise<IPersonOption[]>
 }
 
 /**
@@ -71,16 +79,18 @@ export const FieldInput: FC<IFieldInputProps> = (props) => {
       }
       case 'DateTime':
         return (
-          <Input
-            type={field.dateOnly ? 'date' : 'datetime-local'}
+          <DateTimePicker
             value={value ?? ''}
+            dateOnly={field.dateOnly}
+            required={field.required}
             disabled={disabled}
-            onChange={(_, data) => onChange(data.value)}
+            onChange={onChange}
           />
         )
       case 'Boolean':
         return (
           <Switch
+            label={field.title}
             checked={value === true}
             disabled={disabled}
             onChange={(_, data) => onChange(data.checked)}
@@ -129,9 +139,10 @@ export const FieldInput: FC<IFieldInputProps> = (props) => {
 
   return (
     <Field
-      label={field.title}
+      // A switch carries its own label, beside it
+      label={field.type === 'Boolean' ? undefined : field.title}
       required={field.required}
-      hint={field.description || undefined}
+      hint={props.hint || field.description || undefined}
       validationMessage={props.error}
       validationState={props.error ? 'error' : 'none'}>
       {renderControl()}

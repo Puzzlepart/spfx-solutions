@@ -140,7 +140,7 @@
     <value>Notify again</value>
   </data>
   <data name="SiteFields_NotifyAgain_Description" xml:space="preserve">
-    <value>Send a new Teams notification when you save. Use it only for significant changes, for example a new expected resolution time or that the issue is resolved. Reset to No when the notification has been sent.</value>
+    <value>Send a new Teams notification. Use it only for significant changes, for example a new expected resolution time or that the issue is resolved. Reset to No when the notification has been sent.</value>
   </data>
   <data name="SiteFields_NotifiedAt_DisplayName" xml:space="preserve">
     <value>Notified in Teams</value>

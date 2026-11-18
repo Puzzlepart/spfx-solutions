@@ -4,7 +4,7 @@
 export const CONTENT_FIELD = 'PzlContent'
 
 /**
- * Internal name of the "notified in Teams" field, rendered as a footer in the popover
+ * Internal name of the "notified in Teams" field, rendered as a footer in the details dialog
  */
 export const NOTIFIED_AT_FIELD = 'PzlNotifiedAt'
 
@@ -25,6 +25,12 @@ export const STATUS_FIELD = 'PzlStatus'
 export const SEVERITY_FIELD = 'PzlSeverity'
 
 /**
+ * Internal names of the fields of the notification add-on (Pzl.Ext.Notification)
+ */
+export const NOTIFY_TEAMS_FIELD = 'PzlNotifyTeams'
+export const NOTIFY_AGAIN_FIELD = 'PzlNotifyAgain'
+
+/**
  * Fields added after v1.0.0 (pinning in v1.1.0, banner in v1.5.0, status in
  * v2.0.0) and the fields of the notification add-on. Lists provisioned with an
  * older template do not have them, so queries are retried without them on
@@ -34,14 +40,14 @@ export const OPTIONAL_FIELDS = [
   'PzlPinned',
   SHOW_AS_BANNER_FIELD,
   STATUS_FIELD,
-  'PzlNotifyTeams',
-  'PzlNotifyAgain',
+  NOTIFY_TEAMS_FIELD,
+  NOTIFY_AGAIN_FIELD,
   NOTIFIED_AT_FIELD
 ]
 
 /**
- * Default fields shown in the popover (matches the behaviour before the fields
- * became configurable).
+ * Default fields shown in the details dialog (matches the behaviour before the
+ * fields became configurable). The property is still called `popoverFields`.
  */
 export const DEFAULT_POPOVER_FIELDS: Record<string, boolean> = {
   PzlContent: true,
@@ -55,21 +61,14 @@ export const DEFAULT_POPOVER_FIELDS: Record<string, boolean> = {
 
 /**
  * Fields written by the notification service, or only meaningful on existing
- * items («Varsle på nytt»). Never shown in the create form, even if the list
- * schema does not say `ShowInNewForm="FALSE"`.
+ * items («Varsle på nytt», set from the details dialog). Never shown in the
+ * create form, even if the list schema does not say `ShowInNewForm="FALSE"`.
  */
-export const SERVICE_MANAGED_FIELDS = [NOTIFIED_AT_FIELD, 'PzlNotifyAgain']
-
-/**
- * Fields hidden in the create form unless turned on in the web part
- * properties. «Varsle i Teams» belongs to the notification add-on and is left
- * on lists that once had it, so it is opt-in.
- */
-export const DEFAULT_HIDDEN_FORM_FIELDS = ['PzlNotifyTeams']
+export const SERVICE_MANAGED_FIELDS = [NOTIFIED_AT_FIELD, NOTIFY_AGAIN_FIELD]
 
 /**
  * Whether a field is shown in the create form, given the web part's
- * `formFields` setting (`true` = shown, `false` = hidden, missing = default)
+ * `formFields` setting (`false` = hidden, anything else = shown)
  *
  * @param internalName Internal name of the field
  * @param formFields The web part's `formFields` property
@@ -78,10 +77,14 @@ export function isFormFieldEnabled(
   internalName: string,
   formFields: Record<string, boolean> | undefined
 ): boolean {
-  const setting = formFields?.[internalName]
-  if (typeof setting === 'boolean') return setting
-  return !DEFAULT_HIDDEN_FORM_FIELDS.includes(internalName)
+  return formFields?.[internalName] !== false
 }
+
+/**
+ * Title of the configuration list of the notification add-on, and the fields
+ * the web part reads from it
+ */
+export const NOTIFICATION_CONFIG_LIST = 'Varslingskonfigurasjon'
 
 /**
  * Field types the create form knows how to edit. Other field types are left out

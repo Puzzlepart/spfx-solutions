@@ -43,7 +43,7 @@ export interface IAnnouncementBannerApplicationCustomizerProperties
   targetAudience?: boolean
   /**
    * Fields shown in the details dialog, keyed by internal name (`true` =
-   * visible). Defaults to the web part's default popover fields.
+   * visible). Defaults to the web part's default fields for the details dialog.
    */
   popoverFields?: Record<string, boolean>
 }
@@ -52,7 +52,7 @@ export interface IAnnouncementBannerApplicationCustomizerProperties
  * Shows the active announcements marked "Vis som banner" (`PzlShowAsBanner`)
  * as message bars in the page's top placeholder. Each banner can be dismissed
  * (remembered in localStorage until the announcement changes) and clicked to
- * open a dialog with the same details as the web part's popover.
+ * open a dialog with the same details dialog as the web part.
  *
  * The entry bundle only decides whether the page is targeted (`siteUrls`,
  * `hubSiteUrls`, `everywhere`), synchronously from the page context. On a

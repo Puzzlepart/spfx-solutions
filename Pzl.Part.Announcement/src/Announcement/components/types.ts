@@ -15,7 +15,13 @@ export interface IAnnouncementProps {
   listSiteUrl?: string
 
   /**
-   * Fields to show in the popover, keyed by internal name (`true` = visible).
+   * Absolute URL of the site that hosts *Varslingskonfigurasjon* (notification
+   * add-on). Empty means the site of the announcement list, then the root site.
+   */
+  notificationConfigSiteUrl?: string
+
+  /**
+   * Fields to show in the details dialog, keyed by internal name (`true` = visible).
    * Fields missing from the map are hidden. Defaults are applied by the
    * web part in `onInit` (see `DEFAULT_POPOVER_FIELDS`).
    */
@@ -23,8 +29,7 @@ export interface IAnnouncementProps {
   /**
    * Fields shown in the create form, keyed by internal name (`true` = shown,
    * `false` = hidden). Fields missing from the map are shown if the list schema
-   * allows it, except those in `DEFAULT_HIDDEN_FORM_FIELDS`. Required fields
-   * are always shown.
+   * allows it. Required fields are always shown.
    */
   formFields: Record<string, boolean>
 
@@ -49,7 +54,7 @@ export interface IAnnouncementState {
   loading: boolean
   error?: Error
   /**
-   * ID of the announcement that should be opened (popover) when the web part loads.
+   * ID of the announcement that should be opened (dialog) when the web part loads.
    * Resolved from the Teams deep link (`subPageId`) or the `driftsmelding` query parameter.
    */
   focusedAnnouncementId?: string
@@ -65,6 +70,12 @@ export interface IAnnouncementState {
    * Whether the current user may edit items in the announcement list (quick actions)
    */
   canEdit: boolean
+  /**
+   * Levels the notification add-on always notifies about («Nivåer som alltid
+   * varsles»). «Varsle i Teams» is shown as selected for them. Empty without
+   * the add-on.
+   */
+  alwaysNotified: Severity[]
 }
 
 export interface IAnnouncement {
@@ -100,7 +111,7 @@ export interface IAnnouncement {
   notifiedAt?: string
   /**
    * Raw list item values keyed by internal field name. Used to render the
-   * fields selected for the popover.
+   * fields selected for the details dialog.
    */
   values: Record<string, any>
 }

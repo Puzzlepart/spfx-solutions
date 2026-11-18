@@ -12,7 +12,12 @@ import { PermissionKind } from '@pnp/sp/security'
 import { IFieldInfo } from '@pnp/sp/fields'
 import strings from 'AnnouncementStrings'
 import { IListField } from '../components/types'
-import { SERVICE_MANAGED_FIELDS, SUPPORTED_FORM_FIELD_TYPES } from '../constants'
+import {
+  NOTIFICATION_CONFIG_LIST,
+  SERVICE_MANAGED_FIELDS,
+  SUPPORTED_FORM_FIELD_TYPES
+} from '../constants'
+import { Severity, toKnownSeverity } from '../model'
 import { FALLBACK_FIELDS } from './fallbackFields'
 
 /**
@@ -29,7 +34,7 @@ export interface IPersonOption {
 }
 
 /**
- * Fields from the base content type (Item) that are still useful to show in the popover
+ * Fields from the base content type (Item) that are still useful to show in the details dialog
  */
 const BASE_TYPE_FIELDS_TO_KEEP = ['Title', 'Author', 'Editor', 'Created', 'Modified']
 
@@ -116,26 +121,80 @@ export function isFormField(field: IListField): boolean {
 }
 
 /**
- * Service for the announcement list: schema, permissions, people search and create.
+ * Site URL as compared between the web part and the notification
+ * configuration: trimmed, lower case, no trailing slash
+ */
+function normalizeUrl(url: string | null | undefined): string {
+  return (url ?? '').trim().replace(/\/+$/, '').toLowerCase()
+}
+
+/**
+ * A row in the configuration list of the notification add-on
+ * (`Pzl.Ext.Notification/Templates/NotificationConfig.xml`)
+ */
+export interface INotificationConfigRow {
+  PzlSiteUrl?: string | null
+  PzlNotifyAnnouncements?: boolean | null
+  PzlNotifySeverities?: string[] | null
+  PzlAnnouncementListTitle?: string | null
+}
+
+/**
+ * The levels that are always notified («Nivåer som alltid varsles») for an
+ * announcement list, from the active rows of the notification configuration.
+ * Follows the notification service: the row must be for the list's site, have
+ * driftsmeldinger turned on, and name this list if it names one.
+ *
+ * @param rows Active rows of the configuration list
+ * @param siteUrl Site that hosts the announcement list
+ * @param listTitle Title of the announcement list
+ */
+export function alwaysNotifiedSeverities(
+  rows: INotificationConfigRow[],
+  siteUrl: string,
+  listTitle: string
+): Severity[] {
+  const severities = rows
+    .filter(
+      (row) =>
+        normalizeUrl(row.PzlSiteUrl) === normalizeUrl(siteUrl) &&
+        row.PzlNotifyAnnouncements === true &&
+        (!row.PzlAnnouncementListTitle?.trim() || row.PzlAnnouncementListTitle.trim() === listTitle)
+    )
+    .reduce<string[]>((values, row) => values.concat(row.PzlNotifySeverities ?? []), [])
+    .map(toKnownSeverity)
+    .filter((severity) => severity !== null)
+  return severities.filter((severity, index) => severities.indexOf(severity) === index)
+}
+
+/**
+ * Service for the announcement list: schema, permissions, people search,
+ * create and update, and the notification configuration.
  */
 export class AnnouncementListService {
   private _sp: SPFI
   private _fields: Promise<IListField[]>
   private _editFormUrl: string | null | undefined
+  private _siteUrl: string
   private _siteOrigin: string
+  private _alwaysNotified: Promise<Severity[]>
 
   /**
    * @param context Component context (web part or application customizer)
    * @param _listTitle Title of the announcement list
    * @param siteUrl Site that hosts the list. Defaults to the current web.
+   * @param _notificationConfigSiteUrl Site that hosts the configuration list of
+   * the notification add-on. Defaults to the list's site, then the root site.
    */
   constructor(
-    context: BaseComponentContext,
+    private _context: BaseComponentContext,
     private _listTitle: string = strings.AnnouncementsListName,
-    siteUrl?: string
+    siteUrl?: string,
+    private _notificationConfigSiteUrl?: string
   ) {
-    this._sp = (siteUrl ? spfi(siteUrl) : spfi()).using(SPFx(context))
-    this._siteOrigin = new URL(siteUrl || context.pageContext.web.absoluteUrl).origin
+    this._sp = (siteUrl ? spfi(siteUrl) : spfi()).using(SPFx(_context))
+    this._siteUrl = siteUrl || _context.pageContext.web.absoluteUrl
+    this._siteOrigin = new URL(this._siteUrl).origin
   }
 
   public get sp(): SPFI {
@@ -193,6 +252,46 @@ export class AnnouncementListService {
         !field.hidden &&
         (!field.fromBaseType || BASE_TYPE_FIELDS_TO_KEEP.includes(field.internalName))
     )
+  }
+
+  /**
+   * The levels the notification add-on always notifies about for this list
+   * («Nivåer som alltid varsles» in *Varslingskonfigurasjon*). Used to show
+   * «Varsle i Teams» as selected. Memoized. Empty when the add-on is not
+   * installed, the list has no row, or the user may not read the configuration.
+   */
+  public getAlwaysNotifiedSeverities(): Promise<Severity[]> {
+    if (!this._alwaysNotified) {
+      this._alwaysNotified = this._loadAlwaysNotifiedSeverities().catch((): Severity[] => [])
+    }
+    return this._alwaysNotified
+  }
+
+  private async _loadAlwaysNotifiedSeverities(): Promise<Severity[]> {
+    const candidates = this._notificationConfigSiteUrl
+      ? [this._notificationConfigSiteUrl]
+      : [this._siteUrl, this._siteOrigin]
+    const sites = candidates.filter(
+      (url, index) => candidates.findIndex((u) => normalizeUrl(u) === normalizeUrl(url)) === index
+    )
+    for (const site of sites) {
+      try {
+        const rows: INotificationConfigRow[] = await spfi(site)
+          .using(SPFx(this._context))
+          .web.lists.getByTitle(NOTIFICATION_CONFIG_LIST)
+          .items.select(
+            'PzlSiteUrl',
+            'PzlNotifyAnnouncements',
+            'PzlNotifySeverities',
+            'PzlAnnouncementListTitle'
+          )
+          .filter('PzlActive eq 1')()
+        return alwaysNotifiedSeverities(rows, this._siteUrl, this._listTitle)
+      } catch {
+        // No configuration list on this site (or no access), try the next one
+      }
+    }
+    return []
   }
 
   /**

@@ -7,25 +7,23 @@ import {
   Text,
   webLightTheme,
   InfoLabel,
-  Popover,
-  PopoverSurface,
-  PopoverTrigger,
   Button,
   Toaster,
   Toast,
   ToastTitle,
   useToastController
 } from '@fluentui/react-components'
-import { Add16Regular } from '@fluentui/react-icons'
+import { AddRegular } from '@fluentui/react-icons'
 import styles from './Announcement.module.scss'
 import { IAnnouncementProps } from './types'
 import { AnnouncementContext } from './context'
 import { useAnnouncement } from './useAnnouncement'
 import { UserMessage } from './UserMessage'
-import { AnnouncementDetails } from './AnnouncementDetails'
+import { AnnouncementDialog } from './AnnouncementDialog'
+import { NotificationSettings } from './NotificationSettings'
 import { CreateAnnouncementDialog } from './CreateAnnouncementDialog'
 import { getIntent } from './intent'
-import { QuickActions } from './QuickActions'
+import { EditAction, StatusActions } from './QuickActions'
 import { statusText } from './StatusBadge'
 import { IAnnouncement } from './types'
 import { Status } from '../model'
@@ -39,15 +37,20 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
     refresh,
     fluentProviderId,
     toasterId,
-    openAnnouncementId,
+    openAnnouncement,
     setOpenAnnouncementId,
+    dialogError,
     setAnnouncementRef,
-    toggleAnnouncement,
     popoverFields,
     showCreateButton,
     showQuickActions,
     setStatus,
     getEditFormUrl,
+    showNotificationSettings,
+    notifyTeamsField,
+    notifyAgainField,
+    openAlwaysNotified,
+    setNotification,
     createDialogOpen,
     setCreateDialogOpen
   } = useAnnouncement(props)
@@ -66,26 +69,20 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
     })
   }
 
+  /**
+   * Changes the status. The dialog closes on success; a failure is shown in
+   * the dialog.
+   */
   const onSetStatus = async (announcement: IAnnouncement, status: Status) => {
-    try {
-      await setStatus(announcement, status)
-      dispatchToast(
-        <Toast>
-          <ToastTitle>
-            {format(strings.QuickActions.StatusChangedText, statusText(status).toLowerCase())}
-          </ToastTitle>
-        </Toast>,
-        { intent: 'success' }
-      )
-    } catch (error) {
-      dispatchToast(
-        <Toast>
-          <ToastTitle>{strings.QuickActions.StatusChangeErrorText}</ToastTitle>
-        </Toast>,
-        { intent: 'error' }
-      )
-      throw error
-    }
+    await setStatus(announcement, status)
+    dispatchToast(
+      <Toast>
+        <ToastTitle>
+          {format(strings.QuickActions.StatusChangedText, statusText(status).toLowerCase())}
+        </ToastTitle>
+      </Toast>,
+      { intent: 'success' }
+    )
   }
 
   if (state.loading) {
@@ -129,7 +126,7 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                   <Button
                     className={styles.createButton}
                     appearance='outline'
-                    icon={<Add16Regular />}
+                    icon={<AddRegular />}
                     onClick={() => setCreateDialogOpen(true)}>
                     {strings.CreateButtonText}
                   </Button>
@@ -139,57 +136,36 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
             <div className={styles.announcements}>
               {state.announcements.length > 0 ? (
                 state.announcements.map((announcement) => (
-                  <Popover
+                  <div
                     key={announcement.id}
-                    withArrow
-                    closeOnScroll
-                    trapFocus
-                    positioning='below-start'
-                    open={openAnnouncementId === announcement.id}
-                    onOpenChange={(_, data) =>
-                      setOpenAnnouncementId(data.open ? announcement.id : null)
-                    }>
-                    <PopoverTrigger>
-                      <div
-                        className={styles.message}
-                        ref={setAnnouncementRef(announcement.id)}
-                        data-announcement-id={announcement.id}
-                        role='button'
-                        tabIndex={0}
-                        aria-haspopup='dialog'
-                        aria-label={format(strings.Aria.OpenDetails, announcement.title)}
-                        onKeyDown={(event) => {
-                          if (event.key === 'Enter' || event.key === ' ') {
-                            event.preventDefault()
-                            toggleAnnouncement(announcement.id)
-                          }
-                        }}>
-                        <UserMessage
-                          title={announcement.title}
-                          text={announcement.content}
-                          intent={getIntent(announcement)}
-                          pinned={announcement.pinned}
-                          pinnedTitle={strings.Aria.PinnedTitle}
-                          status={announcement.status}
-                        />
-                      </div>
-                    </PopoverTrigger>
-                    <PopoverSurface tabIndex={-1}>
-                      <AnnouncementDetails
-                        announcement={announcement}
-                        fields={popoverFields}
-                        footer={
-                          showQuickActions && (
-                            <QuickActions
-                              announcement={announcement}
-                              onSetStatus={onSetStatus}
-                              getEditFormUrl={getEditFormUrl}
-                            />
-                          )
-                        }
-                      />
-                    </PopoverSurface>
-                  </Popover>
+                    className={styles.message}
+                    ref={setAnnouncementRef(announcement.id)}
+                    data-announcement-id={announcement.id}
+                    role='button'
+                    tabIndex={0}
+                    aria-haspopup='dialog'
+                    aria-label={format(strings.Aria.OpenDetails, announcement.title)}
+                    onClick={(event) => {
+                      // A link in the content opens the link, not the dialog
+                      if ((event.target as HTMLElement).closest?.('a')) return
+                      setOpenAnnouncementId(announcement.id)
+                    }}
+                    onKeyDown={(event) => {
+                      if (event.target !== event.currentTarget) return
+                      if (event.key === 'Enter' || event.key === ' ') {
+                        event.preventDefault()
+                        setOpenAnnouncementId(announcement.id)
+                      }
+                    }}>
+                    <UserMessage
+                      title={announcement.title}
+                      text={announcement.content}
+                      intent={getIntent(announcement)}
+                      pinned={announcement.pinned}
+                      pinnedTitle={strings.Aria.PinnedTitle}
+                      status={announcement.status}
+                    />
+                  </div>
                 ))
               ) : (
                 <Text style={{ color: 'var(--colorNeutralForeground4)' }}>
@@ -198,11 +174,39 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
               )}
             </div>
           </div>
+          <AnnouncementDialog
+            announcement={openAnnouncement}
+            fields={popoverFields}
+            error={dialogError}
+            onClose={() => setOpenAnnouncementId(null)}
+            startActions={
+              showQuickActions &&
+              openAnnouncement && (
+                <EditAction announcement={openAnnouncement} getEditFormUrl={getEditFormUrl} />
+              )
+            }
+            endActions={
+              showQuickActions &&
+              openAnnouncement && (
+                <StatusActions announcement={openAnnouncement} onSetStatus={onSetStatus} />
+              )
+            }>
+            {showNotificationSettings && openAnnouncement && (
+              <NotificationSettings
+                announcement={openAnnouncement}
+                notifyTeamsField={notifyTeamsField}
+                notifyAgainField={notifyAgainField}
+                alwaysNotified={openAlwaysNotified}
+                onChange={setNotification}
+              />
+            )}
+          </AnnouncementDialog>
           {showCreateButton && (
             <CreateAnnouncementDialog
               open={createDialogOpen}
               fields={state.fields}
               hiddenFormFields={props.formFields}
+              alwaysNotified={state.alwaysNotified}
               service={props.service}
               onOpenChange={setCreateDialogOpen}
               onCreated={onCreated}

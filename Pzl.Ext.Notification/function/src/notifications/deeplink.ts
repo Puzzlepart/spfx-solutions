@@ -19,15 +19,45 @@ export function buildLink(settings: Settings, subEntityId: string, webUrl: strin
   )}?webUrl=${encodeURIComponent(webUrl)}&context=${context}`
 }
 
-/** Strips HTML tags and collapses whitespace, for preview text */
+/** Named character references that occur in rich text from SharePoint (the rest are numeric) */
+const NAMED_ENTITIES: Record<string, string> = {
+  nbsp: ' ',
+  amp: '&',
+  lt: '<',
+  gt: '>',
+  quot: '"',
+  apos: "'",
+  aelig: 'æ',
+  AElig: 'Æ',
+  oslash: 'ø',
+  Oslash: 'Ø',
+  aring: 'å',
+  Aring: 'Å',
+  eacute: 'é',
+  ndash: '–',
+  mdash: '—',
+  hellip: '…',
+  laquo: '«',
+  raquo: '»'
+}
+
+/**
+ * Decodes character references (`&#58;`, `&#xE6;`, `&amp;` …). SharePoint
+ * stores rich text with such references, also for plain characters like the
+ * colon. Unknown names are left as they are.
+ */
+export function decodeEntities(text: string): string {
+  return text.replace(/&(#x[0-9a-f]+|#\d+|[a-z]+);/gi, (match, name: string) => {
+    if (name[0] !== '#') return NAMED_ENTITIES[name] ?? match
+    const code = /^#x/i.test(name) ? parseInt(name.slice(2), 16) : parseInt(name.slice(1), 10)
+    return code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : match
+  })
+}
+
+/** Strips HTML tags, decodes character references and collapses whitespace, for preview text */
 export function toPlainText(html: string | null | undefined, maxLength = 150): string {
-  const text = (html ?? '')
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/&nbsp;/g, ' ')
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
+  const text = decodeEntities((html ?? '').replace(/<[^>]+>/g, ' '))
+    .replace(/[\u200b\ufeff]/g, '')
     .replace(/\s+/g, ' ')
     .trim()
   return text.length > maxLength ? `${text.substring(0, maxLength - 1)}…` : text

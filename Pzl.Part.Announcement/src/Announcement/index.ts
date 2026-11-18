@@ -14,8 +14,9 @@ import { AnnouncementListService, isFormField } from './services/AnnouncementLis
 import { DEFAULT_POPOVER_FIELDS, isFormFieldEnabled } from './constants'
 
 /**
- * Delay (ms) before a changed «Område for driftsmeldinger» is used, so the
- * list is not read for every key stroke in the property pane
+ * Delay (ms) before a changed «Område for driftsmeldinger» or «Område for
+ * varslingskonfigurasjon» is used, so the lists are not read for every key
+ * stroke in the property pane
  */
 const LIST_SITE_URL_DELAY = 800
 
@@ -26,6 +27,15 @@ function normalizeSiteUrl(value: string | undefined): string {
   return (value ?? '').trim().replace(/\/+$/, '')
 }
 
+/**
+ * Validation message for a site URL in the property pane (empty is allowed)
+ */
+function siteUrlErrorMessage(value: string | undefined): string {
+  return !value?.trim() || /^https:\/\/[^/]+/i.test(value.trim())
+    ? ''
+    : 'Skriv inn en full adresse som starter med https://'
+}
+
 export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnouncementProps> {
   private _service: AnnouncementListService
   /**
@@ -33,6 +43,10 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
    * the component is mounted again (and the list read) when it changes.
    */
   private _serviceSiteUrl: string
+  /**
+   * The `notificationConfigSiteUrl` the current service reads from
+   */
+  private _notificationConfigSiteUrl: string
   private _listSiteUrlTimer: number
   /**
    * List fields, loaded when the property pane opens
@@ -43,7 +57,7 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
   public render(): void {
     const element: React.ReactElement<IAnnouncementProps> = React.createElement(Announcement, {
       ...this.properties,
-      key: this._serviceSiteUrl || 'current',
+      key: `${this._serviceSiteUrl}|${this._notificationConfigSiteUrl}`,
       context: this.context,
       service: this._service
     })
@@ -59,10 +73,12 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
    */
   private _createService(): void {
     this._serviceSiteUrl = normalizeSiteUrl(this.properties.listSiteUrl)
+    this._notificationConfigSiteUrl = normalizeSiteUrl(this.properties.notificationConfigSiteUrl)
     this._service = new AnnouncementListService(
       this.context,
       undefined,
-      this._serviceSiteUrl || undefined
+      this._serviceSiteUrl || undefined,
+      this._notificationConfigSiteUrl || undefined
     )
     this._fields = undefined
   }
@@ -85,10 +101,16 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
   }
 
   protected onPropertyPaneFieldChanged(propertyPath: string): void {
-    if (propertyPath !== 'listSiteUrl') return
+    if (propertyPath !== 'listSiteUrl' && propertyPath !== 'notificationConfigSiteUrl') return
     window.clearTimeout(this._listSiteUrlTimer)
     this._listSiteUrlTimer = window.setTimeout(() => {
-      if (normalizeSiteUrl(this.properties.listSiteUrl) === this._serviceSiteUrl) return
+      if (
+        normalizeSiteUrl(this.properties.listSiteUrl) === this._serviceSiteUrl &&
+        normalizeSiteUrl(this.properties.notificationConfigSiteUrl) ===
+          this._notificationConfigSiteUrl
+      ) {
+        return
+      }
       this._createService()
       this.render()
       this.onPropertyPaneConfigurationStart()
@@ -114,7 +136,7 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
   }
 
   /**
-   * One toggle per list field for the popover
+   * One toggle per list field for the details dialog
    */
   private _getPopoverFieldToggles(): IPropertyPaneField<any>[] {
     if (!this._fields) {
@@ -171,10 +193,13 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
                   label: 'Område for driftsmeldinger',
                   description:
                     'Full adresse til området med lista Driftsmeldinger, for eksempel https://tenant.sharepoint.com. Tom betyr dette området. Brukerne må ha lesetilgang til lista.',
-                  onGetErrorMessage: (value) =>
-                    !value?.trim() || /^https:\/\/[^/]+/i.test(value.trim())
-                      ? ''
-                      : 'Skriv inn en full adresse som starter med https://'
+                  onGetErrorMessage: siteUrlErrorMessage
+                }),
+                PropertyPaneTextField('notificationConfigSiteUrl', {
+                  label: 'Område for varslingskonfigurasjon',
+                  description:
+                    'Bare med tillegget for Teams-varsling: full adresse til området med lista Varslingskonfigurasjon. Tom betyr området for driftsmeldinger, deretter rotområdet. «Nivåer som alltid varsles» leses derfra, slik at «Varsle i Teams» vises som valgt for dem.',
+                  onGetErrorMessage: siteUrlErrorMessage
                 }),
                 PropertyPaneTextField('description', {
                   label: 'Beskrivelse',

@@ -1,19 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
+import strings from 'AnnouncementStrings'
 import { useAnnouncementState } from './useAnnouncementState'
 import { IAnnouncementProps } from './types'
 import { useId } from '@fluentui/react-components'
 import { useAnnouncementDataFetch } from './useAnnouncementDataFetch'
 import { getFocusedAnnouncementId } from '../util/getFocusedAnnouncementId'
-import { IAnnouncement } from './types'
-import { Status, statusChoiceValue } from '../model'
-import { STATUS_FIELD } from '../constants'
-
-/**
- * Delay (ms) between scrolling the focused announcement into view and opening
- * its popover. The popover uses `closeOnScroll`, so it must not be open while
- * the scroll event from `scrollIntoView` fires.
- */
-const OPEN_FOCUSED_DELAY = 250
+import { IAnnouncement, IListField } from './types'
+import { isAlwaysNotified, Status, statusChoiceValue } from '../model'
+import { NOTIFY_AGAIN_FIELD, NOTIFY_TEAMS_FIELD, SEVERITY_FIELD, STATUS_FIELD } from '../constants'
 
 /**
  * Component logic hook for `Announcement`. This hook is responsible for
@@ -29,20 +23,29 @@ export const useAnnouncement = (props: IAnnouncementProps) => {
   const toasterId = useId('toaster-announcement')
 
   /**
-   * ID of the announcement whose popover is currently open (controlled popovers)
+   * ID of the announcement shown in the details dialog
    */
-  const [openAnnouncementId, setOpenAnnouncementId] = useState<string>(null)
+  const [openAnnouncementId, $setOpenAnnouncementId] = useState<string>(null)
+
+  /**
+   * Error from an action in the details dialog (status, notification)
+   */
+  const [dialogError, setDialogError] = useState<string>(null)
+
+  /**
+   * Opens the details dialog for an announcement, or closes it (`null`)
+   */
+  const setOpenAnnouncementId = (id: string | null) => {
+    setDialogError(null)
+    $setOpenAnnouncementId(id)
+  }
+
+  const openAnnouncement = state.announcements.find((a) => a.id === openAnnouncementId)
 
   /**
    * Whether the create dialog is open
    */
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
-
-  /**
-   * Toggles the popover for an announcement (keyboard activation of the trigger)
-   */
-  const toggleAnnouncement = (id: string) =>
-    setOpenAnnouncementId((current) => (current === id ? null : id))
 
   /**
    * Refs to the announcement elements, used to scroll the focused one into view
@@ -71,12 +74,11 @@ export const useAnnouncement = (props: IAnnouncementProps) => {
     if (!match) return
     const element = announcementRefs.current[match.id]
     if (element?.scrollIntoView) element.scrollIntoView({ block: 'center' })
-    const timer = setTimeout(() => setOpenAnnouncementId(match.id), OPEN_FOCUSED_DELAY)
-    return () => clearTimeout(timer)
+    setOpenAnnouncementId(match.id)
   }, [state.loading, state.focusedAnnouncementId])
 
   /**
-   * Fields selected for the popover (in content type order)
+   * Fields selected for the details dialog (in content type order)
    */
   const popoverFields = state.fields.filter(
     (field) => props.popoverFields?.[field.internalName] === true
@@ -96,17 +98,58 @@ export const useAnnouncement = (props: IAnnouncementProps) => {
   const showQuickActions = state.canEdit && !!statusField
 
   /**
-   * Sets the status of an announcement (quick action), closes its popover
+   * Sets the status of an announcement (quick action), closes the dialog
    * and fetches the announcements again
    *
    * @param announcement Announcement
    * @param status New status
    */
   const setStatus = async (announcement: IAnnouncement, status: Status): Promise<void> => {
-    await props.service.updateItem(announcement.id, {
-      [statusField.entityPropertyName]: statusChoiceValue(status, statusField.choices)
-    })
+    setDialogError(null)
+    try {
+      await props.service.updateItem(announcement.id, {
+        [statusField.entityPropertyName]: statusChoiceValue(status, statusField.choices)
+      })
+    } catch (error) {
+      setDialogError(strings.QuickActions.StatusChangeErrorText)
+      throw error
+    }
     setOpenAnnouncementId(null)
+    await refresh().catch(() => {
+      // Ignore, the list is shown as it was
+    })
+  }
+
+  /**
+   * The notification add-on's switches are shown to users who may edit items,
+   * when the list has the add-on's columns
+   */
+  const notifyTeamsField = state.fields.find((field) => field.internalName === NOTIFY_TEAMS_FIELD)
+  const notifyAgainField = state.fields.find((field) => field.internalName === NOTIFY_AGAIN_FIELD)
+  const showNotificationSettings = state.canEdit && (!!notifyTeamsField || !!notifyAgainField)
+
+  /**
+   * Whether the level of the open announcement is always notified
+   */
+  const openAlwaysNotified = isAlwaysNotified(
+    openAnnouncement?.values[SEVERITY_FIELD],
+    state.alwaysNotified
+  )
+
+  /**
+   * Saves «Varsle i Teams» or «Varsle på nytt» on an announcement and fetches
+   * the announcements again. The dialog stays open.
+   *
+   * @param announcement Announcement
+   * @param field The switch's field
+   * @param value New value
+   */
+  const setNotification = async (
+    announcement: IAnnouncement,
+    field: IListField,
+    value: boolean
+  ): Promise<void> => {
+    await props.service.updateItem(announcement.id, { [field.entityPropertyName]: value })
     await refresh().catch(() => {
       // Ignore, the list is shown as it was
     })
@@ -121,15 +164,20 @@ export const useAnnouncement = (props: IAnnouncementProps) => {
     refresh,
     fluentProviderId,
     toasterId,
-    openAnnouncementId,
+    openAnnouncement,
     setOpenAnnouncementId,
+    dialogError,
     setAnnouncementRef,
-    toggleAnnouncement,
     popoverFields,
     showCreateButton,
     showQuickActions,
     setStatus,
     getEditFormUrl,
+    showNotificationSettings,
+    notifyTeamsField,
+    notifyAgainField,
+    openAlwaysNotified,
+    setNotification,
     createDialogOpen,
     setCreateDialogOpen
   }

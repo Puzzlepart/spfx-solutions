@@ -15,6 +15,7 @@ declare interface IAnnouncementStrings {
   CreateDialogTitle: string
   SaveButtonText: string
   CancelButtonText: string
+  CloseButtonText: string
   RequiredFieldText: string
   CreateSuccessText: string
   CreateErrorText: string
@@ -25,7 +26,6 @@ declare interface IAnnouncementStrings {
   Banner: {
     DismissTitle: string
     OpenDetails: string
-    CloseButtonText: string
   }
   Status: {
     Planned: string
@@ -38,6 +38,25 @@ declare interface IAnnouncementStrings {
     Edit: string
     StatusChangedText: string
     StatusChangeErrorText: string
+  }
+  Notification: {
+    SectionTitle: string
+    AlwaysNotifiedHint: string
+    ChangeErrorText: string
+  }
+  DatePicker: {
+    Placeholder: string
+    OpenTitle: string
+    TimeLabel: string
+    HourLabel: string
+    MinuteLabel: string
+    OkButtonText: string
+    ClearButtonText: string
+    GoToToday: string
+    PrevMonth: string
+    NextMonth: string
+    PrevYear: string
+    NextYear: string
   }
   RichText: {
     ToolbarLabel: string

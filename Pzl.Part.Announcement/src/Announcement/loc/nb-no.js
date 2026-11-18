@@ -16,6 +16,7 @@ define([], function () {
     CreateDialogTitle: 'Registrer driftsmelding',
     SaveButtonText: 'Lagre',
     CancelButtonText: 'Avbryt',
+    CloseButtonText: 'Lukk',
     RequiredFieldText: 'Feltet må fylles ut',
     CreateSuccessText: 'Driftsmeldingen er registrert.',
     CreateErrorText: 'Kunne ikke lagre driftsmeldingen. Prøv igjen.',
@@ -25,8 +26,7 @@ define([], function () {
     PeoplePickerNoResultsText: 'Ingen treff',
     Banner: {
       DismissTitle: 'Lukk banneret',
-      OpenDetails: 'Vis detaljer for {0}',
-      CloseButtonText: 'Lukk'
+      OpenDetails: 'Vis detaljer for {0}'
     },
     Status: {
       Planned: 'Planlagt',
@@ -39,6 +39,26 @@ define([], function () {
       Edit: 'Rediger',
       StatusChangedText: 'Driftsmeldingen er markert som {0}.',
       StatusChangeErrorText: 'Kunne ikke endre status. Prøv igjen.'
+    },
+    Notification: {
+      SectionTitle: 'Varsling i Teams',
+      AlwaysNotifiedHint:
+        'Nivået «{0}» varsles alltid i Teams. Det er satt i varslingskonfigurasjonen.',
+      ChangeErrorText: 'Kunne ikke endre varslingen. Prøv igjen.'
+    },
+    DatePicker: {
+      Placeholder: 'Velg dato',
+      OpenTitle: 'Åpne datovelgeren',
+      TimeLabel: 'Klokkeslett',
+      HourLabel: 'Time',
+      MinuteLabel: 'Minutt',
+      OkButtonText: 'OK',
+      ClearButtonText: 'Tøm',
+      GoToToday: 'Gå til i dag',
+      PrevMonth: 'Forrige måned',
+      NextMonth: 'Neste måned',
+      PrevYear: 'Forrige år',
+      NextYear: 'Neste år'
     },
     RichText: {
       ToolbarLabel: 'Formatering',
