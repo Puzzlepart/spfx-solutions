@@ -49,6 +49,19 @@ export interface ICreateAnnouncementDialogProps {
 }
 
 /**
+ * Width of the dialog with two columns (Fluent's dialogs are 600px)
+ */
+const FORM_MAX_WIDTH = 960
+
+/**
+ * Whether a field holds what the announcement says (title and text fields).
+ * They go in the left column of the form; the rest is metadata, to the right.
+ */
+function isContentField(field: IListField): boolean {
+  return field.type === 'Text' || field.type === 'Note'
+}
+
+/**
  * Dialog for registering a new announcement, or editing an existing one. The
  * form is built from the fields of the announcement list.
  */
@@ -67,9 +80,30 @@ export const CreateAnnouncementDialog: FC<ICreateAnnouncementDialogProps> = (pro
   const searchPeople = (query: string, allowGroups: boolean) =>
     props.service.searchPeople(query, allowGroups)
 
+  const renderField = (field: IListField) => (
+    <FieldInput
+      key={field.internalName}
+      field={field}
+      value={values[field.internalName]}
+      error={errors[field.internalName]}
+      disabled={saving || field.internalName in lockedFields}
+      hint={lockedFields[field.internalName]}
+      onChange={(value) => setValue(field.internalName, value)}
+      searchPeople={searchPeople}
+    />
+  )
+
+  // Two columns on wide screens: what the announcement says to the left, and
+  // the settings (level, status, dates, people, switches) to the right
+  const contentFields = formFields.filter(isContentField)
+  const metadataFields = formFields.filter((field) => !isContentField(field))
+  const twoColumns = contentFields.length > 0 && metadataFields.length > 0
+
   return (
     <Dialog open={props.open} onOpenChange={(_, data) => props.onOpenChange(data.open)}>
-      <DialogSurface aria-describedby={undefined}>
+      <DialogSurface
+        aria-describedby={undefined}
+        style={twoColumns ? { maxWidth: FORM_MAX_WIDTH } : undefined}>
         <form
           onSubmit={(event) => {
             event.preventDefault()
@@ -91,21 +125,17 @@ export const CreateAnnouncementDialog: FC<ICreateAnnouncementDialogProps> = (pro
               }>
               {props.announcement ? strings.EditDialogTitle : strings.CreateDialogTitle}
             </DialogTitle>
-            <DialogContent className={styles.form}>
-              {formFields.map((field) => (
-                <FieldInput
-                  key={field.internalName}
-                  field={field}
-                  value={values[field.internalName]}
-                  error={errors[field.internalName]}
-                  disabled={saving || field.internalName in lockedFields}
-                  hint={lockedFields[field.internalName]}
-                  onChange={(value) => setValue(field.internalName, value)}
-                  searchPeople={searchPeople}
-                />
-              ))}
+            <DialogContent className={twoColumns ? styles.form : styles.formSingle}>
+              {twoColumns ? (
+                <>
+                  <div className={styles.column}>{contentFields.map(renderField)}</div>
+                  <div className={styles.column}>{metadataFields.map(renderField)}</div>
+                </>
+              ) : (
+                formFields.map(renderField)
+              )}
               {saveError && (
-                <MessageBar intent='error'>
+                <MessageBar intent='error' className={styles.saveError}>
                   <MessageBarBody>{saveError}</MessageBarBody>
                 </MessageBar>
               )}

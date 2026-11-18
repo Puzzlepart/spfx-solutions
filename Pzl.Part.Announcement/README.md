@@ -255,6 +255,7 @@ The package is written to `sharepoint/solution/pzl-announcement.sppkg`.
 * The editor functions are gathered in a collapsed section **Handlinger og varsling** at the bottom of the dialog, shown only to users who may edit the list. «Varslet i Teams» moved there from the details, so other users no longer see it. The dialog is the same from the web part and the banner, so editors can mark as resolved, edit and notify from the banner too.
 * A change made in the web part is shown in the banner on the same page at once, and the other way round.
 * Section backgrounds: on a section with a dark background the header, the info icon, the **New announcement** button and the "no announcements" text use the section's text colour. They were dark on dark.
+* The form for new and edited announcements has two columns on wide screens: the title and text fields to the left, and level, status, dates, people and switches to the right. One column below 720px.
 * The dialog shows the announcement's icon beside the title, with the same icon and colour as in the list and the banner.
 
 ### 2.0.0
