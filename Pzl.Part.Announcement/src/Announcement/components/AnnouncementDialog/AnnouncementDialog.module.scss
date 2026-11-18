@@ -11,3 +11,30 @@
 .actions button {
   white-space: nowrap;
 }
+
+.title {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+// Colours as in Fluent's MessageBar
+.intentIcon {
+  flex-shrink: 0;
+  font-size: 24px;
+  // Centred on the first line of the title (line height 28px)
+  margin-top: 2px;
+  color: var(--colorNeutralForeground3);
+
+  &.warning {
+    color: var(--colorStatusWarningForeground3);
+  }
+
+  &.error {
+    color: var(--colorStatusDangerForeground1);
+  }
+
+  &.success {
+    color: var(--colorStatusSuccessForeground1);
+  }
+}
