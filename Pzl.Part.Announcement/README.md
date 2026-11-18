@@ -65,7 +65,9 @@ The install script creates such a page, see [Information page](#information-page
 
 A click on an announcement (or Enter/Space) opens a modal dialog at the centre of the page with the details. The dialog is the same whether it is opened from the web part or from the banner.
 
-Users with the *Edit items* permission on the list get a collapsed section **Handlinger og varsling** at the bottom of the dialog. It holds **Marker som løst** (planned and ongoing announcements), **Marker som pågår** (planned), **Rediger** (see [Editing](#editing)), when the announcement was notified in Teams, and the Teams notification switches. The status is written with the list's own choice value, so a list provisioned in English gets *Resolved*. The status buttons are shown only when the list has the *Status* column. Other users do not see the section.
+Users with the *Edit items* permission on the list get a collapsed section **Handlinger og varsling** at the bottom of the dialog. It holds **Marker som løst** (planned and ongoing announcements), **Marker som pågår** (planned), **Avslutt melding**, **Rediger** (see [Editing](#editing)), when the announcement was notified in Teams, and the Teams notification switches. The status is written with the list's own choice value, so a list provisioned in English gets *Resolved*. The status buttons are shown only when the list has the *Status* column. Other users do not see the section.
+
+**Avslutt melding** is a shortcut for taking an announcement down now: after a confirmation it sets the status to *Løst* and the end date to now, so the announcement is no longer shown to the users. **Marker som løst** only changes the status, and the announcement stays (green) until its end date. For an announcement whose display period is already over, **Avslutt melding** only sets the status; an upcoming announcement cannot be ended (edit its dates instead), and the button is hidden when there is nothing to end.
 
 When the web part and the banner are on the same page, a change made in one is shown in the other at once.
 
@@ -278,6 +280,7 @@ The page is published but not added to the navigation. It is an ordinary page: e
 * The form for new and edited announcements has two columns on wide screens: the title and text fields to the left, and level, status, dates, people and switches to the right. One column below 720px.
 * New web part properties **Vis kommende driftsmeldinger**, **Vis tidligere driftsmeldinger** and **Kompakt tabellvisning**, for an overview page with every announcement in the list.
 * The install script creates the page **Driftsmeldinger** with that overview and a guide in Norwegian, with a section on Teams notifications when the add-on is installed.
+* New action **Avslutt melding** under **Handlinger og varsling**: sets the status to *Løst* and the end date to now, after a confirmation.
 * The dialog shows the announcement's icon beside the title, with the same icon and colour as in the list and the banner.
 
 ### 2.0.0

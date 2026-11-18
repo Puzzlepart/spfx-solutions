@@ -20,6 +20,11 @@ export const SHOW_AS_BANNER_FIELD = 'PzlShowAsBanner'
 export const STATUS_FIELD = 'PzlStatus'
 
 /**
+ * Internal name of the end date field (end of the display period)
+ */
+export const END_DATE_FIELD = 'PzlEndDate'
+
+/**
  * Internal name of the message level field
  */
 export const SEVERITY_FIELD = 'PzlSeverity'

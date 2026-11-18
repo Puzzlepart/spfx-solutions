@@ -55,6 +55,13 @@ declare interface IAnnouncementStrings {
   }
   Editor: {
     SectionTitle: string
+    EndButtonText: string
+    EndDialogTitle: string
+    EndSetsResolvedText: string
+    EndSetsEndDateText: string
+    EndConfirmButtonText: string
+    EndSuccessText: string
+    EndErrorText: string
   }
   Notification: {
     SectionTitle: string

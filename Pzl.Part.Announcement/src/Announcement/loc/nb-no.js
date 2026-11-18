@@ -55,7 +55,15 @@ define([], function () {
       To: 'Vises til'
     },
     Editor: {
-      SectionTitle: 'Handlinger og varsling'
+      SectionTitle: 'Handlinger og varsling',
+      EndButtonText: 'Avslutt melding',
+      EndDialogTitle: 'Avslutte driftsmeldingen?',
+      EndSetsResolvedText: 'Statusen settes til Løst.',
+      EndSetsEndDateText:
+        'Sluttdatoen settes til nå, slik at meldingen ikke vises for brukerne lenger.',
+      EndConfirmButtonText: 'Avslutt melding',
+      EndSuccessText: 'Driftsmeldingen er avsluttet.',
+      EndErrorText: 'Kunne ikke avslutte driftsmeldingen. Prøv igjen.'
     },
     Notification: {
       SectionTitle: 'Varsling i Teams',
