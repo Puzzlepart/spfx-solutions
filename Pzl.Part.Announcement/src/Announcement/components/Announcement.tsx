@@ -20,6 +20,7 @@ import { AnnouncementContext } from './context'
 import { useAnnouncement } from './useAnnouncement'
 import { UserMessage } from './UserMessage'
 import { AnnouncementDialog } from './AnnouncementDialog'
+import { getSectionTheme, SectionTheme } from './SectionTheme'
 import { NotificationSettings } from './NotificationSettings'
 import { CreateAnnouncementDialog } from './CreateAnnouncementDialog'
 import { getIntent } from './intent'
@@ -103,7 +104,7 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
         <FluentProvider theme={webLightTheme} style={{ backgroundColor: 'transparent' }}>
           <div className={styles.announcement}>
             {(!props.hideHeader || showCreateButton) && (
-              <div className={styles.header}>
+              <SectionTheme themeVariant={props.themeVariant} className={styles.header}>
                 {!props.hideHeader && props.title && (
                   <Text title={props.title} weight='semibold' size={500} block truncate>
                     {props.title}
@@ -135,9 +136,16 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                     {strings.CreateButtonText}
                   </Button>
                 )}
-              </div>
+              </SectionTheme>
             )}
-            <div className={styles.announcements}>
+            <div
+              className={styles.announcements}
+              // The focus outline is drawn on the section: its colour follows the section
+              style={
+                {
+                  '--colorStrokeFocus2': getSectionTheme(props.themeVariant).colorStrokeFocus2
+                } as React.CSSProperties
+              }>
               {state.announcements.length > 0 ? (
                 state.announcements.map((announcement) => (
                   <div
@@ -172,9 +180,11 @@ export const Announcement: FC<IAnnouncementProps> = (props) => {
                   </div>
                 ))
               ) : (
-                <Text style={{ color: 'var(--colorNeutralForeground4)' }}>
-                  {strings.NoAnnouncementsText}
-                </Text>
+                <SectionTheme themeVariant={props.themeVariant}>
+                  <Text style={{ color: 'var(--colorNeutralForeground4)' }}>
+                    {strings.NoAnnouncementsText}
+                  </Text>
+                </SectionTheme>
               )}
             </div>
           </div>

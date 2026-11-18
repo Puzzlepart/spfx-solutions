@@ -9,6 +9,11 @@ import {
   PropertyPaneToggle
 } from '@microsoft/sp-property-pane'
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base'
+import {
+  type IReadonlyTheme,
+  ThemeChangedEventArgs,
+  ThemeProvider
+} from '@microsoft/sp-component-base'
 import { Announcement, IAnnouncementProps, IListField } from './components'
 import { AnnouncementListService, isFormField } from './services/AnnouncementListService'
 import { DEFAULT_POPOVER_FIELDS, isFormFieldEnabled } from './constants'
@@ -53,12 +58,24 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
    */
   private _fields: IListField[]
   private _root: Root | undefined
+  /**
+   * Theme of the page section the web part is in, kept up to date when the
+   * section background is changed
+   */
+  private _themeProvider: ThemeProvider
+  private _themeVariant: IReadonlyTheme | undefined
+
+  private _onThemeChanged(args: ThemeChangedEventArgs): void {
+    this._themeVariant = args.theme
+    this.render()
+  }
 
   public render(): void {
     const element: React.ReactElement<IAnnouncementProps> = React.createElement(Announcement, {
       ...this.properties,
       key: `${this._serviceSiteUrl}|${this._notificationConfigSiteUrl}`,
       context: this.context,
+      themeVariant: this._themeVariant,
       service: this._service
     })
 
@@ -85,6 +102,9 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
 
   protected async onInit(): Promise<void> {
     await super.onInit()
+    this._themeProvider = this.context.serviceScope.consume(ThemeProvider.serviceKey)
+    this._themeVariant = this._themeProvider.tryGetTheme()
+    this._themeProvider.themeChangedEvent.add(this, this._onThemeChanged)
     this._createService()
     if (!this.properties.popoverFields) {
       this.properties.popoverFields = { ...DEFAULT_POPOVER_FIELDS }
@@ -96,6 +116,7 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
 
   protected onDispose(): void {
     window.clearTimeout(this._listSiteUrlTimer)
+    this._themeProvider?.themeChangedEvent.remove(this, this._onThemeChanged)
     this._root?.unmount()
     this._root = undefined
   }

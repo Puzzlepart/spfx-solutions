@@ -250,6 +250,7 @@ The package is written to `sharepoint/solution/pzl-announcement.sppkg`.
 * Start and end date: a date picker with a calendar, the time of day and an **OK** button, instead of the browser's own picker.
 * A link in the content of an announcement opens the link, not the dialog.
 * **Rediger** edits the announcement in the web part's own form dialog instead of opening the list's edit form.
+* Section backgrounds: on a section with a dark background the header, the info icon, the **New announcement** button and the "no announcements" text use the section's text colour. They were dark on dark.
 * The dialog shows the announcement's icon beside the title, with the same icon and colour as in the list and the banner.
 
 ### 2.0.0
