@@ -16,7 +16,7 @@ import {
 } from '@microsoft/sp-component-base'
 import { Announcement, IAnnouncementProps, IListField } from './components'
 import { AnnouncementListService, isFormField } from './services/AnnouncementListService'
-import { DEFAULT_POPOVER_FIELDS, isFormFieldEnabled } from './constants'
+import { DEFAULT_POPOVER_FIELDS, isFormFieldEnabled, NOTIFIED_AT_FIELD } from './constants'
 
 /**
  * Delay (ms) before a changed «Område for driftsmeldinger» or «Område for
@@ -164,7 +164,7 @@ export default class AnnouncementWebPart extends BaseClientSideWebPart<IAnnounce
       return [PropertyPaneLabel('popoverFieldsLoading', { text: 'Laster felter fra lista …' })]
     }
     return this._fields
-      .filter((field) => field.internalName !== 'Title')
+      .filter((field) => field.internalName !== 'Title' && field.internalName !== NOTIFIED_AT_FIELD)
       .map((field) =>
         PropertyPaneToggle(`popoverFields.${field.internalName}`, {
           label: field.title,

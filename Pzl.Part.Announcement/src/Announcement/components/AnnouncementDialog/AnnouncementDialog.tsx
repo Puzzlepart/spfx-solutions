@@ -27,7 +27,7 @@ export interface IAnnouncementDialogProps {
   fields: IListField[]
   onClose: () => void
   /**
-   * Shown below the details: «For redaktører», for users who may edit the list
+   * Shown below the details: «Handlinger og varsling», for users who may edit the list
    */
   children?: ReactNode
 }

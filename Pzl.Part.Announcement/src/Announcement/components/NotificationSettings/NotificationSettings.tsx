@@ -1,10 +1,12 @@
 import React, { FC, useState } from 'react'
 import { Text } from '@fluentui/react-components'
+import { Alert16Regular } from '@fluentui/react-icons'
 import { format } from '@fluentui/react'
 import strings from 'AnnouncementStrings'
 import { IAnnouncement, IListField } from '../types'
 import { FieldInput } from '../CreateAnnouncementDialog/FieldInput'
 import { SEVERITY_FIELD } from '../../constants'
+import { formatShortDateTime } from '../../util/formatDate'
 import styles from './NotificationSettings.module.scss'
 
 export interface INotificationSettingsProps {
@@ -30,8 +32,9 @@ export interface INotificationSettingsProps {
 }
 
 /**
- * The switches of the notification add-on in «For redaktører» in the details
- * dialog: «Varsle i Teams» and «Varsle på nytt». A change is
+ * The switches of the notification add-on in «Handlinger og varsling» in the details
+ * dialog: when the announcement was notified, and «Varsle i Teams» and «Varsle
+ * på nytt». A change is
  * saved at once; the notification service picks it up on its next run.
  */
 export const NotificationSettings: FC<INotificationSettingsProps> = ({
@@ -80,6 +83,14 @@ export const NotificationSettings: FC<INotificationSettingsProps> = ({
       <Text weight='semibold' block>
         {strings.Notification.SectionTitle}
       </Text>
+      {announcement.notifiedAt && (
+        <div className={styles.notified}>
+          <Alert16Regular />
+          <Text size={200}>
+            {format(strings.NotifiedAtText, formatShortDateTime(announcement.notifiedAt))}
+          </Text>
+        </div>
+      )}
       {renderSwitch(notifyTeamsField, alwaysNotified)}
       {renderSwitch(notifyAgainField, false)}
     </div>

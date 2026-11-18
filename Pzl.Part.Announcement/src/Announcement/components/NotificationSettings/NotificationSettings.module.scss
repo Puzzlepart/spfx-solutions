@@ -3,3 +3,10 @@
   flex-direction: column;
   gap: 8px;
 }
+
+.notified {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--colorNeutralForeground3);
+}

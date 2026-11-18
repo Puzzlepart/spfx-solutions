@@ -54,7 +54,7 @@ export interface IEditorSectionProps {
 }
 
 /**
- * «For redaktører»: a collapsed section at the bottom of the details dialog,
+ * «Handlinger og varsling»: a collapsed section at the bottom of the details dialog,
  * shown only to users who may edit the list. Holds the status buttons,
  * «Rediger» and the Teams notification switches.
  */
@@ -114,7 +114,7 @@ export const EditorSection: FC<IEditorSectionProps> = (props) => {
                   <MessageBarBody>{strings.QuickActions.StatusChangeErrorText}</MessageBarBody>
                 </MessageBar>
               )}
-              {(props.notifyTeamsField || props.notifyAgainField) && (
+              {(props.notifyTeamsField || props.notifyAgainField || announcement.notifiedAt) && (
                 <NotificationSettings
                   announcement={announcement}
                   notifyTeamsField={props.notifyTeamsField}

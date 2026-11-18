@@ -36,7 +36,7 @@ export interface IAnnouncementBannerProps {
    */
   fields: IListField[]
   /**
-   * Set for users who may edit the list: the dialog gets «For redaktører»
+   * Set for users who may edit the list: the dialog gets «Handlinger og varsling»
    */
   editor?: IAnnouncementEditor
   /**
@@ -75,7 +75,7 @@ function preview(content: string): string {
  * follow the announcement's level and status (see `getIntent`): a resolved
  * announcement is green. Editing an announcement (for example marking it as
  * resolved) changes `Modified`, so a dismissed banner is shown once more. Click opens
- * the same details dialog as the web part, with «For redaktører» for users who
+ * the same details dialog as the web part, with «Handlinger og varsling» for users who
  * may edit the list; the close button dismisses the banner for this user.
  */
 export const AnnouncementBanner: FC<IAnnouncementBannerProps> = (props) => {

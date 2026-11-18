@@ -46,7 +46,7 @@ export interface IAnnouncementDialogsProps {
   fields: IListField[]
   onClose: () => void
   /**
-   * Set for users who may edit the list: adds «For redaktører» and the edit form
+   * Set for users who may edit the list: adds «Handlinger og varsling» and the edit form
    */
   editor?: IAnnouncementEditor
   /**

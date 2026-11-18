@@ -43,7 +43,7 @@ define([], function () {
       StatusChangeErrorText: 'Kunne ikke endre status. Prøv igjen.'
     },
     Editor: {
-      SectionTitle: 'For redaktører'
+      SectionTitle: 'Handlinger og varsling'
     },
     Notification: {
       SectionTitle: 'Varsling i Teams',

@@ -1,14 +1,12 @@
 import React, { FC } from 'react'
 import { Avatar, Link, Text } from '@fluentui/react-components'
-import { Alert16Regular } from '@fluentui/react-icons'
-import { format } from '@fluentui/react'
 import ReactMarkdown from 'react-markdown'
 import rehypeRaw from 'rehype-raw'
 import strings from 'AnnouncementStrings'
 import styles from './Announcement.module.scss'
 import { IAnnouncement, IListField } from './types'
 import { CONTENT_FIELD, NOTIFIED_AT_FIELD } from '../constants'
-import { formatDate, formatShortDateTime } from '../util/formatDate'
+import { formatDate } from '../util/formatDate'
 import { isEmptyValue, looksLikeHtml } from '../util/fieldValue'
 import { StatusBadge } from './StatusBadge'
 
@@ -99,10 +97,10 @@ export interface IAnnouncementDetailsProps {
 
 /**
  * The details of an announcement in the dialog: status, the selected fields
- * and the "notified in Teams" footer. The title is the dialog's title.
+ * («Varslet i Teams» is left out: it is shown under «Handlinger og varsling»,
+ * for those who may edit). The title is the dialog's title.
  */
 export const AnnouncementDetails: FC<IAnnouncementDetailsProps> = ({ announcement, fields }) => {
-  const showNotifiedAt = fields.some((field) => field.internalName === NOTIFIED_AT_FIELD)
   const bodyFields = fields.filter((field) => field.internalName !== NOTIFIED_AT_FIELD)
 
   return (
@@ -126,14 +124,6 @@ export const AnnouncementDetails: FC<IAnnouncementDetailsProps> = ({ announcemen
           </div>
         )
       })}
-      {showNotifiedAt && announcement.notifiedAt && (
-        <div className={styles.notified}>
-          <Alert16Regular />
-          <Text size={200}>
-            {format(strings.NotifiedAtText, formatShortDateTime(announcement.notifiedAt))}
-          </Text>
-        </div>
-      )}
     </div>
   )
 }
