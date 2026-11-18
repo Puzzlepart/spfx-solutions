@@ -16,9 +16,11 @@ Tittelen i bjella sier hva slags varsel det er:
 | «Varsle på nytt», ellers | «Oppdatert: <tittel>» |
 | Nyhet | «<tittel>» |
 
-Varslene respekterer **målgruppestyring**: har elementet målgrupper, varsles medlemmene i de gruppene. Ellers varsles standardgruppene for området. Klikk på et driftsmeldingsvarsel åpner en Teams-fane som viser intranettet, med meldingen i popover. Klikk på et nyhetsvarsel åpner samme fane, og customizer-en **NotificationDeepLink** i SPFx-pakken til dette tillegget (se [steg 4](#steg-4-teams-appen)) sender brukeren rett til nyhetssiden. Stage view ble prøvd for nyheter og forkastet: artikkelen åpnet i et vindu uten intranettets navigasjon, og mobil støtter det ikke. Graph krever at lenkene er Teams-deep-linker, så fanen er enten varsel-appens egen fane (standard) eller en fane i intranettets egen Teams-app.
+Varslene respekterer **målgruppestyring**: har elementet målgrupper, varsles medlemmene i de gruppene. Ellers varsles standardgruppene for området. Klikk på et driftsmeldingsvarsel åpner en Teams-fane som viser intranettet, med detaljene for meldingen åpne. Klikk på et nyhetsvarsel åpner samme fane, og customizer-en **NotificationDeepLink** i SPFx-pakken til dette tillegget (se [steg 4](#steg-4-teams-appen)) sender brukeren rett til nyhetssiden. Stage view ble prøvd for nyheter og forkastet: artikkelen åpnet i et vindu uten intranettets navigasjon, og mobil støtter det ikke. Graph krever at lenkene er Teams-deep-linker, så fanen er enten varsel-appens egen fane (standard) eller en fane i intranettets egen Teams-app.
 
 Lista og webdelen fungerer uten dette tillegget. Kolonnene tjenesten bruker (`PzlNotifyTeams` «Varsle i Teams», `PzlNotifyAgain` «Varsle på nytt» og `PzlNotifiedAt` «Varslet i Teams») legges til driftsmeldingslista med malen `Templates/AnnouncementFields.xml` i dette tillegget, se [steg 3](#steg-3-sharepoint).
+
+Denne README-en handler om oppsett og drift av tjenesten. Hvordan de som skriver driftsmeldinger bruker varslingen i webdelen, står i [README for Driftsmeldinger](../Pzl.Part.Announcement/README.md#teams-notifications-in-the-dialogs), og i veiledningen på siden *Driftsmeldinger* som installasjonsskriptet oppretter på intranettet.
 
 ## Innhold
 
@@ -134,7 +136,7 @@ Grant-PnPAzureADAppSitePermission -AppId <MI_CLIENT> -DisplayName "Intranett-var
 
 ## Steg 3: SharePoint
 
-Steg 1 til 3 under (og SPFx-pakken fra steg 4) kan gjøres med `Pzl.Part.Announcement/scripts/Install-Driftsmeldinger.ps1 -EnableTeamsNotifications`, se [README for Driftsmeldinger](../Pzl.Part.Announcement/README.md#with-the-install-script-new-installation-and-upgrade). Radene i konfigurasjonslista og målgruppestyring gjøres for hånd.
+Steg 1 til 3 under (og SPFx-pakken fra steg 4) kan gjøres med `Pzl.Part.Announcement/scripts/Install-Driftsmeldinger.ps1 -EnableTeamsNotifications`, se [README for Driftsmeldinger](../Pzl.Part.Announcement/README.md#with-the-install-script-new-installation-and-upgrade). Med `-EnableTeamsNotifications` får også siden *Driftsmeldinger* på intranettet en seksjon om varsling i Teams (se [Information page](../Pzl.Part.Announcement/README.md#information-page)). Radene i konfigurasjonslista og målgruppestyring gjøres for hånd.
 
 1. Legg varslingskolonnene til driftsmeldingslista på hvert område tjenesten skal varsle fra. Malen bygger på innholdstypen fra hovedmalen, så kjør den etter `Announcement.xml`, og kjør den på nytt hver gang hovedmalen er kjørt på nytt:
 
@@ -143,7 +145,7 @@ Steg 1 til 3 under (og SPFx-pakken fra steg 4) kan gjøres med `Pzl.Part.Announc
    Invoke-PnPSiteTemplate -Path .\Templates\AnnouncementFields.xml
    ```
 
-   Webdelen (fra 2.1.0) viser da «Varsle i Teams» i skjemaet for ny driftsmelding, og «Varsle i Teams» og «Varsle på nytt» for redaktører i dialogen som åpnes ved klikk på en driftsmelding. En endring i dialogen lagres med en gang og plukkes opp ved neste kjøring. I listeskjemaet vises «Varsle på nytt» bare når et element redigeres. Legg gjerne kolonnene til visningen av lista.
+   Webdelen viser da «Varsle i Teams» i skjemaet for ny driftsmelding, og «Varsle i Teams», «Varsle på nytt» og «Varslet i Teams» under «Handlinger og varsling» i detaljdialogen, for brukere med redigeringsrett på lista. Se [README for Driftsmeldinger](../Pzl.Part.Announcement/README.md#teams-notifications-in-the-dialogs). Legg gjerne kolonnene til visningen av lista.
 
    Webdelen leser «Nivåer som alltid varsles» fra **Varslingskonfigurasjon** (se punkt 3) og viser «Varsle i Teams» som valgt og låst for disse nivåene, siden tjenesten varsler om dem uansett. Lista letes etter på området med driftsmeldingene og deretter på rotområdet. Ligger den et annet sted, settes «Område for varslingskonfigurasjon» i egenskapene til webdelen. Redaktørene må ha lesetilgang til lista.
 2. Opprett konfigurasjonslista på området som skal eie konfigurasjonen (typisk rot- eller hub-området):
@@ -220,7 +222,7 @@ Aktivitetsvarsler må sendes fra en Teams-app der `webApplicationInfo.id` er cli
    az functionapp config appsettings set -g <ressursgruppe> -n <function-app> --settings TEAMS_DEEPLINK_APP_ID=<Teams-app-ID fra punkt 1> TEAMS_DEEPLINK_ENTITY_ID=intranet
    ```
 
-   Fanen i varsel-appen sender `{subEntityId}` videre til intranettet som `?driftsmelding=`, og det er den parameteren webdelen bruker: `driftsmelding:<id>` åpner driftsmeldingen i popover, `page:<url>` (nyheter) sender brukeren videre til nyhetssiden. Webdelen må derfor ligge på siden fanen åpner, normalt forsiden.
+   Fanen i varsel-appen sender `{subEntityId}` videre til intranettet som `?driftsmelding=`. Webdelen leser `driftsmelding:<id>` og åpner detaljene for driftsmeldingen, så den må ligge på siden fanen åpner, normalt forsiden. `page:<url>` (nyheter) håndteres ikke av webdelen, men av customizer-en under.
 
    Videresendingen for nyheter gjøres av application customizer-en **NotificationDeepLink** (komponent-ID `1e8a8edf-84b4-4a5e-9fcc-5ec33e34a509`) i SPFx-pakken til dette tillegget, så den skjer før sideinnholdet lastes og uavhengig av hvilke webdeler siden har. Bygg pakken med `npm i` og `npm run package` i denne mappa (Node 22), og last opp `sharepoint/solution/pzl-ext-notification.sppkg` til appkatalogen. Customizer-en registreres som custom action på området når pakken legges til fra en områdesamlings-appkatalog. Er pakken distribuert for hele tenanten, kjør malen på området fanen åpner:
 
@@ -302,7 +304,7 @@ Svaret inneholder `ok` og eventuell Graph-feil (`graphStatus` og `graphError`). 
 1. Konfigurasjonsrad mot en testgruppe, setup policy mot samme gruppe.
 2. Test variantene, med nyheter og driftsmeldinger opprettet etter at `DRY_RUN` ble slått av (det som lå der fra før, varsles ikke): nyhet, driftsmelding med et nivå fra «Nivåer som alltid varsles», driftsmelding med «Varsle i Teams», driftsmelding med status *Planlagt*, og «Varsle på nytt» på en driftsmelding som er satt til *Løst*.
 3. Klikk varselet på desktop, web og mobil og se at riktig side/driftsmelding åpnes.
-4. Sjekk at `PzlNotifiedAt` settes på driftsmeldingen og vises i webdelens popover.
+4. Sjekk at `PzlNotifiedAt` settes på driftsmeldingen og vises som «Varslet i Teams» under «Handlinger og varsling» i detaljdialogen (for en bruker med redigeringsrett på lista).
 5. Bytt standardgruppe og setup policy til produksjonsgruppene.
 
 ## Lokal kjøring
@@ -329,4 +331,6 @@ Kopier `function/local.settings.json.example` til `local.settings.json`. Lokalt 
 | Loggen sier «Sent … to N recipients», men ingenting i bjella | Appen var ikke installert for mottakeren da det ble sendt (setup policy tar tid), eller `templateParameters` matcher ikke `templateText`. Send et testvarsel med `/api/test-notification` til én bruker for å få feilen. |
 | Nyheter varsles ikke | `PromotedState = 2`, publisert hovedversjon, innenfor `NEWS_LOOKBACK_DAYS`, publisert etter at nyhetsvarslingen startet for området (raden `news-start` i tabellen `NotificationState`), og ikke allerede en rad i tabellen |
 | Driftsmeldinger varsles ikke | Startdato passert, sluttdato ikke passert, `PzlNotifiedAt` tom, status ikke *Løst*, nivå/«Varsle i Teams», og opprettet eller aktiv etter at varslingen startet for området (raden `announcement-start` i tabellen `NotificationState`; loggen teller dem som «from before the notifications started»). For nytt varsel: «Varsle på nytt» satt (kolonnen fra `AnnouncementFields.xml`) |
+| «Varsle på nytt» ga ikke noe varsel | Meldingen må fortsatt være aktiv når tjenesten kjører (hvert minutt). «Avslutt melding» i webdelen setter sluttdatoen til nå, så en melding som avsluttes før varselet er sendt, varsles ikke. Vent til «Varslet i Teams» har fått nytt tidspunkt før meldingen avsluttes |
+| Forhåndsvisningen i varselet viser tegnkoder som `&#58;` | Function-appen er eldre enn rettingen for rik tekst. Publiser den på nytt med `Publish-NotificationFunction.ps1` |
 | Dobbelt varsel | Viva Connections kan også varsle om nyheter. Skru av det ene. |

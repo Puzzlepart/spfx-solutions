@@ -4,15 +4,63 @@
 
 ## Summary
 
-Driftsmeldinger shows operational announcements (incidents, outages, planned maintenance) from one central SharePoint list, in a web part and optionally as a banner at the top of the pages. Each announcement has a **message level** (*Informasjon / Advarsel / Kritisk*) and a **status** (*Planlagt / Pågår / Løst*), and is shown between its start and end date. Audience targeting is supported. Users who may add items to the list get a **New announcement** button that opens a form built from the fields of the list; a click on an announcement opens a dialog with the details, where users who may edit items can change the status and the Teams notification.
+Driftsmeldinger tells the users of an intranet that something is, was or will be affected in the IT and operations services: incidents, outages and planned maintenance. The announcements live in one central SharePoint list and are shown in three places:
+
+* a **web part** that lists the announcements that apply now, on the front page and on any other site
+* an optional **banner** at the top of the pages, for the announcements most people must see
+* an **overview page** with every announcement (active, upcoming and past) and a guide for the people who write them
+
+Each announcement has a **message level** (*Informasjon / Advarsel / Kritisk*) that gives it its colour and icon, a **status** (*Planlagt / Pågår / Løst*), and a **display period** (start and end date) that decides when it is shown. Audience targeting is supported.
+
+People who may add or edit items in the list do the work where the announcements are shown, without going to the list: a button for a **new announcement**, and in the details dialog a section **Handlinger og varsling** to mark an announcement as resolved, end it, edit it and notify in Teams.
 
 Teams notifications are an optional add-on, [Pzl.Ext.Notification](../Pzl.Ext.Notification/README.md). The terms used in the solution are defined in [CONTEXT.md](CONTEXT.md).
 
-| Announcements                                                                             | Details (on click; now a dialog)                                                          |
-| ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| ![image](https://github.com/user-attachments/assets/c8de6cc6-c843-4d54-957b-4d7e55b9e363) | ![image](https://github.com/user-attachments/assets/413b3a74-d682-4e88-b136-797c6fcbec7c) |
+## What it looks like
 
-![image](https://github.com/user-attachments/assets/c934d56e-1590-4880-8877-8a545acb9cf6)
+The screenshots are from a test page with example data, so the SharePoint page around the parts is not shown.
+
+### Web part and banner
+
+The web part shows the active announcements as cards, coloured by level. A resolved announcement is green whatever its level was, and a planned one has a calendar icon. Pinned announcements come first. The banner shows the announcements marked **Vis som banner** across the top of the page, and each user can close it.
+
+![The banner at the top of the page and the web part with three announcements](docs/webdel-og-banner.png)
+
+On a page section with a dark background, the header and the button take the section's text colour:
+
+![The web part on a dark red page section](docs/mork-seksjon.png)
+
+### Details
+
+A click on an announcement, in the web part or in the banner, opens the same dialog with the fields chosen in the web part properties.
+
+![The details dialog for a planned announcement](docs/detaljer.png)
+
+### Handlinger og varsling
+
+Users who may edit the list get a collapsed section at the bottom of the dialog. It holds the status buttons, **Avslutt melding**, **Rediger** and, with the notification add-on, the Teams switches and when the announcement was notified. Other users do not see it.
+
+![The details dialog with the section Handlinger og varsling open](docs/handlinger-og-varsling.png)
+
+**Avslutt melding** takes the announcement down at once, after a confirmation:
+
+![The confirmation for ending an announcement](docs/avslutt-melding.png)
+
+### New and edited announcements
+
+**Ny driftsmelding** and **Rediger** open a form built from the fields of the list, with the column descriptions as help texts. On wide screens the text fields are to the left and the settings to the right.
+
+![The form for editing an announcement, in two columns](docs/skjema.png)
+
+Dates are chosen in a picker with a calendar, the time of day and an **OK** button:
+
+![The date picker with calendar, time of day and OK button](docs/datovelger.png)
+
+### Overview page
+
+With **Vis kommende driftsmeldinger**, **Vis tidligere driftsmeldinger** and **Kompakt tabellvisning** the web part lists everything in the list, grouped by period. The install script creates a page with this overview and a guide, see [Information page](#information-page).
+
+![The web part as a compact table with active, upcoming and past announcements](docs/oversikt.png)
 
 ## The list
 
@@ -61,7 +109,7 @@ The web part normally shows only the announcements that apply now. With **Vis ko
 
 The install script creates such a page, see [Information page](#information-page).
 
-### Quick actions
+### Details dialog and Handlinger og varsling
 
 A click on an announcement (or Enter/Space) opens a modal dialog at the centre of the page with the details. The dialog is the same whether it is opened from the web part or from the banner.
 
