@@ -1,5 +1,6 @@
 import { SPUser } from '@microsoft/sp-page-context'
 import { WebPartContext } from '@microsoft/sp-webpart-base'
+import type { IReadonlyTheme } from '@microsoft/sp-component-base'
 import type { AnnouncementListService } from '../services/AnnouncementListService'
 import type { Severity, Status } from '../model'
 
@@ -43,6 +44,11 @@ export interface IAnnouncementProps {
   // WebPart
   currentUser: SPUser
   context: WebPartContext
+  /**
+   * Theme of the page section the web part is in (section background). Used
+   * for the colours of what is drawn directly on the section.
+   */
+  themeVariant?: IReadonlyTheme
   /**
    * Service for the announcement list (schema, permissions, create)
    */

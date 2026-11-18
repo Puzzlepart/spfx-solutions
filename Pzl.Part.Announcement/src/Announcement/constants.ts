@@ -4,7 +4,7 @@
 export const CONTENT_FIELD = 'PzlContent'
 
 /**
- * Internal name of the "notified in Teams" field, rendered as a footer in the details dialog
+ * Internal name of the "notified in Teams" field, shown under «Handlinger og varsling» in the details dialog, for users who may edit the list
  */
 export const NOTIFIED_AT_FIELD = 'PzlNotifiedAt'
 
@@ -55,8 +55,7 @@ export const DEFAULT_POPOVER_FIELDS: Record<string, boolean> = {
   PzlEndDate: true,
   PzlAffectedSystems: true,
   PzlConsequences: true,
-  PzlResponsible: true,
-  PzlNotifiedAt: true
+  PzlResponsible: true
 }
 
 /**

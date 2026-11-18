@@ -1,0 +1,19 @@
+.editorSection {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  // Room for the focus outline of the first button
+  padding-top: 4px;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}

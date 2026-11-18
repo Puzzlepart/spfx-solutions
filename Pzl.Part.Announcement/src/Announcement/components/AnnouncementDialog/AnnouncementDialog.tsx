@@ -7,9 +7,7 @@ import {
   DialogContent,
   DialogSurface,
   DialogTitle,
-  DialogTrigger,
-  MessageBar,
-  MessageBarBody
+  DialogTrigger
 } from '@fluentui/react-components'
 import { Dismiss24Regular } from '@fluentui/react-icons'
 import strings from 'AnnouncementStrings'
@@ -29,35 +27,19 @@ export interface IAnnouncementDialogProps {
   fields: IListField[]
   onClose: () => void
   /**
-   * Secondary action at the start (left) of the actions, e.g. «Rediger»
-   */
-  startActions?: ReactNode
-  /**
-   * Actions after the close button, at the end (right), e.g. the status
-   * buttons. The primary button comes last, as in other Fluent dialogs.
-   */
-  endActions?: ReactNode
-  /**
-   * Error from an action, shown at the bottom of the content
-   */
-  error?: string
-  /**
-   * Shown below the details, e.g. the notification settings for editors
+   * Shown below the details: «Handlinger og varsling», for users who may edit the list
    */
   children?: ReactNode
 }
 
 /**
  * The details of an announcement in a modal dialog at the centre of the page.
- * Used by the web part (with the editor functions) and the banner.
+ * Used through `AnnouncementDialogs` by the web part and the banner.
  */
 export const AnnouncementDialog: FC<IAnnouncementDialogProps> = ({
   announcement,
   fields,
   onClose,
-  startActions,
-  endActions,
-  error,
   children
 }) => (
   <Dialog open={!!announcement} onOpenChange={(_, data) => !data.open && onClose()}>
@@ -82,22 +64,11 @@ export const AnnouncementDialog: FC<IAnnouncementDialogProps> = ({
           <DialogContent className={styles.content}>
             <AnnouncementDetails announcement={announcement} fields={fields} />
             {children}
-            {error && (
-              <MessageBar intent='error'>
-                <MessageBarBody>{error}</MessageBarBody>
-              </MessageBar>
-            )}
           </DialogContent>
-          {startActions && (
-            <DialogActions position='start' className={styles.actions}>
-              {startActions}
-            </DialogActions>
-          )}
-          <DialogActions position='end' className={styles.actions}>
+          <DialogActions>
             <DialogTrigger action='close' disableButtonEnhancement>
               <Button appearance='secondary'>{strings.CloseButtonText}</Button>
             </DialogTrigger>
-            {endActions}
           </DialogActions>
         </DialogBody>
       )}

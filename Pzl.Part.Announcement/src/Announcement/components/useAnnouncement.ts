@@ -1,13 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
-import strings from 'AnnouncementStrings'
 import { useAnnouncementState } from './useAnnouncementState'
 import { IAnnouncementProps } from './types'
 import { useId } from '@fluentui/react-components'
 import { useAnnouncementDataFetch } from './useAnnouncementDataFetch'
 import { getFocusedAnnouncementId } from '../util/getFocusedAnnouncementId'
-import { IAnnouncement, IListField } from './types'
-import { isAlwaysNotified, Status, statusChoiceValue } from '../model'
-import { NOTIFY_AGAIN_FIELD, NOTIFY_TEAMS_FIELD, SEVERITY_FIELD, STATUS_FIELD } from '../constants'
+import { IAnnouncementEditor } from './AnnouncementDialogs'
+import { onAnnouncementChanged } from '../util/announcementChanged'
 
 /**
  * Component logic hook for `Announcement`. This hook is responsible for
@@ -21,6 +19,21 @@ export const useAnnouncement = (props: IAnnouncementProps) => {
 
   const fluentProviderId = useId('fp-announcement')
   const toasterId = useId('toaster-announcement')
+  /**
+   * Identifies this web part when it tells the banner about a change
+   */
+  const partId = useId('announcement-web-part')
+
+  // Read the list again when the banner on the page has changed an announcement
+  useEffect(
+    () =>
+      onAnnouncementChanged(partId, () => {
+        refresh().catch(() => {
+          // The list is shown as it was
+        })
+      }),
+    []
+  )
 
   /**
    * ID of the announcement shown in the details dialog
@@ -28,17 +41,9 @@ export const useAnnouncement = (props: IAnnouncementProps) => {
   const [openAnnouncementId, $setOpenAnnouncementId] = useState<string>(null)
 
   /**
-   * Error from an action in the details dialog (status, notification)
-   */
-  const [dialogError, setDialogError] = useState<string>(null)
-
-  /**
    * Opens the details dialog for an announcement, or closes it (`null`)
    */
-  const setOpenAnnouncementId = (id: string | null) => {
-    setDialogError(null)
-    $setOpenAnnouncementId(id)
-  }
+  const setOpenAnnouncementId = (id: string | null) => $setOpenAnnouncementId(id)
 
   const openAnnouncement = state.announcements.find((a) => a.id === openAnnouncementId)
 
@@ -91,115 +96,30 @@ export const useAnnouncement = (props: IAnnouncementProps) => {
   const showCreateButton = state.canCreate && !props.hideCreateButton
 
   /**
-   * The status buttons are shown to users who may edit items, when the list
-   * has the status column. «Rediger» is shown to all who may edit items.
+   * The editor functions of the dialogs, for users who may edit items
    */
-  const statusField = state.fields.find((field) => field.internalName === STATUS_FIELD)
-  const showQuickActions = state.canEdit && !!statusField
-
-  /**
-   * Sets the status of an announcement (quick action), closes the dialog
-   * and fetches the announcements again
-   *
-   * @param announcement Announcement
-   * @param status New status
-   */
-  const setStatus = async (announcement: IAnnouncement, status: Status): Promise<void> => {
-    setDialogError(null)
-    try {
-      await props.service.updateItem(announcement.id, {
-        [statusField.entityPropertyName]: statusChoiceValue(status, statusField.choices)
-      })
-    } catch (error) {
-      setDialogError(strings.QuickActions.StatusChangeErrorText)
-      throw error
-    }
-    setOpenAnnouncementId(null)
-    await refresh().catch(() => {
-      // Ignore, the list is shown as it was
-    })
-  }
-
-  /**
-   * The notification add-on's switches are shown to users who may edit items,
-   * when the list has the add-on's columns
-   */
-  const notifyTeamsField = state.fields.find((field) => field.internalName === NOTIFY_TEAMS_FIELD)
-  const notifyAgainField = state.fields.find((field) => field.internalName === NOTIFY_AGAIN_FIELD)
-  const showNotificationSettings = state.canEdit && (!!notifyTeamsField || !!notifyAgainField)
-
-  /**
-   * Whether the level of the open announcement is always notified
-   */
-  const openAlwaysNotified = isAlwaysNotified(
-    openAnnouncement?.values[SEVERITY_FIELD],
-    state.alwaysNotified
-  )
-
-  /**
-   * Saves «Varsle i Teams» or «Varsle på nytt» on an announcement and fetches
-   * the announcements again. The dialog stays open.
-   *
-   * @param announcement Announcement
-   * @param field The switch's field
-   * @param value New value
-   */
-  const setNotification = async (
-    announcement: IAnnouncement,
-    field: IListField,
-    value: boolean
-  ): Promise<void> => {
-    await props.service.updateItem(announcement.id, { [field.entityPropertyName]: value })
-    await refresh().catch(() => {
-      // Ignore, the list is shown as it was
-    })
-  }
-
-  /**
-   * The announcement shown in the form dialog: set when «Rediger» opened it,
-   * empty when it registers a new announcement
-   */
-  const [editAnnouncement, setEditAnnouncement] = useState<IAnnouncement>(null)
-
-  /**
-   * Opens the form for a new announcement
-   */
-  const openCreateDialog = () => {
-    setEditAnnouncement(null)
-    setCreateDialogOpen(true)
-  }
-
-  /**
-   * Closes the details dialog and opens the announcement in the form
-   */
-  const openEditDialog = (announcement: IAnnouncement) => {
-    setOpenAnnouncementId(null)
-    setEditAnnouncement(announcement)
-    setCreateDialogOpen(true)
-  }
+  const editor: IAnnouncementEditor | undefined = state.canEdit
+    ? {
+        service: props.service,
+        fields: state.fields,
+        hiddenFormFields: props.formFields,
+        alwaysNotified: state.alwaysNotified
+      }
+    : undefined
 
   return {
     state,
     setState,
     refresh,
+    partId,
     fluentProviderId,
     toasterId,
     openAnnouncement,
     setOpenAnnouncementId,
-    dialogError,
     setAnnouncementRef,
     popoverFields,
     showCreateButton,
-    showQuickActions,
-    setStatus,
-    editAnnouncement,
-    openCreateDialog,
-    openEditDialog,
-    showNotificationSettings,
-    notifyTeamsField,
-    notifyAgainField,
-    openAlwaysNotified,
-    setNotification,
+    editor,
     createDialogOpen,
     setCreateDialogOpen
   }
