@@ -112,7 +112,10 @@ $ErrorActionPreference = 'Stop'
 $BannerComponentId = 'c0d1edf4-db39-4feb-8052-a4c27ffe1954'
 $WebPartComponentId = 'ddfa2478-1872-408c-8f8f-a1c704f93d66'
 $OldDeepLinkComponentId = '9f3d6a2c-7b14-4e8f-a5c0-3d2e1f6b8a47'
+# The list's title follows the language of the app catalog site («Tenant Wide Extensions» in
+# English), its URL does not, so the list is looked up by URL.
 $TenantWideExtensionsList = 'Tenant Wide Extensions'
+$TenantWideExtensionsUrl = 'Lists/TenantWideExtensions'
 
 $TemplateFolder = (Resolve-Path (Join-Path $PSScriptRoot '..\Templates')).Path
 $NotificationTemplateFolder = Join-Path $PSScriptRoot '..\..\Pzl.Ext.Notification\Templates'
@@ -358,7 +361,13 @@ $bannerTargeting = $BannerSiteUrls.Count -or $BannerHubSiteUrls.Count -or $Banne
 if ($bannerTargeting) {
   Write-Step 'Banner (Tenant Wide Extensions)'
   $catalogConnection = Get-Connection $AppCatalogUrl
-  $rows = Get-PnPListItem -List $TenantWideExtensionsList -Connection $catalogConnection -PageSize 500 |
+  $extensionsList = Get-PnPList -Identity $TenantWideExtensionsUrl -Connection $catalogConnection -ErrorAction SilentlyContinue
+  if (-not $extensionsList) { $extensionsList = Get-PnPList -Identity $TenantWideExtensionsList -Connection $catalogConnection -ErrorAction SilentlyContinue }
+  if (-not $extensionsList) {
+    throw "The Tenant Wide Extensions list was not found on $AppCatalogUrl (looked for $TenantWideExtensionsUrl and the title «$TenantWideExtensionsList»). Check that $AppCatalogUrl is the tenant app catalog, or pass -AppCatalogUrl."
+  }
+  Write-Info "List: $($extensionsList.Title) ($TenantWideExtensionsUrl)"
+  $rows = Get-PnPListItem -List $extensionsList.Id -Connection $catalogConnection -PageSize 500 |
     Where-Object { "$($_['TenantWideExtensionComponentId'])" -eq $BannerComponentId }
   $row = $rows | Select-Object -First 1
   if (@($rows).Count -gt 1) { Write-Warning "Found $(@($rows).Count) banner rows; updating the first (ID $($row.Id)) only." }
@@ -408,11 +417,11 @@ if ($bannerTargeting) {
   }
   if ($row) {
     if ($PSCmdlet.ShouldProcess("$TenantWideExtensionsList, item $($row.Id)", "Update banner properties to $json")) {
-      Set-PnPListItem -List $TenantWideExtensionsList -Identity $row.Id -Values $values -Connection $catalogConnection | Out-Null
+      Set-PnPListItem -List $extensionsList.Id -Identity $row.Id -Values $values -Connection $catalogConnection | Out-Null
       Write-Done "Updated the banner row (ID $($row.Id)): $json"
     }
   } elseif ($PSCmdlet.ShouldProcess($TenantWideExtensionsList, "Add banner row with $json")) {
-    $item = Add-PnPListItem -List $TenantWideExtensionsList -Values $values -Connection $catalogConnection
+    $item = Add-PnPListItem -List $extensionsList.Id -Values $values -Connection $catalogConnection
     Write-Done "Added the banner row (ID $($item.Id)): $json"
   }
 } else {

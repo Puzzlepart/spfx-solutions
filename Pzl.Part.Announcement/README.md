@@ -168,7 +168,7 @@ The banner is shown on a page when one of these properties matches. With none of
 
 ```powershell
 Connect-PnPOnline -Url "https://<tenant>.sharepoint.com/sites/appcatalog" -Interactive -ClientId "<clientid>"
-Add-PnPListItem -List "Tenant Wide Extensions" -Values @{
+Add-PnPListItem -List "Lists/TenantWideExtensions" -Values @{
   Title                                  = "AnnouncementBanner"
   TenantWideExtensionComponentId         = "c0d1edf4-db39-4feb-8052-a4c27ffe1954"
   TenantWideExtensionLocation            = "ClientSideExtension.ApplicationCustomizer"
@@ -179,7 +179,7 @@ Add-PnPListItem -List "Tenant Wide Extensions" -Values @{
 }
 ```
 
-The same can be done with **New item** in the list: Title, Component Id, Component Properties, Location `ClientSideExtension.ApplicationCustomizer`, Sequence 110, Disabled = No; leave Web template and List template empty. The row applies on the next page load and is edited in place later (`Set-PnPListItem -Identity <id> -Values @{ TenantWideExtensionComponentProperties = '<json>' }`); nothing is deployed or scripted per site. Sites that join the hub get the banner, sites that leave lose it.
+The list is addressed by its URL, `Lists/TenantWideExtensions`, because its title follows the language of the app catalog site (it is only called «Tenant Wide Extensions» on an English site). The same can be done with **New item** in the list: Title, Component Id, Component Properties, Location `ClientSideExtension.ApplicationCustomizer`, Sequence 110, Disabled = No; leave Web template and List template empty. The row applies on the next page load and is edited in place later (`Set-PnPListItem -Identity <id> -Values @{ TenantWideExtensionComponentProperties = '<json>' }`); nothing is deployed or scripted per site. Sites that join the hub get the banner, sites that leave lose it.
 
 The package does not create this row itself. SPFx can ship a `ClientSideInstance.xml` for that, but SharePoint processes it only on a first-time tenant-wide deployment (never on an upgrade), and in 1.5.1 a first-time deployment failed in a tenant where the row already existed, so it was removed again in 1.5.2.
 
