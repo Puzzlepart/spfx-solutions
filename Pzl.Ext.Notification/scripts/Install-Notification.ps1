@@ -63,8 +63,20 @@
   Organization that owns the intranet, shown in the Teams app.
 
 .PARAMETER TeamsAppId
-  Teams app ID. Read from the function app setting TEAMS_DEEPLINK_APP_ID when empty, and a new
-  GUID is generated for a new installation.
+  Manifest ID of the notification Teams app (the app this script builds and uploads). When empty
+  it is read from the function app setting TEAMS_APP_MANIFEST_ID, which this script writes. For
+  installations made before that setting existed it is read from TEAMS_DEEPLINK_APP_ID, but only
+  when the notifications open the notification app's own tab. A new GUID is generated for a new
+  installation.
+
+.PARAMETER TeamsDeepLinkAppId
+  Teams app the notifications open (TEAMS_DEEPLINK_APP_ID). Pass the ID of the intranet's own
+  Teams app to open its tab; -TeamsDeepLinkEntityId is then required. When empty the current
+  setting is kept, and a new installation opens the notification app's own tab.
+
+.PARAMETER TeamsDeepLinkEntityId
+  entityId of the tab in that app (TEAMS_DEEPLINK_ENTITY_ID). "intranet" is the notification
+  app's own tab.
 
 .PARAMETER TeamsAppVersion
   Version of the Teams app package. When empty: 1.0.0 for a new app, otherwise the version in the
@@ -114,6 +126,14 @@
     -ResourceGroupName rg-intranet-notification -FunctionAppName func-intranet-notification `
     -StorageAccountName stintranetnotify01 -ConfigSiteUrl https://contoso.sharepoint.com `
     -AppName "Contoso varsler" -DeveloperName "Contoso" -SkipSitePermissions
+
+.EXAMPLE
+  # The notifications open the tab of the intranet's own Teams app
+  .\Install-Notification.ps1 -TenantId <tenant-id> -SubscriptionId <subscription-id> `
+    -ResourceGroupName rg-intranet-notification -FunctionAppName func-intranet-notification `
+    -StorageAccountName stintranetnotify01 -ConfigSiteUrl https://contoso.sharepoint.com `
+    -AppName "Contoso varsler" -DeveloperName "Contoso" `
+    -TeamsDeepLinkAppId <intranet app ID> -TeamsDeepLinkEntityId <entityId of its tab>
 #>
 [CmdletBinding()]
 param(
@@ -130,6 +150,8 @@ param(
   [Parameter(Mandatory = $true)] [string]$DeveloperName,
   [string]$TeamsAppId = '',
   [string]$TeamsAppVersion = '',
+  [string]$TeamsDeepLinkAppId = '',
+  [string]$TeamsDeepLinkEntityId = '',
   [string]$ColorIcon = '',
   [string]$OutlineIcon = '',
   [ValidateSet('Keep', 'On', 'Off')] [string]$DryRun = 'Keep',
@@ -232,12 +254,53 @@ if ($functionApp) {
 }
 $mode = if ($functionApp) { 'upgrade' } else { 'new installation' }
 
-if (-not $TeamsAppId) { $TeamsAppId = $appSettings['TEAMS_DEEPLINK_APP_ID'] }
+# The notification app's own ID and the app the notifications open are two things. They are the
+# same only when the notifications open the notification app's own tab (entity "intranet"). With
+# an intranet app as the target, TEAMS_DEEPLINK_APP_ID is that app's ID, and reading the
+# notification app's ID from it would upload the notification manifest over the intranet app.
+$OwnTabEntityId = 'intranet'
+$currentDeepLinkAppId = "$($appSettings['TEAMS_DEEPLINK_APP_ID'])".Trim()
+$currentEntityId = "$($appSettings['TEAMS_DEEPLINK_ENTITY_ID'])".Trim()
+$currentOpensOwnTab = -not $currentEntityId -or $currentEntityId -eq $OwnTabEntityId
+
+if (-not $TeamsAppId) { $TeamsAppId = "$($appSettings['TEAMS_APP_MANIFEST_ID'])".Trim() }
+if (-not $TeamsAppId -and $currentDeepLinkAppId) {
+  if (-not $currentOpensOwnTab) {
+    throw "The notifications open the tab '$currentEntityId' of the Teams app $currentDeepLinkAppId, which is not the notification app, so the notification app's ID cannot be read from TEAMS_DEEPLINK_APP_ID. Pass -TeamsAppId with the app ID of «$AppName» (Teams admin center > Teams apps > Manage apps > the app > App ID). The script stores it for later runs."
+  }
+  $TeamsAppId = $currentDeepLinkAppId
+}
 if (-not $TeamsAppId) {
   $TeamsAppId = [guid]::NewGuid().ToString()
   Write-Info "New Teams app ID: $TeamsAppId"
 } else {
   Write-Info "Teams app ID: $TeamsAppId"
+}
+
+# Where the notifications open: as given, otherwise as it is, otherwise the notification app's tab
+if ($TeamsDeepLinkAppId) {
+  $deepLinkAppId = $TeamsDeepLinkAppId.Trim()
+  if ($TeamsDeepLinkEntityId) {
+    $deepLinkEntityId = $TeamsDeepLinkEntityId.Trim()
+  } elseif ($deepLinkAppId -eq $TeamsAppId) {
+    $deepLinkEntityId = $OwnTabEntityId
+  } elseif ($deepLinkAppId -eq $currentDeepLinkAppId -and -not $currentOpensOwnTab) {
+    $deepLinkEntityId = $currentEntityId
+  } else {
+    throw "-TeamsDeepLinkAppId $deepLinkAppId is another app than the notification app: pass -TeamsDeepLinkEntityId with the entityId of the tab to open (staticTabs in that app's manifest)."
+  }
+} elseif ($currentDeepLinkAppId -and -not $currentOpensOwnTab) {
+  $deepLinkAppId = $currentDeepLinkAppId
+  $deepLinkEntityId = if ($TeamsDeepLinkEntityId) { $TeamsDeepLinkEntityId.Trim() } else { $currentEntityId }
+} else {
+  $deepLinkAppId = $TeamsAppId
+  $deepLinkEntityId = if ($TeamsDeepLinkEntityId) { $TeamsDeepLinkEntityId.Trim() } else { $OwnTabEntityId }
+}
+$opensOtherApp = $deepLinkAppId -ne $TeamsAppId
+if ($opensOtherApp) {
+  Write-Info "Notifications open another Teams app: $deepLinkAppId, tab $deepLinkEntityId"
+} else {
+  Write-Info "Notifications open the notification app's own tab ($deepLinkEntityId)"
 }
 
 $dryRunValue = switch ($DryRun) {
@@ -253,6 +316,9 @@ Write-Done "Mode: $mode, DRY_RUN=$($dryRunValue.ToString().ToLower())"
 
 if ($SkipInfrastructure) {
   Write-Step '1. Azure resources (skipped)'
+  if ($deepLinkAppId -ne $currentDeepLinkAppId -or ($currentDeepLinkAppId -and $deepLinkEntityId -ne $currentEntityId -and -not ($currentOpensOwnTab -and $deepLinkEntityId -eq $OwnTabEntityId))) {
+    Write-Warning "TEAMS_DEEPLINK_APP_ID and TEAMS_DEEPLINK_ENTITY_ID are set in step 1, which is skipped: the notifications still open $currentDeepLinkAppId."
+  }
 } else {
   Write-Step '1. Azure resources'
   $deploy = @{
@@ -263,14 +329,14 @@ if ($SkipInfrastructure) {
     StorageAccountName = $StorageAccountName
     IdentityName       = $IdentityName
     ConfigSiteUrl      = $ConfigSiteUrl
-    TeamsDeepLinkAppId = $TeamsAppId
-    DryRun             = $dryRunValue
+    TeamsDeepLinkAppId    = $deepLinkAppId
+    TeamsDeepLinkEntityId = $deepLinkEntityId
+    DryRun                = $dryRunValue
   }
   # Keep settings the infrastructure script would otherwise reset to its defaults
   if ($appSettings['CONFIG_LIST_TITLE']) { $deploy.ConfigListTitle = $appSettings['CONFIG_LIST_TITLE'] }
   if ($appSettings['ANNOUNCEMENT_LIST_TITLE']) { $deploy.AnnouncementListTitle = $appSettings['ANNOUNCEMENT_LIST_TITLE'] }
   if ($appSettings['NEWS_LOOKBACK_DAYS']) { $deploy.NewsLookbackDays = $appSettings['NEWS_LOOKBACK_DAYS'] }
-  if ($appSettings['TEAMS_DEEPLINK_ENTITY_ID']) { $deploy.TeamsDeepLinkEntityId = $appSettings['TEAMS_DEEPLINK_ENTITY_ID'] }
   & (Join-Path $PSScriptRoot 'Deploy-NotificationInfrastructure.ps1') @deploy | Out-Host
 }
 
@@ -354,6 +420,19 @@ if ($SkipTeamsApp) {
   if (-not $SkipTeamsAppUpload) {
     $catalogApp = Find-CatalogApp $TeamsAppId
   }
+  if ($catalogApp) {
+    # Never upload over an app that is not the notification app. The sender in the manifest
+    # (webApplicationInfo.id) settles it when Graph returns it; otherwise the name must match.
+    $newest = @($catalogApp.appDefinitions) | Sort-Object { [version]$_.version } -Descending | Select-Object -First 1
+    $sender = "$($newest.authorization.clientAppId)"
+    $name = if ($newest.displayName) { "$($newest.displayName)" } else { "$($catalogApp.displayName)" }
+    if ($sender -and $sender -ne $identity.clientId) {
+      throw "The Teams app $TeamsAppId in the app catalog is «$name», and its sender (webApplicationInfo.id) is $sender, not the notification identity $($identity.clientId). It is not the notification app, so nothing is uploaded. Pass -TeamsAppId with the app ID of the notification app."
+    }
+    if (-not $sender -and $name -ne $AppName) {
+      throw "The Teams app $TeamsAppId in the app catalog is named «$name», not «$AppName», so it may not be the notification app and nothing is uploaded. Pass -TeamsAppId with the app ID of the notification app. To rename the app, run with -SkipTeamsAppUpload and upload the package in Teams admin center."
+    }
+  }
   if (-not $TeamsAppVersion) {
     if ($catalogApp) {
       $versions = @($catalogApp.appDefinitions | ForEach-Object { [version]$_.version })
@@ -407,6 +486,16 @@ if ($SkipTeamsApp) {
     }
     $manualSteps.Add("Teams admin center: create an app setup policy that installs «$AppName» for the recipients (without pinning it) and assign it to the same groups as in Varslingskonfigurasjon. Start with a test group.")
   }
+}
+
+# Remember the notification app's ID for later runs. Only this script reads the setting.
+if ("$($appSettings['TEAMS_APP_MANIFEST_ID'])" -ne $TeamsAppId) {
+  & az functionapp config appsettings set -n $FunctionAppName -g $ResourceGroupName --settings "TEAMS_APP_MANIFEST_ID=$TeamsAppId" -o none
+  if ($LASTEXITCODE -ne 0) { throw "Could not store TEAMS_APP_MANIFEST_ID on $FunctionAppName" }
+  Write-Info "Stored the notification app's ID in the app setting TEAMS_APP_MANIFEST_ID"
+}
+if ($opensOtherApp) {
+  $manualSteps.Add("The notifications open the Teams app $deepLinkAppId (tab $deepLinkEntityId). Its tab must pass {subEntityId} to the page as the URL parameter driftsmelding, and the recipients need «$AppName» installed as well (README, step 4).")
 }
 
 #endregion
