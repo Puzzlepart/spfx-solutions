@@ -34,9 +34,20 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-Connect-MgGraph -TenantId $TenantId -Scopes 'AppRoleAssignment.ReadWrite.All', 'Application.Read.All' -NoWelcome
+# A session already connected to the tenant is used as it is: with the scopes, or with an access
+# token given to Connect-MgGraph (Install-Notification.ps1 -GraphFromAzureCli). The sign-in window
+# of Connect-MgGraph (WAM, which cannot be turned off) has hung in terminals without a window.
+$scopes = 'AppRoleAssignment.ReadWrite.All', 'Application.Read.All'
 $context = Get-MgContext
-if ($context.TenantId -ne $TenantId) { throw "Connected to tenant $($context.TenantId), expected $TenantId. Run Disconnect-MgGraph and try again." }
+$hasScopes = -not @($scopes | Where-Object { @($context.Scopes) -notcontains $_ }).Count
+# A session made from an access token may not say which tenant it is for; the caller got the token
+# for this tenant.
+$fromToken = $context -and "$($context.AuthType)" -eq 'UserProvidedAccessToken'
+if (-not ($fromToken -or ($context -and $context.TenantId -eq $TenantId -and $hasScopes))) {
+  Connect-MgGraph -TenantId $TenantId -Scopes $scopes -NoWelcome
+}
+$context = Get-MgContext
+if ($context.TenantId -and $context.TenantId -ne $TenantId) { throw "Connected to tenant $($context.TenantId), expected $TenantId. Run Disconnect-MgGraph and try again." }
 Write-Host "Connected to tenant $($context.TenantId) as $($context.Account)"
 
 try {
@@ -56,6 +67,7 @@ $required = @(
   @{ Resource = $sharePointAppId; Role = 'Sites.Selected' }
 )
 
+$failed = @()
 $existingAssignments = Get-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $ServicePrincipalObjectId -All
 
 foreach ($item in $required) {
@@ -70,12 +82,25 @@ foreach ($item in $required) {
     continue
   }
 
-  New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $ServicePrincipalObjectId -BodyParameter @{
-    principalId = $ServicePrincipalObjectId
-    resourceId  = $resource.Id
-    appRoleId   = $appRole.Id
-  } | Out-Null
-  Write-Host "Assigned: $($resource.DisplayName) / $($item.Role)"
+  # The cmdlet has reported a refused assignment as a non-terminating error, also with
+  # $ErrorActionPreference = 'Stop', so the script went on and said "Assigned". Stop on the error
+  # and collect the failures.
+  try {
+    New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $ServicePrincipalObjectId -ErrorAction Stop -BodyParameter @{
+      principalId = $ServicePrincipalObjectId
+      resourceId  = $resource.Id
+      appRoleId   = $appRole.Id
+    } | Out-Null
+    Write-Host "Assigned: $($resource.DisplayName) / $($item.Role)"
+  } catch {
+    $reason = ("$($_.Exception.Message)" -split "`r?`n")[0]
+    Write-Host "NOT assigned: $($resource.DisplayName) / $($item.Role) ($reason)" -ForegroundColor Red
+    $failed += "$($resource.DisplayName) / $($item.Role)"
+  }
+}
+
+if ($failed.Count) {
+  throw "$($failed.Count) of $($required.Count) app roles were not assigned: $($failed -join ', '). Assigning app roles takes an active Global Administrator or Privileged Role Administrator role (activate it in PIM if it is eligible only) and a sign-in with the scope AppRoleAssignment.ReadWrite.All. The sign-in of Azure CLI (Install-Notification.ps1 -GraphFromAzureCli) does not always carry it. Signed in as $($context.Account), scopes: $(@($context.Scopes) -join ' ')."
 }
 
 Write-Host ''

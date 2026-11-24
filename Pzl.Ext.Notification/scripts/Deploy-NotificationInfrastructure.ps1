@@ -158,8 +158,11 @@ if ($newAssignments -gt 0) { Write-Host '   waiting 30 s for role assignments to
 
 Write-Host "== Function app $FunctionAppName (Flex Consumption, Node 22)" -ForegroundColor Cyan
 if (-not (Test-Az functionapp show -n $FunctionAppName -g $ResourceGroupName)) {
+  # --https-only true: the service has no reason to answer plain HTTP, and Azure policies that
+  # append httpsOnly (common in landing zones) refuse a request that says false, which is what az
+  # sends without the flag (AppendPoliciesFieldsExist).
   Invoke-Az functionapp create -n $FunctionAppName -g $ResourceGroupName --storage-account $StorageAccountName `
-    --flexconsumption-location $Location --runtime node --runtime-version 22 `
+    --flexconsumption-location $Location --runtime node --runtime-version 22 --https-only true `
     --assign-identity $identity.id --app-insights $AppInsightsName `
     --deployment-storage-auth-type UserAssignedIdentity --deployment-storage-auth-value $identity.id | Out-Null
   Write-Host '   created'

@@ -97,7 +97,11 @@ Timer (1 min)
 
 Er ikke Azure CLI logget inn mot tenanten, kjører skriptet `az login --tenant <tenant-id>` selv. Med `-Force` stopper det i stedet.
 
-`-PreflightOnly` viser oppsummeringen og stopper. `-Force` hopper over spørsmålet, for kjøring uten bruker. Svaret er nei som standard. Advarslene stopper ikke skriptet: en ressursleverandør som mangler, registreres av Azure CLI ved første bruk når kontoen har rettigheter på abonnementet. Med rettigheter bare på ressursgruppa må en eier av abonnementet kjøre `az provider register -n <navnerom>` først.
+`-PreflightOnly` viser oppsummeringen og stopper, og logger ikke inn i Microsoft Graph. `-Force` hopper over spørsmålet, for kjøring uten bruker. Svaret er nei som standard. Advarslene stopper ikke skriptet: en ressursleverandør som mangler, registreres av Azure CLI ved første bruk når kontoen har rettigheter på abonnementet. Med rettigheter bare på ressursgruppa må en eier av abonnementet kjøre `az provider register -n <navnerom>` først.
+
+**Områder du ikke administrerer.** Å gi identiteten tilgang til et område krever at du er områdeadministrator der. På et område som nekter, legger skriptet kontoen din til som områdeadministrator, gir tilgangen og fjerner deg igjen. Det krever at rollen SharePoint Administrator eller Global Administrator er aktiv. Preflighten sier fra om dette før noe gjøres.
+
+**Pålogging til Microsoft Graph.** Skriptet åpner et påloggingsvindu. Vinduet har uteblitt mens skriptet hang uten å svare på Ctrl+C: lukk da terminalen (ingenting er endret før preflighten er bekreftet). Vinduet er Windows-påloggingen (WAM), som Graph-modulen ikke lar deg slå av, og den trenger et terminalvindu å vise seg i. Prøv derfor først i et vanlig PowerShell-vindu, ikke en terminal inne i et annet program. Hjelper ikke det, kjør med `-GraphFromAzureCli`, som bruker påloggingen fra Azure CLI. Har den ikke tilgang til appkatalogen i Teams, bygger skriptet pakken, og du laster den opp for hånd. `-GraphDeviceCode` gir en kode å taste inn på microsoft.com/devicelogin, men mange tenanter sperrer den påloggingen. En økt som alt er logget inn mot tenanten med de nødvendige tilgangene, brukes uten ny pålogging.
 
 **Har intranettet en egen Teams-app**, legg til `-TeamsDeepLinkAppId <intranett-appens ID> -TeamsDeepLinkEntityId <fanens entityId>`. Varslene åpner da fanen i den appen, se [steg 4](#steg-4-teams-appen). Verdiene beholdes ved senere kjøringer.
 
@@ -338,6 +342,7 @@ Kopier `function/local.settings.json.example` til `local.settings.json`. Lokalt 
 | Symptom | Sjekk |
 |---|---|
 | `RequestDisallowedByAzure` («not accepting new customers») i steg 1 | Azure tar ikke imot nye kunder i regionen for dette abonnementet. Kjør på nytt med en annen `-Location`. Ressursgruppa som alt er opprettet, kan beholdes |
+| `AppendPoliciesFieldsExist` for `Microsoft.Web/sites/httpsOnly` i steg 1 | En Azure-policy legger til krav om HTTPS, og forespørselen sa noe annet. Skriptet oppretter Function-appen med `--https-only true` fra og med denne rettingen. Kjør skriptet på nytt: ressursene som alt er opprettet, beholdes |
 | `401`/`403` fra SharePoint | App-rollen `Sites.Selected` på **SharePoint Online** (ikke bare Graph), og `Grant-PnPAzureADAppSitePermission` på riktig område med riktig nivå |
 | `403` fra `transitiveMembers` | `GroupMember.Read.All` tildelt, og at admin consent er gitt (scriptet tildeler app-roller direkte, consent er implisitt) |
 | `400` «Invalid 'webUrl' specified» fra `sendActivityNotificationToRecipients` | `TEAMS_DEEPLINK_APP_ID` mangler eller er ikke en Teams-app-ID. Lenken må være `https://teams.microsoft.com/l/...` |

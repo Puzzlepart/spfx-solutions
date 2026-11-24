@@ -11,7 +11,7 @@
   },
   "name": {
     "short": "{{APP_NAME}}",
-    "full": "{{APP_NAME}} – varsler"
+    "full": "{{APP_NAME}} – nyheter og driftsmeldinger"
   },
   "description": {
     "short": "Varsler om nyheter og driftsmeldinger fra intranettet",

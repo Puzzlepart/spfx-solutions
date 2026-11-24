@@ -118,6 +118,18 @@
   Show the preflight summary (environment, what is created or changed, warnings) and stop.
   Nothing is created or changed.
 
+.PARAMETER GraphFromAzureCli
+  Use the sign-in of Azure CLI for Microsoft Graph instead of a sign-in window. Use it when the
+  window (WAM, which the Graph module cannot turn off) does not show up and the script hangs,
+  typically in a terminal inside another application. The account must be an administrator who
+  may assign app roles. If the sign-in has no access to the Teams app catalog, the package is
+  built and uploaded by hand in Teams admin center.
+
+.PARAMETER GraphDeviceCode
+  Sign in to Microsoft Graph with a device code (a code to type in at microsoft.com/devicelogin)
+  instead of a sign-in window. Use it when the window does not show up and the script hangs. A
+  session already signed in to the tenant with the scopes needed is used without a new sign-in.
+
 .PARAMETER Force
   Do not ask for confirmation after the preflight summary (for unattended runs). The script
   then does not sign in to Azure CLI itself: it stops if the CLI is not logged in to the tenant.
@@ -171,6 +183,8 @@ param(
   [switch]$SkipTeamsAppUpload,
   [switch]$SkipFunction,
   [switch]$PreflightOnly,
+  [switch]$GraphDeviceCode,
+  [switch]$GraphFromAzureCli,
   [switch]$Force
 )
 
@@ -209,7 +223,8 @@ function Find-CatalogApp([string]$ExternalId) {
 
 Write-Step 'Prerequisites'
 $needAz = -not ($SkipInfrastructure -and $SkipFunction)
-$needGraph = -not $SkipPermissions -or (-not $SkipTeamsApp -and -not $SkipTeamsAppUpload)
+# The preflight reads nothing from Microsoft Graph, so -PreflightOnly does not sign in to it
+$needGraph = -not $PreflightOnly -and (-not $SkipPermissions -or (-not $SkipTeamsApp -and -not $SkipTeamsAppUpload))
 $missing = @()
 if (-not (Get-Command az -ErrorAction SilentlyContinue)) { $missing += 'Azure CLI (az)' }
 if (-not $SkipFunction -and -not (Get-Command npm -ErrorAction SilentlyContinue)) { $missing += 'Node.js/npm' }
@@ -237,7 +252,14 @@ if (-not $account -or $account.tenantId -ne $TenantId) {
   # An unattended run cannot answer a sign-in in the browser
   if ($Force) { throw "$reason Run: az login --tenant $TenantId" }
   Write-Info "$reason Signing in (az login --tenant $TenantId)"
-  & az login --tenant $TenantId -o none
+  # Without the subscription picker of the new login experience, which waits for an answer
+  $loginExperience = $env:AZURE_CORE_LOGIN_EXPERIENCE_V2
+  $env:AZURE_CORE_LOGIN_EXPERIENCE_V2 = 'off'
+  try {
+    & az login --tenant $TenantId -o none
+  } finally {
+    $env:AZURE_CORE_LOGIN_EXPERIENCE_V2 = $loginExperience
+  }
   if ($LASTEXITCODE -ne 0) { throw "az login failed. Run: az login --tenant $TenantId" }
   $account = Get-AzJson account show
   if (-not $account -or $account.tenantId -ne $TenantId) { throw "Azure CLI is still not logged in to tenant $TenantId. Run: az login --tenant $TenantId" }
@@ -249,10 +271,39 @@ Write-Done "Azure CLI: $($account.user.name), subscription $SubscriptionId"
 if ($needGraph) {
   $scopes = @('AppRoleAssignment.ReadWrite.All', 'Application.Read.All')
   if (-not $SkipTeamsApp -and -not $SkipTeamsAppUpload) { $scopes += 'AppCatalog.ReadWrite.All' }
-  Connect-MgGraph -TenantId $TenantId -Scopes $scopes -NoWelcome
+  # A session that is already signed in to the tenant with the scopes is used as it is. The
+  # sign-in window of Connect-MgGraph has hung without showing and without answering Ctrl+C, so
+  # this lets the person sign in first (Connect-MgGraph ... -UseDeviceCode) and run the script after.
   $context = Get-MgContext
-  if ($context.TenantId -ne $TenantId) { throw "Microsoft Graph is connected to tenant $($context.TenantId), expected $TenantId. Run Disconnect-MgGraph and try again." }
-  Write-Done "Microsoft Graph: $($context.Account)"
+  $missingScopes = @($scopes | Where-Object { @($context.Scopes) -notcontains $_ })
+  if ($GraphFromAzureCli) {
+    # Azure CLI is signed in already, and its Microsoft Graph token lets an administrator assign
+    # app roles. It may not cover the Teams app catalog, which is checked below.
+    Write-Info 'Microsoft Graph: using the sign-in of Azure CLI'
+    $graphToken = & az account get-access-token --resource-type ms-graph --tenant $TenantId --query accessToken -o tsv
+    if ($LASTEXITCODE -ne 0 -or -not $graphToken) { throw 'Azure CLI did not return a Microsoft Graph token (az account get-access-token --resource-type ms-graph).' }
+    Connect-MgGraph -AccessToken (ConvertTo-SecureString "$graphToken" -AsPlainText -Force) -NoWelcome
+    if (-not $SkipTeamsApp -and -not $SkipTeamsAppUpload) {
+      try {
+        Invoke-MgGraphRequest -Method GET -Uri "v1.0/appCatalogs/teamsApps?`$top=1" | Out-Null
+      } catch {
+        Write-Warning "The Azure CLI sign-in has no access to the Teams app catalog, so the Teams app package is built but not uploaded: upload it in Teams admin center (printed at the end). For an upgrade, pass -TeamsAppVersion with a higher version than the one in the catalog."
+        $SkipTeamsAppUpload = $true
+      }
+    }
+  } elseif ($context -and $context.TenantId -eq $TenantId -and -not $missingScopes.Count) {
+    Write-Info 'Microsoft Graph: using the sign-in of this session'
+  } elseif ($GraphDeviceCode) {
+    Write-Info "Signing in to Microsoft Graph with a device code ($($scopes -join ', '))"
+    Connect-MgGraph -TenantId $TenantId -Scopes $scopes -NoWelcome -UseDeviceCode
+  } else {
+    Write-Info "Signing in to Microsoft Graph ($($scopes -join ', ')). A sign-in window or browser tab opens, and it can be hidden behind other windows. If nothing shows up, close this terminal and run again with -GraphFromAzureCli."
+    Connect-MgGraph -TenantId $TenantId -Scopes $scopes -NoWelcome
+  }
+  $context = Get-MgContext
+  # A session made from an access token may not say which tenant it is for
+  if ($context.TenantId -and $context.TenantId -ne $TenantId) { throw "Microsoft Graph is connected to tenant $($context.TenantId), expected $TenantId. Run Disconnect-MgGraph and try again." }
+  Write-Done "Microsoft Graph: $(if ($context.Account) { $context.Account } else { 'access token from Azure CLI' })"
 }
 
 #endregion
@@ -284,7 +335,7 @@ $currentOpensOwnTab = -not $currentEntityId -or $currentEntityId -eq $OwnTabEnti
 if (-not $TeamsAppId) { $TeamsAppId = "$($appSettings['TEAMS_APP_MANIFEST_ID'])".Trim() }
 if (-not $TeamsAppId -and $currentDeepLinkAppId) {
   if (-not $currentOpensOwnTab) {
-    throw "The notifications open the tab '$currentEntityId' of the Teams app $currentDeepLinkAppId, which is not the notification app, so the notification app's ID cannot be read from TEAMS_DEEPLINK_APP_ID. Pass -TeamsAppId with the app ID of «$AppName» (Teams admin center > Teams apps > Manage apps > the app > App ID). The script stores it for later runs."
+    throw "The notifications open the tab '$currentEntityId' of the Teams app $currentDeepLinkAppId, which is not the notification app, so the notification app's ID cannot be read from TEAMS_DEEPLINK_APP_ID. Pass -TeamsAppId with the app ID of «$AppName» (Teams admin center > Teams apps > Manage apps > the app > App ID). If the app was never uploaded (an earlier run stopped before step 4), pass the ID that run printed, or a new GUID. The script stores it for later runs."
   }
   $TeamsAppId = $currentDeepLinkAppId
 }
@@ -349,7 +400,7 @@ Write-Section 'Environment'
 Write-Row 'Tenant' $TenantId
 Write-Row 'Azure account' "$($subscription.user.name)"
 Write-Row 'Subscription' "$($subscription.name) ($SubscriptionId)"
-if ($needGraph) { Write-Row 'Microsoft Graph' "$((Get-MgContext).Account)" }
+if ($needGraph) { Write-Row 'Microsoft Graph' "$((Get-MgContext).Account)" } elseif ($PreflightOnly) { Write-Row 'Microsoft Graph' 'not signed in (-PreflightOnly)' }
 Write-Row 'Intranet site' $ConfigSiteUrl
 
 if ($SkipInfrastructure) {
@@ -418,6 +469,8 @@ if ($SkipSitePermissions) {
   Write-Section "3. Site access for the identity (signs in with PnP app $ClientId)"
   foreach ($url in $siteAccess.Keys) { Write-Row $siteAccess[$url] $url }
   Write-Row '' 'Existing grants are raised, never lowered.'
+  Write-Row '' 'On a site that refuses the grant, the signed-in account is made site collection'
+  Write-Row '' 'administrator for the grant and removed afterwards.'
 }
 
 if ($SkipTeamsApp) {
@@ -492,6 +545,16 @@ $identity = Get-AzJson identity show -n $IdentityName -g $ResourceGroupName
 if (-not $identity) { throw "Managed identity $IdentityName not found in $ResourceGroupName" }
 Write-Info "Identity: client ID $($identity.clientId), principal ID $($identity.principalId)"
 
+# Remember the notification app's ID as soon as the function app exists, so a run that stops in a
+# later step can be run again without -TeamsAppId. (The ID is stored again after step 4 if a
+# different one was given.)
+if (-not "$($appSettings['TEAMS_APP_MANIFEST_ID'])") {
+  & az functionapp config appsettings set -n $FunctionAppName -g $ResourceGroupName --settings "TEAMS_APP_MANIFEST_ID=$TeamsAppId" -o none
+  if ($LASTEXITCODE -ne 0) { throw "Could not store TEAMS_APP_MANIFEST_ID on $FunctionAppName" }
+  $appSettings['TEAMS_APP_MANIFEST_ID'] = $TeamsAppId
+  Write-Info "Stored the notification app's ID ($TeamsAppId) in the app setting TEAMS_APP_MANIFEST_ID"
+}
+
 #endregion
 
 #region 2. App roles
@@ -535,20 +598,73 @@ if ($SkipSitePermissions) {
   if ($failure) {
     throw "SharePoint refused the connection to $ConfigSiteUrl ($failure). Check that the account belongs to tenant $TenantId and has access to the site (a login persisted with -PersistLogin is reused without asking: see Get-PnPPersistedLogin and Disconnect-PnPOnline -ClearPersistedLogin), that the URL is right, and that the app registration $ClientId is consented for SharePoint in this tenant (otherwise pass -ClientId)."
   }
-  foreach ($url in $wanted.Keys) {
-    $level = $wanted[$url]
-    $grants = @(Get-PnPAzureADAppSitePermission -Site $url -Connection $connection -ErrorAction SilentlyContinue |
+  $grantSite = {
+    param([string]$Url, [string]$Level)
+    $grants = @(Get-PnPAzureADAppSitePermission -Site $Url -Connection $connection -ErrorAction SilentlyContinue |
         Where-Object { $_.Apps.Id -contains $identity.clientId })
     $current = $grants | Sort-Object { ($_.Roles | ForEach-Object { $rank["$_".ToLower()] } | Measure-Object -Maximum).Maximum } -Descending | Select-Object -First 1
     $currentRank = if ($current) { ($current.Roles | ForEach-Object { $rank["$_".ToLower()] } | Measure-Object -Maximum).Maximum } else { 0 }
     if (-not $current) {
-      Grant-PnPAzureADAppSitePermission -AppId $identity.clientId -DisplayName $FunctionAppName -Site $url -Permissions $level -Connection $connection | Out-Null
-      Write-Done "${level}: $url (granted)"
-    } elseif ($currentRank -lt $rank[$level.ToLower()]) {
-      Set-PnPAzureADAppSitePermission -Site $url -PermissionId $current.Id -Permissions $level -Connection $connection | Out-Null
-      Write-Done "${level}: $url (raised from $($current.Roles -join ', '))"
+      Grant-PnPAzureADAppSitePermission -AppId $identity.clientId -DisplayName $FunctionAppName -Site $Url -Permissions $Level -Connection $connection -ErrorAction Stop | Out-Null
+      Write-Done "${Level}: $Url (granted)"
+    } elseif ($currentRank -lt $rank[$Level.ToLower()]) {
+      Set-PnPAzureADAppSitePermission -Site $Url -PermissionId $current.Id -Permissions $Level -Connection $connection -ErrorAction Stop | Out-Null
+      Write-Done "${Level}: $Url (raised from $($current.Roles -join ', '))"
     } else {
-      Write-Info "$($current.Roles -join ', '): $url (kept)"
+      Write-Info "$($current.Roles -join ', '): $Url (kept)"
+    }
+  }
+
+  # Granting an app access to a site takes a site collection administrator of that site. On a
+  # site that refuses the grant, the signed-in account is made one for the grant (through the
+  # SharePoint admin site, which takes the SharePoint Administrator role) and removed again
+  # afterwards. The preflight says so before anything is done.
+  $adminConnection = $null
+  $signedInUser = ''
+  foreach ($url in $wanted.Keys) {
+    $level = $wanted[$url]
+    try {
+      & $grantSite $url $level
+      continue
+    } catch {
+      $refusal = "$($_.Exception.Message)"
+      if ($refusal -notmatch 'access ?denied|unauthorized|forbidden|403') { throw }
+    }
+    if (-not $adminConnection) {
+      $adminUrl = "https://$(([uri]$ConfigSiteUrl).Host -replace '\.sharepoint\.', '-admin.sharepoint.')"
+      $adminConnection = Connect-PnPOnline -Url $adminUrl -Interactive -ClientId $ClientId -Tenant $TenantId -ReturnConnection
+      $web = Get-PnPWeb -Includes CurrentUser -Connection $connection
+      $signedInUser = ("$($web.CurrentUser.LoginName)" -split '\|')[-1]
+      if (-not $signedInUser) { throw 'Could not read the signed-in account from SharePoint, so it cannot be made a site collection administrator. Add it in the SharePoint admin center.' }
+    }
+    try {
+      Set-PnPTenantSite -Identity $url -Owners $signedInUser -Connection $adminConnection -ErrorAction Stop
+    } catch {
+      throw "Access denied when granting $level on ${url}, and $signedInUser could not be made a site collection administrator there ($($_.Exception.Message)). That takes an active SharePoint Administrator or Global Administrator role. Activate the role, or add the account in the SharePoint admin center (Active sites > the site > Membership > Site admins), and run again."
+    }
+    Write-Info "Made $signedInUser a site collection administrator of $url for the grant"
+    try {
+      $granted = $false
+      foreach ($wait in 5, 15, 30, 60) {
+        Start-Sleep -Seconds $wait
+        try {
+          & $grantSite $url $level
+          $granted = $true
+          break
+        } catch {
+          $refusal = "$($_.Exception.Message)"
+        }
+      }
+      if (-not $granted) { throw "Granting $level on $url was still refused after the account was made a site collection administrator: $refusal" }
+    } finally {
+      try {
+        $siteConnection = Connect-PnPOnline -Url $url -Interactive -ClientId $ClientId -Tenant $TenantId -ReturnConnection
+        Remove-PnPSiteCollectionAdmin -Owners $signedInUser -Connection $siteConnection -ErrorAction Stop
+        Write-Info "Removed $signedInUser as site collection administrator of $url"
+      } catch {
+        Write-Warning "Could not remove $signedInUser as site collection administrator of $url ($($_.Exception.Message))."
+        $manualSteps.Add("Remove $signedInUser as site collection administrator of $url (SharePoint admin center > Active sites > the site > Membership), unless the account should stay.")
+      }
     }
   }
 }
