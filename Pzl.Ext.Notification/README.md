@@ -90,6 +90,14 @@ az login --tenant <tenant-id>
 | 4. Teams-appen | Bygger pakken med `New-NotificationTeamsApp.ps1` og laster den opp til organisasjonens appkatalog med Graph: ny app første gang, ny versjon (patch-nummeret økes) ved oppgradering. `-SkipTeamsAppUpload` bygger bare pakken. |
 | 5. Funksjonen | Kjører `Publish-NotificationFunction.ps1`. |
 
+**Preflight.** Før noe opprettes eller endres, viser skriptet en oppsummering og spør om det skal fortsette:
+
+- miljøet: tenant, Azure-konto, abonnement, Graph-konto og intranettområde
+- hva hvert steg gjør: hvilke Azure-ressurser som finnes og hvilke som opprettes, `DRY_RUN`, app-rollene, tilgangen per område, Teams-appen og hvilken fane varslene åpner
+- advarsler: ressursleverandører som ikke er registrert i abonnementet (sjekkes når noe skal opprettes), opptatt navn på lagringskontoen, ressursgruppe som mangler og ikoner som ikke finnes
+
+`-PreflightOnly` viser oppsummeringen og stopper. `-Force` hopper over spørsmålet, for kjøring uten bruker. Svaret er nei som standard. Advarslene stopper ikke skriptet: en ressursleverandør som mangler, registreres av Azure CLI ved første bruk når kontoen har rettigheter på abonnementet. Med rettigheter bare på ressursgruppa må en eier av abonnementet kjøre `az provider register -n <navnerom>` først.
+
 **Har intranettet en egen Teams-app**, legg til `-TeamsDeepLinkAppId <intranett-appens ID> -TeamsDeepLinkEntityId <fanens entityId>`. Varslene åpner da fanen i den appen, se [steg 4](#steg-4-teams-appen). Verdiene beholdes ved senere kjøringer.
 
 Skriptet holder varsel-appens ID og appen varslene åpner fra hverandre:

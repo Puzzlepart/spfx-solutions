@@ -113,6 +113,13 @@
 .PARAMETER SkipFunction
   Skip step 5.
 
+.PARAMETER PreflightOnly
+  Show the preflight summary (environment, what is created or changed, warnings) and stop.
+  Nothing is created or changed.
+
+.PARAMETER Force
+  Do not ask for confirmation after the preflight summary (for unattended runs).
+
 .EXAMPLE
   az login --tenant <tenant-id>
   .\Install-Notification.ps1 -TenantId <tenant-id> -SubscriptionId <subscription-id> `
@@ -161,7 +168,9 @@ param(
   [switch]$SkipSitePermissions,
   [switch]$SkipTeamsApp,
   [switch]$SkipTeamsAppUpload,
-  [switch]$SkipFunction
+  [switch]$SkipFunction,
+  [switch]$PreflightOnly,
+  [switch]$Force
 )
 
 $ErrorActionPreference = 'Stop'
@@ -312,6 +321,136 @@ Write-Done "Mode: $mode, DRY_RUN=$($dryRunValue.ToString().ToLower())"
 
 #endregion
 
+#region Preflight
+
+# Everything above only reads. Show where the script is about to work and what it will do, check
+# what can be checked up front, and let the person running it decide.
+Write-Step 'Preflight'
+$warnings = [System.Collections.Generic.List[string]]::new()
+function Write-Row([string]$Label, [string]$Value) { Write-Host ("   {0,-22} {1}" -f $Label, $Value) }
+function Write-Section([string]$Text) { Write-Host "`n   $Text" -ForegroundColor Cyan }
+
+# Highest level per site: Write wins over Read
+$siteAccess = [ordered]@{}
+foreach ($url in @($ConfigSiteUrl) + $NewsSiteUrls) { $siteAccess[$url.TrimEnd('/')] = 'Read' }
+foreach ($url in $AnnouncementSiteUrls) { $siteAccess[$url.TrimEnd('/')] = 'Write' }
+
+$subscription = Get-AzJson account show
+Write-Section 'Environment'
+Write-Row 'Tenant' $TenantId
+Write-Row 'Azure account' "$($subscription.user.name)"
+Write-Row 'Subscription' "$($subscription.name) ($SubscriptionId)"
+if ($needGraph) { Write-Row 'Microsoft Graph' "$((Get-MgContext).Account)" }
+Write-Row 'Intranet site' $ConfigSiteUrl
+
+if ($SkipInfrastructure) {
+  Write-Section '1. Azure resources: skipped'
+} else {
+  $group = Get-AzJson group show -n $ResourceGroupName
+  $identityNow = Get-AzJson identity show -n $IdentityName -g $ResourceGroupName
+  $storageNow = Get-AzJson storage account show -n $StorageAccountName -g $ResourceGroupName
+  $state = { param($Existing) if ($Existing) { 'exists, settings updated' } else { "CREATED in $Location" } }
+  Write-Section "1. Azure resources ($mode)"
+  Write-Row 'Resource group' "$ResourceGroupName ($(if ($group) { "exists, $($group.location)" } else { "CREATED in $Location" }))"
+  Write-Row 'Managed identity' "$IdentityName ($(if ($identityNow) { 'exists' } else { "CREATED in $Location" }))"
+  Write-Row 'Storage account' "$StorageAccountName ($(if ($storageNow) { 'exists' } else { "CREATED in $Location" }))"
+  Write-Row 'Application Insights' "$FunctionAppName-insights (created if missing)"
+  Write-Row 'Function app' "$FunctionAppName ($(& $state $functionApp))"
+  Write-Row 'DRY_RUN' "$($dryRunValue.ToString().ToLower())$(if ($dryRunValue) { ' (nothing is sent)' } else { ' (NOTIFICATIONS ARE SENT)' })"
+
+  if (-not $storageNow) {
+    $nameCheck = Get-AzJson storage account check-name --name $StorageAccountName
+    if ($nameCheck -and -not $nameCheck.nameAvailable) {
+      $warnings.Add("The storage account name $StorageAccountName is not available ($($nameCheck.message)). Pass another -StorageAccountName.")
+    }
+  }
+
+  # Resource providers are registered per subscription. az registers a missing one on first use,
+  # but only for an account with rights on the subscription: with rights on the resource group
+  # alone the creation fails halfway. Checked only when something is to be created.
+  if (-not ($group -and $identityNow -and $storageNow -and $functionApp)) {
+    $providers = [ordered]@{
+      'Microsoft.ManagedIdentity'     = 'managed identity'
+      'Microsoft.Storage'             = 'storage account'
+      'Microsoft.Insights'            = 'Application Insights'
+      'Microsoft.OperationalInsights' = 'Log Analytics workspace for Application Insights'
+      'Microsoft.Web'                 = 'function app'
+      'Microsoft.App'                 = 'Flex Consumption plan'
+    }
+    $notRegistered = @()
+    foreach ($namespace in $providers.Keys) {
+      $provider = Get-AzJson provider show -n $namespace
+      $registration = if ($provider) { "$($provider.registrationState)" } else { 'unknown' }
+      if ($registration -ne 'Registered') { $notRegistered += "$namespace ($($providers[$namespace]): $registration)" }
+    }
+    if ($notRegistered) {
+      Write-Row 'Resource providers' "NOT REGISTERED: $($notRegistered -join ', ')"
+      $warnings.Add("Resource providers not registered in the subscription: $($notRegistered -join ', '). Azure CLI registers them on first use if the account has rights on the subscription. With rights on the resource group only, ask a subscription owner to run: az provider register -n <namespace> --subscription $SubscriptionId")
+    } else {
+      Write-Row 'Resource providers' "registered ($($providers.Keys.Count) checked)"
+    }
+  }
+  if (-not $group) {
+    $warnings.Add("The resource group $ResourceGroupName does not exist and is created, which takes rights on the subscription.")
+  }
+}
+
+if ($SkipPermissions) {
+  Write-Section '2. App roles in Entra: skipped'
+} else {
+  Write-Section '2. App roles in Entra (for the managed identity)'
+  Write-Row 'Microsoft Graph' 'TeamsActivity.Send, GroupMember.Read.All, Sites.Selected'
+  Write-Row 'SharePoint Online' 'Sites.Selected'
+}
+
+if ($SkipSitePermissions) {
+  Write-Section '3. Site access: skipped'
+} else {
+  Write-Section "3. Site access for the identity (signs in with PnP app $ClientId)"
+  foreach ($url in $siteAccess.Keys) { Write-Row $siteAccess[$url] $url }
+  Write-Row '' 'Existing grants are raised, never lowered.'
+}
+
+if ($SkipTeamsApp) {
+  Write-Section '4. Teams app: skipped'
+} else {
+  Write-Section '4. Teams app'
+  Write-Row 'Name' "$AppName ($DeveloperName)"
+  Write-Row 'App ID' $TeamsAppId
+  Write-Row 'Icons' "$(if ($ColorIcon) { $ColorIcon } else { 'default color icon' }), $(if ($OutlineIcon) { $OutlineIcon } else { 'default outline icon' })"
+  Write-Row 'App catalog' "$(if ($SkipTeamsAppUpload) { 'package is built, NOT uploaded' } else { 'uploaded to the organization''s app catalog (new app, or a new version)' })"
+  foreach ($icon in $ColorIcon, $OutlineIcon) {
+    if ($icon -and -not (Test-Path -LiteralPath $icon)) { $warnings.Add("Icon not found: $icon") }
+  }
+}
+Write-Row 'Notifications open' "$(if ($opensOtherApp) { "another Teams app: $deepLinkAppId, tab $deepLinkEntityId" } else { "the notification app's own tab ($deepLinkEntityId)" })"
+
+Write-Section "5. Function code: $(if ($SkipFunction) { 'skipped' } else { "built and deployed to $FunctionAppName" })"
+
+if ($warnings.Count) {
+  Write-Host ''
+  foreach ($warning in $warnings) { Write-Warning $warning }
+}
+if ($PreflightOnly) {
+  Write-Host "`n   -PreflightOnly: nothing was created or changed." -ForegroundColor Yellow
+  return
+}
+if (-not $Force) {
+  Write-Host ''
+  $question = if ($warnings.Count) { "Continue in spite of $($warnings.Count) warning(s)? (y/N)" } else { 'Continue? (y/N)' }
+  try {
+    $answer = Read-Host "   $question"
+  } catch {
+    throw "The preflight needs a confirmation and the session is not interactive. Pass -Force to continue without asking, or -PreflightOnly to see the summary only."
+  }
+  if ($answer -notmatch '^\s*(y|yes|j|ja)\s*$') {
+    Write-Host '   Stopped. Nothing was created or changed.' -ForegroundColor Yellow
+    return
+  }
+}
+
+#endregion
+
 #region 1. Azure resources
 
 if ($SkipInfrastructure) {
@@ -363,10 +502,7 @@ if ($SkipSitePermissions) {
   Write-Step '3. Site access (skipped)'
 } else {
   Write-Step '3. Site access (Sites.Selected)'
-  # Highest level per site: Write wins over Read
-  $wanted = [ordered]@{}
-  foreach ($url in @($ConfigSiteUrl) + $NewsSiteUrls) { $wanted[$url.TrimEnd('/')] = 'Read' }
-  foreach ($url in $AnnouncementSiteUrls) { $wanted[$url.TrimEnd('/')] = 'Write' }
+  $wanted = $siteAccess
   $rank = @{ read = 1; write = 2; manage = 3; fullcontrol = 4 }
 
   # Without -Tenant, PnP.PowerShell signs in against the common endpoint and silently reuses the
