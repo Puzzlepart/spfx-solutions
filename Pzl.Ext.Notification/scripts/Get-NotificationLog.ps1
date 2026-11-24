@@ -28,7 +28,18 @@ if (-not $AppInsightsName) { $AppInsightsName = "$FunctionAppName-insights" }
 $filter = if ($IncludeHostMessages) { '' } else { "| where message !startswith 'Host Status' and message !startswith 'Trigger Details' and message !startswith 'Executing '" }
 $query = "traces | where timestamp > ago(${Minutes}m) $filter | project timestamp, severityLevel, message | order by timestamp desc | take $Take"
 
-$json = & az monitor app-insights query --app $AppInsightsName -g $ResourceGroupName --analytics-query $query -o json 2>$null
+# Azure CLI writes its output in the Windows ANSI code page and PowerShell reads it in the console
+# code page, so æ, ø and å came out as other characters ("pÕ", "l°nn"). Ask for UTF-8 on both sides.
+$consoleEncoding = [Console]::OutputEncoding
+$pythonEncoding = $env:PYTHONIOENCODING
+try {
+  [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+  $env:PYTHONIOENCODING = 'utf-8'
+  $json = & az monitor app-insights query --app $AppInsightsName -g $ResourceGroupName --analytics-query $query -o json 2>$null
+} finally {
+  [Console]::OutputEncoding = $consoleEncoding
+  $env:PYTHONIOENCODING = $pythonEncoding
+}
 if ($LASTEXITCODE -ne 0 -or -not $json) { throw "Query failed. Check that Application Insights '$AppInsightsName' exists in '$ResourceGroupName' and that you are logged in (az login)." }
 $rows = ($json | ConvertFrom-Json).tables[0].rows
 if (-not $rows) { Write-Host "No log lines in the last $Minutes minutes. The timer runs every minute; logs arrive with a delay."; return }
