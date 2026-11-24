@@ -318,14 +318,54 @@ function Update-SiteApp($App, [string]$Url, [string]$Title) {
 # Packages before 1.5.3 have another solution ID, so the new package does not replace them: it
 # becomes a second app with the same components. The old one is always removed first. The web
 # part is gone from the pages from the removal until the new package is published, about a minute.
+# Catalog IDs (the Id of Get-PnPApp) of the apps in the tenant app catalog with the given solution
+# ID. Get-PnPApp does not return the solution ID (seen with PnP.PowerShell 3.4.1 and 3.5.0), so
+# it is read from SharePoint: the app catalog API first, then the app catalog library. Returns
+# $null when neither source gives a solution ID.
+function Find-CatalogAppIds([string]$SolutionId) {
+  $normalize = { param($Value) "$Value".Trim('{', '}', ' ').ToLowerInvariant() }
+  $wanted = & $normalize $SolutionId
+  try {
+    $response = Invoke-PnPSPRestMethod -Url '/_api/web/tenantappcatalog/AvailableApps' -Connection $siteConnection -ErrorAction Stop
+    $available = @($response.value)
+    $property = $available | ForEach-Object { $_.PSObject.Properties.Name } | Where-Object { $_ -in 'ProductId', 'ProductID' } | Select-Object -First 1
+    if ($property) {
+      Write-Info 'Solution IDs read from the app catalog API'
+      return , @($available | Where-Object { (& $normalize $_.$property) -eq $wanted } | ForEach-Object { & $normalize $(if ($_.ID) { $_.ID } else { $_.Id }) })
+    }
+  } catch {
+    Write-Verbose "AvailableApps: $($_.Exception.Message)"
+  }
+  try {
+    $catalog = Get-Connection $AppCatalogUrl
+    $library = Get-PnPList -Identity 'AppCatalog' -Connection $catalog -ErrorAction Stop
+    $items = @(Get-PnPListItem -List $library.Id -PageSize 500 -Connection $catalog)
+    if ($items | Where-Object { $_.FieldValues.ContainsKey('AppProductID') -and $_.FieldValues['AppProductID'] }) {
+      Write-Info "Solution IDs read from the app catalog library ($($library.Title))"
+      return , @($items | Where-Object { (& $normalize $_.FieldValues['AppProductID']) -eq $wanted } | ForEach-Object { & $normalize $_.FieldValues['UniqueId'] })
+    }
+  } catch {
+    Write-Verbose "App catalog library: $($_.Exception.Message)"
+  }
+  return $null
+}
+
 function Remove-OldPackage {
-  $apps = @(Get-PnPApp -Scope Tenant -Connection $siteConnection)
-  if ($apps.Count -and -not ($apps[0].PSObject.Properties.Name -contains 'ProductId')) {
-    Write-Warning "This version of PnP.PowerShell does not return the solution ID of the apps, so a package older than 1.5.3 (solution ID $OldSolutionId, «Announcements by Puzzlepart») cannot be found. If it is in the app catalog, delete it there before this package is published."
+  $oldIds = Find-CatalogAppIds $OldSolutionId
+  if ($null -eq $oldIds) {
+    Write-Warning "The solution IDs of the apps in the app catalog could not be read, so a package older than 1.5.3 (solution ID $OldSolutionId, «Announcements by Puzzlepart») cannot be found. If it is in the app catalog, delete it there before this package is published."
     return
   }
-  $old = @($apps | Where-Object { "$($_.ProductId)" -eq $OldSolutionId })
-  if (-not $old.Count) { return }
+  if (-not $oldIds.Count) {
+    Write-Info 'No package from before 1.5.3 in the app catalog'
+    return
+  }
+  $apps = @(Get-PnPApp -Scope Tenant -Connection $siteConnection)
+  $old = @($apps | Where-Object { $oldIds -contains "$($_.Id)".ToLowerInvariant() })
+  if (-not $old.Count) {
+    Write-Warning "The app catalog has a package with the old solution ID $OldSolutionId (catalog ID $($oldIds -join ', ')), but Get-PnPApp does not list it. Delete it in the app catalog before this package is published."
+    return
+  }
   foreach ($app in $old) {
     Write-Info "Found the package from before 1.5.3: «$($app.Title)» $($app.AppCatalogVersion) (solution ID $OldSolutionId)"
     if (-not $PSCmdlet.ShouldProcess($AppCatalogUrl, "Remove the old package «$($app.Title)» $($app.AppCatalogVersion) before the new one is published")) { continue }
