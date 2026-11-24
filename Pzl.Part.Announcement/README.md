@@ -217,7 +217,7 @@ Application customizers are not rendered in the Viva Connections mobile app, and
 
 | Step | What it does |
 | --- | --- |
-| Package | Uploads and publishes `pzl-announcement.sppkg` to the tenant app catalog (replaces 1.x in place) and updates the app on the list site if it was added there. `-SkipPackage` skips it. |
+| Package | Uploads and publishes `pzl-announcement.sppkg` to the tenant app catalog and updates the app on the list site if it was added there. 1.5.3 and later are replaced in place. A package from before 1.5.3 («Announcements by Puzzlepart», solution ID `a65ac2f2-…`) is removed from the app catalog first, see [Upgrading from 1.x](#upgrading-from-1x). `-SkipPackage` skips it. |
 | List | Applies `Templates/Announcement.xml` to `-SiteUrl`, with the workaround for PnP.PowerShell 3.4.x. Detects a new installation, an upgrade from 1.x (no *Status* column) or an update of 2.x. |
 | Cleanup | Removes the 1.x `AnnouncementDeepLink` custom action from the list site and the notification site. |
 | Banner | With `-BannerSiteUrls`, `-BannerHubSiteUrls` or `-BannerEverywhere` (and `-BannerTargetAudience`): creates or updates the banner's row in Tenant Wide Extensions. Properties not given, such as `popoverFields`, are kept. |
@@ -253,7 +253,11 @@ Upload `sharepoint/solution/pzl-announcement.sppkg` from the build to the tenant
 
 ### Upgrading from 1.x
 
-2.0.0 keeps the solution ID and the component IDs, so it is an in-place upgrade: existing web part instances and the banner's Tenant Wide Extensions row keep working. `scripts/Install-Driftsmeldinger.ps1` does steps 1 to 3; the steps by hand:
+2.0.0 keeps the solution ID of 1.5.3 and the component IDs, so from 1.5.3 it is an in-place upgrade: existing web part instances and the banner's Tenant Wide Extensions row keep working.
+
+**From a package older than 1.5.3** (solution ID `a65ac2f2-48d4-41ad-81b2-4c89e28c3481`, «Announcements by Puzzlepart») the new package is a new app with the same components, not a replacement. The install script always removes the old package from the tenant app catalog first (and uninstalls it from the list site if it was added there), then publishes the new one. The web part is unavailable on the pages in between, about a minute, so run it when few people use the intranet. The web part instances keep their settings, because the component IDs are the same. `-WhatIf` shows whether an old package was found. By hand: delete the old app in the app catalog, then upload the new package.
+
+ `scripts/Install-Driftsmeldinger.ps1` does steps 1 to 3; the steps by hand:
 
 1. Upload the 2.0.0 package to the app catalog where 1.x is deployed (replace the existing app). Sites with the app installed from a site collection app catalog need **Update** under Site contents.
 2. Re-run `Invoke-PnPSiteTemplate -Path ".\Templates\Announcement.xml"` on the site with the list. This adds *Status*, changes the level choices to *Informasjon / Advarsel / Kritisk* and updates the column descriptions. Existing items keep their values: *Varsel* is shown as *Kritisk*, *Normal* as *Informasjon*, and items without a status as *Pågår*. When such an item is edited, the editor picks a new level and a status.

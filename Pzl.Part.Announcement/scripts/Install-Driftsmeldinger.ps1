@@ -8,7 +8,9 @@
   there and only changes what is missing or outdated.
 
     1. Uploads and publishes pzl-announcement.sppkg to the tenant app catalog (replaces an
-       existing version; same solution ID as 1.x, so 1.x is upgraded in place).
+       existing version from 1.5.3 or later in place). A package from before 1.5.3 has another
+       solution ID and is removed from the app catalog first; the web part is unavailable for
+       about a minute, until the new package is published.
     2. Updates the app on the list site if it was added there from a site collection.
     3. Applies Templates/Announcement.xml to the list site (creates the list, or adds Status,
        the new level choices and the column descriptions to an existing one).
@@ -112,6 +114,8 @@ $ErrorActionPreference = 'Stop'
 $BannerComponentId = 'c0d1edf4-db39-4feb-8052-a4c27ffe1954'
 $WebPartComponentId = 'ddfa2478-1872-408c-8f8f-a1c704f93d66'
 $OldDeepLinkComponentId = '9f3d6a2c-7b14-4e8f-a5c0-3d2e1f6b8a47'
+# Solution ID of the packages before 1.5.3 («Announcements by Puzzlepart»)
+$OldSolutionId = 'a65ac2f2-48d4-41ad-81b2-4c89e28c3481'
 # The list's title follows the language of the app catalog site («Tenant Wide Extensions» in
 # English), its URL does not, so the list is looked up by URL.
 $TenantWideExtensionsList = 'Tenant Wide Extensions'
@@ -311,10 +315,40 @@ function Update-SiteApp($App, [string]$Url, [string]$Title) {
   }
 }
 
+# Packages before 1.5.3 have another solution ID, so the new package does not replace them: it
+# becomes a second app with the same components. The old one is always removed first. The web
+# part is gone from the pages from the removal until the new package is published, about a minute.
+function Remove-OldPackage {
+  $apps = @(Get-PnPApp -Scope Tenant -Connection $siteConnection)
+  if ($apps.Count -and -not ($apps[0].PSObject.Properties.Name -contains 'ProductId')) {
+    Write-Warning "This version of PnP.PowerShell does not return the solution ID of the apps, so a package older than 1.5.3 (solution ID $OldSolutionId, «Announcements by Puzzlepart») cannot be found. If it is in the app catalog, delete it there before this package is published."
+    return
+  }
+  $old = @($apps | Where-Object { "$($_.ProductId)" -eq $OldSolutionId })
+  if (-not $old.Count) { return }
+  foreach ($app in $old) {
+    Write-Info "Found the package from before 1.5.3: «$($app.Title)» $($app.AppCatalogVersion) (solution ID $OldSolutionId)"
+    if (-not $PSCmdlet.ShouldProcess($AppCatalogUrl, "Remove the old package «$($app.Title)» $($app.AppCatalogVersion) before the new one is published")) { continue }
+    if ($app.InstalledVersion) {
+      Uninstall-PnPApp -Identity $app.Id -Scope Tenant -Connection $siteConnection
+      foreach ($attempt in 1..24) {
+        Start-Sleep -Seconds 5
+        $now = Get-PnPApp -Identity $app.Id -Scope Tenant -Connection $siteConnection -ErrorAction SilentlyContinue
+        if (-not $now -or -not $now.InstalledVersion) { break }
+      }
+      Write-Done "Uninstalled the old package from $SiteUrl"
+    }
+    Remove-PnPApp -Identity $app.Id -Scope Tenant -Connection $siteConnection
+    Write-Done "Removed the old package «$($app.Title)» from the tenant app catalog. The web part is unavailable until the new package is published."
+    $manualSteps.Add("The old package «$($app.Title)» was removed. If it was added to other sites than $SiteUrl (Site contents), remove it there. Check the pages with the web part.")
+  }
+}
+
 if ($SkipPackage) {
   Write-Step 'Packages (skipped)'
 } else {
   Write-Step 'Driftsmeldinger package'
+  Remove-OldPackage
   $announcementApp = Publish-Package $PackagePath 'Driftsmeldinger'
   Update-SiteApp $announcementApp $SiteUrl 'Driftsmeldinger'
 }
