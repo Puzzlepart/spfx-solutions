@@ -84,11 +84,19 @@ az login --tenant <tenant-id>
 
 | Steg | Hva skriptet gjør |
 |---|---|
-| 1. Azure | Kjører `Deploy-NotificationInfrastructure.ps1`. Teams-app-ID-en, `DRY_RUN` og listetitlene leses fra den eksisterende Function-appen og beholdes. `-DryRun On/Off` overstyrer. Nye installasjoner starter med `DRY_RUN=true`. |
+| 1. Azure | Kjører `Deploy-NotificationInfrastructure.ps1`. Teams-app-ID-en, hvilken fane varslene åpner, `DRY_RUN` og listetitlene leses fra den eksisterende Function-appen og beholdes. `-DryRun On/Off` overstyrer. Nye installasjoner starter med `DRY_RUN=true`. |
 | 2. Entra | Kjører `Grant-NotificationPermissions.ps1` med identitetens principal ID. |
 | Tilgang per område | `Write` på `-AnnouncementSiteUrls` (standard: konfigurasjonsområdet), `Read` på konfigurasjonsområdet og `-NewsSiteUrls`. Eksisterende tilganger heves, men senkes aldri. Bruker PnP.PowerShell (lastet i økten, via `Import-PnPPowerShell` eller installert) med PP365-appen som standard `-ClientId`. |
 | 4. Teams-appen | Bygger pakken med `New-NotificationTeamsApp.ps1` og laster den opp til organisasjonens appkatalog med Graph: ny app første gang, ny versjon (patch-nummeret økes) ved oppgradering. `-SkipTeamsAppUpload` bygger bare pakken. |
 | 5. Funksjonen | Kjører `Publish-NotificationFunction.ps1`. |
+
+**Har intranettet en egen Teams-app**, legg til `-TeamsDeepLinkAppId <intranett-appens ID> -TeamsDeepLinkEntityId <fanens entityId>`. Varslene åpner da fanen i den appen, se [steg 4](#steg-4-teams-appen). Verdiene beholdes ved senere kjøringer.
+
+Skriptet holder varsel-appens ID og appen varslene åpner fra hverandre:
+
+- Varsel-appens ID lagres i app-innstillingen `TEAMS_APP_MANIFEST_ID`, som bare skriptet leser, og hentes derfra ved neste kjøring.
+- Finnes appen i appkatalogen fra før, laster skriptet bare opp en ny versjon når avsenderen i manifestet er varslingsidentiteten. Oppgir ikke Graph avsenderen, må navnet være likt `-AppName`.
+- På en installasjon fra før denne innstillingen fantes, der varslene alt åpner en intranett-app, stopper skriptet og ber om `-TeamsAppId <varsel-appens ID>` én gang.
 
 Roller: Owner (eller Contributor + User Access Administrator) på abonnementet, Global Administrator eller Privileged Role Administrator, Teams Administrator og SharePoint Administrator. Hvert steg kan hoppes over med `-Skip…`. For hånd gjenstår app setup policy i Teams admin center, radene i **Varslingskonfigurasjon** og testvarselet. Skriptet skriver dem ut til slutt.
 
@@ -242,7 +250,7 @@ Aktivitetsvarsler må sendes fra en Teams-app der `webApplicationInfo.id` er cli
       ```
 
    2. Øk versjonen, last opp manifestet som oppdatering, og la brukerne logge ut og inn av Teams under test (se punkt 5).
-   3. Sett `TEAMS_DEEPLINK_APP_ID` til intranett-appens app-ID og `TEAMS_DEEPLINK_ENTITY_ID` til fanens `entityId`.
+   3. Sett `TEAMS_DEEPLINK_APP_ID` til intranett-appens app-ID og `TEAMS_DEEPLINK_ENTITY_ID` til fanens `entityId`: med `-TeamsDeepLinkAppId` og `-TeamsDeepLinkEntityId` på `Install-Notification.ps1`, eller med `az functionapp config appsettings set` som over.
 
    Varsel-appen må uansett finnes og være installert for mottakerne: Graph krever at avsenderens identitet står i `webApplicationInfo.id` i appen varselet vises for, og intranett-appen må ha SharePoints app-ID der for SSO. `subPageId` fra Teams-konteksten når ikke fram til webdelen i fanen, så URL-parameteren er eneste pålitelige vei.
 
@@ -273,6 +281,7 @@ App-innstillingene ble satt i steg 1, bortsett fra `TEAMS_DEEPLINK_APP_ID`, som 
 | `TEAMS_DEEPLINK_APP_ID` | *(påkrevd)* | Teams-app som varslene åpner: varsel-appen selv (steg 4) eller intranett-appen. Uten denne sendes ingenting, og loggen sier hvorfor. |
 | `TEAMS_DEEPLINK_ENTITY_ID` | `intranet` | `entityId` for fanen i den appen. `intranet` er varsel-appens fane. |
 | `TEAMS_NOTIFICATION_APP_ID` | *(tom)* | Sendes til Graph som `teamsAppId`. Trengs bare når en mottaker har flere Teams-apper med samme avsender-identitet (`409` «Found multiple applications with the same AAD App ID»). Prøv verdien med `&teamsAppId=` på test-endepunktet før den settes. |
+| `TEAMS_APP_MANIFEST_ID` | *(settes av skriptet)* | Varsel-appens ID i manifestet. Leses bare av `Install-Notification.ps1`, ikke av tjenesten. |
 | `STATE_STORAGE_ACCOUNT_NAME` | Function-appens konto | Lagringskonto for sendt-status for sider |
 | `STATE_TABLE_NAME` | `NotificationState` | Tabellnavn |
 | `TIMER_SCHEDULE` | `0 * * * * *` | NCRONTAB, hvert minutt |
