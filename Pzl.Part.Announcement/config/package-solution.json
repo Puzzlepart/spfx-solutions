@@ -3,7 +3,7 @@
   "solution": {
     "name": "Driftsmeldinger",
     "id": "cd056a9e-7e02-48ae-890d-bf87e815febd",
-    "version": "2.1.0.0",
+    "version": "2.1.1.0",
     "includeClientSideAssets": true,
     "skipFeatureDeployment": true,
     "isDomainIsolated": false,

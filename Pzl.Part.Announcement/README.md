@@ -1,6 +1,6 @@
 # Driftsmeldinger (Pzl.Part.Announcement)
 
-[![version](https://img.shields.io/badge/version-2.1.0-orange.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-2.1.1-orange.svg)](https://semver.org)
 
 ## Summary
 
@@ -137,6 +137,8 @@ To open a specific announcement when the page loads, the web part reads an annou
 
 1. Query string: `?driftsmelding=<id>` on the page URL, so a link to one announcement can be shared. The value may carry the deep link prefix (`driftsmelding:<id>`).
 2. Teams deep link: `subEntityId`/`subPageId` set to `driftsmelding:<id>` (read via `context.sdks.microsoftTeams`).
+
+3. Teams `load` message: Teams keeps the tab's page alive and does not load it again when the user clicks another notification in the activity feed. It sends the page a `load` message with the tab address, and the web part reads the `driftsmelding` parameter from it, reads the list again and opens the dialog. The same notification clicked again opens the dialog again.
 
 `page:<url>` values (news notifications) are ignored by the web part and handled by the add-on's **NotificationDeepLink** customizer.
 
@@ -316,6 +318,10 @@ The script creates the page **Driftsmeldinger** (`SitePages/Driftsmeldinger.aspx
 The page is published but not added to the navigation. It is an ordinary page: edit the text to fit the organisation. Running the script again does not touch an existing page. To get the notification section on a page created without it, run the script with `-OverwriteInfoPage` (changes made by hand are lost) or copy the text from the HTML file.
 
 ## Changelog
+
+### 2.1.1
+
+* Teams activity feed: a click on a notification opens the announcement also when Teams has kept the page alive. Teams loads the tab once and, for the next notification the user clicks, sends the page a `load` message with the tab address instead of loading it again (app caching). The web part opened the dialog only when the page was loaded, so the second notification, and the same notification after the dialog was closed, opened nothing. The web part now listens for the message, reads the list again and opens the announcement.
 
 ### 2.1.0
 

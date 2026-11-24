@@ -3,7 +3,8 @@ import { useAnnouncementState } from './useAnnouncementState'
 import { IAnnouncementProps } from './types'
 import { useId } from '@fluentui/react-components'
 import { useAnnouncementDataFetch } from './useAnnouncementDataFetch'
-import { getFocusedAnnouncementId } from '../util/getFocusedAnnouncementId'
+import { findAnnouncementIdInUrl, getFocusedAnnouncementId } from '../util/getFocusedAnnouncementId'
+import { onTeamsLoad } from '../util/teamsLoad'
 import { IAnnouncementEditor } from './AnnouncementDialogs'
 import { onAnnouncementChanged } from '../util/announcementChanged'
 
@@ -72,6 +73,29 @@ export const useAnnouncement = (props: IAnnouncementProps) => {
       })
   }, [])
 
+  /**
+   * Raised each time Teams asks for an announcement on a page it has kept alive,
+   * so the same announcement is opened again after the user has closed it
+   */
+  const [focusRequest, setFocusRequest] = useState(0)
+
+  // Teams does not load the page again when the user clicks another notification
+  // in the activity feed: it sends a `load` message with the tab address instead.
+  // The list on a page that has been kept alive may be old, so read it first.
+  useEffect(
+    () =>
+      onTeamsLoad((contentUrl) => {
+        const focusedAnnouncementId = findAnnouncementIdInUrl(contentUrl)
+        if (!focusedAnnouncementId) return
+        const focus = (): void => {
+          setState({ focusedAnnouncementId })
+          setFocusRequest((request) => request + 1)
+        }
+        refresh().then(focus, focus)
+      }),
+    []
+  )
+
   // Open the focused announcement once both the data and the focus ID are ready
   useEffect(() => {
     if (state.loading || !state.focusedAnnouncementId) return
@@ -80,7 +104,7 @@ export const useAnnouncement = (props: IAnnouncementProps) => {
     const element = announcementRefs.current[match.id]
     if (element?.scrollIntoView) element.scrollIntoView({ block: 'center' })
     setOpenAnnouncementId(match.id)
-  }, [state.loading, state.focusedAnnouncementId])
+  }, [state.loading, state.focusedAnnouncementId, focusRequest])
 
   /**
    * Fields selected for the details dialog (in content type order)

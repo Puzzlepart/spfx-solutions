@@ -1,5 +1,6 @@
 import { BaseApplicationCustomizer } from '@microsoft/sp-application-base'
 import { getPageRedirectUrl } from './pageDeepLink'
+import { redirectOnTeamsLoad } from './teamsLoad'
 
 /**
  * The customizer has no properties. The custom action is registered with an
@@ -15,12 +16,23 @@ export type INotificationDeepLinkApplicationCustomizerProperties = Record<string
  * the redirect happens before the content is shown.
  *
  * `driftsmelding:<id>` deep links (open an announcement) are left to the
- * Driftsmeldinger web part, which owns the popover.
+ * Driftsmeldinger web part, which owns the dialog.
+ *
+ * Teams keeps the page alive when the tab is opened again (another notification
+ * in the activity feed) and sends a `load` message instead of loading it, so
+ * the customizer also listens for that message, see `teamsLoad.ts`.
  */
 export default class NotificationDeepLinkApplicationCustomizer extends BaseApplicationCustomizer<INotificationDeepLinkApplicationCustomizerProperties> {
+  private _stopListening?: () => void
+
   public onInit(): Promise<void> {
     const url = getPageRedirectUrl()
     if (url) window.location.replace(url)
+    this._stopListening = redirectOnTeamsLoad()
     return Promise.resolve()
+  }
+
+  protected onDispose(): void {
+    this._stopListening?.()
   }
 }

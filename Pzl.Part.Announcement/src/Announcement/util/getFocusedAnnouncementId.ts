@@ -69,6 +69,25 @@ function getUrlAnnouncementId(): string | null {
 }
 
 /**
+ * Finds an announcement ID in an address: the `driftsmelding` parameter of the
+ * address itself, or of the address in its `dest` parameter (a Teams tab loads
+ * `teamslogon.aspx?dest=<page address>`). Returns `null` when there is none.
+ *
+ * @param url Absolute URL
+ */
+export function findAnnouncementIdInUrl(url: string): string | null {
+  try {
+    const params = new URL(url).searchParams
+    const direct = parseAnnouncementId(params.get(QUERY_PARAM_NAME))
+    if (direct) return direct
+    const dest = params.get('dest')
+    return dest ? parseAnnouncementId(new URL(dest).searchParams.get(QUERY_PARAM_NAME)) : null
+  } catch {
+    return null
+  }
+}
+
+/**
  * Resolves the announcement ID that should be focused (details dialog opened) on load.
  * The `driftsmelding` query parameter is checked first (synchronous, and what
  * the Teams tab passes), then the Teams deep link context (`subPageId`).

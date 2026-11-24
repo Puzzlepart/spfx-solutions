@@ -252,6 +252,8 @@ Aktivitetsvarsler må sendes fra en Teams-app der `webApplicationInfo.id` er cli
    Invoke-PnPSiteTemplate -Path .\Templates\DeepLinkCustomAction.xml
    ```
 
+   Teams holder siden i live når brukeren klikker på et nytt varsel i aktivitetsfeeden, og sender siden en `load`-melding med fanens adresse i stedet for å laste den på nytt. Customizer-en (fra 1.0.1) lytter på meldingen og sender brukeren til nyhetssiden da også. Står brukeren på en annen side enn forsiden når et driftsmeldingsvarsel klikkes, sendes de til forsiden, der webdelen åpner meldingen. Dette gjelder sider på området der customizer-en er registrert: har Teams sendt brukeren til en nyhet på et annet område, fanger ingen opp neste varsel før fanen lastes på nytt.
+
    Sjekk med `Get-PnPCustomAction -Scope Site`. Customizer-en gjør ingenting på sider som åpnes uten `driftsmelding=page:`-parameteren. Bare samme-opprinnelse `.aspx`-stier godtas, og andre URL-parametere (som `app=portals` fra Teams-fanen) beholdes.
 
    **Har intranettet en egen Teams-app** med SharePoint-SSO, pek varslene dit i stedet. Det er anbefalt der den finnes, siden varsel-appen ikke garanterer stille pålogging på desktop og mobil:
