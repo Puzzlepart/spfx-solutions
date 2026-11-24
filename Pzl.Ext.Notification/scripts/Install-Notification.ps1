@@ -21,7 +21,8 @@
   installed with Pzl.Part.Announcement/scripts/Install-Driftsmeldinger.ps1 -EnableTeamsNotifications.
   Left by hand: the Teams app setup policy and the rows in Varslingskonfigurasjon (printed at the end).
 
-  Requires, and does not install: Azure CLI 2.70+ (logged in: az login --tenant <tenant-id>),
+  Requires, and does not install: Azure CLI 2.70+ (the script runs az login --tenant <tenant-id>
+  when the CLI is not logged in to the tenant, except with -Force),
   Node 20+ and npm, Microsoft.Graph PowerShell (Authentication and Applications) and PnP.PowerShell.
   Roles: Owner (or Contributor + User Access Administrator) on the subscription, Global
   Administrator or Privileged Role Administrator (app roles), Teams Administrator (app upload)
@@ -118,10 +119,10 @@
   Nothing is created or changed.
 
 .PARAMETER Force
-  Do not ask for confirmation after the preflight summary (for unattended runs).
+  Do not ask for confirmation after the preflight summary (for unattended runs). The script
+  then does not sign in to Azure CLI itself: it stops if the CLI is not logged in to the tenant.
 
 .EXAMPLE
-  az login --tenant <tenant-id>
   .\Install-Notification.ps1 -TenantId <tenant-id> -SubscriptionId <subscription-id> `
     -ResourceGroupName rg-intranet-notification -FunctionAppName func-intranet-notification `
     -StorageAccountName stintranetnotify01 -ConfigSiteUrl https://contoso.sharepoint.com `
@@ -231,8 +232,16 @@ if (-not $SkipSitePermissions) {
 if ($missing) { throw "Missing (this script installs nothing): $($missing -join ', ')" }
 
 $account = Get-AzJson account show
-if (-not $account) { throw "Azure CLI is not logged in. Run: az login --tenant $TenantId" }
-if ($account.tenantId -ne $TenantId) { throw "Azure CLI is logged in to tenant $($account.tenantId), expected $TenantId. Run: az login --tenant $TenantId" }
+if (-not $account -or $account.tenantId -ne $TenantId) {
+  $reason = if ($account) { "Azure CLI is logged in to tenant $($account.tenantId), expected $TenantId." } else { 'Azure CLI is not logged in.' }
+  # An unattended run cannot answer a sign-in in the browser
+  if ($Force) { throw "$reason Run: az login --tenant $TenantId" }
+  Write-Info "$reason Signing in (az login --tenant $TenantId)"
+  & az login --tenant $TenantId -o none
+  if ($LASTEXITCODE -ne 0) { throw "az login failed. Run: az login --tenant $TenantId" }
+  $account = Get-AzJson account show
+  if (-not $account -or $account.tenantId -ne $TenantId) { throw "Azure CLI is still not logged in to tenant $TenantId. Run: az login --tenant $TenantId" }
+}
 & az account set --subscription $SubscriptionId -o none
 if ($LASTEXITCODE -ne 0) { throw "Subscription $SubscriptionId not found for $($account.user.name)" }
 Write-Done "Azure CLI: $($account.user.name), subscription $SubscriptionId"

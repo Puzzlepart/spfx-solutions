@@ -74,7 +74,6 @@ Timer (1 min)
 `scripts/Install-Notification.ps1` gjør steg 1, 2, 4 og 5 under, pluss tilgangen per område fra steg 2, i én kjøring. Skriptet kan kjøres på nytt ved hver oppgradering og installerer ingen verktøy. SharePoint-delen (steg 3 og SPFx-pakken) gjøres med `Pzl.Part.Announcement/scripts/Install-Driftsmeldinger.ps1 -EnableTeamsNotifications`.
 
 ```powershell
-az login --tenant <tenant-id>
 .\scripts\Install-Notification.ps1 -TenantId <tenant-id> -SubscriptionId <abonnement> `
   -ResourceGroupName rg-intranet-notification -FunctionAppName func-intranet-notification `
   -StorageAccountName stintranetnotify01 -ConfigSiteUrl https://<tenant>.sharepoint.com `
@@ -95,6 +94,8 @@ az login --tenant <tenant-id>
 - miljøet: tenant, Azure-konto, abonnement, Graph-konto og intranettområde
 - hva hvert steg gjør: hvilke Azure-ressurser som finnes og hvilke som opprettes, `DRY_RUN`, app-rollene, tilgangen per område, Teams-appen og hvilken fane varslene åpner
 - advarsler: ressursleverandører som ikke er registrert i abonnementet (sjekkes når noe skal opprettes), opptatt navn på lagringskontoen, ressursgruppe som mangler og ikoner som ikke finnes
+
+Er ikke Azure CLI logget inn mot tenanten, kjører skriptet `az login --tenant <tenant-id>` selv. Med `-Force` stopper det i stedet.
 
 `-PreflightOnly` viser oppsummeringen og stopper. `-Force` hopper over spørsmålet, for kjøring uten bruker. Svaret er nei som standard. Advarslene stopper ikke skriptet: en ressursleverandør som mangler, registreres av Azure CLI ved første bruk når kontoen har rettigheter på abonnementet. Med rettigheter bare på ressursgruppa må en eier av abonnementet kjøre `az provider register -n <navnerom>` først.
 
