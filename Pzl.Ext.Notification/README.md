@@ -67,7 +67,7 @@ Timer (1 min)
 
 - Driftsmeldinger (Pzl.Part.Announcement) 2.0.0 eller nyere, med hovedmalen kjørt. Med eldre lister uten *Status* behandles alle driftsmeldinger som *Pågår*.
 - Azure-abonnement, og rettigheter til å opprette ressurser og tildele app-roller i Entra (Global Administrator eller Privileged Role Administrator for steg 2).
-- Verktøy: [Azure CLI](https://learn.microsoft.com/cli/azure/), [Azure Functions Core Tools](https://learn.microsoft.com/azure/azure-functions/functions-run-local) v4, Node 20 eller 22, PnP.PowerShell, Microsoft.Graph PowerShell.
+- Verktøy: [Azure CLI](https://learn.microsoft.com/cli/azure/), [Azure Functions Core Tools](https://learn.microsoft.com/azure/azure-functions/functions-run-local) v4, PnP.PowerShell, Microsoft.Graph PowerShell. Node 20 eller 22 trengs bare når funksjonen bygges fra kildekoden, altså ikke med en release-pakke der funksjonen ligger ferdig bygget (se [steg 5](#steg-5-deploy-function-appen)).
 
 ## Installer med skript
 
@@ -87,7 +87,7 @@ Timer (1 min)
 | 2. Entra | Kjører `Grant-NotificationPermissions.ps1` med identitetens principal ID. |
 | Tilgang per område | `Write` på `-AnnouncementSiteUrls` (standard: konfigurasjonsområdet), `Read` på konfigurasjonsområdet og `-NewsSiteUrls`. Eksisterende tilganger heves, men senkes aldri. Bruker PnP.PowerShell (lastet i økten, via `Import-PnPPowerShell` eller installert) med PP365-appen som standard `-ClientId`. |
 | 4. Teams-appen | Bygger pakken med `New-NotificationTeamsApp.ps1` og laster den opp til organisasjonens appkatalog med Graph: ny app første gang, ny versjon (patch-nummeret økes) ved oppgradering. `-SkipTeamsAppUpload` bygger bare pakken. |
-| 5. Funksjonen | Kjører `Publish-NotificationFunction.ps1`. |
+| 5. Funksjonen | Kjører `Publish-NotificationFunction.ps1`, som bygger funksjonen, eller legger ut den ferdig bygde fra en release-pakke. |
 
 **Preflight.** Før noe opprettes eller endres, viser skriptet en oppsummering og spør om det skal fortsette:
 
@@ -277,7 +277,9 @@ Aktivitetsvarsler må sendes fra en Teams-app der `webApplicationInfo.id` er cli
 
 ## Steg 5: Deploy Function-appen
 
-`scripts/Publish-NotificationFunction.ps1` bygger prosjektet, pakker det og deployer med Azure CLI zip-deploy og remote build. Azure Functions Core Tools trengs ikke.
+`scripts/Publish-NotificationFunction.ps1` bygger prosjektet, pakker det og deployer med Azure CLI zip-deploy, uten bygging i Azure. Azure Functions Core Tools trengs ikke.
+
+**Ferdig bygget funksjon.** Ligger `function/notification-function.zip` i mappa og `function/src` ikke gjør det, legger skriptet ut den fila som den er. Da trengs verken Node eller npm. Slik er en release-pakke til en kunde satt sammen. Fila lages med `-PackageOnly`, som bygger pakken og skriver ut stien uten å legge den ut. `-PackagePath <zip>` legger ut en gitt pakke på samme måte.
 
 ```powershell
 .\scripts\Publish-NotificationFunction.ps1 -ResourceGroupName rg-intranet-notification -FunctionAppName func-intranet-notification

@@ -23,7 +23,9 @@
 
   Requires, and does not install: Azure CLI 2.70+ (the script runs az login --tenant <tenant-id>
   when the CLI is not logged in to the tenant, except with -Force),
-  Node 20+ and npm, Microsoft.Graph PowerShell (Authentication and Applications) and PnP.PowerShell.
+  Microsoft.Graph PowerShell (Authentication and Applications) and PnP.PowerShell. Node 20+ and npm
+  are needed only when the function is built from source: a release package holds the function
+  prebuilt (function/notification-function.zip, no function/src), and that file is deployed as it is.
   Roles: Owner (or Contributor + User Access Administrator) on the subscription, Global
   Administrator or Privileged Role Administrator (app roles), Teams Administrator (app upload)
   and SharePoint Administrator (site access).
@@ -227,7 +229,10 @@ $needAz = -not ($SkipInfrastructure -and $SkipFunction)
 $needGraph = -not $PreflightOnly -and (-not $SkipPermissions -or (-not $SkipTeamsApp -and -not $SkipTeamsAppUpload))
 $missing = @()
 if (-not (Get-Command az -ErrorAction SilentlyContinue)) { $missing += 'Azure CLI (az)' }
-if (-not $SkipFunction -and -not (Get-Command npm -ErrorAction SilentlyContinue)) { $missing += 'Node.js/npm' }
+# A release package holds the function prebuilt and no source: nothing to build, so no Node
+$functionFolder = Join-Path $PSScriptRoot '..\function'
+$prebuiltFunction = (Test-Path (Join-Path $functionFolder 'notification-function.zip')) -and -not (Test-Path (Join-Path $functionFolder 'src'))
+if (-not $SkipFunction -and -not $prebuiltFunction -and -not (Get-Command npm -ErrorAction SilentlyContinue)) { $missing += 'Node.js/npm' }
 if ($needGraph) {
   foreach ($name in 'Microsoft.Graph.Authentication', 'Microsoft.Graph.Applications') {
     if (-not (Get-Module -ListAvailable -Name $name)) { $missing += "PowerShell module $name" }
@@ -487,7 +492,7 @@ if ($SkipTeamsApp) {
 }
 Write-Row 'Notifications open' "$(if ($opensOtherApp) { "another Teams app: $deepLinkAppId, tab $deepLinkEntityId" } else { "the notification app's own tab ($deepLinkEntityId)" })"
 
-Write-Section "5. Function code: $(if ($SkipFunction) { 'skipped' } else { "built and deployed to $FunctionAppName" })"
+Write-Section "5. Function code: $(if ($SkipFunction) { 'skipped' } elseif ($prebuiltFunction) { "prebuilt package deployed to $FunctionAppName" } else { "built and deployed to $FunctionAppName" })"
 
 if ($warnings.Count) {
   Write-Host ''
