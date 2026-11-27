@@ -16,6 +16,32 @@
     }
   }
 
+  // The whole line is used: the text is cut with «…» where the line ends,
+  // whatever the width of the page. Two lines on narrow screens, where one
+  // line holds little more than the title.
+  .body {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    overflow: hidden;
+    min-width: 0;
+
+    @media (max-width: 640px) {
+      -webkit-line-clamp: 2;
+    }
+  }
+
+  // «Informasjon» is blue instead of the message bar's neutral grey, so it is
+  // not anonymous next to the other levels (Fluent's brand colours)
+  .message.info {
+    background-color: var(--colorBrandBackground2);
+    border-color: var(--colorBrandStroke2);
+
+    :global(.fui-MessageBar__icon) {
+      color: var(--colorBrandForeground1);
+    }
+  }
+
   .pin {
     vertical-align: text-bottom;
     margin-right: 4px;

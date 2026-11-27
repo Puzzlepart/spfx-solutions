@@ -61,13 +61,13 @@ const AnnouncementDialogs = React.lazy(() =>
 const PART_ID = 'announcement-banner'
 
 /**
- * Maximum length of the content preview shown in the banner
+ * The most text put in the page for the preview. What is shown is decided by
+ * the width: the line is filled and then cut with «…» (see `.body`).
  */
-const PREVIEW_LENGTH = 160
+const PREVIEW_LENGTH = 1000
 
 function preview(content: string): string {
-  const text = htmlToText(content ?? '')
-  return text.length > PREVIEW_LENGTH ? `${text.substring(0, PREVIEW_LENGTH - 1)}…` : text
+  return htmlToText(content ?? '').substring(0, PREVIEW_LENGTH)
 }
 
 /**
@@ -121,7 +121,7 @@ export const AnnouncementBanner: FC<IAnnouncementBannerProps> = (props) => {
             intent={getIntent(announcement)}
             icon={announcement.status === 'planned' ? <CalendarClock20Regular /> : undefined}
             layout='multiline'
-            className={styles.message}
+            className={`${styles.message} ${getIntent(announcement) === 'info' ? styles.info : ''}`}
             role='button'
             tabIndex={0}
             aria-haspopup='dialog'
@@ -133,7 +133,7 @@ export const AnnouncementBanner: FC<IAnnouncementBannerProps> = (props) => {
                 setOpenId(announcement.id)
               }
             }}>
-            <MessageBarBody>
+            <MessageBarBody className={styles.body}>
               <MessageBarTitle>
                 {announcement.pinned && (
                   <Pin16Filled

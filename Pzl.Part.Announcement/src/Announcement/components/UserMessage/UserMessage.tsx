@@ -35,7 +35,7 @@ export const UserMessage: FC<IUserMessageProps> = (props: IUserMessageProps) => 
         onClick={props.onClick}>
         <MessageBar
           {...messageProps}
-          className={styles.message}
+          className={`${styles.message} ${props.intent === 'info' ? styles.info : ''}`}
           intent={props.intent}
           icon={props.status === 'planned' ? <CalendarClock20Regular /> : undefined}>
           <MessageBarBody>

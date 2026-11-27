@@ -149,7 +149,7 @@ Lists provisioned with an older template still work: the web part falls back to 
 The package also contains the application customizer **AnnouncementBanner** (component ID `c0d1edf4-db39-4feb-8052-a4c27ffe1954`). On every page of a site where it is registered it reads the announcement list and shows the active announcements with **Vis som banner** (`PzlShowAsBanner`) set as message bars in the page's top placeholder:
 
 * Colour and icon follow the announcement's level and status, like in the web part: *Løst* is green with the label «Løst», *Planlagt* has a calendar icon and the label «Planlagt». Pinned announcements come first and get the pin icon.
-* The banner shows the title and the first 160 characters of the content. Clicking it (or Enter/Space) opens the same details dialog as the web part, with **Handlinger og varsling** for users who may edit the list (their code is fetched only for those users): the fields in `popoverFields` (default: the web part's default fields).
+* The banner shows the title and as much of the content as the line holds, whatever the width of the page, and cuts it with «…» (one line; two lines below 640px). Clicking it (or Enter/Space) opens the same details dialog as the web part, with **Handlinger og varsling** for users who may edit the list (their code is fetched only for those users): the fields in `popoverFields` (default: the web part's default fields).
 * The close button dismisses the banner for the user. The dismissal is kept in `localStorage` (`pzl-announcement-banner-dismissed`) per announcement and version (`Modified`), so an edited announcement comes back. That is how users who dismissed a critical banner see it once more, green, when it is marked as resolved. Dismissals for announcements that are no longer active are pruned.
 * Audience targeting is honoured when `targetAudience` is set, with the same rules as the web part.
 * The customizer decides from the page context alone whether the page is targeted (see below). Only on targeted pages is the list code loaded and the list read, and the UI is loaded only when there is a banner to show. Pages outside the targeting cost a few KB of script, which is what makes the tenant-wide registration affordable.
@@ -339,6 +339,8 @@ The page is published but not added to the navigation. It is an ordinary page: e
 * New web part properties **Vis kommende driftsmeldinger**, **Vis tidligere driftsmeldinger** and **Kompakt tabellvisning**, for an overview page with every announcement in the list.
 * The install script creates the page **Driftsmeldinger** with that overview and a guide in Norwegian, with a section on Teams notifications when the add-on is installed.
 * New action **Avslutt melding** under **Handlinger og varsling**: sets the status to *Løst* and the end date to now, after a confirmation.
+* *Informasjon* is blue (background, border and icon) instead of neutral grey, in the web part, the banner, the dialog and the table.
+* The banner fills the line with the content before it is cut with «…», instead of stopping at 160 characters.
 * The dialog shows the announcement's icon beside the title, with the same icon and colour as in the list and the banner.
 
 ### 2.0.0

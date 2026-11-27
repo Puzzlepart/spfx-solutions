@@ -6,6 +6,17 @@
     padding: 15px;
   }
 
+  // «Informasjon» is blue instead of the message bar's neutral grey, so it is
+  // not anonymous next to the other levels (Fluent's brand colours)
+  .message.info {
+    background-color: var(--colorBrandBackground2);
+    border-color: var(--colorBrandStroke2);
+
+    :global(.fui-MessageBar__icon) {
+      color: var(--colorBrandForeground1);
+    }
+  }
+
   .pin {
     vertical-align: text-bottom;
     margin-right: 4px;
